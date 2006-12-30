@@ -2,12 +2,14 @@
 
 #include "hooks.h"
 
+enum DragState { dsNone, dsMoving, dsResizing, dsIgnoring };
+
 #pragma data_seg(".SHARED")
 DWORD mainThreadId = 0;
-bool altPressed = false;
-bool leftButtonPressed = false;
-bool rightButtonPressed = false;
-POINT lastMousePos;
+DragState currentState = dsNone;
+POINT lastMousePos = { 0, 0 };
+HWND draggedWindow = NULL;
+RECT lastRect = { 0, 0, 0, 0 };
 #pragma data_seg()
 #pragma comment(linker, "/section:.SHARED,rws")
 
@@ -34,6 +36,7 @@ void __declspec(dllexport) __stdcall init(DWORD threadId) {
 	mainThreadId = threadId;
 }
 
+/*
 LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	if (nCode > 0) { // if nCode < 0, do nothing as per Microsoft's recommendations
 #ifdef DEBUG
@@ -43,7 +46,7 @@ LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, L
 			return 1; // nonzero to ignore the keypress message
 		}
 #endif
-		if (wParam == VK_MENU /* Alt key */) {
+		if (wParam == VK_MENU) { // Alt key pressed
 			bool previouslyDown = lParam & (1 << 30);
 			bool beingReleased = lParam & (1 << 31);
 			if (!previouslyDown && !beingReleased) {
@@ -53,46 +56,107 @@ LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, L
 			}
 		}
 	}
-	return CallNextHookEx((HHOOK)37 /* ignored */, nCode, wParam, lParam);
+	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam);
+}
+*/
+
+bool isDraggableWindow(HWND window) {
+	WINDOWINFO info;
+	info.cbSize = sizeof(WINDOWINFO);
+	GetWindowInfo(window, &info);
+	if (info.dwStyle & WS_MAXIMIZE) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+enum MouseButton { mbLeft, mbMiddle, mbRight };
+
+bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
+	if (currentState == dsNone) {
+		bool altDown = GetKeyState(VK_MENU) & 0x8000; // GetAsyncKeyState?
+		if (altDown) {
+			if (button == mbLeft) {
+				currentState = dsMoving;
+			} else if (button == mbRight) {
+				currentState = dsResizing;
+			}
+			if (currentState != dsNone) {
+				draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
+				if (isDraggableWindow(draggedWindow)) {
+					SetCapture(draggedWindow);
+					GetWindowRect(draggedWindow, &lastRect);
+				} else {
+					// when trying to Alt-drag an invalid window, the user won't expect her actions to be passed to that window;
+					// so we suppress all events until the mouse button is released
+					currentState = dsIgnoring;
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool processButtonUp(MouseButton button) {
+	if (currentState != dsNone) {
+		ReleaseCapture();
+		currentState = dsNone;
+		return true;
+	}
+	return false;
 }
 
 LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+	bool processed = false;
 	if (nCode >= 0 && nCode == HC_ACTION) { // if nCode < 0, do nothing as per Microsoft's recommendations
+		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
 		switch (wParam) {
 			case WM_LBUTTONDOWN:
-				leftButtonPressed = true;
-				break;
-			case WM_LBUTTONUP:
-				leftButtonPressed = false;
+				processed = processButtonDown(mbLeft, eventInfo);
 				break;
 			case WM_RBUTTONDOWN:
-				rightButtonPressed = true;
+				processed = processButtonDown(mbRight, eventInfo);
+				break;
+			case WM_LBUTTONUP:
+				processed = processButtonUp(mbLeft);
 				break;
 			case WM_RBUTTONUP:
-				rightButtonPressed = false;
+				processed = processButtonUp(mbRight);
+				break;
+			case WM_MOUSEMOVE:
+				int deltaX, deltaY;
+				switch (currentState) {
+					case dsMoving:
+					case dsResizing:
+						deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
+						if (currentState == dsMoving) {
+							lastRect.left += deltaX;
+							lastRect.top += deltaY;
+							lastRect.right += deltaX;
+							lastRect.bottom += deltaY;
+						} else if (currentState == dsResizing) {
+							lastRect.right += deltaX;
+							lastRect.bottom += deltaY;
+						}
+						SetWindowPos(draggedWindow, NULL,
+							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
+							SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+						// no break here
+					case dsIgnoring:
+						processed = true;
+						break;
+					case dsNone:
+						break;
+				}
 				break;
 		}
-		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
-		if (altPressed && (leftButtonPressed || rightButtonPressed)) {
-			HWND topLevelWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
-			RECT oldRect;
-			GetWindowRect(topLevelWindow, &oldRect);
-			int left = oldRect.left, top = oldRect.top, width = oldRect.right - oldRect.left, height = oldRect.bottom - oldRect.top;
-			int deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
-			if (leftButtonPressed) {
-				left += deltaX;
-				top += deltaY;
-			} else { // rightButtonPressed
-				width += deltaX;
-				height += deltaY;
-			}
-			SetWindowPos(topLevelWindow, NULL, left, top, width, height, SWP_NOACTIVATE | SWP_NOOWNERZORDER);
-			lastMousePos = eventInfo->pt;
-			return 1; // no further processing should be done
-		} else {
-			lastMousePos = eventInfo->pt;
-		}
+		lastMousePos = eventInfo->pt;
 	}
-	// call next hook in chain only if we haven't returned by now
-	return CallNextHookEx((HHOOK)37 /* ignored */, nCode, wParam, lParam);
+
+	LRESULT res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
+	if (processed)
+		res = 1;
+	return res;
 }
