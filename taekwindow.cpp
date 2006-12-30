@@ -2,13 +2,10 @@
 #include <stdio.h>
 
 const LPCSTR INIT_ORDINAL = (LPCSTR)1;
-//const LPCSTR KEYBOARDPROC_ORDINAL = (LPCSTR)2;
 const LPCSTR MOUSEPROC_ORDINAL = (LPCSTR)3;
 
 HMODULE dllHandle = NULL;
-//FARPROC keyboardProc = NULL;
 FARPROC mouseProc = NULL;
-//HHOOK keyboardHook = NULL;
 HHOOK mouseHook = NULL;
 
 bool loadDll() {
@@ -31,11 +28,6 @@ bool unloadDll() {
 }
 
 bool findProcs() {
-	/*
-	keyboardProc = GetProcAddress(dllHandle, KEYBOARDPROC_ORDINAL);
-	if (!keyboardProc)
-		return false;
-	*/
 	mouseProc = GetProcAddress(dllHandle, MOUSEPROC_ORDINAL);
 	if (!mouseProc)
 		return false;
@@ -43,11 +35,6 @@ bool findProcs() {
 }
 
 bool attachHooks() {
-	/*
-	keyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC)keyboardProc, dllHandle, NULL);
-	if (!keyboardHook)
-		return false;
-	*/
 	mouseHook = SetWindowsHookEx(WH_MOUSE, (HOOKPROC)mouseProc, dllHandle, NULL);
 	if (!mouseHook)
 		return false;
@@ -56,10 +43,6 @@ bool attachHooks() {
 
 bool detachHooks() {
 	bool success = true;
-	/*
-	if (!UnhookWindowsHookEx(keyboardHook))
-		success = false;
-	*/
 	if (!UnhookWindowsHookEx(mouseHook))
 		success = false;
 	return success;

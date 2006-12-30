@@ -36,30 +36,6 @@ void __declspec(dllexport) __stdcall init(DWORD threadId) {
 	mainThreadId = threadId;
 }
 
-/*
-LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	if (nCode > 0) { // if nCode < 0, do nothing as per Microsoft's recommendations
-#ifdef DEBUG
-		// use Q key for clean exit (unloading the DLL, and such)
-		if (wParam == 'Q') {
-			PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
-			return 1; // nonzero to ignore the keypress message
-		}
-#endif
-		if (wParam == VK_MENU) { // Alt key pressed
-			bool previouslyDown = lParam & (1 << 30);
-			bool beingReleased = lParam & (1 << 31);
-			if (!previouslyDown && !beingReleased) {
-				altPressed = true;
-			} else if(previouslyDown && beingReleased) {
-				altPressed = false;
-			}
-		}
-	}
-	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam);
-}
-*/
-
 bool isDraggableWindow(HWND window) {
 	WINDOWINFO info;
 	info.cbSize = sizeof(WINDOWINFO);
