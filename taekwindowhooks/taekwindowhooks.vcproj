@@ -37,6 +37,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="DEBUG"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -50,6 +51,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
+				ModuleDefinitionFile="hooks.def"
+				EntryPointSymbol=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -78,8 +81,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -110,6 +114,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				ModuleDefinitionFile="hooks.def"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -147,6 +152,10 @@
 			>
 			<File
 				RelativePath=".\hooks.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hooks.def"
 				>
 			</File>
 		</Filter>

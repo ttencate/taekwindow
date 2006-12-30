@@ -1,49 +1,81 @@
 #include <windows.h>
 #include <stdio.h>
 
+const LPCSTR INIT_ORDINAL = (LPCSTR)1;
+const LPCSTR KEYBOARDPROC_ORDINAL = (LPCSTR)2;
+const LPCSTR MOUSEPROC_ORDINAL = (LPCSTR)3;
+
 HMODULE dllHandle = NULL;
+FARPROC keyboardProc = NULL;
 FARPROC mouseProc = NULL;
+HHOOK keyboardHook = NULL;
 HHOOK mouseHook = NULL;
 
 bool loadDll() {
 	dllHandle = LoadLibrary(L"taekwindowhooks.dll");
-	return dllHandle != NULL;
+	if (dllHandle) {
+		void (__stdcall *initProc)(DWORD) = (void (__stdcall*)(DWORD))GetProcAddress(dllHandle, INIT_ORDINAL);
+		if (initProc) {
+			(*initProc)(GetCurrentThreadId());
+		} else {
+			return false;
+		}
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool unloadDll() {
 	return FreeLibrary(dllHandle) != 0;
 }
 
-bool findMouseProc() {
-	mouseProc = GetProcAddress(dllHandle, "mouseProc");
-	return mouseProc != NULL;
+bool findProcs() {
+	keyboardProc = GetProcAddress(dllHandle, KEYBOARDPROC_ORDINAL);
+	if (!keyboardProc)
+		return false;
+	mouseProc = GetProcAddress(dllHandle, MOUSEPROC_ORDINAL);
+	if (!mouseProc)
+		return false;
+	return true;
 }
 
-bool attachHook() {
+bool attachHooks() {
+	keyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC)keyboardProc, dllHandle, NULL);
+	if (!keyboardHook)
+		return false;
 	mouseHook = SetWindowsHookEx(WH_MOUSE, (HOOKPROC)mouseProc, dllHandle, NULL);
-	return mouseHook != NULL;
+	if (!mouseHook)
+		return false;
+	return true;
 }
 
-bool detachHook() {
-	return UnhookWindowsHookEx(mouseHook) != 0;
+bool detachHooks() {
+	bool success = true;
+	if (!UnhookWindowsHookEx(keyboardHook))
+		success = false;
+	if (!UnhookWindowsHookEx(mouseHook))
+		success = false;
+	return success;
 }
 
 void showLastError(LPCWSTR title) {
 	PVOID msg;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
+	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
 	MessageBoxW(NULL, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
 	LocalFree(msg);
 }
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+	// TODO: use mutex to prevent multiple instances
 	int retVal = 0;
 	if (!loadDll()) {
 		showLastError(L"Error loading DLL");
 	} else {
-		if (!findMouseProc()) {
-			showLastError(L"Error getting mouse handler address");
+		if (!findProcs()) {
+			showLastError(L"Error getting handler address");
 		} else {
-			if (!attachHook()) {
+			if (!attachHooks()) {
 				showLastError(L"Error attaching hook");
 			} else {
 				MSG msg;
@@ -61,10 +93,10 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 						DispatchMessage(&msg);
 					}
 				} while (getMsgRetVal);
-				retVal = msg.wParam;
+				retVal = (int)msg.wParam;
 
 				// normal exit
-				detachHook();
+				detachHooks();
 			}
 		}
 		unloadDll();

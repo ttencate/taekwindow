@@ -177,6 +177,14 @@
 			<File
 				RelativePath=".\taekwindow.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions="DEBUG"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
