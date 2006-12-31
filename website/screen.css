@@ -1,0 +1,61 @@
+body {
+	background-color: #ffffcc;
+	font-family: sans-serif;
+}
+
+#everything {
+	margin: 0 3em;
+}
+
+#topbar {
+	margin: 0;
+	padding: 0;
+}
+
+#topbar h1 {
+	background-image: url("title.gif");
+	background-repeat: no-repeat;
+	width: 656px;
+	height: 0px;
+	overflow: hidden;
+	padding: 0;
+	padding-top: 165px;
+}
+
+#navbar {
+	margin: 0;
+	padding: 0;
+}
+
+ul.navbar {
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
+	margin: 0;
+	padding: 3px 0;
+}
+
+ul.navbar li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+ul.navbar li a {
+	font-weight: bold;
+	text-decoration: none;
+	color: black;
+	padding: 0.2em 1em;
+}
+
+ul.navbar li a:active, ul.navbar li a:hover {
+	background-color: #ddddaa;
+}
+
+#content {
+	margin: 2em;
+}
+
+.rightmargin {
+	float: right;
+	margin: 0 0 1em 1em;
+}

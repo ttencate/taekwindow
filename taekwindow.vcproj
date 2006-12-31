@@ -203,6 +203,18 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\graphics\16x16.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics\32x32.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics\48x48.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\taekwindow.rc"
 				>
 			</File>
