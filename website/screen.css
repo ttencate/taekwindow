@@ -15,6 +15,7 @@ body {
 #topbar h1 {
 	background-image: url("title.gif");
 	background-repeat: no-repeat;
+	float: left;
 	width: 656px;
 	height: 0px;
 	overflow: hidden;
@@ -25,6 +26,7 @@ body {
 #navbar {
 	margin: 0;
 	padding: 0;
+	clear: both;
 }
 
 ul.navbar {
@@ -58,4 +60,8 @@ ul.navbar li a:active, ul.navbar li a:hover {
 .rightmargin {
 	float: right;
 	margin: 0 0 1em 1em;
+}
+
+#footer {
+	font-size: 60%;
 }
