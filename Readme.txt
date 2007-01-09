@@ -29,36 +29,58 @@ stop it through the Task Manager if you prefer.
 Known bugs
 ----------
 
-- When resizing cmd.exe and releasing the button outside the window,
-  you will still be resizing it even though you're no longer holding the
-  button.
-- PuTTY seems to resize but snaps back to its old size as soon as the
-  button is released.
-- MDI interfaces do not always work properly. In Photoshop all is well,
-  in Opera the main window is moved instead.
+Please see the Bugs Tracker at:
+http://sourceforge.net/tracker/?group_id=185457&atid=913353
+
+You can view the list of bugs in the current release as well as submit
+any new bugs you've discovered.
 
 Planned features
 ----------------
 
-- A tray icon to view and control whether the program is running.
-- A configuration program to set which mouse buttons and modifier keys
-  to use.
-- Windows snapping to screen edges and to each other while moving and
-  resizing.
-- Copying by selecting text, pasting with the middle mouse button, just
-  as in X.
-- Raising and lowering windows with Alt+middle mouse button.
-- Scrolling the window under the cursor with the scroll wheel, instead
-  of the window that currently has focus (which is Windows' normal,
-  annoying behaviour).
-- Sloppy focus (focus-follows-mouse) with optional window raising.
+Please see the Feature Requests Tracker at:
+http://sourceforge.net/tracker/?group_id=185457&atid=913356
+
+Apart from a list of planned features, this also contains all feature
+requests submitted by users. You can of course submit your own.
+
+Version history
+---------------
+
+0.1:
+- very first version
+- native Win32 executable facilitating moving and resizing with Alt
 
 Contact
 -------
 
-TODO
+Taekwindow is written by Thomas ten Cate. The preferred way to contact
+the author is through the Taekwindow web page, located at:
+http://taekwindow.sf.net/
 
-Legal
------
+Legal (modified BSD-style license)
+----------------------------------
 
-TODO
+Copyright (c) 2007, Thomas ten Cate
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+- Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+- Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
