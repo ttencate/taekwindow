@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link rel="stylesheet" type="text/css" href="screen.css"/>
+		<script type="text/javascript" src="utils.js"></script>
+		<title>Taekwindow - <!--#echo var="title"--></title>
+	</head>
+	<body onload="replaceEmail()">
+		<div id="everything">
+			<div id="topbar">
+				<h1>Taekwindow</h1>
+				<a href="http://sourceforge.net" class="rightmargin"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=185457&amp;type=3" width="125" height="37" alt="SourceForge.net logo"/></a>
+				<a href="http://sourceforge.net/donate/index.php?group_id=185457" class="rightmargin"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" alt="Support this project"/></a>
+			</div>
+			<div id="navbar">
+				<ul class="navbar">
+					<li><a href="index.shtml">Home</a></li>
+					<li><a href="faq.shtml">FAQ</a></li>
+					<li><a href="documentation.shtml">Documentation</a></li>
+					<li><a href="download.shtml">Download</a></li>
+					<li><a href="contact.shtml">Contact</a></li>
+					<li><a href="http://sourceforge.net/projects/taekwindow/" class="sf">SF.net project page</a></li>
+				</ul>
+			</div>
+			<div id="content">

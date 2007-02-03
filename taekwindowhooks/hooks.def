@@ -1,0 +1,6 @@
+LIBRARY	"taekwindowhooks"
+EXPORTS
+	init         @1
+	readConfig   @2
+	mouseProc    @3
+	keyboardProc @4

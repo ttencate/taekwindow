@@ -1,0 +1,16 @@
+<!--#set var="title" value="Home"-->
+<!--#set var="lastmod" value="$LAST_MODIFIED"-->
+<!--#include virtual="header.part.shtml"-->
+
+<h1>Welcome to the Taekwindow web page</h1>
+<img src="move.gif" alt="Example of Taekwindow usage" class="rightmargin"/>
+<p>Taekwindow is a simple, lightweight and free program that allows you to manipulate floating windows in Microsoft Windows in a way similar to many X11 window managers. It allows you to do the following:
+</p>
+<ul>
+	<li>move windows by grabbing them <em>anywhere</em> (not just the title bar) while holding the Alt key, and then dragging with the left mouse button;</li>
+	<li>resize windows by grabbing them <em>anywhere</em> (not just the tiny little border) while holding the Alt key, and then dragging with the right mouse button.</li>
+</ul>
+<p>Especially when you have a large screen, you're moving your mouse much more than you ought to. Taekwindow can save you time, frustration and RSI!</p>
+<p>The program is released under the BSD licence, which means that it is free as in speech as well as in beer. <strong><a href="download.shtml">Download it now!</a></strong></p>
+
+<!--#include virtual="footer.part.shtml"-->

@@ -1,0 +1,13 @@
+<!--#set var="title" value="Documentation"-->
+<!--#set var="lastmod" value="$LAST_MODIFIED"-->
+<!--#include virtual="header.part.shtml"-->
+
+<h1>Documentation</h1>
+
+<p>Instructions for <strong>using</strong> the program are included in the distribution.</p>
+
+<p>For a list of known <strong>bugs</strong>, see the <a href="http://sourceforge.net/tracker/?group_id=185457&amp;atid=913353" class="sf">bug tracker</a>.</p>
+
+<p>For a list of planned <strong>features</strong>, or for submitting your own feature requests, see the <a href="http://sourceforge.net/tracker/?group_id=185457&amp;atid=913356" class="sf">feature tracker</a>.</p>
+
+<!--#include virtual="footer.part.shtml"-->
