@@ -86,8 +86,8 @@ LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,0,0
- PRODUCTVERSION 0,1,0,0
+ FILEVERSION 0,1,1,0
+ PRODUCTVERSION 0,1,1,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -103,12 +103,12 @@ BEGIN
         BLOCK "080004b0"
         BEGIN
             VALUE "FileDescription", "Taekwindow"
-            VALUE "FileVersion", "0.1"
+            VALUE "FileVersion", "0.1.1"
             VALUE "InternalName", "Taekwindow"
             VALUE "LegalCopyright", "Copyright (C) 2006, Thomas ten Cate"
             VALUE "OriginalFilename", "taekwindow.exe"
             VALUE "ProductName", "Taekwindow"
-            VALUE "ProductVersion", "0.1"
+            VALUE "ProductVersion", "0.1.1"
         END
     END
     BLOCK "VarFileInfo"

@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Zipping distribution archive..."
-				CommandLine="cd $(InputDir)&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-0.1.zip&quot; &quot;$(OutDir)\taekwindow.exe&quot; &quot;$(OutDir)\taekwindowhooks.dll&quot; Readme.txt&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-0.1-src.zip&quot; graphics\*.ico graphics\*.ai graphics\*.psd taekwindowhooks\*.cpp taekwindowhooks\*.h taekwindowhooks\*.def taekwindowhooks\*.rc taekwindowhooks\*.vcproj *.cpp *.h *.rc *.vcproj *.sln Readme.txt"
+				CommandLine="cd $(InputDir)&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-0.1.1.zip&quot; &quot;$(OutDir)\taekwindow.exe&quot; &quot;$(OutDir)\taekwindowhooks.dll&quot; Readme.txt&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-0.1.1-src.zip&quot; graphics\*.ico graphics\*.ai graphics\*.psd taekwindowhooks\*.cpp taekwindowhooks\*.h taekwindowhooks\*.def taekwindowhooks\*.rc taekwindowhooks\*.vcproj *.cpp *.h *.rc *.vcproj *.sln Readme.txt&#x0D;&#x0A;"
 				AdditionalDependencies="../Readme.txt"
 				Outputs="taekwindow-$(Version).zip"
 			/>

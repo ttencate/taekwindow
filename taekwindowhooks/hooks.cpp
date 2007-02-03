@@ -25,6 +25,12 @@ DWORD mainThreadId = 0;
 enum DragState { dsNone, dsDragging, dsIgnoring };
 DragState currentState = dsNone;
 
+/* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
+ * resizingX == -1 means resizing at left border, 0 means not resizing in x direction, 1 means right border.
+ * Similar for y; -1 is top border, 0 is no resizing, 1 is bottom border.
+ */
+int resizingX = 0, resizingY = 0;
+
 /* The button that we're dragging with.
  * Only meaningful while we're dragging, of course.
  */
@@ -106,6 +112,16 @@ bool isDraggableWindow(HWND window) {
 	}
 }
 
+/* Sets the variables resizingX and resizingY to the proper values,
+ * considering the screen-coordinate pointer location.
+ */
+void setResizingX(POINT const &pt) {
+	resizingX = (pt.x - lastRect.left) * 3 / (lastRect.right - lastRect.left) - 1;
+}
+void setResizingY(POINT const &pt) {
+	resizingY = (pt.y - lastRect.top) * 3 / (lastRect.bottom - lastRect.top) - 1;
+}
+
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
@@ -127,6 +143,11 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 					// (could happen while resizing).
 					SetCapture(draggedWindow);
 					GetWindowRect(draggedWindow, &lastRect);
+					if (button == mbRight) {
+						// Figure out in which area we're dragging to resize in the proper direction.
+						setResizingX(eventInfo->pt);
+						setResizingY(eventInfo->pt);
+					}
 				} else {
 					// Alt-dragging an invalid window. The user won't expect her actions to be passed
 					// to that window, so we suppress all events until the mouse button is released.
@@ -214,8 +235,25 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 							lastRect.right += deltaX;
 							lastRect.bottom += deltaY;
 						} else if (draggingButton == mbRight) {
-							lastRect.right += deltaX;
-							lastRect.bottom += deltaY;
+							// Resize at the right corner/edge.
+							switch (resizingX) {
+								case -1:
+									lastRect.left += deltaX; break;
+								case 1:
+									lastRect.right += deltaX; break;
+								case 0:
+									// We may have come close to a vertical border in the meantime.
+									setResizingX(eventInfo->pt); break;
+							}
+							switch (resizingY) {
+								case -1:
+									lastRect.top += deltaY; break;
+								case 1:
+									lastRect.bottom += deltaY; break;
+								case 0:
+									// We may have come close to a horizontal border in the meantime.
+									setResizingY(eventInfo->pt); break;
+							}
 						}
 						SetWindowPos(draggedWindow, NULL,
 							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
