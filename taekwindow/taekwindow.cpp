@@ -11,6 +11,7 @@ DWORD (__stdcall *initProc)(DWORD) = NULL;
 void (__stdcall *readConfigProc)() = NULL;
 HOOKPROC mouseProc = NULL;
 HOOKPROC keyboardProc = NULL;
+HOOKPROC callWndRetProc = NULL;
 HHOOK mouseHook = NULL;
 HHOOK keyboardHook = NULL;
 

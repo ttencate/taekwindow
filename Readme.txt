@@ -44,13 +44,6 @@ http://sourceforge.net/tracker/?group_id=185457&atid=913356
 Apart from a list of planned features, this also contains all feature
 requests submitted by users. You can of course submit your own.
 
-Version history
----------------
-
-0.1:
-- very first version
-- native Win32 executable facilitating moving and resizing with Alt
-
 Contact
 -------
 

@@ -28,7 +28,13 @@ DragState currentState = dsNone;
 /* The button that we're dragging with.
  * Only meaningful while we're dragging, of course.
  */
-enum MouseButton { mbLeft, mbMiddle, mbRight };
+enum MouseButton : DWORD {
+	mbLeft = MK_LBUTTON, mbMiddle = MK_MBUTTON, mbRight = MK_RBUTTON
+#if _WIN32_WINNT >= 0x0500
+	// only declare these if we build for Windows 2000 or above
+	, mbX1 = MK_XBUTTON1, mbX2 = MK_XBUTTON2
+#endif
+};
 MouseButton draggingButton = mbLeft;
 
 /* The last known location of the mouse cursor (screen coordinates).
@@ -45,19 +51,16 @@ HWND draggedWindow = NULL;
  */
 RECT lastRect = { 0, 0, 0, 0 };
 
-/* The modifier key used for moving and resizing.
- * This is referred to as Modifier is the comments, but you can read Alt if you like.
+/* The modifier keys used for moving and resizing.
+ * These are zero-terminated lists of length at most 3 (excluding the terminator).
  */
-int modifier = VK_MENU;
+int moveModifiers[4] = { VK_MENU, 0, 0, 0 };
+int resizeModifiers[4] = { VK_MENU, 0, 0, 0 };
 
-/* Whether or not the modifier key is currently down.
+/* The mouse buttons used for moving and resizing.
  */
-bool modifierDown = false;
-
-/* Whether or not dragging has occurred since the last key-down event of the Modifier.
- * If dragging has occurred, this prevents the key-up event to be passed on.
- */
-bool haveDragged = false;
+MouseButton moveButton = mbLeft;
+MouseButton resizeButton = mbRight;
 
 /* End of the shared data segment.
  */
@@ -107,9 +110,24 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
 	}
 }
 
+DWORD readRegDword(HKEY key, LPSTR value, DWORD def) {
+	DWORD type;
+	DWORD data;
+	DWORD size = sizeof(data);
+	if (RegQueryValueEx(key, value, NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS) {
+		if (type == REG_DWORD && size == sizeof(data)) {
+			return data;
+		}
+	}
+	return def;
+}
+
 void __declspec(dllexport) __stdcall readConfig() {
 	// Set up defaults; these are loaded if registry loading fails for some reason.
-	modifier = VK_MENU;
+	moveModifiers[0] = VK_MENU;
+	moveModifiers[1] = 0;
+	resizeModifiers[0] = VK_MENU;
+	resizeModifiers[1] = 0;
 	// Open the registry keys.
 	HKEY software;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {
@@ -120,14 +138,14 @@ void __declspec(dllexport) __stdcall readConfig() {
 			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
 			if (RegOpenKeyEx(taekwindow, "0.2", 0, KEY_READ, &ohPointTwo) == ERROR_SUCCESS) {
 				// Read stuff.
-				DWORD type;
-				DWORD data;
-				DWORD size = sizeof(data);
-				if (RegQueryValueEx(ohPointTwo, "modifier", NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS) {
-					if (type == REG_DWORD && size == sizeof(data)) {
-						modifier = data;
-					}
-				}
+				moveModifiers[0] = readRegDword(ohPointTwo, "moveModifier0", VK_MENU);
+				moveModifiers[1] = readRegDword(ohPointTwo, "moveModifier1", 0);
+				moveModifiers[2] = readRegDword(ohPointTwo, "moveModifier2", 0);
+				resizeModifiers[0] = readRegDword(ohPointTwo, "resizeModifier0", VK_MENU);
+				resizeModifiers[1] = readRegDword(ohPointTwo, "resizeModifier1", 0);
+				resizeModifiers[2] = readRegDword(ohPointTwo, "resizeModifier2", 0);
+				moveButton = (MouseButton)readRegDword(ohPointTwo, "moveButton", MK_LBUTTON);
+				resizeButton = (MouseButton)readRegDword(ohPointTwo, "resizeButton", MK_RBUTTON);
 				// Close the keys again.
 				RegCloseKey(ohPointTwo);
 			}
@@ -151,40 +169,55 @@ bool isDraggableWindow(HWND window) {
 	}
 }
 
+/**
+ * Returns true if all specified modifiers are down.
+ * modifiers points to a 0-terminated array of ints representing the virtual key codes of the modifiers.
+ * For safety, this list is assumed to contain at most 3 elements, not counting the terminator.
+ */
+bool allModifiersDown(int *modifiers) {
+	for (int i = 0; i < 3; i++) {
+		if (!modifiers[i]) {
+			// Reached the terminator.
+			return true;
+		}
+		if (!(GetKeyState(modifiers[i]) & 0x80000000)) {
+			// One of 'em is not down.
+			return false;
+		}
+	}
+	// No not-down modifier found.
+	return true;
+}
+
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
 bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 	if (currentState == dsNone) {
-		// Nothing is yet going on. We possibly want to take action if the Modifier key is currently pressed.
-		if (modifierDown) {
-			if (button == mbLeft || button == mbRight) {
-				// Yippee! A Modifier-drag event just started that we want to process.
-				currentState = dsDragging;
-				haveDragged = true;
-				draggingButton = button;
-				// Find the actual window being dragged: this is the top-level window that is the ultimate parent
-				// of the window receiving the event. Seems to work for MDI's too.
-				draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
-				if (isDraggableWindow(draggedWindow)) {
-					// Window can be dragged.
-					// Capture the mouse so it'll still get events even if the mouse leaves the window
-					// (could happen while resizing).
-					SetCapture(draggedWindow);
-					GetWindowRect(draggedWindow, &lastRect);
-				} else {
-					// Modifier-dragging an invalid window. The user won't expect her actions to be passed
-					// to that window, so we suppress all events until the mouse button is released.
-					currentState = dsIgnoring;
-				}
-				// Either way, we eat the event.
-				return true;
+		// Nothing is yet going on. We possibly want to take action if the correct mouse button is being used.
+		if ((button == moveButton && allModifiersDown(moveModifiers))
+		 || (button == resizeButton && allModifiersDown(resizeModifiers))) {
+			// Yippee! A Modifier-drag event just started that we want to process.
+			currentState = dsDragging;
+			draggingButton = button;
+			// Find the actual window being dragged: this is the top-level window that is the ultimate parent
+			// of the window receiving the event. Seems to work for MDI's too.
+			draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
+			if (isDraggableWindow(draggedWindow)) {
+				// Window can be dragged.
+				// Capture the mouse so it'll still get events even if the mouse leaves the window
+				// (could happen while resizing).
+				SetCapture(draggedWindow);
+				GetWindowRect(draggedWindow, &lastRect);
 			} else {
-				// Mouse-down event with a button we don't handle. Stay away from it.
-				return false;
+				// Modifier-dragging an invalid window. The user won't expect her actions to be passed
+				// to that window, so we suppress all events until the mouse button is released.
+				currentState = dsIgnoring;
 			}
+			// Either way, we eat the event.
+			return true;
 		} else {
-			// Modifier was up, so we keep our hands off this event.
+			// Mouse-down event with wrong button or wrong modifiers. Stay away from it.
 			return false;
 		}
 	} else {
@@ -231,19 +264,27 @@ bool processButtonUp(MouseButton button) {
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
  * see the SetWindowsHookEx documentation for details.
  */
-LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
-	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
+	if (nCode == HC_ACTION) {
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
 		switch (wParam) {
+			// We have to process these events separately, because we do not get the full message data.
+			// E.g. the WM_LBUTTONDOWN message holds MK_LBUTTON in its wParam, but we do not get this wParam through this hook.
 			case WM_LBUTTONDOWN:
 				processed = processButtonDown(mbLeft, eventInfo);
+				break;
+			case WM_MBUTTONDOWN:
+				processed = processButtonDown(mbMiddle, eventInfo);
 				break;
 			case WM_RBUTTONDOWN:
 				processed = processButtonDown(mbRight, eventInfo);
 				break;
 			case WM_LBUTTONUP:
 				processed = processButtonUp(mbLeft);
+				break;
+			case WM_MBUTTONUP:
+				processed = processButtonUp(mbMiddle);
 				break;
 			case WM_RBUTTONUP:
 				processed = processButtonUp(mbRight);
@@ -253,12 +294,12 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 				switch (currentState) {
 					case dsDragging:
 						deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
-						if (draggingButton == mbLeft) {
+						if (draggingButton == moveButton) {
 							lastRect.left += deltaX;
 							lastRect.top += deltaY;
 							lastRect.right += deltaX;
 							lastRect.bottom += deltaY;
-						} else if (draggingButton == mbRight) {
+						} else if (draggingButton == resizeButton) {
 							lastRect.right += deltaX;
 							lastRect.bottom += deltaY;
 						}
@@ -286,7 +327,7 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 /* The function for handling keyboard events.
  * Or rather, the function to eat keyboard events that the application shouldn't receive.
  */
-LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT __declspec(dllexport) CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 #ifdef DEBUG
 	if (wParam == 0x51) {
 		// Q button pressed. Panic button for debugging.
@@ -294,23 +335,7 @@ LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, L
 		return 1;
 	}
 #endif
-	if (nCode >= 0 && nCode == HC_ACTION) {
-		if (wParam == modifier) {
-			// Something happened to the modifier key.
-			bool wasDown = modifierDown;
-			modifierDown = !(lParam & 0x80000000);
-			//MessageBoxA(NULL, modifierDown?"keydown":"keyup", lParam&0x4000, MB_OK);
-			if (wasDown && !modifierDown) {
-				// Modifier was released. Only pass the event on if there was no drag event.
-				if (haveDragged) {
-					return 1;
-				}
-				haveDragged = false;
-			} else if (!wasDown && modifierDown) {
-				// Modifier was pressed. There has been no drag event since.
-				haveDragged = false;
-			}
-		}
+	if (nCode == HC_ACTION) {
 	}
 	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
 }
