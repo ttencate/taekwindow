@@ -366,7 +366,7 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 						}
 						SetWindowPos(draggedWindow, NULL,
 							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
-							SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+							SWP_NOACTIVATE | SWP_NOZORDER);
 						// no break here
 					case dsIgnoring:
 						processed = true;
