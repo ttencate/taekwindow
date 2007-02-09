@@ -25,6 +25,12 @@ DWORD mainThreadId = 0;
 enum DragState { dsNone, dsDragging, dsIgnoring };
 DragState currentState = dsNone;
 
+/* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
+ * resizingX == -1 means resizing at left border, 0 means not resizing in x direction, 1 means right border.
+ * Similar for y; -1 is top border, 0 is no resizing, 1 is bottom border.
+ */
+int resizingX = 0, resizingY = 0;
+
 /* The button that we're dragging with.
  * Only meaningful while we're dragging, of course.
  */
@@ -61,6 +67,11 @@ int resizeModifiers[4] = { VK_MENU, 0, 0, 0 };
  */
 MouseButton moveButton = mbLeft;
 MouseButton resizeButton = mbRight;
+
+/* The resize mode used.
+ */
+enum ResizeMode { rsBottomRight = 0, rsNineSquares = 1 };
+ResizeMode resizeMode = rsNineSquares;
 
 /* End of the shared data segment.
  */
@@ -133,21 +144,22 @@ void __declspec(dllexport) __stdcall readConfig() {
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {
 		HKEY taekwindow;
 		if (RegOpenKeyEx(software, "Taekwindow", 0, KEY_READ, &taekwindow) == ERROR_SUCCESS) {
-			HKEY ohPointTwo;
+			HKEY configKey;
 			// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
 			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
-			if (RegOpenKeyEx(taekwindow, "0.2", 0, KEY_READ, &ohPointTwo) == ERROR_SUCCESS) {
+			if (RegOpenKeyEx(taekwindow, "0.2", 0, KEY_READ, &configKey) == ERROR_SUCCESS) {
 				// Read stuff.
-				moveModifiers[0] = readRegDword(ohPointTwo, "moveModifier0", VK_MENU);
-				moveModifiers[1] = readRegDword(ohPointTwo, "moveModifier1", 0);
-				moveModifiers[2] = readRegDword(ohPointTwo, "moveModifier2", 0);
-				resizeModifiers[0] = readRegDword(ohPointTwo, "resizeModifier0", VK_MENU);
-				resizeModifiers[1] = readRegDword(ohPointTwo, "resizeModifier1", 0);
-				resizeModifiers[2] = readRegDword(ohPointTwo, "resizeModifier2", 0);
-				moveButton = (MouseButton)readRegDword(ohPointTwo, "moveButton", MK_LBUTTON);
-				resizeButton = (MouseButton)readRegDword(ohPointTwo, "resizeButton", MK_RBUTTON);
+				moveModifiers[0] = readRegDword(configKey, "moveModifier0", VK_MENU);
+				moveModifiers[1] = readRegDword(configKey, "moveModifier1", 0);
+				moveModifiers[2] = readRegDword(configKey, "moveModifier2", 0);
+				resizeModifiers[0] = readRegDword(configKey, "resizeModifier0", VK_MENU);
+				resizeModifiers[1] = readRegDword(configKey, "resizeModifier1", 0);
+				resizeModifiers[2] = readRegDword(configKey, "resizeModifier2", 0);
+				moveButton = (MouseButton)readRegDword(configKey, "moveButton", MK_LBUTTON);
+				resizeButton = (MouseButton)readRegDword(configKey, "resizeButton", MK_RBUTTON);
+				resizeMode = (ResizeMode)readRegDword(configKey, "resizeMode", rsNineSquares);
 				// Close the keys again.
-				RegCloseKey(ohPointTwo);
+				RegCloseKey(configKey);
 			}
 			RegCloseKey(taekwindow);
 		}
@@ -166,6 +178,30 @@ bool isDraggableWindow(HWND window) {
 		return false;
 	} else {
 		return true;
+	}
+}
+
+/* Sets the variables resizingX and resizingY to the proper values,
+ * considering the screen-coordinate pointer location.
+ */
+void setResizingX(POINT const &pt) {
+	switch (resizeMode) {
+		case rsBottomRight:
+			resizingX = 1;
+			break;
+		case rsNineSquares:
+			resizingX = (pt.x - lastRect.left) * 3 / (lastRect.right - lastRect.left) - 1;
+			break;
+	}
+}
+void setResizingY(POINT const &pt) {
+	switch (resizeMode) {
+		case rsBottomRight:
+			resizingY = 1;
+			break;
+		case rsNineSquares:
+			resizingY = (pt.y - lastRect.top) * 3 / (lastRect.bottom - lastRect.top) - 1;
+			break;
 	}
 }
 
@@ -209,6 +245,11 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 				// (could happen while resizing).
 				SetCapture(draggedWindow);
 				GetWindowRect(draggedWindow, &lastRect);
+				if (button == resizeButton) {
+					// Figure out in which area we're dragging to resize in the proper direction.
+					setResizingX(eventInfo->pt);
+					setResizingY(eventInfo->pt);
+				}
 			} else {
 				// Modifier-dragging an invalid window. The user won't expect her actions to be passed
 				// to that window, so we suppress all events until the mouse button is released.
@@ -293,15 +334,35 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 				int deltaX, deltaY;
 				switch (currentState) {
 					case dsDragging:
+						// The mouse was moved while we're dragging a window.
+						// Find out by how much it was moved first.
 						deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
 						if (draggingButton == moveButton) {
+							// We're moving the window, so adjust its position.
 							lastRect.left += deltaX;
 							lastRect.top += deltaY;
 							lastRect.right += deltaX;
 							lastRect.bottom += deltaY;
 						} else if (draggingButton == resizeButton) {
-							lastRect.right += deltaX;
-							lastRect.bottom += deltaY;
+							// Resizing the window, at the correct corner/edge.
+							switch (resizingX) {
+								case -1:
+									lastRect.left += deltaX; break;
+								case 1:
+									lastRect.right += deltaX; break;
+								case 0:
+									// We may have come close to a vertical border in the meantime.
+									setResizingX(eventInfo->pt); break;
+							}
+							switch (resizingY) {
+								case -1:
+									lastRect.top += deltaY; break;
+								case 1:
+									lastRect.bottom += deltaY; break;
+								case 0:
+									// We may have come close to a horizontal border in the meantime.
+									setResizingY(eventInfo->pt); break;
+							}
 						}
 						SetWindowPos(draggedWindow, NULL,
 							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
