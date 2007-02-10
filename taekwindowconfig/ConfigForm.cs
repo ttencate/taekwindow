@@ -20,20 +20,27 @@ namespace TaekwindowConfig
 		/// <summary>
 		/// Whether or not settings have changed since last save.
 		/// </summary>
-		private bool settingsSaved = true;
+		private bool settingsSaved {
+			get { return !applyButton.Enabled; }
+			set { applyButton.Enabled = !value; }
+		}
 
 		/// <summary>
 		/// Saves the settings that are currently in the GUI to the registry, and makes the DLL reload them.
 		/// </summary>
 		private void saveSettings()
 		{
-			applyButton.Enabled = false;
+			settingsSaved = true;
 		}
 
 		private void settingChanged()
 		{
 			settingsSaved = false;
-			applyButton.Enabled = true;
+		}
+
+		private void applyButton_Click(object sender, EventArgs e)
+		{
+			saveSettings();
 		}
 
 		private void exitButton_Click(object sender, EventArgs e)
@@ -55,11 +62,18 @@ namespace TaekwindowConfig
 		private void emailLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			System.Diagnostics.Process.Start(emailLinkLabel.Text);
+			e.Link.Visited = true;
 		}
 
 		private void websiteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			System.Diagnostics.Process.Start(websiteLinkLabel.Text);
+			e.Link.Visited = true;
+		}
+
+		private void SettingChanged(object sender, EventArgs e)
+		{
+			settingsSaved = false;
 		}
 	}
 }

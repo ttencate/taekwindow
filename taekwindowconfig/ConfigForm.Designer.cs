@@ -32,25 +32,29 @@ namespace TaekwindowConfig
 			this.exitButton = new System.Windows.Forms.Button();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.generalTabPage = new System.Windows.Forms.TabPage();
-			this.aboutTabPage = new System.Windows.Forms.TabPage();
-			this.logoPictureBox = new System.Windows.Forms.PictureBox();
-			this.nameLabel = new System.Windows.Forms.Label();
-			this.versionLabel = new System.Windows.Forms.Label();
-			this.authorLabel = new System.Windows.Forms.Label();
-			this.emailLinkLabel = new System.Windows.Forms.LinkLabel();
-			this.websiteLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.startAtLogonCheckBox = new System.Windows.Forms.CheckBox();
 			this.trayIconCheckBox = new System.Windows.Forms.CheckBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.keysAndButtonsTabPage = new System.Windows.Forms.TabPage();
 			this.resizingTabPage = new System.Windows.Forms.TabPage();
+			this.keysAndButtonsTabPage = new System.Windows.Forms.TabPage();
+			this.aboutTabPage = new System.Windows.Forms.TabPage();
+			this.label2 = new System.Windows.Forms.Label();
+			this.websiteLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.emailLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.authorLabel = new System.Windows.Forms.Label();
+			this.versionLabel = new System.Windows.Forms.Label();
+			this.nameLabel = new System.Windows.Forms.Label();
+			this.logoPictureBox = new System.Windows.Forms.PictureBox();
+			this.movingGroupBox = new System.Windows.Forms.GroupBox();
+			this.modifierPicker1 = new TaekwindowConfig.ModifierPicker();
 			this.tabControl.SuspendLayout();
 			this.generalTabPage.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.keysAndButtonsTabPage.SuspendLayout();
 			this.aboutTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-			this.groupBox1.SuspendLayout();
+			this.movingGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// applyButton
@@ -63,6 +67,7 @@ namespace TaekwindowConfig
 			this.applyButton.TabIndex = 2;
 			this.applyButton.Text = "&Apply";
 			this.applyButton.UseVisualStyleBackColor = true;
+			this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
 			// 
 			// exitButton
 			// 
@@ -78,6 +83,9 @@ namespace TaekwindowConfig
 			// 
 			// tabControl
 			// 
+			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.generalTabPage);
 			this.tabControl.Controls.Add(this.keysAndButtonsTabPage);
 			this.tabControl.Controls.Add(this.resizingTabPage);
@@ -98,86 +106,6 @@ namespace TaekwindowConfig
 			this.generalTabPage.TabIndex = 0;
 			this.generalTabPage.Text = "General";
 			this.generalTabPage.UseVisualStyleBackColor = true;
-			// 
-			// aboutTabPage
-			// 
-			this.aboutTabPage.Controls.Add(this.label2);
-			this.aboutTabPage.Controls.Add(this.websiteLinkLabel);
-			this.aboutTabPage.Controls.Add(this.emailLinkLabel);
-			this.aboutTabPage.Controls.Add(this.authorLabel);
-			this.aboutTabPage.Controls.Add(this.versionLabel);
-			this.aboutTabPage.Controls.Add(this.nameLabel);
-			this.aboutTabPage.Controls.Add(this.logoPictureBox);
-			this.aboutTabPage.Location = new System.Drawing.Point(4, 22);
-			this.aboutTabPage.Name = "aboutTabPage";
-			this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.aboutTabPage.Size = new System.Drawing.Size(332, 335);
-			this.aboutTabPage.TabIndex = 1;
-			this.aboutTabPage.Text = "About";
-			this.aboutTabPage.UseVisualStyleBackColor = true;
-			// 
-			// logoPictureBox
-			// 
-			this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
-			this.logoPictureBox.Location = new System.Drawing.Point(6, 6);
-			this.logoPictureBox.Name = "logoPictureBox";
-			this.logoPictureBox.Size = new System.Drawing.Size(64, 64);
-			this.logoPictureBox.TabIndex = 1;
-			this.logoPictureBox.TabStop = false;
-			// 
-			// nameLabel
-			// 
-			this.nameLabel.AutoSize = true;
-			this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.nameLabel.Location = new System.Drawing.Point(75, 3);
-			this.nameLabel.Name = "nameLabel";
-			this.nameLabel.Size = new System.Drawing.Size(106, 20);
-			this.nameLabel.TabIndex = 2;
-			this.nameLabel.Text = "Taekwindow";
-			// 
-			// versionLabel
-			// 
-			this.versionLabel.AutoSize = true;
-			this.versionLabel.Location = new System.Drawing.Point(76, 31);
-			this.versionLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
-			this.versionLabel.Name = "versionLabel";
-			this.versionLabel.Size = new System.Drawing.Size(45, 13);
-			this.versionLabel.TabIndex = 3;
-			this.versionLabel.Text = "Version ";
-			// 
-			// authorLabel
-			// 
-			this.authorLabel.AutoSize = true;
-			this.authorLabel.Location = new System.Drawing.Point(76, 52);
-			this.authorLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
-			this.authorLabel.Name = "authorLabel";
-			this.authorLabel.Size = new System.Drawing.Size(139, 13);
-			this.authorLabel.TabIndex = 4;
-			this.authorLabel.Text = "Written by Thomas ten Cate";
-			// 
-			// emailLinkLabel
-			// 
-			this.emailLinkLabel.AutoSize = true;
-			this.emailLinkLabel.Location = new System.Drawing.Point(76, 73);
-			this.emailLinkLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
-			this.emailLinkLabel.Name = "emailLinkLabel";
-			this.emailLinkLabel.Size = new System.Drawing.Size(167, 13);
-			this.emailLinkLabel.TabIndex = 5;
-			this.emailLinkLabel.TabStop = true;
-			this.emailLinkLabel.Text = "ttencate+taekwindow@gmail.com";
-			this.emailLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.emailLinkLabel_LinkClicked);
-			// 
-			// websiteLinkLabel
-			// 
-			this.websiteLinkLabel.AutoSize = true;
-			this.websiteLinkLabel.Location = new System.Drawing.Point(76, 94);
-			this.websiteLinkLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
-			this.websiteLinkLabel.Name = "websiteLinkLabel";
-			this.websiteLinkLabel.Size = new System.Drawing.Size(129, 13);
-			this.websiteLinkLabel.TabIndex = 6;
-			this.websiteLinkLabel.TabStop = true;
-			this.websiteLinkLabel.Text = "http://taekwindow.sf.net/";
-			this.websiteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.websiteLinkLabel_LinkClicked);
 			// 
 			// groupBox1
 			// 
@@ -211,6 +139,7 @@ namespace TaekwindowConfig
 			this.startAtLogonCheckBox.TabIndex = 5;
 			this.startAtLogonCheckBox.Text = "Start when &logging on";
 			this.startAtLogonCheckBox.UseVisualStyleBackColor = true;
+			this.startAtLogonCheckBox.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// trayIconCheckBox
 			// 
@@ -221,6 +150,43 @@ namespace TaekwindowConfig
 			this.trayIconCheckBox.TabIndex = 4;
 			this.trayIconCheckBox.Text = "&Show system tray icon";
 			this.trayIconCheckBox.UseVisualStyleBackColor = true;
+			this.trayIconCheckBox.CheckedChanged += new System.EventHandler(this.SettingChanged);
+			// 
+			// resizingTabPage
+			// 
+			this.resizingTabPage.Location = new System.Drawing.Point(4, 22);
+			this.resizingTabPage.Name = "resizingTabPage";
+			this.resizingTabPage.Size = new System.Drawing.Size(332, 335);
+			this.resizingTabPage.TabIndex = 3;
+			this.resizingTabPage.Text = "Resizing";
+			this.resizingTabPage.UseVisualStyleBackColor = true;
+			// 
+			// keysAndButtonsTabPage
+			// 
+			this.keysAndButtonsTabPage.Controls.Add(this.movingGroupBox);
+			this.keysAndButtonsTabPage.Location = new System.Drawing.Point(4, 22);
+			this.keysAndButtonsTabPage.Name = "keysAndButtonsTabPage";
+			this.keysAndButtonsTabPage.Size = new System.Drawing.Size(332, 335);
+			this.keysAndButtonsTabPage.TabIndex = 2;
+			this.keysAndButtonsTabPage.Text = "Keys and buttons";
+			this.keysAndButtonsTabPage.UseVisualStyleBackColor = true;
+			// 
+			// aboutTabPage
+			// 
+			this.aboutTabPage.Controls.Add(this.label2);
+			this.aboutTabPage.Controls.Add(this.websiteLinkLabel);
+			this.aboutTabPage.Controls.Add(this.emailLinkLabel);
+			this.aboutTabPage.Controls.Add(this.authorLabel);
+			this.aboutTabPage.Controls.Add(this.versionLabel);
+			this.aboutTabPage.Controls.Add(this.nameLabel);
+			this.aboutTabPage.Controls.Add(this.logoPictureBox);
+			this.aboutTabPage.Location = new System.Drawing.Point(4, 22);
+			this.aboutTabPage.Name = "aboutTabPage";
+			this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.aboutTabPage.Size = new System.Drawing.Size(332, 335);
+			this.aboutTabPage.TabIndex = 1;
+			this.aboutTabPage.Text = "About";
+			this.aboutTabPage.UseVisualStyleBackColor = true;
 			// 
 			// label2
 			// 
@@ -233,30 +199,93 @@ namespace TaekwindowConfig
 			this.label2.Text = "You are free and welcome to distribute this program. See the Readme.txt file for " +
 				"license details.";
 			// 
-			// keysAndButtonsTabPage
+			// websiteLinkLabel
 			// 
-			this.keysAndButtonsTabPage.Location = new System.Drawing.Point(4, 22);
-			this.keysAndButtonsTabPage.Name = "keysAndButtonsTabPage";
-			this.keysAndButtonsTabPage.Size = new System.Drawing.Size(332, 335);
-			this.keysAndButtonsTabPage.TabIndex = 2;
-			this.keysAndButtonsTabPage.Text = "Keys and buttons";
-			this.keysAndButtonsTabPage.UseVisualStyleBackColor = true;
+			this.websiteLinkLabel.AutoSize = true;
+			this.websiteLinkLabel.Location = new System.Drawing.Point(76, 94);
+			this.websiteLinkLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+			this.websiteLinkLabel.Name = "websiteLinkLabel";
+			this.websiteLinkLabel.Size = new System.Drawing.Size(129, 13);
+			this.websiteLinkLabel.TabIndex = 6;
+			this.websiteLinkLabel.TabStop = true;
+			this.websiteLinkLabel.Text = "http://taekwindow.sf.net/";
+			this.websiteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.websiteLinkLabel_LinkClicked);
 			// 
-			// resizingTabPage
+			// emailLinkLabel
 			// 
-			this.resizingTabPage.Location = new System.Drawing.Point(4, 22);
-			this.resizingTabPage.Name = "resizingTabPage";
-			this.resizingTabPage.Size = new System.Drawing.Size(332, 335);
-			this.resizingTabPage.TabIndex = 3;
-			this.resizingTabPage.Text = "Resizing";
-			this.resizingTabPage.UseVisualStyleBackColor = true;
+			this.emailLinkLabel.AutoSize = true;
+			this.emailLinkLabel.Location = new System.Drawing.Point(76, 73);
+			this.emailLinkLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+			this.emailLinkLabel.Name = "emailLinkLabel";
+			this.emailLinkLabel.Size = new System.Drawing.Size(167, 13);
+			this.emailLinkLabel.TabIndex = 5;
+			this.emailLinkLabel.TabStop = true;
+			this.emailLinkLabel.Text = "ttencate+taekwindow@gmail.com";
+			this.emailLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.emailLinkLabel_LinkClicked);
+			// 
+			// authorLabel
+			// 
+			this.authorLabel.AutoSize = true;
+			this.authorLabel.Location = new System.Drawing.Point(76, 52);
+			this.authorLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+			this.authorLabel.Name = "authorLabel";
+			this.authorLabel.Size = new System.Drawing.Size(139, 13);
+			this.authorLabel.TabIndex = 4;
+			this.authorLabel.Text = "Written by Thomas ten Cate";
+			// 
+			// versionLabel
+			// 
+			this.versionLabel.AutoSize = true;
+			this.versionLabel.Location = new System.Drawing.Point(76, 31);
+			this.versionLabel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+			this.versionLabel.Name = "versionLabel";
+			this.versionLabel.Size = new System.Drawing.Size(45, 13);
+			this.versionLabel.TabIndex = 3;
+			this.versionLabel.Text = "Version ";
+			// 
+			// nameLabel
+			// 
+			this.nameLabel.AutoSize = true;
+			this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.nameLabel.Location = new System.Drawing.Point(75, 3);
+			this.nameLabel.Name = "nameLabel";
+			this.nameLabel.Size = new System.Drawing.Size(106, 20);
+			this.nameLabel.TabIndex = 2;
+			this.nameLabel.Text = "Taekwindow";
+			// 
+			// logoPictureBox
+			// 
+			this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
+			this.logoPictureBox.Location = new System.Drawing.Point(6, 6);
+			this.logoPictureBox.Name = "logoPictureBox";
+			this.logoPictureBox.Size = new System.Drawing.Size(64, 64);
+			this.logoPictureBox.TabIndex = 1;
+			this.logoPictureBox.TabStop = false;
+			// 
+			// movingGroupBox
+			// 
+			this.movingGroupBox.Controls.Add(this.modifierPicker1);
+			this.movingGroupBox.Location = new System.Drawing.Point(3, 3);
+			this.movingGroupBox.Name = "movingGroupBox";
+			this.movingGroupBox.Size = new System.Drawing.Size(326, 160);
+			this.movingGroupBox.TabIndex = 0;
+			this.movingGroupBox.TabStop = false;
+			this.movingGroupBox.Text = "Moving";
+			// 
+			// modifierPicker1
+			// 
+			this.modifierPicker1.ActionText = "move windows";
+			this.modifierPicker1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.modifierPicker1.Location = new System.Drawing.Point(6, 19);
+			this.modifierPicker1.Name = "modifierPicker1";
+			this.modifierPicker1.Size = new System.Drawing.Size(314, 70);
+			this.modifierPicker1.TabIndex = 0;
 			// 
 			// ConfigForm
 			// 
-			this.AcceptButton = this.applyButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.exitButton;
 			this.ClientSize = new System.Drawing.Size(364, 414);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.exitButton);
@@ -269,11 +298,13 @@ namespace TaekwindowConfig
 			this.Text = "Taekwindow configuration";
 			this.tabControl.ResumeLayout(false);
 			this.generalTabPage.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.keysAndButtonsTabPage.ResumeLayout(false);
 			this.aboutTabPage.ResumeLayout(false);
 			this.aboutTabPage.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
+			this.movingGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -298,6 +329,8 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TabPage keysAndButtonsTabPage;
 		private System.Windows.Forms.TabPage resizingTabPage;
+		private System.Windows.Forms.GroupBox movingGroupBox;
+		private ModifierPicker modifierPicker1;
 	}
 }
 
