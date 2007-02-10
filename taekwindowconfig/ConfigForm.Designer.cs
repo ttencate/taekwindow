@@ -36,8 +36,9 @@ namespace TaekwindowConfig
 			this.label1 = new System.Windows.Forms.Label();
 			this.startAtLogonCheckBox = new System.Windows.Forms.CheckBox();
 			this.trayIconCheckBox = new System.Windows.Forms.CheckBox();
-			this.resizingTabPage = new System.Windows.Forms.TabPage();
 			this.keysAndButtonsTabPage = new System.Windows.Forms.TabPage();
+			this.movingGroupBox = new System.Windows.Forms.GroupBox();
+			this.resizingTabPage = new System.Windows.Forms.TabPage();
 			this.aboutTabPage = new System.Windows.Forms.TabPage();
 			this.label2 = new System.Windows.Forms.Label();
 			this.websiteLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -46,15 +47,15 @@ namespace TaekwindowConfig
 			this.versionLabel = new System.Windows.Forms.Label();
 			this.nameLabel = new System.Windows.Forms.Label();
 			this.logoPictureBox = new System.Windows.Forms.PictureBox();
-			this.movingGroupBox = new System.Windows.Forms.GroupBox();
-			this.modifierPicker1 = new TaekwindowConfig.ModifierPicker();
+			this.label3 = new System.Windows.Forms.Label();
+			this.keyComboPicker1 = new TaekwindowConfig.KeyComboPicker();
 			this.tabControl.SuspendLayout();
 			this.generalTabPage.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.keysAndButtonsTabPage.SuspendLayout();
+			this.movingGroupBox.SuspendLayout();
 			this.aboutTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-			this.movingGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// applyButton
@@ -152,15 +153,6 @@ namespace TaekwindowConfig
 			this.trayIconCheckBox.UseVisualStyleBackColor = true;
 			this.trayIconCheckBox.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
-			// resizingTabPage
-			// 
-			this.resizingTabPage.Location = new System.Drawing.Point(4, 22);
-			this.resizingTabPage.Name = "resizingTabPage";
-			this.resizingTabPage.Size = new System.Drawing.Size(332, 335);
-			this.resizingTabPage.TabIndex = 3;
-			this.resizingTabPage.Text = "Resizing";
-			this.resizingTabPage.UseVisualStyleBackColor = true;
-			// 
 			// keysAndButtonsTabPage
 			// 
 			this.keysAndButtonsTabPage.Controls.Add(this.movingGroupBox);
@@ -170,6 +162,26 @@ namespace TaekwindowConfig
 			this.keysAndButtonsTabPage.TabIndex = 2;
 			this.keysAndButtonsTabPage.Text = "Keys and buttons";
 			this.keysAndButtonsTabPage.UseVisualStyleBackColor = true;
+			// 
+			// movingGroupBox
+			// 
+			this.movingGroupBox.Controls.Add(this.label3);
+			this.movingGroupBox.Controls.Add(this.keyComboPicker1);
+			this.movingGroupBox.Location = new System.Drawing.Point(3, 3);
+			this.movingGroupBox.Name = "movingGroupBox";
+			this.movingGroupBox.Size = new System.Drawing.Size(326, 160);
+			this.movingGroupBox.TabIndex = 0;
+			this.movingGroupBox.TabStop = false;
+			this.movingGroupBox.Text = "Moving";
+			// 
+			// resizingTabPage
+			// 
+			this.resizingTabPage.Location = new System.Drawing.Point(4, 22);
+			this.resizingTabPage.Name = "resizingTabPage";
+			this.resizingTabPage.Size = new System.Drawing.Size(332, 335);
+			this.resizingTabPage.TabIndex = 3;
+			this.resizingTabPage.Text = "Resizing";
+			this.resizingTabPage.UseVisualStyleBackColor = true;
 			// 
 			// aboutTabPage
 			// 
@@ -262,25 +274,21 @@ namespace TaekwindowConfig
 			this.logoPictureBox.TabIndex = 1;
 			this.logoPictureBox.TabStop = false;
 			// 
-			// movingGroupBox
+			// label3
 			// 
-			this.movingGroupBox.Controls.Add(this.modifierPicker1);
-			this.movingGroupBox.Location = new System.Drawing.Point(3, 3);
-			this.movingGroupBox.Name = "movingGroupBox";
-			this.movingGroupBox.Size = new System.Drawing.Size(326, 160);
-			this.movingGroupBox.TabIndex = 0;
-			this.movingGroupBox.TabStop = false;
-			this.movingGroupBox.Text = "Moving";
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(6, 22);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(61, 13);
+			this.label3.TabIndex = 1;
+			this.label3.Text = "&Hold down:";
 			// 
-			// modifierPicker1
+			// keyComboPicker1
 			// 
-			this.modifierPicker1.ActionText = "move windows";
-			this.modifierPicker1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.modifierPicker1.Location = new System.Drawing.Point(6, 19);
-			this.modifierPicker1.Name = "modifierPicker1";
-			this.modifierPicker1.Size = new System.Drawing.Size(314, 70);
-			this.modifierPicker1.TabIndex = 0;
+			this.keyComboPicker1.Location = new System.Drawing.Point(73, 19);
+			this.keyComboPicker1.Name = "keyComboPicker1";
+			this.keyComboPicker1.Size = new System.Drawing.Size(247, 43);
+			this.keyComboPicker1.TabIndex = 0;
 			// 
 			// ConfigForm
 			// 
@@ -301,10 +309,11 @@ namespace TaekwindowConfig
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.keysAndButtonsTabPage.ResumeLayout(false);
+			this.movingGroupBox.ResumeLayout(false);
+			this.movingGroupBox.PerformLayout();
 			this.aboutTabPage.ResumeLayout(false);
 			this.aboutTabPage.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-			this.movingGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -330,7 +339,8 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.TabPage keysAndButtonsTabPage;
 		private System.Windows.Forms.TabPage resizingTabPage;
 		private System.Windows.Forms.GroupBox movingGroupBox;
-		private ModifierPicker modifierPicker1;
+		private System.Windows.Forms.Label label3;
+		private KeyComboPicker keyComboPicker1;
 	}
 }
 

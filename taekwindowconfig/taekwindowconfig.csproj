@@ -55,8 +55,14 @@
     <Compile Include="ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModifierPicker.cs">
+    <Compile Include="KeyComboPicker.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="KeyComboPicker.Designer.cs">
+      <DependentUpon>KeyComboPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModifierPicker.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ModifierPicker.Designer.cs">
       <DependentUpon>ModifierPicker.cs</DependentUpon>
@@ -67,9 +73,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ModifierPicker.resx">
+    <EmbeddedResource Include="KeyComboPicker.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ModifierPicker.cs</DependentUpon>
+      <DependentUpon>KeyComboPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
