@@ -44,12 +44,29 @@ http://sourceforge.net/tracker/?group_id=185457&atid=913356
 Apart from a list of planned features, this also contains all feature
 requests submitted by users. You can of course submit your own.
 
+Version history
+---------------
+
+0.1:
+- very first version
+- native Win32 executable facilitating moving and resizing with Alt
+
 Contact
 -------
 
 Taekwindow is written by Thomas ten Cate. The preferred way to contact
 the author is through the Taekwindow web page, located at:
 http://taekwindow.sf.net/
+
+Contributors
+------------
+
+The following people have contributed to the current version of
+Taekwindow:
+- Eamon Nerbonne and Mark IJbema have tested early versions of the
+  program and provided valuable comments and suggestions.
+- Sylvain Vignaud provided a patch to blacklist certain applications
+  that require Alt-dragging in their normal mode of operation.
 
 Legal (modified BSD-style license)
 ----------------------------------
