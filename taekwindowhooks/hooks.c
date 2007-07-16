@@ -22,7 +22,10 @@ DWORD mainThreadId = 0;
  *             This is used when the user attempts to Modifier+drag a window that cannot be moved,
  *             e.g. a maximized window. In that case we don't want to pass those mouse events to that window.
  */
-enum DragState { dsNone, dsDragging, dsIgnoring };
+typedef int DragState;
+#define	dsNone     0
+#define dsDragging 1
+#define dsIgnoring 2
 DragState currentState = dsNone;
 
 /* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
@@ -34,13 +37,15 @@ int resizingX = 0, resizingY = 0;
 /* The button that we're dragging with.
  * Only meaningful while we're dragging, of course.
  */
-enum MouseButton : DWORD {
-	mbLeft = MK_LBUTTON, mbMiddle = MK_MBUTTON, mbRight = MK_RBUTTON
+typedef DWORD MouseButton;
+#define mbLeft   MK_LBUTTON
+#define mbMiddle MK_MBUTTON
+#define mbRight  MK_RBUTTON
 #if _WIN32_WINNT >= 0x0500
 	// only declare these if we build for Windows 2000 or above
-	, mbX1 = MK_XBUTTON1, mbX2 = MK_XBUTTON2
+#define mbX1     MK_XBUTTON1
+#define mbX2     MK_XBUTTON2
 #endif
-};
 MouseButton draggingButton = mbLeft;
 
 /* The last known location of the mouse cursor (screen coordinates).
@@ -70,7 +75,9 @@ MouseButton resizeButton = mbRight;
 
 /* The resize mode used.
  */
-enum ResizeMode { rsBottomRight = 0, rsNineSquares = 1 };
+typedef int ResizeMode;
+#define rsBottomRight 0
+#define rsNineSquares 1
 ResizeMode resizeMode = rsNineSquares;
 
 /* End of the shared data segment.
@@ -87,9 +94,9 @@ HINSTANCE dllHandle = NULL;
  * with the given title.
  */
 void showLastError(LPCWSTR title) {
+	PVOID msg;
 	if (!GetLastError())
 		return;
-	PVOID msg;
 	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
 	MessageBoxW(NULL, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
 	LocalFree(msg);
@@ -117,7 +124,7 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
 		return mainThreadId;
 	} else {
 		mainThreadId = threadId;
-		return NULL;
+		return 0;
 	}
 }
 
@@ -134,17 +141,15 @@ DWORD readRegDword(HKEY key, LPSTR value, DWORD def) {
 }
 
 void __declspec(dllexport) __stdcall readConfig() {
+	HKEY software, taekwindow, configKey;
 	// Set up defaults; these are loaded if registry loading fails for some reason.
 	moveModifiers[0] = VK_MENU;
 	moveModifiers[1] = 0;
 	resizeModifiers[0] = VK_MENU;
 	resizeModifiers[1] = 0;
 	// Open the registry keys.
-	HKEY software;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {
-		HKEY taekwindow;
 		if (RegOpenKeyEx(software, "Taekwindow", 0, KEY_READ, &taekwindow) == ERROR_SUCCESS) {
-			HKEY configKey;
 			// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
 			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
 			if (RegOpenKeyEx(taekwindow, "0.2", 0, KEY_READ, &configKey) == ERROR_SUCCESS) {
@@ -170,37 +175,37 @@ void __declspec(dllexport) __stdcall readConfig() {
 /* Returns true if the given window can be moved and resized.
  * Prevents moving/resizing of maximized windows. Other cases may be added later.
  */
-bool isDraggableWindow(HWND window) {
+BOOL isDraggableWindow(HWND window) {
 	WINDOWINFO info;
 	info.cbSize = sizeof(WINDOWINFO);
 	GetWindowInfo(window, &info);
 	if (info.dwStyle & WS_MAXIMIZE) {
-		return false;
+		return FALSE;
 	} else {
-		return true;
+		return TRUE;
 	}
 }
 
 /* Sets the variables resizingX and resizingY to the proper values,
  * considering the screen-coordinate pointer location.
  */
-void setResizingX(POINT const &pt) {
+void setResizingX(POINT const *pt) {
 	switch (resizeMode) {
 		case rsBottomRight:
 			resizingX = 1;
 			break;
 		case rsNineSquares:
-			resizingX = (pt.x - lastRect.left) * 3 / (lastRect.right - lastRect.left) - 1;
+			resizingX = (pt->x - lastRect.left) * 3 / (lastRect.right - lastRect.left) - 1;
 			break;
 	}
 }
-void setResizingY(POINT const &pt) {
+void setResizingY(POINT const *pt) {
 	switch (resizeMode) {
 		case rsBottomRight:
 			resizingY = 1;
 			break;
 		case rsNineSquares:
-			resizingY = (pt.y - lastRect.top) * 3 / (lastRect.bottom - lastRect.top) - 1;
+			resizingY = (pt->y - lastRect.top) * 3 / (lastRect.bottom - lastRect.top) - 1;
 			break;
 	}
 }
@@ -210,25 +215,26 @@ void setResizingY(POINT const &pt) {
  * modifiers points to a 0-terminated array of ints representing the virtual key codes of the modifiers.
  * For safety, this list is assumed to contain at most 3 elements, not counting the terminator.
  */
-bool allModifiersDown(int *modifiers) {
-	for (int i = 0; i < 3; i++) {
+BOOL allModifiersDown(int *modifiers) {
+	int i;
+	for (i = 0; i < 3; i++) {
 		if (!modifiers[i]) {
 			// Reached the terminator.
-			return true;
+			return TRUE;
 		}
 		if (!(GetKeyState(modifiers[i]) & 0x80000000)) {
 			// One of 'em is not down.
-			return false;
+			return FALSE;
 		}
 	}
 	// No not-down modifier found.
-	return true;
+	return TRUE;
 }
 
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
-bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
+BOOL processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 	if (currentState == dsNone) {
 		// Nothing is yet going on. We possibly want to take action if the correct mouse button is being used.
 		if ((button == moveButton && allModifiersDown(moveModifiers))
@@ -247,8 +253,8 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 				GetWindowRect(draggedWindow, &lastRect);
 				if (button == resizeButton) {
 					// Figure out in which area we're dragging to resize in the proper direction.
-					setResizingX(eventInfo->pt);
-					setResizingY(eventInfo->pt);
+					setResizingX(&eventInfo->pt);
+					setResizingY(&eventInfo->pt);
 				}
 			} else {
 				// Modifier-dragging an invalid window. The user won't expect her actions to be passed
@@ -256,37 +262,37 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 				currentState = dsIgnoring;
 			}
 			// Either way, we eat the event.
-			return true;
+			return TRUE;
 		} else {
 			// Mouse-down event with wrong button or wrong modifiers. Stay away from it.
-			return false;
+			return FALSE;
 		}
 	} else {
 		// We're already dragging, and another button was pressed.
 		// Naughty user shouldn't do this, but we pass the event anyway, because otherwise the application
 		// might receive a mouse-up event without a preceding mouse-down event and get all confused.
-		return false;
+		return FALSE;
 	}
 }
 
 /* Processes a mouse button release event.
  * Returns true if the event was processed and should not be passed to the application, false otherwise.
  */
-bool processButtonUp(MouseButton button) {
+BOOL processButtonUp(MouseButton button) {
 	switch (currentState) {
 		case dsNone:
 			// Nothing going on, pass the event on.
-			return false;
+			return FALSE;
 		case dsDragging:
 			if (button == draggingButton) {
 				// End of move or resize action.
 				// Release the capture and eat the event.
 				ReleaseCapture();
 				currentState = dsNone;
-				return true;
+				return TRUE;
 			} else {
 				// Other button released during move event. (Naughty user!)
-				return false;
+				return FALSE;
 			}
 		case dsIgnoring:
 			// Ignoring all events until the appropriate button was released.
@@ -295,10 +301,10 @@ bool processButtonUp(MouseButton button) {
 				// But we still ignore this up event, of course.
 				currentState = dsNone;
 			}
-			return true;
+			return TRUE;
 		default:
 			// Should never be reached unless the currentState enum was tortured by inserting a pineapple into its butt.
-			return false;
+			return FALSE;
 	}
 }
 
@@ -306,7 +312,10 @@ bool processButtonUp(MouseButton button) {
  * see the SetWindowsHookEx documentation for details.
  */
 LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	bool processed = false; // Set to true if we don't want to pass the event to the application.
+	BOOL processed = TRUE; // Set to true if we don't want to pass the event to the application.
+	int deltaX, deltaY;
+	LRESULT res;
+
 	if (nCode == HC_ACTION) {
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
 		switch (wParam) {
@@ -331,7 +340,6 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 				processed = processButtonUp(mbRight);
 				break;
 			case WM_MOUSEMOVE:
-				int deltaX, deltaY;
 				switch (currentState) {
 					case dsDragging:
 						// The mouse was moved while we're dragging a window.
@@ -352,7 +360,7 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 									lastRect.right += deltaX; break;
 								case 0:
 									// We may have come close to a vertical border in the meantime.
-									setResizingX(eventInfo->pt); break;
+									setResizingX(&eventInfo->pt); break;
 							}
 							switch (resizingY) {
 								case -1:
@@ -361,7 +369,7 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 									lastRect.bottom += deltaY; break;
 								case 0:
 									// We may have come close to a horizontal border in the meantime.
-									setResizingY(eventInfo->pt); break;
+									setResizingY(&eventInfo->pt); break;
 							}
 						}
 						SetWindowPos(draggedWindow, NULL,
@@ -369,7 +377,7 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 							SWP_NOACTIVATE | SWP_NOZORDER);
 						// no break here
 					case dsIgnoring:
-						processed = true;
+						processed = TRUE;
 						break;
 					case dsNone:
 						break;
@@ -379,7 +387,7 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 		lastMousePos = eventInfo->pt;
 	}
 
-	LRESULT res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
+	res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
 	if (processed)
 		res = 1; // nonzero return value prevents passing the event to the application
 	return res;
