@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 
 #include "hooks.h"
 
@@ -95,11 +96,28 @@ HINSTANCE dllHandle = NULL;
  */
 void showLastError(LPCWSTR title) {
 	PVOID msg;
+
 	if (!GetLastError())
 		return;
 	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
 	MessageBoxW(NULL, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
 	LocalFree(msg);
+}
+#endif
+
+#ifdef DEBUG
+/* For debugging purposes: writes a line to the debug log, called debug.txt, in the current working directory.
+ * Note that it is opened and closed for every line that's written, because I'm too lazy to figure out
+ * whether I can share the file handle between different processes.
+ */
+void debugLogMessage(char *text) {
+	FILE *debugFile;
+
+	debugFile = fopen("debug.txt", "a");
+
+	fprintf(debugFile, text);
+
+	fclose(debugFile);
 }
 #endif
 
