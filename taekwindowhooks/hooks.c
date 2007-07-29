@@ -308,11 +308,11 @@ BOOL processButtonUp(MouseButton button) {
 	}
 }
 
-/* The function for handling mouse events. This is the reason why we have to use a separate DLL;
- * see the SetWindowsHookEx documentation for details.
+/* The function for handling mouse events. Executed in the context of the process that owns the window.
+ * This is the reason why we have to use a separate DLL; see the SetWindowsHookEx documentation for details.
  */
 LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	BOOL processed = TRUE; // Set to true if we don't want to pass the event to the application.
+	BOOL processed = FALSE; // Set to true if we don't want to pass the event to the application.
 	int deltaX, deltaY;
 	LRESULT res;
 
@@ -322,24 +322,31 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 			// We have to process these events separately, because we do not get the full message data.
 			// E.g. the WM_LBUTTONDOWN message holds MK_LBUTTON in its wParam, but we do not get this wParam through this hook.
 			case WM_LBUTTONDOWN:
+			case WM_NCLBUTTONDOWN:
 				processed = processButtonDown(mbLeft, eventInfo);
 				break;
 			case WM_MBUTTONDOWN:
+			case WM_NCMBUTTONDOWN:
 				processed = processButtonDown(mbMiddle, eventInfo);
 				break;
 			case WM_RBUTTONDOWN:
+			case WM_NCRBUTTONDOWN:
 				processed = processButtonDown(mbRight, eventInfo);
 				break;
 			case WM_LBUTTONUP:
+			case WM_NCLBUTTONUP:
 				processed = processButtonUp(mbLeft);
 				break;
 			case WM_MBUTTONUP:
+			case WM_NCMBUTTONUP:
 				processed = processButtonUp(mbMiddle);
 				break;
 			case WM_RBUTTONUP:
+			case WM_NCRBUTTONUP:
 				processed = processButtonUp(mbRight);
 				break;
 			case WM_MOUSEMOVE:
+			case WM_NCMOUSEMOVE:
 				switch (currentState) {
 					case dsDragging:
 						// The mouse was moved while we're dragging a window.
@@ -381,6 +388,13 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 						break;
 					case dsNone:
 						break;
+				}
+				break;
+			case WM_MOUSEACTIVATE:
+				// Sent whenever the mouse was pressed in an inactive window.
+				// When moving or resizing it, we want to ignore this.
+				if (currentState == dsDragging || currentState == dsIgnoring) {
+					processed = TRUE;
 				}
 				break;
 		}
