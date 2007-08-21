@@ -59,6 +59,11 @@ POINT lastMousePos = { 0, 0 };
  */
 HWND draggedWindow = NULL;
 
+/* The window that had focus before we started dragging.
+ * Only meaningful if currentState is dsDragging.
+ */
+HWND focusedWindow = NULL;
+
 /* The last known window rectangle of the draggedWindow. Saves us calls to GetWindowRect().
  */
 RECT lastRect = { 0, 0, 0, 0 };
@@ -80,6 +85,20 @@ typedef int ResizeMode;
 #define rsBottomRight 0
 #define rsNineSquares 1
 ResizeMode resizeMode = rsNineSquares;
+
+/* The desired behaviour of the focus.
+ */
+typedef int FocusMode;
+#define fmRetainFocus 0 // no focus change on moving/resizing
+#define fmSwitchFocus 1 // give focus to window being moved/resized
+FocusMode focusMode = fmRetainFocus;
+
+/* The desired behaviour of the stacking order (Z-order).
+ */
+typedef int StackingMode;
+#define smRetainStacking 0 // window is not moved to the top when moving/resizing
+#define smBringToFront 1   // window is moved to the top when moving/resizing
+StackingMode stackingMode = smRetainStacking;
 
 /* End of the shared data segment.
  */
@@ -181,6 +200,8 @@ void __declspec(dllexport) __stdcall readConfig() {
 				moveButton = (MouseButton)readRegDword(configKey, "moveButton", MK_LBUTTON);
 				resizeButton = (MouseButton)readRegDword(configKey, "resizeButton", MK_RBUTTON);
 				resizeMode = (ResizeMode)readRegDword(configKey, "resizeMode", rsNineSquares);
+				focusMode = (FocusMode)readRegDword(configKey, "focusMode", fmRetainFocus);
+				stackingMode = (StackingMode)readRegDword(configKey, "stackingMode", smRetainStacking);
 				// Close the keys again.
 				RegCloseKey(configKey);
 			}
@@ -228,8 +249,7 @@ void setResizingY(POINT const *pt) {
 	}
 }
 
-/**
- * Returns true if all specified modifiers are down.
+/* Returns true if all specified modifiers are down.
  * modifiers points to a 0-terminated array of ints representing the virtual key codes of the modifiers.
  * For safety, this list is assumed to contain at most 3 elements, not counting the terminator.
  */
@@ -249,6 +269,44 @@ BOOL allModifiersDown(int *modifiers) {
 	return TRUE;
 }
 
+/* Initiates a window dragging action (i.e. moving/resizing).
+ */
+void startDragAction(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
+	// Remember which window had the focus previously, so we can restore it if desired.
+	focusedWindow = GetForegroundWindow();
+	// Capture the mouse so it'll still get events even if the mouse leaves the window
+	// (could happen while resizing).
+	SetCapture(draggedWindow);
+	GetWindowRect(draggedWindow, &lastRect);
+	if (button == resizeButton) {
+		// Figure out in which area we're dragging to resize in the proper direction.
+		setResizingX(&eventInfo->pt);
+		setResizingY(&eventInfo->pt);
+	}
+	// Pull the window to the top if the user likes that.
+	if (stackingMode == smBringToFront) {
+		if (focusMode == fmSwitchFocus) {
+			// Easiest way to raise and focus.
+			BringWindowToTop(draggedWindow);
+		} else {
+			// When trying to pull the window to the top without activating it,
+			// using HWND_TOP and the SWP_NOACTIVATE flag, nothing happens.
+			// This HACK seems to work nicely.
+			// BUG: windows that are already topmost 
+			SetWindowPos(draggedWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+			SetWindowPos(draggedWindow, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		}
+	} else { // stackingMode == smRetainStacking
+		if (focusMode == fmSwitchFocus) {
+			// Change focus, but do not raise.
+			// TODO
+		} else {
+			// Neither change focus, nor raise dragged window.
+			// TODO: keep active window active, instead of having it lose focus
+		}
+	}
+}
+
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
@@ -265,15 +323,7 @@ BOOL processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 			draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
 			if (isDraggableWindow(draggedWindow)) {
 				// Window can be dragged.
-				// Capture the mouse so it'll still get events even if the mouse leaves the window
-				// (could happen while resizing).
-				SetCapture(draggedWindow);
-				GetWindowRect(draggedWindow, &lastRect);
-				if (button == resizeButton) {
-					// Figure out in which area we're dragging to resize in the proper direction.
-					setResizingX(&eventInfo->pt);
-					setResizingY(&eventInfo->pt);
-				}
+				startDragAction(button, eventInfo);
 			} else {
 				// Modifier-dragging an invalid window. The user won't expect her actions to be passed
 				// to that window, so we suppress all events until the mouse button is released.
@@ -282,7 +332,7 @@ BOOL processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 			// Either way, we eat the event.
 			return TRUE;
 		} else {
-			// Mouse-down event with wrong button or wrong modifiers. Stay away from it.
+			// Mouse-down event with button or modifiers that we don't care about. Stay away from it.
 			return FALSE;
 		}
 	} else {
@@ -290,6 +340,32 @@ BOOL processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 		// Naughty user shouldn't do this, but we pass the event anyway, because otherwise the application
 		// might receive a mouse-up event without a preceding mouse-down event and get all confused.
 		return FALSE;
+	}
+}
+
+/* Processes the end of a drag (i.e. move/resize) action.
+ */
+void endDragAction() {
+	ReleaseCapture();
+	currentState = dsNone;
+
+	if (focusMode == fmRetainFocus) {
+		// Dragging a window makes the focus go away from the currently focused window, with the result that no window has focus at all.
+		// So we give focus back to the window that previously had it.
+		// There must be a better way, i.e. preventing the focus change altogether, but I don't know how.
+
+		// TODO
+	}
+	switch (focusMode) {
+		case fmRetainFocus:
+			// Return focus to the window that previously had it.
+			// If NULL, this means no window had focus, so we restore to that situation.
+			SetFocus(focusedWindow);
+			break;
+		case fmSwitchFocus:
+			// Switch focus to the window that we were dragging.
+			SetWindowPos(draggedWindow, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
+			break;
 	}
 }
 
@@ -304,9 +380,8 @@ BOOL processButtonUp(MouseButton button) {
 		case dsDragging:
 			if (button == draggingButton) {
 				// End of move or resize action.
-				// Release the capture and eat the event.
-				ReleaseCapture();
-				currentState = dsNone;
+				// Process it and eat the event.
+				endDragAction();
 				return TRUE;
 			} else {
 				// Other button released during move event. (Naughty user!)
@@ -326,12 +401,59 @@ BOOL processButtonUp(MouseButton button) {
 	}
 }
 
+/* Processes drag events that we want to handle.
+ */
+void processDrag(MOUSEHOOKSTRUCT const *eventInfo) {
+	int deltaX, deltaY;
+	UINT flags;
+
+	// Find out by how much the mouse was moved.
+	deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
+	if (draggingButton == moveButton) {
+		// We're moving the window, so adjust its position.
+		lastRect.left += deltaX;
+		lastRect.top += deltaY;
+		lastRect.right += deltaX;
+		lastRect.bottom += deltaY;
+	} else if (draggingButton == resizeButton) {
+		// Resizing the window, at the correct corner/edge.
+		switch (resizingX) {
+			case -1:
+				lastRect.left += deltaX; break;
+			case 1:
+				lastRect.right += deltaX; break;
+			case 0:
+				// We may have come close to a vertical border in the meantime.
+				setResizingX(&eventInfo->pt); break;
+		}
+		switch (resizingY) {
+			case -1:
+				lastRect.top += deltaY; break;
+			case 1:
+				lastRect.bottom += deltaY; break;
+			case 0:
+				// We may have come close to a horizontal border in the meantime.
+				setResizingY(&eventInfo->pt); break;
+		}
+	}
+
+	flags = 0;
+	if (focusMode == fmRetainFocus) {
+		flags |= SWP_NOACTIVATE;
+	}
+	if (stackingMode == smRetainStacking) {
+		flags |= SWP_NOZORDER | SWP_NOOWNERZORDER;
+	}
+	SetWindowPos(draggedWindow, HWND_TOP,
+	             lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
+	             flags);
+}
+
 /* The function for handling mouse events. Executed in the context of the process that owns the window.
  * This is the reason why we have to use a separate DLL; see the SetWindowsHookEx documentation for details.
  */
 LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	BOOL processed = FALSE; // Set to true if we don't want to pass the event to the application.
-	int deltaX, deltaY;
 	LRESULT res;
 
 	if (nCode == HC_ACTION) {
@@ -368,39 +490,9 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
 				switch (currentState) {
 					case dsDragging:
 						// The mouse was moved while we're dragging a window.
-						// Find out by how much it was moved first.
-						deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
-						if (draggingButton == moveButton) {
-							// We're moving the window, so adjust its position.
-							lastRect.left += deltaX;
-							lastRect.top += deltaY;
-							lastRect.right += deltaX;
-							lastRect.bottom += deltaY;
-						} else if (draggingButton == resizeButton) {
-							// Resizing the window, at the correct corner/edge.
-							switch (resizingX) {
-								case -1:
-									lastRect.left += deltaX; break;
-								case 1:
-									lastRect.right += deltaX; break;
-								case 0:
-									// We may have come close to a vertical border in the meantime.
-									setResizingX(&eventInfo->pt); break;
-							}
-							switch (resizingY) {
-								case -1:
-									lastRect.top += deltaY; break;
-								case 1:
-									lastRect.bottom += deltaY; break;
-								case 0:
-									// We may have come close to a horizontal border in the meantime.
-									setResizingY(&eventInfo->pt); break;
-							}
-						}
-						SetWindowPos(draggedWindow, NULL,
-							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
-							SWP_NOACTIVATE | SWP_NOZORDER);
-						// no break here
+						processDrag(eventInfo);
+						processed = TRUE;
+						break;
 					case dsIgnoring:
 						processed = TRUE;
 						break;
@@ -430,10 +522,42 @@ LRESULT __declspec(dllexport) CALLBACK mouseProc(int nCode, WPARAM wParam, LPARA
  */
 LRESULT __declspec(dllexport) CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 #ifdef DEBUG
+	HWND hwnd;
+	POINT mousePos;
 	if (wParam == 0x51) {
 		// Q button pressed. Panic button for debugging.
 		PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
 		return 1;
+	}
+	if (wParam == 0x52) {
+		// R button pressed. Raise window under cursor.
+		GetCursorPos(&mousePos);
+		hwnd = WindowFromPoint(mousePos);
+		hwnd = GetAncestor(hwnd, GA_ROOT);
+		// When trying to pull the window to the top, using HWND_TOP and the SWP_NOACTIVATE flag,
+		// nothing happens. This HACK seems to work nicely.
+		SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		return 1;
+	}
+	if (wParam == 0x41) {
+		// A button pressed. Activate window under cursor.
+		GetCursorPos(&mousePos);
+		hwnd = WindowFromPoint(mousePos);
+		hwnd = GetAncestor(hwnd, GA_ROOT);
+		/* activates and raises:
+		SetWindowPos(hwnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
+		*/
+		/* activates and raises:
+		AttachThreadInput(GetCurrentThreadId(), GetWindowThreadProcessId(hwnd, NULL), TRUE);
+		SetActiveWindow(hwnd);
+		AttachThreadInput(GetCurrentThreadId(), GetWindowThreadProcessId(hwnd, NULL), FALSE);
+		*/
+		/* activates and raises:
+		AttachThreadInput(GetCurrentThreadId(), GetWindowThreadProcessId(hwnd, NULL), TRUE);
+		SetFocus(hwnd);
+		AttachThreadInput(GetCurrentThreadId(), GetWindowThreadProcessId(hwnd, NULL), FALSE);
+		*/
 	}
 #endif
 	if (nCode == HC_ACTION) {
