@@ -56,6 +56,7 @@
     <Compile Include="ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\ProcessedVersionInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConfigForm.resx">
@@ -71,15 +72,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="types.cs" />
   </ItemGroup>
@@ -104,6 +96,9 @@
     <Content Include="..\graphics\all.ico">
       <Link>all.ico</Link>
     </Content>
+    <Content Include="..\version.inc">
+      <Link>version.inc</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -113,4 +108,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>echo "NOTE: cl.exe (the C++ compiler) and the Common7\IDE directory must be in PATH for this to work!"
+cl.exe /EP "$(ProjectDir)Properties\VersionInfo.cs" &gt; "$(ProjectDir)Properties\ProcessedVersionInfo.cs"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

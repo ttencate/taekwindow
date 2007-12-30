@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("taekwindowconfig")]
+[assembly: AssemblyTitle(VersionInfo.Title)]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("-")]
-[assembly: AssemblyProduct("taekwindowconfig")]
-[assembly: AssemblyCopyright("Copyright © - 2007")]
+[assembly: AssemblyCompany(VersionInfo.Author)]
+[assembly: AssemblyProduct(VersionInfo.Title)]
+[assembly: AssemblyCopyright(VersionInfo.Copyright)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.2.0.0")]
-[assembly: AssemblyFileVersion("0.2.0.0")]
+[assembly: AssemblyVersion(VersionInfo.VersionString)]
+[assembly: AssemblyFileVersion(VersionInfo.VersionString)]
