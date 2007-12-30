@@ -107,6 +107,9 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
 	}
 }
 
+/* Reads the configuration from the registry.
+ * If no value is present for a certain setting, that setting remains untouched.
+ */
 void __declspec(dllexport) __stdcall readConfig() {
 	// Set up defaults; these are loaded if registry loading fails for some reason.
 	modifier = VK_MENU;
@@ -252,6 +255,8 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 				int deltaX, deltaY;
 				switch (currentState) {
 					case dsDragging:
+						// We are handling the moving or resizing of a window.
+						// Find out the movement since the last known mouse position.
 						deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
 						if (draggingButton == mbLeft) {
 							lastRect.left += deltaX;
@@ -262,10 +267,11 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 							lastRect.right += deltaX;
 							lastRect.bottom += deltaY;
 						}
+						// Now possibly the most important statement in the program: apply the movement/resizing to the window!
 						SetWindowPos(draggedWindow, NULL,
 							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
 							SWP_NOACTIVATE | SWP_NOOWNERZORDER);
-						// no break here
+						// No break here: fall through to the next case.
 					case dsIgnoring:
 						processed = true;
 						break;
