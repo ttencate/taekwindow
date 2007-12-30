@@ -133,8 +133,12 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 							// error in GetMessage... low-level, panic and abort
 							break;
 						} else {
-							TranslateMessage(&msg);
-							DispatchMessage(&msg);
+							if (msg.message == WM_APP) {
+								readConfig();
+							} else {
+								TranslateMessage(&msg);
+								DispatchMessage(&msg);
+							}
 						}
 					} while (getMsgRetVal);
 					if (getMsgRetVal) {

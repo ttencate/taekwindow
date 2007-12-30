@@ -9,12 +9,18 @@ using System.Reflection;
 using Microsoft.Win32;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace TaekwindowConfig
 {
 	public partial class ConfigForm : Form
 	{
 		private static string settingsKey = "Software\\Taekwindow\\0.2";
+
+		[DllImport("user32.dll", SetLastError = true)]
+		private static extern bool PostThreadMessage(int threadId, int message, int wParam, int lParam);
+
+		private const int WM_APP = 0x8000;
 
 		public ConfigForm()
 		{
@@ -127,7 +133,12 @@ namespace TaekwindowConfig
 		/// </summary>
 		private void triggerReload()
 		{
-			// TODO
+			Process[] procs = Process.GetProcessesByName("Taekwindow");
+			foreach (Process proc in procs) {
+				foreach (ProcessThread thread in proc.Threads) {
+					PostThreadMessage(thread.Id, WM_APP, 0, 0);
+				}
+			}
 		}
 
 		/// <summary>
