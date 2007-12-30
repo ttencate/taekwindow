@@ -11,23 +11,22 @@ DWORD (__stdcall *initProc)(DWORD) = NULL;
 void (__stdcall *readConfigProc)() = NULL;
 HOOKPROC mouseProc = NULL;
 HOOKPROC keyboardProc = NULL;
-HOOKPROC callWndRetProc = NULL;
 HHOOK mouseHook = NULL;
 HHOOK keyboardHook = NULL;
 
 /* Loads and initializes the DLL with the hook handlers.
  * Returns true on success.
  */
-BOOL loadDll() {
+bool loadDll() {
 	dllHandle = LoadLibrary(L"taekwindowhooks.dll");
 	if (!dllHandle)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 /* Unloads the DLL. Returns true on success.
  */
-BOOL unloadDll() {
+bool unloadDll() {
 	return FreeLibrary(dllHandle) != 0;
 }
 
@@ -41,20 +40,20 @@ DWORD initDll() {
 /* Initializes the function pointers to functions in the DLL.
  * Returns true on success.
  */
-BOOL findProcs() {
+bool findProcs() {
 	initProc = (DWORD (__stdcall*)(DWORD))GetProcAddress(dllHandle, INIT_ORDINAL);
 	if (!initProc)
-		return FALSE;
+		return false;
 	readConfigProc = (void (__stdcall*)())GetProcAddress(dllHandle, READ_CONFIG_ORDINAL);
 	if (!readConfigProc)
-		return FALSE;
+		return false;
 	mouseProc = (HOOKPROC)GetProcAddress(dllHandle, MOUSEPROC_ORDINAL);
 	if (!mouseProc)
-		return FALSE;
+		return false;
 	keyboardProc = (HOOKPROC)GetProcAddress(dllHandle, KEYBOARDPROC_ORDINAL);
 	if (!keyboardProc)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 /* Kicks the DLL to read its configuration from the registry.
@@ -67,25 +66,25 @@ void readConfig() {
  * Currently this is only done for mouse events; keyboard events may be added later.
  * Returns true on success.
  */
-BOOL attachHooks() {
-	mouseHook = SetWindowsHookEx(WH_MOUSE, (HOOKPROC)mouseProc, dllHandle, 0);
+bool attachHooks() {
+	mouseHook = SetWindowsHookEx(WH_MOUSE, (HOOKPROC)mouseProc, dllHandle, NULL);
 	if (!mouseHook)
-		return FALSE;
-	keyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC)keyboardProc, dllHandle, 0);
+		return false;
+	keyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC)keyboardProc, dllHandle, NULL);
 	if (!keyboardHook)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 /* Detaches previously set hooks.
  * Returns true on success.
  */
-BOOL detachHooks() {
-	BOOL success = TRUE;
+bool detachHooks() {
+	bool success = true;
 	if (!UnhookWindowsHookEx(keyboardHook))
-		success = FALSE;
+		success = false;
 	if (!UnhookWindowsHookEx(mouseHook))
-		success = FALSE;
+		success = false;
 	return success;
 }
 

@@ -38,7 +38,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="DEBUG"
-				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -54,7 +53,6 @@
 				IgnoreImportLibrary="true"
 				ModuleDefinitionFile="hooks.def"
 				EntryPointSymbol=""
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -104,7 +102,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -118,7 +115,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				ModuleDefinitionFile="hooks.def"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -155,7 +151,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\hooks.c"
+				RelativePath=".\hooks.cpp"
 				>
 			</File>
 			<File
