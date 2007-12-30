@@ -9,22 +9,27 @@ Installation
 ------------
 
 Simply extract the archive to any place you like. Make sure that the
-files taekwindow.exe and taekwindowhooks.dll are in the same directory.
+files taekwindow.exe, taekwindowconfig.exe and taekwindowhooks.dll are in
+the same directory.
 
 If you want to load the program when you log on to Windows, add a
 shortcut to taekwindow.exe in the Startup folder in your Start Menu.
+The configuration program also supplies an option to do this for you.
 
 Using the program
 -----------------
 
 Start taekwindow.exe to load the program. Nothing will seem to happen,
 but you can now do the following:
-- Hold Alt and drag a window with the left mouse button to move it.
-- Hold Alt and drag a window with the right mouse button to resize it.
+- Hold left Alt and drag a window with the left mouse button to move it.
+- Hold left Alt and drag a window with the right mouse button to resize it.
 
 To stop the program, just run taekwindow.exe again. It will not load
 itself, but rather stop the running instance and then quit. You can also
 stop it through the Task Manager if you prefer.
+
+You can configure the program using the supplied configuration tool,
+taekwindowconfig.exe.
 
 Known bugs
 ----------
@@ -46,6 +51,17 @@ requests submitted by users. You can of course submit your own.
 
 Version history
 ---------------
+
+0.2:
+- added a configuration tool as per
+  http://sourceforge.net/tracker/index.php?func=detail&aid=1629762&group_id=185457&atid=913356
+- made the modifier and mouse buttons, as well as closest-corner resizing,
+  into options as per
+  http://sourceforge.net/tracker/index.php?func=detail&aid=1653698&group_id=185457&atid=913356
+
+0.1.1:
+- implemented closest-corner resizing as per
+  http://sourceforge.net/tracker/index.php?func=detail&aid=1632182&group_id=185457&atid=913356
 
 0.1:
 - very first version

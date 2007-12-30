@@ -209,6 +209,10 @@
 				RelativePath=".\util.hpp"
 				>
 			</File>
+			<File
+				RelativePath="..\version.inc"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

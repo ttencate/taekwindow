@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
+#include "../version.inc"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -65,8 +66,8 @@ LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,1,0
- PRODUCTVERSION 0,1,1,0
+ FILEVERSION APPLICATION_VERSION
+ PRODUCTVERSION APPLICATION_VERSION
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -81,13 +82,13 @@ BEGIN
     BEGIN
         BLOCK "080004b0"
         BEGIN
-            VALUE "FileDescription", "Taekwindow event hooks DLL"
-            VALUE "FileVersion", "0.1.1"
-            VALUE "InternalName", "Taekwindow"
-            VALUE "LegalCopyright", "Copyright (C) 2006, Thomas ten Cate"
+            VALUE "FileDescription", APPLICATION_TITLE
+            VALUE "FileVersion", APPLICATION_VERSION_STRING
+            VALUE "InternalName", APPLICATION_TITLE
+            VALUE "LegalCopyright", APPLICATION_COPYRIGHT
             VALUE "OriginalFilename", "taekwindow.dll"
-            VALUE "ProductName", "Taekwindow"
-            VALUE "ProductVersion", "0.1.1"
+            VALUE "ProductName", APPLICATION_TITLE
+            VALUE "ProductVersion", APPLICATION_VERSION_STRING
         END
     END
     BLOCK "VarFileInfo"
