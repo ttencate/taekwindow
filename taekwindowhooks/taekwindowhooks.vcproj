@@ -190,7 +190,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\hooks.h"
+				RelativePath=".\hooks.hpp"
 				>
 			</File>
 			<File
