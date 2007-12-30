@@ -198,7 +198,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\shared.hpp"
+				RelativePath=".\state.hpp"
 				>
 			</File>
 			<File

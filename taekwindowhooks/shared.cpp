@@ -1,4 +1,4 @@
-#include "shared.hpp"
+#include "util.hpp"
 
 /* The shared data segment.
  * These variables are shared across all instances of the DLL. This is necessary because the hook handler

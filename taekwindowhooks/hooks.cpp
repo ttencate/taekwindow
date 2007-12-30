@@ -4,7 +4,7 @@
 #include "drag.hpp"
 #include "config.hpp"
 #include "util.hpp"
-#include "shared.hpp"
+#include "state.hpp"
 
 /* The handle of this instance of the DLL, set in DllMain.
  */

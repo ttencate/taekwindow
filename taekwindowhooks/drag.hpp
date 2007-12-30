@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-#include "shared.hpp"
+#include "util.hpp"
 
 /* Initiates a window dragging action (i.e. moving/resizing).
  */

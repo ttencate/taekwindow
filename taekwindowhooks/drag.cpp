@@ -1,5 +1,5 @@
 #include "drag.hpp"
-#include "shared.hpp"
+#include "state.hpp"
 
 /* Sets the variables resizingX and resizingY to the proper values,
  * considering the screen-coordinate pointer location.
