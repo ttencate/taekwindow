@@ -59,7 +59,7 @@ namespace TaekwindowConfig
 			this.email = new System.Windows.Forms.LinkLabel();
 			this.author = new System.Windows.Forms.Label();
 			this.version = new System.Windows.Forms.Label();
-			this.name = new System.Windows.Forms.Label();
+			this.title = new System.Windows.Forms.Label();
 			this.logo = new System.Windows.Forms.PictureBox();
 			this.cancel = new System.Windows.Forms.Button();
 			this.tabControl.SuspendLayout();
@@ -368,7 +368,7 @@ namespace TaekwindowConfig
 			this.about.Controls.Add(this.email);
 			this.about.Controls.Add(this.author);
 			this.about.Controls.Add(this.version);
-			this.about.Controls.Add(this.name);
+			this.about.Controls.Add(this.title);
 			this.about.Controls.Add(this.logo);
 			this.about.Location = new System.Drawing.Point(4, 22);
 			this.about.Name = "about";
@@ -395,10 +395,10 @@ namespace TaekwindowConfig
 			this.website.Location = new System.Drawing.Point(81, 99);
 			this.website.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
 			this.website.Name = "website";
-			this.website.Size = new System.Drawing.Size(129, 13);
+			this.website.Size = new System.Drawing.Size(46, 13);
 			this.website.TabIndex = 6;
 			this.website.TabStop = true;
-			this.website.Text = "http://taekwindow.sf.net/";
+			this.website.Text = "Website";
 			this.website.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.websiteLinkLabel_LinkClicked);
 			// 
 			// email
@@ -407,10 +407,10 @@ namespace TaekwindowConfig
 			this.email.Location = new System.Drawing.Point(81, 78);
 			this.email.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
 			this.email.Name = "email";
-			this.email.Size = new System.Drawing.Size(167, 13);
+			this.email.Size = new System.Drawing.Size(35, 13);
 			this.email.TabIndex = 5;
 			this.email.TabStop = true;
-			this.email.Text = "ttencate+taekwindow@gmail.com";
+			this.email.Text = "E-mail";
 			this.email.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.emailLinkLabel_LinkClicked);
 			// 
 			// author
@@ -419,9 +419,9 @@ namespace TaekwindowConfig
 			this.author.Location = new System.Drawing.Point(81, 57);
 			this.author.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
 			this.author.Name = "author";
-			this.author.Size = new System.Drawing.Size(139, 13);
+			this.author.Size = new System.Drawing.Size(38, 13);
 			this.author.TabIndex = 4;
-			this.author.Text = "Written by Thomas ten Cate";
+			this.author.Text = "Author";
 			// 
 			// version
 			// 
@@ -433,15 +433,15 @@ namespace TaekwindowConfig
 			this.version.TabIndex = 3;
 			this.version.Text = "Version ";
 			// 
-			// name
+			// title
 			// 
-			this.name.AutoSize = true;
-			this.name.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.name.Location = new System.Drawing.Point(80, 8);
-			this.name.Name = "name";
-			this.name.Size = new System.Drawing.Size(106, 20);
-			this.name.TabIndex = 2;
-			this.name.Text = "Taekwindow";
+			this.title.AutoSize = true;
+			this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.title.Location = new System.Drawing.Point(80, 8);
+			this.title.Name = "title";
+			this.title.Size = new System.Drawing.Size(43, 20);
+			this.title.TabIndex = 2;
+			this.title.Text = "Title";
 			// 
 			// logo
 			// 
@@ -480,7 +480,7 @@ namespace TaekwindowConfig
 			this.MaximizeBox = false;
 			this.Name = "ConfigForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Taekwindow configuration";
+			this.Text = "Configuration";
 			this.tabControl.ResumeLayout(false);
 			this.general.ResumeLayout(false);
 			this.general.PerformLayout();
@@ -509,7 +509,7 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.LinkLabel email;
 		private System.Windows.Forms.Label author;
 		private System.Windows.Forms.Label version;
-		private System.Windows.Forms.Label name;
+		private System.Windows.Forms.Label title;
 		private System.Windows.Forms.LinkLabel website;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TabPage keysAndButtons;

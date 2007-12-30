@@ -25,7 +25,12 @@ namespace TaekwindowConfig
 		public ConfigForm()
 		{
 			InitializeComponent();
-			version.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			Text = VersionInfo.Title + " configuration";
+			title.Text = VersionInfo.Title;
+			version.Text = VersionInfo.VersionString;
+			author.Text = VersionInfo.Author;
+			website.Text = VersionInfo.Website;
+			email.Text = VersionInfo.Email;
 			loadSettings();
 		}
 
@@ -188,7 +193,7 @@ namespace TaekwindowConfig
 				link.TargetPath = exe;
 				link.Arguments = "";
 				link.WorkingDirectory = Directory.GetParent(exe).FullName;
-				link.Description = "Taekwindow";
+				link.Description = VersionInfo.Title;
 				link.IconLocation = exe;
 				link.Save();
 			} catch (Exception ex) {

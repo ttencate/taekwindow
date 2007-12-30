@@ -104,9 +104,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Zipping distribution archive..."
-				CommandLine="cd $(InputDir)&#x0D;&#x0A;del &quot;$(OutDir)\taekwindow-0.1.zip&quot;&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-0.1.zip&quot; &quot;$(OutDir)\taekwindow.exe&quot; &quot;$(OutDir)\taekwindowhooks.dll&quot; Readme.txt&#x0D;&#x0A;del &quot;$(OutDir)\taekwindow-0.1-src.zip&quot;&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-0.1-src.zip&quot; graphics\*.ico graphics\*.ai taekwindowhooks\*.cpp taekwindowhooks\*.h taekwindowhooks\*.def taekwindowhooks\*.rc taekwindowhooks\*.vcproj *.cpp *.h *.rc *.vcproj *.sln Readme.txt&#x0D;&#x0A;"
+				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;del &quot;$(OutDir)\taekwindow.zip&quot;&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow.zip&quot; &quot;$(OutDir)\taekwindow.exe&quot; &quot;$(OutDir)\taekwindowhooks.dll&quot; &quot;$(SolutionDir)\taekwindowconfig\bin\Release\taekwindowconfig.exe&quot; &quot;$(SolutionDir)Readme.txt&quot;&#x0D;&#x0A;del &quot;$(OutDir)\taekwindow-src.zip&quot;&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-src.zip&quot; graphics\*.ico graphics\*.ai taekwindow\*.cpp taekwindow\*.h taekwindow\*.hpp taekwindow\*.rc taekwindow\*.vcproj taekwindowhooks\*.cpp taekwindowhooks\*.h taekwindowhooks\*.hpp taekwindowhooks\*.def taekwindowhooks\*.rc taekwindowhooks\*.vcproj *.sln Readme.txt&#x0D;&#x0A;"
 				AdditionalDependencies=""
-				Outputs="taekwindow-0.1.zip;taekwindow-0.1-src.zip"
+				Outputs="taekwindow.zip;taekwindow-src.zip"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
