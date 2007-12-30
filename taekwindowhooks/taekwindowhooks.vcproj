@@ -152,11 +152,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\config.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\hooks.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\hooks.def"
+				>
+			</File>
+			<File
+				RelativePath=".\shared.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\util.cpp"
 				>
 			</File>
 		</Filter>
@@ -166,11 +178,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\config.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\hooks.h"
 				>
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\shared.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\util.hpp"
 				>
 			</File>
 		</Filter>

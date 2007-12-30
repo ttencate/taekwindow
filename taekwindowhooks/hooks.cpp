@@ -1,92 +1,13 @@
 #include <windows.h>
 
 #include "hooks.h"
-
-/* The shared data segment.
- * These variables are shared across all instances of the DLL. This is necessary because the hook handler
- * runs in the thread of the window that would have received the event, NOT in the thread of the application
- * that hooked up the handler in the first place.
- * Everything in this segment must be initialized in order to actually become shared.
- * This syntax probably only works with the Microsoft compiler...
- */
-#pragma data_seg(".SHARED")
-
-/* The thread ID of the first thread that called init().
- */
-DWORD mainThreadId = 0;
-
-/* The current state we're in.
- * dsNone: nothing special going on, all events simply passed on.
- * dsDragging: we're moving or resizing the window identified by draggedWindow.
- * dsIgnoring: we're ignoring and discarding mouse events until the button is released.
- *             This is used when the user attempts to Modifier+drag a window that cannot be moved,
- *             e.g. a maximized window. In that case we don't want to pass those mouse events to that window.
- */
-enum DragState { dsNone, dsDragging, dsIgnoring };
-DragState currentState = dsNone;
-
-/* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
- * resizingX == -1 means resizing at left border, 0 means not resizing in x direction, 1 means right border.
- * Similar for y; -1 is top border, 0 is no resizing, 1 is bottom border.
- */
-int resizingX = 0, resizingY = 0;
-
-/* The button that we're dragging with.
- * Only meaningful while we're dragging, of course.
- */
-enum MouseButton { mbLeft, mbMiddle, mbRight };
-MouseButton draggingButton = mbLeft;
-
-/* The last known location of the mouse cursor (screen coordinates).
- * This is used in the mouse event handler to compute the distance travelled since the last mouse event.
- */
-POINT lastMousePos = { 0, 0 };
-
-/* The window that we are currently dragging.
- * Only meaningful if currentState is dsDragging.
- */
-HWND draggedWindow = NULL;
-
-/* The last known window rectangle of the draggedWindow. Saves us calls to GetWindowRect().
- */
-RECT lastRect = { 0, 0, 0, 0 };
-
-/* The modifier key used for moving and resizing.
- * This is referred to as Modifier is the comments, but you can read Alt if you like.
- */
-int modifier = VK_MENU;
-
-/* Whether or not the modifier key is currently down.
- */
-bool modifierDown = false;
-
-/* Whether or not dragging has occurred since the last key-down event of the Modifier.
- * If dragging has occurred, this prevents the key-up event to be passed on.
- */
-bool haveDragged = false;
-
-/* End of the shared data segment.
- */
-#pragma data_seg()
-#pragma comment(linker, "/section:.SHARED,rws")
+#include "config.hpp"
+#include "util.hpp"
+#include "shared.hpp"
 
 /* The handle of this instance of the DLL, set in DllMain.
  */
 HINSTANCE dllHandle = NULL;
-
-#ifdef DEBUG
-/* For debugging purposes: shows a messagebox with the message corresponding to GetLastError(),
- * with the given title.
- */
-void showLastError(LPCWSTR title) {
-	if (!GetLastError())
-		return;
-	PVOID msg;
-	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
-	MessageBoxW(NULL, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
-	LocalFree(msg);
-}
-#endif
 
 /* The entry point for the DLL. Stores the instance handle of the DLL for later use.
  */
@@ -110,37 +31,6 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
 	} else {
 		mainThreadId = threadId;
 		return NULL;
-	}
-}
-
-/* Reads the configuration from the registry.
- * If no value is present for a certain setting, that setting remains untouched.
- */
-void __declspec(dllexport) __stdcall readConfig() {
-	// Open the registry keys.
-	HKEY software;
-	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {
-		HKEY taekwindow;
-		if (RegOpenKeyEx(software, "Taekwindow", 0, KEY_READ, &taekwindow) == ERROR_SUCCESS) {
-			HKEY ohPointTwo;
-			// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
-			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
-			if (RegOpenKeyEx(taekwindow, "0.2", 0, KEY_READ, &ohPointTwo) == ERROR_SUCCESS) {
-				// Read stuff.
-				DWORD type;
-				DWORD data;
-				DWORD size = sizeof(data);
-				if (RegQueryValueEx(ohPointTwo, "modifier", NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS) {
-					if (type == REG_DWORD && size == sizeof(data)) {
-						modifier = data;
-					}
-				}
-				// Close the keys again.
-				RegCloseKey(ohPointTwo);
-			}
-			RegCloseKey(taekwindow);
-		}
-		RegCloseKey(software);
 	}
 }
 
