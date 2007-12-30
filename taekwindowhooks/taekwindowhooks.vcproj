@@ -38,6 +38,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="DEBUG"
+				RuntimeLibrary="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
