@@ -111,8 +111,6 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
  * If no value is present for a certain setting, that setting remains untouched.
  */
 void __declspec(dllexport) __stdcall readConfig() {
-	// Set up defaults; these are loaded if registry loading fails for some reason.
-	modifier = VK_MENU;
 	// Open the registry keys.
 	HKEY software;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {
