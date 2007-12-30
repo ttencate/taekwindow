@@ -1,6 +1,6 @@
 #include <windows.h>
 
-#include "hooks.h"
+#include "hooks.hpp"
 #include "drag.hpp"
 #include "config.hpp"
 #include "util.hpp"
@@ -131,16 +131,14 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
 		switch (wParam) {
 			case WM_LBUTTONDOWN:
-				processed = processButtonDown(mbLeft, eventInfo);
-				break;
+			case WM_MBUTTONDOWN:
 			case WM_RBUTTONDOWN:
-				processed = processButtonDown(mbRight, eventInfo);
+				processed = processButtonDown(eventToButton(wParam), eventInfo);
 				break;
 			case WM_LBUTTONUP:
-				processed = processButtonUp(mbLeft);
-				break;
+			case WM_MBUTTONUP:
 			case WM_RBUTTONUP:
-				processed = processButtonUp(mbRight);
+				processed = processButtonUp(eventToButton(wParam));
 				break;
 			case WM_MOUSEMOVE:
 				switch (currentState) {

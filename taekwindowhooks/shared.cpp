@@ -9,6 +9,8 @@
  */
 #pragma data_seg(".SHARED")
 
+// Program state
+
 DWORD mainThreadId = 0;
 
 DragState currentState = dsNone;
@@ -26,6 +28,12 @@ RECT lastRect = { 0, 0, 0, 0 };
 bool modifierDown = false;
 
 bool haveDragged = false;
+
+// Configuration options
+
+int modifier = VK_MENU;
+
+MouseButton moveButton = mbLeft, resizeButton = mbRight;
 
 /* End of the shared data segment.
  */

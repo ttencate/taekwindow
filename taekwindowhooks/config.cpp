@@ -1,7 +1,5 @@
 #include "config.hpp"
 
-int modifier = VK_MENU;
-
 void __declspec(dllexport) __stdcall readConfig() {
 	// Open the registry keys.
 	HKEY software;

@@ -3,18 +3,14 @@
 
 #include <windows.h>
 
+#include "util.hpp"
+
 /* The thread ID of the first thread that called init().
  */
 extern DWORD mainThreadId;
 
 /* The current state we're in.
- * dsNone: nothing special going on, all events simply passed on.
- * dsDragging: we're moving or resizing the window identified by draggedWindow.
- * dsIgnoring: we're ignoring and discarding mouse events until the button is released.
- *             This is used when the user attempts to Modifier+drag a window that cannot be moved,
- *             e.g. a maximized window. In that case we don't want to pass those mouse events to that window.
  */
-enum DragState { dsNone, dsDragging, dsIgnoring };
 extern DragState currentState;
 
 /* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
@@ -26,7 +22,6 @@ extern int resizingX, resizingY;
 /* The button that we're dragging with.
  * Only meaningful while we're dragging, of course.
  */
-enum MouseButton { mbLeft, mbMiddle, mbRight };
 extern MouseButton draggingButton;
 
 /* The last known location of the mouse cursor (screen coordinates).

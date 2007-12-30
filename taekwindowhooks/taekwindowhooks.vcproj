@@ -202,6 +202,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\types.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\util.hpp"
 				>
 			</File>
