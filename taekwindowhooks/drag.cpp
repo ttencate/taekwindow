@@ -1,4 +1,5 @@
 #include "drag.hpp"
+#include "config.hpp"
 #include "state.hpp"
 
 /* Sets the variables resizingX and resizingY to the proper values,
@@ -16,7 +17,7 @@ void startDragAction(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 	// (could happen while resizing).
 	SetCapture(draggedWindow);
 	GetWindowRect(draggedWindow, &lastRect);
-	if (button == mbRight) {
+	if (button == resizeButton) {
 		// Figure out in which area we're dragging to resize in the proper direction.
 		setResizingX(eventInfo->pt);
 		setResizingY(eventInfo->pt);
@@ -32,12 +33,12 @@ void processDrag(MOUSEHOOKSTRUCT const *eventInfo) {
 	int deltaX, deltaY;
 	// Find out the movement since the last known mouse position.
 	deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
-	if (draggingButton == mbLeft) {
+	if (draggingButton == moveButton) {
 		lastRect.left += deltaX;
 		lastRect.top += deltaY;
 		lastRect.right += deltaX;
 		lastRect.bottom += deltaY;
-	} else if (draggingButton == mbRight) {
+	} else if (draggingButton == resizeButton) {
 		// Resize at the right corner/edge.
 		switch (resizingX) {
 			case -1:

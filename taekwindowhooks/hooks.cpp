@@ -56,7 +56,7 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 	if (currentState == dsNone) {
 		// Nothing is yet going on. We possibly want to take action if the Modifier key is currently pressed.
 		if (modifierDown) {
-			if (button == mbLeft || button == mbRight) {
+			if (button == moveButton || button == resizeButton) {
 				// Yippee! A Modifier-drag event just started that we want to process.
 				currentState = dsDragging;
 				haveDragged = true;
