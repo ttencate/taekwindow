@@ -18,9 +18,17 @@ void startDragAction(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 	SetCapture(draggedWindow);
 	GetWindowRect(draggedWindow, &lastRect);
 	if (button == resizeButton) {
-		// Figure out in which area we're dragging to resize in the proper direction.
-		setResizingX(eventInfo->pt);
-		setResizingY(eventInfo->pt);
+		switch (resizeMode) {
+			case rmBottomRight:
+				resizingX = 1;
+				resizingY = 1;
+				break;
+			case rmNineRectangles:
+				// Figure out in which area we're dragging to resize in the proper direction.
+				setResizingX(eventInfo->pt);
+				setResizingY(eventInfo->pt);
+				break;
+		}
 	}
 }
 

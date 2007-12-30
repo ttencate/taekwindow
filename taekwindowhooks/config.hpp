@@ -16,6 +16,10 @@ extern int modifier;
  */
 extern MouseButton moveButton, resizeButton;
 
+/* The behaviour to use when resizing windows.
+ */
+extern ResizeMode resizeMode;
+
 /* Reads the configuration from the registry.
  * If no value is present for a certain setting, that setting remains untouched.
  */

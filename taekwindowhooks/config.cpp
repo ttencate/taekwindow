@@ -31,6 +31,7 @@ void __declspec(dllexport) __stdcall readConfig() {
 				readDWord(ohPointTwo, "modifier"    , (LPDWORD)&modifier    );
 				readDWord(ohPointTwo, "moveButton"  , (LPDWORD)&moveButton  );
 				readDWord(ohPointTwo, "resizeButton", (LPDWORD)&resizeButton);
+				readDWord(ohPointTwo, "resizeMode"  , (LPDWORD)&resizeMode  );
 				// Close the keys again.
 				RegCloseKey(ohPointTwo);
 			}

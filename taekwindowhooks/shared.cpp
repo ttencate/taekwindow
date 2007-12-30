@@ -35,6 +35,8 @@ int modifier = VK_MENU;
 
 MouseButton moveButton = mbLeft, resizeButton = mbRight;
 
+ResizeMode resizeMode = rmNineRectangles;
+
 /* End of the shared data segment.
  */
 #pragma data_seg()
