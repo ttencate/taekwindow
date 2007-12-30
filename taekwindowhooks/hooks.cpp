@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "hooks.h"
+#include "drag.hpp"
 #include "config.hpp"
 #include "util.hpp"
 #include "shared.hpp"
@@ -48,16 +49,6 @@ bool isDraggableWindow(HWND window) {
 	}
 }
 
-/* Sets the variables resizingX and resizingY to the proper values,
- * considering the screen-coordinate pointer location.
- */
-void setResizingX(POINT const &pt) {
-	resizingX = (pt.x - lastRect.left) * 3 / (lastRect.right - lastRect.left) - 1;
-}
-void setResizingY(POINT const &pt) {
-	resizingY = (pt.y - lastRect.top) * 3 / (lastRect.bottom - lastRect.top) - 1;
-}
-
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
@@ -75,15 +66,7 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 				draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
 				if (isDraggableWindow(draggedWindow)) {
 					// Window can be dragged.
-					// Capture the mouse so it'll still get events even if the mouse leaves the window
-					// (could happen while resizing).
-					SetCapture(draggedWindow);
-					GetWindowRect(draggedWindow, &lastRect);
-					if (button == mbRight) {
-						// Figure out in which area we're dragging to resize in the proper direction.
-						setResizingX(eventInfo->pt);
-						setResizingY(eventInfo->pt);
-					}
+					startDragAction(button, eventInfo);
 				} else {
 					// Modifier-dragging an invalid window. The user won't expect her actions to be passed
 					// to that window, so we suppress all events until the mouse button is released.
@@ -119,8 +102,7 @@ bool processButtonUp(MouseButton button) {
 			if (button == draggingButton) {
 				// End of move or resize action.
 				// Release the capture and eat the event.
-				ReleaseCapture();
-				currentState = dsNone;
+				endDragAction();
 				return true;
 			} else {
 				// Other button released during move event. (Naughty user!)
@@ -161,43 +143,12 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 				processed = processButtonUp(mbRight);
 				break;
 			case WM_MOUSEMOVE:
-				int deltaX, deltaY;
 				switch (currentState) {
 					case dsDragging:
 						// We are handling the moving or resizing of a window.
-						// Find out the movement since the last known mouse position.
-						deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
-						if (draggingButton == mbLeft) {
-							lastRect.left += deltaX;
-							lastRect.top += deltaY;
-							lastRect.right += deltaX;
-							lastRect.bottom += deltaY;
-						} else if (draggingButton == mbRight) {
-							// Resize at the right corner/edge.
-							switch (resizingX) {
-								case -1:
-									lastRect.left += deltaX; break;
-								case 1:
-									lastRect.right += deltaX; break;
-								case 0:
-									// We may have come close to a vertical border in the meantime.
-									setResizingX(eventInfo->pt); break;
-							}
-							switch (resizingY) {
-								case -1:
-									lastRect.top += deltaY; break;
-								case 1:
-									lastRect.bottom += deltaY; break;
-								case 0:
-									// We may have come close to a horizontal border in the meantime.
-									setResizingY(eventInfo->pt); break;
-							}
-						}
-						// Now possibly the most important statement in the program: apply the movement/resizing to the window!
-						SetWindowPos(draggedWindow, NULL,
-							lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
-							SWP_NOACTIVATE | SWP_NOOWNERZORDER);
-						// No break here: fall through to the next case.
+						processDrag(eventInfo);
+						processed = true;
+						break;
 					case dsIgnoring:
 						processed = true;
 						break;

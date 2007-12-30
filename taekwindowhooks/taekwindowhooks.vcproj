@@ -156,6 +156,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\drag.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\hooks.cpp"
 				>
 			</File>
@@ -179,6 +183,10 @@
 			>
 			<File
 				RelativePath=".\config.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\drag.hpp"
 				>
 			</File>
 			<File
