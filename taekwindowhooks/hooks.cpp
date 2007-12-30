@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 
 #include "hooks.hpp"
 #include "drag.hpp"
@@ -176,21 +177,20 @@ LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, L
 	}
 #endif
 	if (nCode >= 0 && nCode == HC_ACTION) {
-		if (wParam == modifier) {
-			// Something happened to the modifier key.
-			bool wasDown = modifierDown;
-			modifierDown = !(lParam & 0x80000000);
-			//MessageBoxA(NULL, modifierDown?"keydown":"keyup", lParam&0x4000, MB_OK);
-			if (wasDown && !modifierDown) {
-				// Modifier was released. Only pass the event on if there was no drag event.
-				if (haveDragged) {
-					return 1;
-				}
-				haveDragged = false;
-			} else if (!wasDown && modifierDown) {
-				// Modifier was pressed. There has been no drag event since.
-				haveDragged = false;
+		// Something MAY have happened to the modifier key.
+		// We have a key-code in wParam, but it does not distinguish e.g. left and right Alt,
+		// because it is VK_MENU for both of them. Therefore we have to use GetAsyncKeyState.
+		bool wasDown = modifierDown;
+		modifierDown = GetAsyncKeyState(modifier) & 0x8000;
+		if (wasDown && !modifierDown) {
+			// Modifier was released. Only pass the event on if there was no drag event.
+			if (haveDragged) {
+				return 1;
 			}
+			haveDragged = false;
+		} else if (!wasDown && modifierDown) {
+			// Modifier was pressed. There has been no drag event since.
+			haveDragged = false;
 		}
 	}
 	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
