@@ -31,7 +31,7 @@ bool haveDragged = false;
 
 // Configuration options
 
-int modifier = VK_MENU;
+int modifier = VK_LMENU;
 
 MouseButton moveButton = mbLeft, resizeButton = mbRight;
 
