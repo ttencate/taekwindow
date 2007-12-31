@@ -84,8 +84,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\graphics\64x64-shadow.png">
+      <Link>graphics\64x64-shadow.png</Link>
+    </Content>
     <Content Include="..\graphics\all.ico">
-      <Link>all.ico</Link>
+      <Link>graphics\all.ico</Link>
+    </Content>
+    <Content Include="..\graphics\startup.png">
+      <Link>graphics\startup.png</Link>
     </Content>
     <Content Include="..\version.inc">
       <Link>version.inc</Link>

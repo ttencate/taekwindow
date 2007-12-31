@@ -62,6 +62,8 @@ namespace TaekwindowConfig
 			this.title = new System.Windows.Forms.Label();
 			this.logo = new System.Windows.Forms.PictureBox();
 			this.cancel = new System.Windows.Forms.Button();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tabControl.SuspendLayout();
 			this.general.SuspendLayout();
 			this.keysAndButtons.SuspendLayout();
@@ -71,6 +73,8 @@ namespace TaekwindowConfig
 			this.resizing.SuspendLayout();
 			this.about.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// apply
@@ -114,8 +118,7 @@ namespace TaekwindowConfig
 			// 
 			// general
 			// 
-			this.general.Controls.Add(this.label1);
-			this.general.Controls.Add(this.startAtLogon);
+			this.general.Controls.Add(this.groupBox1);
 			this.general.Location = new System.Drawing.Point(4, 22);
 			this.general.Name = "general";
 			this.general.Padding = new System.Windows.Forms.Padding(8);
@@ -128,9 +131,9 @@ namespace TaekwindowConfig
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(29, 31);
+			this.label1.Location = new System.Drawing.Point(28, 39);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(280, 41);
+			this.label1.Size = new System.Drawing.Size(271, 41);
 			this.label1.TabIndex = 8;
 			this.label1.Text = "This option creates or removes a shortcut to Taekwindow in the Startup folder in " +
 				"the Start Menu for your user account.";
@@ -138,7 +141,7 @@ namespace TaekwindowConfig
 			// startAtLogon
 			// 
 			this.startAtLogon.AutoSize = true;
-			this.startAtLogon.Location = new System.Drawing.Point(11, 11);
+			this.startAtLogon.Location = new System.Drawing.Point(11, 19);
 			this.startAtLogon.Name = "startAtLogon";
 			this.startAtLogon.Size = new System.Drawing.Size(129, 17);
 			this.startAtLogon.TabIndex = 7;
@@ -464,6 +467,28 @@ namespace TaekwindowConfig
 			this.cancel.UseVisualStyleBackColor = true;
 			this.cancel.Click += new System.EventHandler(this.cancel_Click);
 			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Location = new System.Drawing.Point(31, 83);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(241, 52);
+			this.pictureBox1.TabIndex = 10;
+			this.pictureBox1.TabStop = false;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.pictureBox1);
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.startAtLogon);
+			this.groupBox1.Location = new System.Drawing.Point(11, 11);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox1.Size = new System.Drawing.Size(310, 146);
+			this.groupBox1.TabIndex = 11;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Startup";
+			// 
 			// ConfigForm
 			// 
 			this.AcceptButton = this.apply;
@@ -483,7 +508,6 @@ namespace TaekwindowConfig
 			this.Text = "Configuration";
 			this.tabControl.ResumeLayout(false);
 			this.general.ResumeLayout(false);
-			this.general.PerformLayout();
 			this.keysAndButtons.ResumeLayout(false);
 			this.keysAndButtons.PerformLayout();
 			this.panel3.ResumeLayout(false);
@@ -494,6 +518,9 @@ namespace TaekwindowConfig
 			this.about.ResumeLayout(false);
 			this.about.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -534,6 +561,8 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.RadioButton resizeRight;
 		private System.Windows.Forms.RadioButton resizeLeft;
 		private System.Windows.Forms.Button cancel;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
 
