@@ -33,8 +33,6 @@ namespace TaekwindowConfig
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.general = new System.Windows.Forms.TabPage();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.startAtLogon = new System.Windows.Forms.CheckBox();
 			this.keysAndButtons = new System.Windows.Forms.TabPage();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -52,10 +50,6 @@ namespace TaekwindowConfig
 			this.resizing = new System.Windows.Forms.TabPage();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.pictureBox3 = new System.Windows.Forms.PictureBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.pictureBox2 = new System.Windows.Forms.PictureBox();
-			this.label6 = new System.Windows.Forms.Label();
 			this.nineRectangles = new System.Windows.Forms.RadioButton();
 			this.bottomRight = new System.Windows.Forms.RadioButton();
 			this.about = new System.Windows.Forms.TabPage();
@@ -72,15 +66,12 @@ namespace TaekwindowConfig
 			this.tabControl.SuspendLayout();
 			this.general.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.keysAndButtons.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.resizing.SuspendLayout();
 			this.groupBox5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.about.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.aboutBox.SuspendLayout();
@@ -141,45 +132,30 @@ namespace TaekwindowConfig
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.pictureBox1);
-			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.startAtLogon);
 			this.groupBox1.Location = new System.Drawing.Point(11, 11);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
-			this.groupBox1.Size = new System.Drawing.Size(310, 146);
+			this.groupBox1.Size = new System.Drawing.Size(310, 160);
 			this.groupBox1.TabIndex = 11;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Startup";
 			// 
-			// pictureBox1
-			// 
-			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-			this.pictureBox1.Location = new System.Drawing.Point(31, 83);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(241, 52);
-			this.pictureBox1.TabIndex = 10;
-			this.pictureBox1.TabStop = false;
-			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(28, 39);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(271, 41);
-			this.label1.TabIndex = 8;
-			this.label1.Text = "This option creates or removes a shortcut to Taekwindow in the Startup folder in " +
-				"the Start Menu for your user account.";
-			// 
 			// startAtLogon
 			// 
-			this.startAtLogon.AutoSize = true;
+			this.startAtLogon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.startAtLogon.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.startAtLogon.Image = ((System.Drawing.Image)(resources.GetObject("startAtLogon.Image")));
+			this.startAtLogon.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.startAtLogon.Location = new System.Drawing.Point(11, 19);
 			this.startAtLogon.Name = "startAtLogon";
-			this.startAtLogon.Size = new System.Drawing.Size(129, 17);
+			this.startAtLogon.Size = new System.Drawing.Size(288, 130);
 			this.startAtLogon.TabIndex = 7;
-			this.startAtLogon.Text = "Start when &logging on";
+			this.startAtLogon.Text = "Start when &logging on\r\n\r\nThis option creates or removes a shortcut to Taekwindow" +
+				" in the Startup folder in the Start Menu for your user account.";
+			this.startAtLogon.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.startAtLogon.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
 			this.startAtLogon.UseVisualStyleBackColor = true;
 			this.startAtLogon.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
@@ -368,14 +344,10 @@ namespace TaekwindowConfig
 			this.groupBox5.Controls.Add(this.bottomRight);
 			this.groupBox5.Controls.Add(this.nineRectangles);
 			this.groupBox5.Controls.Add(this.groupBox6);
-			this.groupBox5.Controls.Add(this.pictureBox3);
-			this.groupBox5.Controls.Add(this.label7);
-			this.groupBox5.Controls.Add(this.pictureBox2);
-			this.groupBox5.Controls.Add(this.label6);
 			this.groupBox5.Location = new System.Drawing.Point(11, 11);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
-			this.groupBox5.Size = new System.Drawing.Size(310, 246);
+			this.groupBox5.Padding = new System.Windows.Forms.Padding(8, 3, 8, 10);
+			this.groupBox5.Size = new System.Drawing.Size(310, 251);
 			this.groupBox5.TabIndex = 0;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Resize mode";
@@ -384,77 +356,47 @@ namespace TaekwindowConfig
 			// 
 			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox6.Location = new System.Drawing.Point(11, 126);
-			this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+			this.groupBox6.Location = new System.Drawing.Point(11, 129);
+			this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(288, 2);
 			this.groupBox6.TabIndex = 12;
 			this.groupBox6.TabStop = false;
 			// 
-			// pictureBox3
-			// 
-			this.pictureBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-			this.pictureBox3.Location = new System.Drawing.Point(171, 139);
-			this.pictureBox3.Name = "pictureBox3";
-			this.pictureBox3.Size = new System.Drawing.Size(128, 96);
-			this.pictureBox3.TabIndex = 11;
-			this.pictureBox3.TabStop = false;
-			// 
-			// label7
-			// 
-			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label7.Location = new System.Drawing.Point(27, 162);
-			this.label7.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(138, 73);
-			this.label7.TabIndex = 10;
-			this.label7.Text = "The window is resized from the corner or edge that is closest to the point where " +
-				"you grab it.";
-			// 
-			// pictureBox2
-			// 
-			this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-			this.pictureBox2.Location = new System.Drawing.Point(171, 19);
-			this.pictureBox2.Name = "pictureBox2";
-			this.pictureBox2.Size = new System.Drawing.Size(128, 96);
-			this.pictureBox2.TabIndex = 9;
-			this.pictureBox2.TabStop = false;
-			// 
-			// label6
-			// 
-			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label6.Location = new System.Drawing.Point(27, 42);
-			this.label6.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(138, 73);
-			this.label6.TabIndex = 8;
-			this.label6.Text = "Regardless of where you grab the window, you always resize from its lower right c" +
-				"orner.";
-			// 
 			// nineRectangles
 			// 
-			this.nineRectangles.AutoSize = true;
+			this.nineRectangles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.nineRectangles.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.nineRectangles.Image = ((System.Drawing.Image)(resources.GetObject("nineRectangles.Image")));
+			this.nineRectangles.ImageAlign = System.Drawing.ContentAlignment.TopRight;
 			this.nineRectangles.Location = new System.Drawing.Point(11, 139);
-			this.nineRectangles.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
+			this.nineRectangles.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.nineRectangles.Name = "nineRectangles";
-			this.nineRectangles.Size = new System.Drawing.Size(99, 17);
+			this.nineRectangles.Size = new System.Drawing.Size(288, 99);
 			this.nineRectangles.TabIndex = 7;
-			this.nineRectangles.Text = "&Nine rectangles";
+			this.nineRectangles.Text = "&Nine rectangles\r\n\r\nThe window is resized from the corner or edge that is closest" +
+				" to the point where you grab it.";
+			this.nineRectangles.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.nineRectangles.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.nineRectangles.UseVisualStyleBackColor = true;
 			this.nineRectangles.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// bottomRight
 			// 
-			this.bottomRight.AutoSize = true;
+			this.bottomRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.bottomRight.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.bottomRight.Image = ((System.Drawing.Image)(resources.GetObject("bottomRight.Image")));
+			this.bottomRight.ImageAlign = System.Drawing.ContentAlignment.TopRight;
 			this.bottomRight.Location = new System.Drawing.Point(11, 19);
 			this.bottomRight.Name = "bottomRight";
-			this.bottomRight.Size = new System.Drawing.Size(114, 17);
+			this.bottomRight.Size = new System.Drawing.Size(288, 99);
 			this.bottomRight.TabIndex = 6;
-			this.bottomRight.Text = "&Bottom right corner";
+			this.bottomRight.Text = "&Bottom right corner\r\n\r\nRegardless of where you grab the window, you always resiz" +
+				"e from its lower right corner.";
+			this.bottomRight.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.bottomRight.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.bottomRight.UseVisualStyleBackColor = true;
 			this.bottomRight.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
@@ -607,8 +549,6 @@ namespace TaekwindowConfig
 			this.tabControl.ResumeLayout(false);
 			this.general.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.keysAndButtons.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
@@ -618,9 +558,6 @@ namespace TaekwindowConfig
 			this.groupBox2.PerformLayout();
 			this.resizing.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
-			this.groupBox5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			this.about.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.aboutBox.ResumeLayout(false);
@@ -646,14 +583,12 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TabPage keysAndButtons;
 		private System.Windows.Forms.TabPage resizing;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox startAtLogon;
 		private System.Windows.Forms.RadioButton eitherAlt;
 		private System.Windows.Forms.RadioButton rightAlt;
 		private System.Windows.Forms.RadioButton leftAlt;
 		private System.Windows.Forms.Button cancel;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.RadioButton moveMiddle;
@@ -664,10 +599,6 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.RadioButton resizeRight;
 		private System.Windows.Forms.RadioButton resizeLeft;
 		private System.Windows.Forms.GroupBox groupBox5;
-		private System.Windows.Forms.PictureBox pictureBox3;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.PictureBox pictureBox2;
-		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.RadioButton nineRectangles;
 		private System.Windows.Forms.RadioButton bottomRight;
 		private System.Windows.Forms.GroupBox groupBox6;
