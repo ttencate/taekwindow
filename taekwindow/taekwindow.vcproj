@@ -103,10 +103,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Zipping distribution archive..."
-				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;del &quot;$(OutDir)\taekwindow.zip&quot;&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow.zip&quot; &quot;$(OutDir)\taekwindow.exe&quot; &quot;$(OutDir)\taekwindowhooks.dll&quot; &quot;$(SolutionDir)\taekwindowconfig\bin\Release\taekwindowconfig.exe&quot; &quot;$(SolutionDir)Readme.txt&quot;&#x0D;&#x0A;del &quot;$(OutDir)\taekwindow-src.zip&quot;&#x0D;&#x0A;7z.exe a -tzip &quot;$(OutDir)\taekwindow-src.zip&quot; graphics\*.ico graphics\*.ai taekwindow\*.cpp taekwindow\*.h taekwindow\*.hpp taekwindow\*.rc taekwindow\*.vcproj taekwindowhooks\*.cpp taekwindowhooks\*.h taekwindowhooks\*.hpp taekwindowhooks\*.def taekwindowhooks\*.rc taekwindowhooks\*.vcproj *.sln Readme.txt&#x0D;&#x0A;"
+				Description="Packaging..."
+				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;cl.exe /EP tools\package.bat &gt; &quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;&quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;"
 				AdditionalDependencies=""
-				Outputs="taekwindow.zip;taekwindow-src.zip"
+				Outputs="package\taekwindow.zip;package\taekwindow-src.zip"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindowhooks", "taekwindowhooks\taekwindowhooks.vcproj", "{EED18669-70C8-450F-8989-A8712FBFFA67}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{892966C6-CA0C-4FE4-94B0-FBBB6366533F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966C6-CA0C-4FE4-94B0-FBBB6366533F}"
 	ProjectSection(SolutionItems) = preProject
 		Readme.txt = Readme.txt
 		version.inc = version.inc
@@ -15,6 +15,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindow", "taekwindow\ta
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taekwindowconfig", "taekwindowconfig\taekwindowconfig.csproj", "{1CA60A68-E0C4-43BA-8D37-E374C583919B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{32D13502-1F48-439F-BB15-291491EB4F4C}"
+	ProjectSection(SolutionItems) = preProject
+		tools\package.bat = tools\package.bat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
