@@ -106,7 +106,7 @@
 				Description="Packaging..."
 				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;cl.exe /EP tools\package.bat &gt; &quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;&quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;"
 				AdditionalDependencies=""
-				Outputs="package\taekwindow.zip;package\taekwindow-src.zip"
+				Outputs="..\package\taekwindow.zip;..\package\taekwindow-src.zip"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
