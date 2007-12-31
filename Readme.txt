@@ -8,13 +8,19 @@ many X11 window managers.
 Installation
 ------------
 
-Simply extract the archive to any place you like. Make sure that the
-files taekwindow.exe, taekwindowconfig.exe and taekwindowhooks.dll are in
-the same directory.
+1. You need to have the Microsoft .NET Framework, version 2.0 or later,
+   installed to use the configuration tool. You can get the latest version
+   of the framework here:
+   http://msdn2.microsoft.com/en-us/netframework/aa569263.aspx
 
-If you want to load the program when you log on to Windows, add a
-shortcut to taekwindow.exe in the Startup folder in your Start Menu.
-The configuration program also supplies an option to do this for you.
+2. To install Taekwindow, simply extract the archive to any place you like.
+   Make sure that the files are all in the same directory.
+
+3. Run taekwindowconfig.exe to configure the Taekwindow. The configuration
+   tool can create a shortcut in the Startup section of your Start Menu, so
+   Taekwindow is started when you log on to your computer.
+
+4. Optional: create a shortcut to taekwindowconfig.exe in your Start Menu.
 
 Using the program
 -----------------
@@ -23,13 +29,20 @@ Start taekwindow.exe to load the program. Nothing will seem to happen,
 but you can now do the following:
 - Hold left Alt and drag a window with the left mouse button to move it.
 - Hold left Alt and drag a window with the right mouse button to resize it.
+(These buttons are configurable through the configuration tool.)
 
 To stop the program, just run taekwindow.exe again. It will not load
 itself, but rather stop the running instance and then quit. You can also
 stop it through the Task Manager if you prefer.
 
+Configuring the program
+-----------------------
+
 You can configure the program using the supplied configuration tool,
-taekwindowconfig.exe.
+taekwindowconfig.exe. Its usage should be self-explanatory.
+
+If the tool refuses to start, make sure that the .NET framework is
+installed. See Installation, above, for details.
 
 Known bugs
 ----------
@@ -58,6 +71,8 @@ Version history
 - made the modifier and mouse buttons, as well as closest-corner resizing,
   into options as per
   http://sourceforge.net/tracker/index.php?func=detail&aid=1653698&group_id=185457&atid=913356
+- added an option to the configuration tool for creating/deleting a Startup
+  shortcut in the Start Menu
 
 0.1.1:
 - implemented closest-corner resizing as per

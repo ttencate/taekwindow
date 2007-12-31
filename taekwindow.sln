@@ -6,6 +6,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966C6-CA0C-4FE4-94B0-FBBB6366533F}"
 	ProjectSection(SolutionItems) = preProject
 		Readme.txt = Readme.txt
+		Source.txt = Source.txt
 		version.inc = version.inc
 	EndProjectSection
 EndProject

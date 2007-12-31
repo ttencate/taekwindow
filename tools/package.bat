@@ -56,4 +56,6 @@ SEVENZIP a -tzip PACKAGE_DIR\SOURCE_ZIP ^
   tools\package.bat ^
   taekwindow.sln ^
   version.inc ^
-  Readme.txt
+  Readme.txt ^
+  Source.txt
+

@@ -93,6 +93,9 @@
     <Content Include="..\graphics\resize-bottom-right.png">
       <Link>graphics\resize-bottom-right.png</Link>
     </Content>
+    <Content Include="..\graphics\resize-nine-rectangles.png">
+      <Link>graphics\resize-nine-rectangles.png</Link>
+    </Content>
     <Content Include="..\graphics\startup.png">
       <Link>graphics\startup.png</Link>
     </Content>

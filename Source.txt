@@ -1,0 +1,8 @@
+The project and solution files were made in Microsoft Visual Studio 2005.
+
+To build, you need the following in your PATH:
+[Visual Studio directory]\VC\bin
+[Visual Studio directory]\Common7\IDE
+
+The project files may open in the Express editions of Visual C++ and Visual C#,
+but I am not sure of this and have not tested it.
