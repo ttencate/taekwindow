@@ -5,9 +5,11 @@ const LPCSTR INIT_ORDINAL = (LPCSTR)1;
 const LPCSTR READ_CONFIG_ORDINAL = (LPCSTR)2;
 const LPCSTR MOUSEPROC_ORDINAL = (LPCSTR)3;
 const LPCSTR KEYBOARDPROC_ORDINAL = (LPCSTR)4;
+const LPCSTR UNINIT_ORDINAL = (LPCSTR)5;
 
 HMODULE dllHandle = NULL;
 DWORD (__stdcall *initProc)(DWORD) = NULL;
+void (__stdcall *uninitProc)() = NULL;
 void (__stdcall *readConfigProc)() = NULL;
 HOOKPROC mouseProc = NULL;
 HOOKPROC keyboardProc = NULL;
@@ -37,12 +39,24 @@ DWORD initDll() {
 	return (*initProc)(GetCurrentThreadId());
 }
 
+/* Uninitializes the DLL by making it forget our thread ID.
+ * This way, if the DLL (for some reason) lingers in memory after we've shut down,
+ * it will not hold a nonexistent thread ID, and therefore be available when a new instance of
+ * the .exe needs it.
+ */
+void uninitDll() {
+	(*uninitProc)();
+}
+
 /* Initializes the function pointers to functions in the DLL.
  * Returns true on success.
  */
 bool findProcs() {
 	initProc = (DWORD (__stdcall*)(DWORD))GetProcAddress(dllHandle, INIT_ORDINAL);
 	if (!initProc)
+		return false;
+	uninitProc = (void (__stdcall*)())GetProcAddress(dllHandle, UNINIT_ORDINAL);
+	if (!uninitProc)
 		return false;
 	readConfigProc = (void (__stdcall*)())GetProcAddress(dllHandle, READ_CONFIG_ORDINAL);
 	if (!readConfigProc)
@@ -152,6 +166,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 				// Normal exit.
 				// Note that calling detachHooks is OK if attachHooks only partly worked.
 				detachHooks();
+				// Make the DLL forget about our existence.
+				uninitDll();
 			}
 		}
 		unloadDll();

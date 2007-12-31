@@ -4,3 +4,4 @@ EXPORTS
 	readConfig   @2
 	mouseProc    @3
 	keyboardProc @4
+	uninit       @5

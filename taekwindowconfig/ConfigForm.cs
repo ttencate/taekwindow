@@ -17,11 +17,6 @@ namespace TaekwindowConfig
 	{
 		private static string settingsKey = "Software\\Taekwindow\\0.2";
 
-		[DllImport("user32.dll", SetLastError = true)]
-		private static extern bool PostThreadMessage(int threadId, int message, int wParam, int lParam);
-
-		private const int WM_APP = 0x8000;
-
 		public ConfigForm()
 		{
 			InitializeComponent();
@@ -138,11 +133,24 @@ namespace TaekwindowConfig
 		/// </summary>
 		private void triggerReload()
 		{
-			Process[] procs = Process.GetProcessesByName("Taekwindow");
+			Process[] procs = Process.GetProcessesByName("taekwindow"); // .exe filename without extension or path
+			bool attempted = false;
+			bool succeeded = false;
+			int lastError = 0;
 			foreach (Process proc in procs) {
 				foreach (ProcessThread thread in proc.Threads) {
-					PostThreadMessage(thread.Id, WM_APP, 0, 0);
+					attempted = true;
+					if (Win32.PostThreadMessage(thread.Id, Win32.WM_APP, 0, 0)) {
+						succeeded = true;
+					} else {
+						lastError = Marshal.GetLastWin32Error();
+					}
 				}
+			}
+			// Show an error message if at least one message posting was attempted,
+			// but none succeeded.
+			if (attempted && !succeeded) {
+				MessageBox.Show(this, String.Format("{1} seems to be running, but the reloading of its settings failed:\n{0}\n\nYour settings were saved successfully. Restart {1} manually to make them effective.", new Win32Exception(lastError).Message, VersionInfo.Title), "Error triggering settings reload", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -188,7 +196,9 @@ namespace TaekwindowConfig
 				// Use the Windows Scripting Host to create a shortcut.
 				// It would probably be better to use the IShellLink COM interface from shell32.dll,
 				// but I somehow can't get that to work.
-				IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
+				// Also, it would be nice if I managed to manually declare the required interfaces,
+				// so we could do away with the generated interop DLL.
+				IWshRuntimeLibrary.IWshShell shell = new IWshRuntimeLibrary.WshShell();
 				IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(lnk);
 				link.TargetPath = exe;
 				link.Arguments = "";
@@ -211,9 +221,10 @@ namespace TaekwindowConfig
 		private bool deleteShortcut()
 		{
 			string lnk = linkFilename();
-			if (!File.Exists(lnk))
+			if (!File.Exists(lnk)) {
 				return true;
-
+			}
+			
 			try {
 				File.Delete(lnk);
 			} catch (Exception ex) {

@@ -36,6 +36,12 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
 	}
 }
 
+/* Uninitializes the DLL by forgetting the thread ID.
+ */
+void __declspec(dllexport) __stdcall uninit() {
+	mainThreadId = 0;
+}
+
 /* Returns true if the given window can be moved and resized.
  * Prevents moving/resizing of maximized windows. Other cases may be added later.
  */
