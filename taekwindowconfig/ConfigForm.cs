@@ -75,15 +75,24 @@ namespace TaekwindowConfig
 		/// </summary>
 		private void saveSettings()
 		{
+			bool success = true;
 			if (writeRegistry()) {
 				triggerReload();
+			} else {
+				success = false;
 			}
 			if (startAtLogon.Checked) {
-				createShortcut();
+				if (!createShortcut()) {
+					success = false;
+				}
 			} else {
-				deleteShortcut();
+				if (!deleteShortcut()) {
+					success = false;
+				}
 			}
-			settingsSaved = true;
+			if (success) {
+				settingsSaved = true;
+			}
 		}
 
 		/// <summary>
