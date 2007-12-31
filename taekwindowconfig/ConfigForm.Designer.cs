@@ -37,22 +37,21 @@ namespace TaekwindowConfig
 			this.label1 = new System.Windows.Forms.Label();
 			this.startAtLogon = new System.Windows.Forms.CheckBox();
 			this.keysAndButtons = new System.Windows.Forms.TabPage();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.panel3 = new System.Windows.Forms.Panel();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.resizeMiddle = new System.Windows.Forms.RadioButton();
 			this.resizeRight = new System.Windows.Forms.RadioButton();
 			this.resizeLeft = new System.Windows.Forms.RadioButton();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.moveMiddle = new System.Windows.Forms.RadioButton();
 			this.moveRight = new System.Windows.Forms.RadioButton();
 			this.moveLeft = new System.Windows.Forms.RadioButton();
-			this.panel2 = new System.Windows.Forms.Panel();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.eitherAlt = new System.Windows.Forms.RadioButton();
 			this.rightAlt = new System.Windows.Forms.RadioButton();
 			this.leftAlt = new System.Windows.Forms.RadioButton();
-			this.label3 = new System.Windows.Forms.Label();
 			this.resizing = new System.Windows.Forms.TabPage();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.pictureBox3 = new System.Windows.Forms.PictureBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -60,26 +59,31 @@ namespace TaekwindowConfig
 			this.nineRectangles = new System.Windows.Forms.RadioButton();
 			this.bottomRight = new System.Windows.Forms.RadioButton();
 			this.about = new System.Windows.Forms.TabPage();
+			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.aboutBox = new System.Windows.Forms.GroupBox();
+			this.logo = new System.Windows.Forms.PictureBox();
+			this.title = new System.Windows.Forms.Label();
 			this.website = new System.Windows.Forms.LinkLabel();
+			this.version = new System.Windows.Forms.Label();
 			this.email = new System.Windows.Forms.LinkLabel();
 			this.author = new System.Windows.Forms.Label();
-			this.version = new System.Windows.Forms.Label();
-			this.title = new System.Windows.Forms.Label();
-			this.logo = new System.Windows.Forms.PictureBox();
 			this.cancel = new System.Windows.Forms.Button();
 			this.tabControl.SuspendLayout();
 			this.general.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.keysAndButtons.SuspendLayout();
-			this.panel3.SuspendLayout();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
+			this.groupBox4.SuspendLayout();
+			this.groupBox3.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.resizing.SuspendLayout();
+			this.groupBox5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.about.SuspendLayout();
+			this.groupBox7.SuspendLayout();
+			this.aboutBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -87,7 +91,7 @@ namespace TaekwindowConfig
 			// 
 			this.apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.apply.Enabled = false;
-			this.apply.Location = new System.Drawing.Point(277, 379);
+			this.apply.Location = new System.Drawing.Point(277, 357);
 			this.apply.Name = "apply";
 			this.apply.Size = new System.Drawing.Size(75, 23);
 			this.apply.TabIndex = 2;
@@ -99,7 +103,7 @@ namespace TaekwindowConfig
 			// 
 			this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.ok.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.ok.Location = new System.Drawing.Point(115, 379);
+			this.ok.Location = new System.Drawing.Point(115, 357);
 			this.ok.Name = "ok";
 			this.ok.Size = new System.Drawing.Size(75, 23);
 			this.ok.TabIndex = 3;
@@ -119,7 +123,7 @@ namespace TaekwindowConfig
 			this.tabControl.Location = new System.Drawing.Point(12, 12);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(340, 361);
+			this.tabControl.Size = new System.Drawing.Size(340, 339);
 			this.tabControl.TabIndex = 4;
 			// 
 			// general
@@ -128,7 +132,7 @@ namespace TaekwindowConfig
 			this.general.Location = new System.Drawing.Point(4, 22);
 			this.general.Name = "general";
 			this.general.Padding = new System.Windows.Forms.Padding(8);
-			this.general.Size = new System.Drawing.Size(332, 335);
+			this.general.Size = new System.Drawing.Size(332, 313);
 			this.general.TabIndex = 0;
 			this.general.Text = "General";
 			this.general.UseVisualStyleBackColor = true;
@@ -181,246 +185,264 @@ namespace TaekwindowConfig
 			// 
 			// keysAndButtons
 			// 
-			this.keysAndButtons.Controls.Add(this.label5);
-			this.keysAndButtons.Controls.Add(this.label4);
-			this.keysAndButtons.Controls.Add(this.panel3);
-			this.keysAndButtons.Controls.Add(this.panel1);
-			this.keysAndButtons.Controls.Add(this.panel2);
-			this.keysAndButtons.Controls.Add(this.label3);
+			this.keysAndButtons.Controls.Add(this.groupBox4);
+			this.keysAndButtons.Controls.Add(this.groupBox3);
+			this.keysAndButtons.Controls.Add(this.groupBox2);
 			this.keysAndButtons.Location = new System.Drawing.Point(4, 22);
 			this.keysAndButtons.Name = "keysAndButtons";
 			this.keysAndButtons.Padding = new System.Windows.Forms.Padding(8);
-			this.keysAndButtons.Size = new System.Drawing.Size(332, 335);
+			this.keysAndButtons.Size = new System.Drawing.Size(332, 313);
 			this.keysAndButtons.TabIndex = 2;
 			this.keysAndButtons.Text = "Keys and buttons";
 			this.keysAndButtons.UseVisualStyleBackColor = true;
 			// 
-			// label5
+			// groupBox4
 			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(8, 50);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(194, 13);
-			this.label5.TabIndex = 13;
-			this.label5.Text = "Resize windows with this mouse button:";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(8, 8);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(189, 13);
-			this.label4.TabIndex = 12;
-			this.label4.Text = "Move windows with this mouse button:";
-			// 
-			// panel3
-			// 
-			this.panel3.Controls.Add(this.resizeMiddle);
-			this.panel3.Controls.Add(this.resizeRight);
-			this.panel3.Controls.Add(this.resizeLeft);
-			this.panel3.Location = new System.Drawing.Point(11, 66);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(222, 23);
-			this.panel3.TabIndex = 11;
+			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Controls.Add(this.resizeMiddle);
+			this.groupBox4.Controls.Add(this.resizeRight);
+			this.groupBox4.Controls.Add(this.resizeLeft);
+			this.groupBox4.Location = new System.Drawing.Point(11, 209);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox4.Size = new System.Drawing.Size(310, 93);
+			this.groupBox4.TabIndex = 16;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Resizing";
 			// 
 			// resizeMiddle
 			// 
-			this.resizeMiddle.Location = new System.Drawing.Point(77, 3);
+			this.resizeMiddle.AutoSize = true;
+			this.resizeMiddle.Location = new System.Drawing.Point(11, 42);
 			this.resizeMiddle.Name = "resizeMiddle";
-			this.resizeMiddle.Size = new System.Drawing.Size(68, 17);
+			this.resizeMiddle.Size = new System.Drawing.Size(179, 17);
 			this.resizeMiddle.TabIndex = 10;
 			this.resizeMiddle.TabStop = true;
-			this.resizeMiddle.Text = "&Middle";
+			this.resizeMiddle.Text = "Resize with mi&ddle mouse button";
 			this.resizeMiddle.UseVisualStyleBackColor = true;
-			this.resizeMiddle.Click += new System.EventHandler(this.resizeMiddle_Click);
 			this.resizeMiddle.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// resizeRight
 			// 
-			this.resizeRight.Location = new System.Drawing.Point(150, 3);
+			this.resizeRight.AutoSize = true;
+			this.resizeRight.Location = new System.Drawing.Point(11, 65);
 			this.resizeRight.Name = "resizeRight";
-			this.resizeRight.Size = new System.Drawing.Size(68, 17);
+			this.resizeRight.Size = new System.Drawing.Size(169, 17);
 			this.resizeRight.TabIndex = 9;
 			this.resizeRight.TabStop = true;
-			this.resizeRight.Text = "&Right";
+			this.resizeRight.Text = "Resize with ri&ght mouse button";
 			this.resizeRight.UseVisualStyleBackColor = true;
-			this.resizeRight.Click += new System.EventHandler(this.resizeRight_Click);
 			this.resizeRight.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// resizeLeft
 			// 
-			this.resizeLeft.Location = new System.Drawing.Point(3, 3);
+			this.resizeLeft.AutoSize = true;
+			this.resizeLeft.Location = new System.Drawing.Point(11, 19);
 			this.resizeLeft.Name = "resizeLeft";
-			this.resizeLeft.Size = new System.Drawing.Size(68, 17);
+			this.resizeLeft.Size = new System.Drawing.Size(163, 17);
 			this.resizeLeft.TabIndex = 8;
 			this.resizeLeft.TabStop = true;
-			this.resizeLeft.Text = "&Left";
+			this.resizeLeft.Text = "Resize with le&ft mouse button";
 			this.resizeLeft.UseVisualStyleBackColor = true;
-			this.resizeLeft.Click += new System.EventHandler(this.resizeLeft_Click);
 			this.resizeLeft.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
-			// panel1
+			// groupBox3
 			// 
-			this.panel1.Controls.Add(this.moveMiddle);
-			this.panel1.Controls.Add(this.moveRight);
-			this.panel1.Controls.Add(this.moveLeft);
-			this.panel1.Location = new System.Drawing.Point(11, 24);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(222, 23);
-			this.panel1.TabIndex = 11;
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Controls.Add(this.moveMiddle);
+			this.groupBox3.Controls.Add(this.moveRight);
+			this.groupBox3.Controls.Add(this.moveLeft);
+			this.groupBox3.Location = new System.Drawing.Point(11, 110);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox3.Size = new System.Drawing.Size(310, 93);
+			this.groupBox3.TabIndex = 15;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Moving";
 			// 
 			// moveMiddle
 			// 
-			this.moveMiddle.Location = new System.Drawing.Point(77, 3);
+			this.moveMiddle.AutoSize = true;
+			this.moveMiddle.Location = new System.Drawing.Point(11, 42);
 			this.moveMiddle.Name = "moveMiddle";
-			this.moveMiddle.Size = new System.Drawing.Size(68, 17);
+			this.moveMiddle.Size = new System.Drawing.Size(174, 17);
 			this.moveMiddle.TabIndex = 10;
 			this.moveMiddle.TabStop = true;
-			this.moveMiddle.Text = "&Middle";
+			this.moveMiddle.Text = "Move with &middle mouse button";
 			this.moveMiddle.UseVisualStyleBackColor = true;
-			this.moveMiddle.Click += new System.EventHandler(this.moveMiddle_Click);
 			this.moveMiddle.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// moveRight
 			// 
-			this.moveRight.Location = new System.Drawing.Point(150, 3);
+			this.moveRight.AutoSize = true;
+			this.moveRight.Location = new System.Drawing.Point(11, 65);
 			this.moveRight.Name = "moveRight";
-			this.moveRight.Size = new System.Drawing.Size(68, 17);
+			this.moveRight.Size = new System.Drawing.Size(164, 17);
 			this.moveRight.TabIndex = 9;
 			this.moveRight.TabStop = true;
-			this.moveRight.Text = "&Right";
+			this.moveRight.Text = "Move with r&ight mouse button";
 			this.moveRight.UseVisualStyleBackColor = true;
-			this.moveRight.Click += new System.EventHandler(this.moveRight_Click);
 			this.moveRight.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// moveLeft
 			// 
-			this.moveLeft.Location = new System.Drawing.Point(3, 3);
+			this.moveLeft.AutoSize = true;
+			this.moveLeft.Location = new System.Drawing.Point(11, 19);
 			this.moveLeft.Name = "moveLeft";
-			this.moveLeft.Size = new System.Drawing.Size(68, 17);
+			this.moveLeft.Size = new System.Drawing.Size(158, 17);
 			this.moveLeft.TabIndex = 8;
 			this.moveLeft.TabStop = true;
-			this.moveLeft.Text = "&Left";
+			this.moveLeft.Text = "Move with l&eft mouse button";
 			this.moveLeft.UseVisualStyleBackColor = true;
-			this.moveLeft.Click += new System.EventHandler(this.moveLeft_Click);
 			this.moveLeft.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
-			// panel2
+			// groupBox2
 			// 
-			this.panel2.Controls.Add(this.eitherAlt);
-			this.panel2.Controls.Add(this.rightAlt);
-			this.panel2.Controls.Add(this.leftAlt);
-			this.panel2.Location = new System.Drawing.Point(11, 301);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(222, 23);
-			this.panel2.TabIndex = 9;
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.eitherAlt);
+			this.groupBox2.Controls.Add(this.rightAlt);
+			this.groupBox2.Controls.Add(this.leftAlt);
+			this.groupBox2.Location = new System.Drawing.Point(11, 11);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox2.Size = new System.Drawing.Size(310, 93);
+			this.groupBox2.TabIndex = 14;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Keyboard";
 			// 
 			// eitherAlt
 			// 
-			this.eitherAlt.Location = new System.Drawing.Point(77, 3);
+			this.eitherAlt.AutoSize = true;
+			this.eitherAlt.Location = new System.Drawing.Point(11, 42);
 			this.eitherAlt.Name = "eitherAlt";
-			this.eitherAlt.Size = new System.Drawing.Size(68, 17);
+			this.eitherAlt.Size = new System.Drawing.Size(151, 17);
 			this.eitherAlt.TabIndex = 10;
 			this.eitherAlt.TabStop = true;
-			this.eitherAlt.Text = "&Either";
+			this.eitherAlt.Text = "Move or resize with a&ny Alt";
 			this.eitherAlt.UseVisualStyleBackColor = true;
 			this.eitherAlt.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// rightAlt
 			// 
-			this.rightAlt.Location = new System.Drawing.Point(150, 3);
+			this.rightAlt.AutoSize = true;
+			this.rightAlt.Location = new System.Drawing.Point(11, 65);
 			this.rightAlt.Name = "rightAlt";
-			this.rightAlt.Size = new System.Drawing.Size(68, 17);
+			this.rightAlt.Size = new System.Drawing.Size(154, 17);
 			this.rightAlt.TabIndex = 9;
 			this.rightAlt.TabStop = true;
-			this.rightAlt.Text = "&Right";
+			this.rightAlt.Text = "Move or resize with &right Alt";
 			this.rightAlt.UseVisualStyleBackColor = true;
 			this.rightAlt.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// leftAlt
 			// 
-			this.leftAlt.Location = new System.Drawing.Point(3, 3);
+			this.leftAlt.AutoSize = true;
+			this.leftAlt.Location = new System.Drawing.Point(11, 19);
 			this.leftAlt.Name = "leftAlt";
-			this.leftAlt.Size = new System.Drawing.Size(68, 17);
+			this.leftAlt.Size = new System.Drawing.Size(148, 17);
 			this.leftAlt.TabIndex = 8;
 			this.leftAlt.TabStop = true;
-			this.leftAlt.Text = "&Left";
+			this.leftAlt.Text = "Move or resize with &left Alt";
 			this.leftAlt.UseVisualStyleBackColor = true;
 			this.leftAlt.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(8, 285);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(221, 13);
-			this.label3.TabIndex = 0;
-			this.label3.Text = "Move and resize windows with this Alt button:";
-			// 
 			// resizing
 			// 
-			this.resizing.Controls.Add(this.pictureBox3);
-			this.resizing.Controls.Add(this.label7);
-			this.resizing.Controls.Add(this.pictureBox2);
-			this.resizing.Controls.Add(this.label6);
-			this.resizing.Controls.Add(this.nineRectangles);
-			this.resizing.Controls.Add(this.bottomRight);
+			this.resizing.Controls.Add(this.groupBox5);
 			this.resizing.Location = new System.Drawing.Point(4, 22);
 			this.resizing.Margin = new System.Windows.Forms.Padding(8);
 			this.resizing.Name = "resizing";
 			this.resizing.Padding = new System.Windows.Forms.Padding(8);
-			this.resizing.Size = new System.Drawing.Size(332, 335);
+			this.resizing.Size = new System.Drawing.Size(332, 313);
 			this.resizing.TabIndex = 3;
 			this.resizing.Text = "Resizing";
 			this.resizing.UseVisualStyleBackColor = true;
 			// 
+			// groupBox5
+			// 
+			this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox5.Controls.Add(this.bottomRight);
+			this.groupBox5.Controls.Add(this.nineRectangles);
+			this.groupBox5.Controls.Add(this.groupBox6);
+			this.groupBox5.Controls.Add(this.pictureBox3);
+			this.groupBox5.Controls.Add(this.label7);
+			this.groupBox5.Controls.Add(this.pictureBox2);
+			this.groupBox5.Controls.Add(this.label6);
+			this.groupBox5.Location = new System.Drawing.Point(11, 11);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox5.Size = new System.Drawing.Size(310, 246);
+			this.groupBox5.TabIndex = 0;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "Resize mode";
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Location = new System.Drawing.Point(11, 126);
+			this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(288, 2);
+			this.groupBox6.TabIndex = 12;
+			this.groupBox6.TabStop = false;
+			// 
 			// pictureBox3
 			// 
+			this.pictureBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-			this.pictureBox3.Location = new System.Drawing.Point(30, 211);
+			this.pictureBox3.Location = new System.Drawing.Point(171, 139);
 			this.pictureBox3.Name = "pictureBox3";
 			this.pictureBox3.Size = new System.Drawing.Size(128, 96);
-			this.pictureBox3.TabIndex = 5;
+			this.pictureBox3.TabIndex = 11;
 			this.pictureBox3.TabStop = false;
 			// 
 			// label7
 			// 
 			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label7.Location = new System.Drawing.Point(27, 182);
+			this.label7.Location = new System.Drawing.Point(27, 162);
+			this.label7.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(294, 26);
-			this.label7.TabIndex = 4;
-			this.label7.Text = "The window is resized from the corner or edge that is closest to where you grab i" +
-				"t.";
+			this.label7.Size = new System.Drawing.Size(138, 73);
+			this.label7.TabIndex = 10;
+			this.label7.Text = "The window is resized from the corner or edge that is closest to the point where " +
+				"you grab it.";
 			// 
 			// pictureBox2
 			// 
+			this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-			this.pictureBox2.Location = new System.Drawing.Point(30, 60);
+			this.pictureBox2.Location = new System.Drawing.Point(171, 19);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(128, 96);
-			this.pictureBox2.TabIndex = 3;
+			this.pictureBox2.TabIndex = 9;
 			this.pictureBox2.TabStop = false;
 			// 
 			// label6
 			// 
 			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label6.Location = new System.Drawing.Point(27, 31);
+			this.label6.Location = new System.Drawing.Point(27, 42);
+			this.label6.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(294, 26);
-			this.label6.TabIndex = 2;
+			this.label6.Size = new System.Drawing.Size(138, 73);
+			this.label6.TabIndex = 8;
 			this.label6.Text = "Regardless of where you grab the window, you always resize from its lower right c" +
 				"orner.";
 			// 
 			// nineRectangles
 			// 
 			this.nineRectangles.AutoSize = true;
-			this.nineRectangles.Location = new System.Drawing.Point(11, 162);
+			this.nineRectangles.Location = new System.Drawing.Point(11, 139);
+			this.nineRectangles.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
 			this.nineRectangles.Name = "nineRectangles";
 			this.nineRectangles.Size = new System.Drawing.Size(99, 17);
-			this.nineRectangles.TabIndex = 1;
+			this.nineRectangles.TabIndex = 7;
 			this.nineRectangles.Text = "&Nine rectangles";
 			this.nineRectangles.UseVisualStyleBackColor = true;
 			this.nineRectangles.CheckedChanged += new System.EventHandler(this.SettingChanged);
@@ -428,48 +450,91 @@ namespace TaekwindowConfig
 			// bottomRight
 			// 
 			this.bottomRight.AutoSize = true;
-			this.bottomRight.Checked = true;
-			this.bottomRight.Location = new System.Drawing.Point(11, 11);
+			this.bottomRight.Location = new System.Drawing.Point(11, 19);
 			this.bottomRight.Name = "bottomRight";
 			this.bottomRight.Size = new System.Drawing.Size(114, 17);
-			this.bottomRight.TabIndex = 0;
-			this.bottomRight.TabStop = true;
+			this.bottomRight.TabIndex = 6;
 			this.bottomRight.Text = "&Bottom right corner";
 			this.bottomRight.UseVisualStyleBackColor = true;
 			this.bottomRight.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// about
 			// 
-			this.about.Controls.Add(this.label2);
-			this.about.Controls.Add(this.website);
-			this.about.Controls.Add(this.email);
-			this.about.Controls.Add(this.author);
-			this.about.Controls.Add(this.version);
-			this.about.Controls.Add(this.title);
-			this.about.Controls.Add(this.logo);
+			this.about.Controls.Add(this.groupBox7);
+			this.about.Controls.Add(this.aboutBox);
 			this.about.Location = new System.Drawing.Point(4, 22);
 			this.about.Name = "about";
 			this.about.Padding = new System.Windows.Forms.Padding(8);
-			this.about.Size = new System.Drawing.Size(332, 335);
+			this.about.Size = new System.Drawing.Size(332, 313);
 			this.about.TabIndex = 1;
 			this.about.Text = "About";
 			this.about.UseVisualStyleBackColor = true;
 			// 
+			// groupBox7
+			// 
+			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox7.Controls.Add(this.label2);
+			this.groupBox7.Location = new System.Drawing.Point(11, 229);
+			this.groupBox7.Name = "groupBox7";
+			this.groupBox7.Padding = new System.Windows.Forms.Padding(8, 8, 8, 13);
+			this.groupBox7.Size = new System.Drawing.Size(310, 73);
+			this.groupBox7.TabIndex = 9;
+			this.groupBox7.TabStop = false;
+			this.groupBox7.Text = "Legal";
+			// 
 			// label2
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(11, 295);
+			this.label2.Location = new System.Drawing.Point(11, 21);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(310, 32);
+			this.label2.Size = new System.Drawing.Size(288, 39);
 			this.label2.TabIndex = 7;
-			this.label2.Text = "You are free and welcome to distribute this program. See the Readme.txt file for " +
-				"license details.";
+			this.label2.Text = "This program is licensed under the BSD license. This means you are free and welco" +
+				"me to distribute this program. See the Readme.txt file for details.";
+			// 
+			// aboutBox
+			// 
+			this.aboutBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.aboutBox.Controls.Add(this.logo);
+			this.aboutBox.Controls.Add(this.title);
+			this.aboutBox.Controls.Add(this.website);
+			this.aboutBox.Controls.Add(this.version);
+			this.aboutBox.Controls.Add(this.email);
+			this.aboutBox.Controls.Add(this.author);
+			this.aboutBox.Location = new System.Drawing.Point(11, 11);
+			this.aboutBox.Name = "aboutBox";
+			this.aboutBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 13);
+			this.aboutBox.Size = new System.Drawing.Size(310, 133);
+			this.aboutBox.TabIndex = 8;
+			this.aboutBox.TabStop = false;
+			this.aboutBox.Text = "About";
+			// 
+			// logo
+			// 
+			this.logo.Image = ((System.Drawing.Image)(resources.GetObject("logo.Image")));
+			this.logo.Location = new System.Drawing.Point(11, 19);
+			this.logo.Name = "logo";
+			this.logo.Size = new System.Drawing.Size(64, 64);
+			this.logo.TabIndex = 1;
+			this.logo.TabStop = false;
+			// 
+			// title
+			// 
+			this.title.AutoSize = true;
+			this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.title.Location = new System.Drawing.Point(81, 16);
+			this.title.Name = "title";
+			this.title.Size = new System.Drawing.Size(43, 20);
+			this.title.TabIndex = 2;
+			this.title.Text = "Title";
 			// 
 			// website
 			// 
 			this.website.AutoSize = true;
-			this.website.Location = new System.Drawing.Point(81, 99);
+			this.website.Location = new System.Drawing.Point(82, 107);
 			this.website.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
 			this.website.Name = "website";
 			this.website.Size = new System.Drawing.Size(46, 13);
@@ -478,10 +543,20 @@ namespace TaekwindowConfig
 			this.website.Text = "Website";
 			this.website.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.websiteLinkLabel_LinkClicked);
 			// 
+			// version
+			// 
+			this.version.AutoSize = true;
+			this.version.Location = new System.Drawing.Point(82, 44);
+			this.version.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+			this.version.Name = "version";
+			this.version.Size = new System.Drawing.Size(45, 13);
+			this.version.TabIndex = 3;
+			this.version.Text = "Version ";
+			// 
 			// email
 			// 
 			this.email.AutoSize = true;
-			this.email.Location = new System.Drawing.Point(81, 78);
+			this.email.Location = new System.Drawing.Point(82, 86);
 			this.email.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
 			this.email.Name = "email";
 			this.email.Size = new System.Drawing.Size(35, 13);
@@ -493,47 +568,18 @@ namespace TaekwindowConfig
 			// author
 			// 
 			this.author.AutoSize = true;
-			this.author.Location = new System.Drawing.Point(81, 57);
+			this.author.Location = new System.Drawing.Point(81, 65);
 			this.author.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
 			this.author.Name = "author";
 			this.author.Size = new System.Drawing.Size(38, 13);
 			this.author.TabIndex = 4;
 			this.author.Text = "Author";
 			// 
-			// version
-			// 
-			this.version.AutoSize = true;
-			this.version.Location = new System.Drawing.Point(81, 36);
-			this.version.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
-			this.version.Name = "version";
-			this.version.Size = new System.Drawing.Size(45, 13);
-			this.version.TabIndex = 3;
-			this.version.Text = "Version ";
-			// 
-			// title
-			// 
-			this.title.AutoSize = true;
-			this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.title.Location = new System.Drawing.Point(80, 8);
-			this.title.Name = "title";
-			this.title.Size = new System.Drawing.Size(43, 20);
-			this.title.TabIndex = 2;
-			this.title.Text = "Title";
-			// 
-			// logo
-			// 
-			this.logo.Image = ((System.Drawing.Image)(resources.GetObject("logo.Image")));
-			this.logo.Location = new System.Drawing.Point(6, 6);
-			this.logo.Name = "logo";
-			this.logo.Size = new System.Drawing.Size(64, 64);
-			this.logo.TabIndex = 1;
-			this.logo.TabStop = false;
-			// 
 			// cancel
 			// 
 			this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancel.Location = new System.Drawing.Point(196, 379);
+			this.cancel.Location = new System.Drawing.Point(196, 357);
 			this.cancel.Name = "cancel";
 			this.cancel.Size = new System.Drawing.Size(75, 23);
 			this.cancel.TabIndex = 5;
@@ -547,7 +593,7 @@ namespace TaekwindowConfig
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.cancel;
-			this.ClientSize = new System.Drawing.Size(364, 414);
+			this.ClientSize = new System.Drawing.Size(364, 392);
 			this.Controls.Add(this.cancel);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.ok);
@@ -564,16 +610,21 @@ namespace TaekwindowConfig
 			this.groupBox1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.keysAndButtons.ResumeLayout(false);
-			this.keysAndButtons.PerformLayout();
-			this.panel3.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
-			this.panel2.ResumeLayout(false);
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox3.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.resizing.ResumeLayout(false);
-			this.resizing.PerformLayout();
+			this.groupBox5.ResumeLayout(false);
+			this.groupBox5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			this.about.ResumeLayout(false);
-			this.about.PerformLayout();
+			this.groupBox7.ResumeLayout(false);
+			this.aboutBox.ResumeLayout(false);
+			this.aboutBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
 			this.ResumeLayout(false);
 
@@ -597,30 +648,31 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.TabPage resizing;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox startAtLogon;
-		private System.Windows.Forms.RadioButton nineRectangles;
-		private System.Windows.Forms.RadioButton bottomRight;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.RadioButton eitherAlt;
 		private System.Windows.Forms.RadioButton rightAlt;
 		private System.Windows.Forms.RadioButton leftAlt;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.RadioButton moveMiddle;
-		private System.Windows.Forms.RadioButton moveRight;
-		private System.Windows.Forms.RadioButton moveLeft;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Panel panel3;
-		private System.Windows.Forms.RadioButton resizeMiddle;
-		private System.Windows.Forms.RadioButton resizeRight;
-		private System.Windows.Forms.RadioButton resizeLeft;
 		private System.Windows.Forms.Button cancel;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.PictureBox pictureBox2;
-		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.GroupBox groupBox3;
+		private System.Windows.Forms.RadioButton moveMiddle;
+		private System.Windows.Forms.RadioButton moveRight;
+		private System.Windows.Forms.RadioButton moveLeft;
+		private System.Windows.Forms.GroupBox groupBox4;
+		private System.Windows.Forms.RadioButton resizeMiddle;
+		private System.Windows.Forms.RadioButton resizeRight;
+		private System.Windows.Forms.RadioButton resizeLeft;
+		private System.Windows.Forms.GroupBox groupBox5;
 		private System.Windows.Forms.PictureBox pictureBox3;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.PictureBox pictureBox2;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.RadioButton nineRectangles;
+		private System.Windows.Forms.RadioButton bottomRight;
+		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.GroupBox aboutBox;
+		private System.Windows.Forms.GroupBox groupBox7;
 	}
 }
 

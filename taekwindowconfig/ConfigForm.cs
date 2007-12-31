@@ -21,9 +21,10 @@ namespace TaekwindowConfig
 		{
 			InitializeComponent();
 			Text = VersionInfo.Title + " configuration";
+			aboutBox.Text = "About " + VersionInfo.Title;
 			title.Text = VersionInfo.Title;
 			version.Text = VersionInfo.VersionString;
-			author.Text = VersionInfo.Author;
+			author.Text = "Written by " + VersionInfo.Author;
 			website.Text = VersionInfo.Website;
 			email.Text = VersionInfo.Email;
 			loadSettings();
@@ -307,5 +308,6 @@ namespace TaekwindowConfig
 			if (moveRight.Checked)
 				moveLeft.Checked = true;
 		}
+
 	}
 }
