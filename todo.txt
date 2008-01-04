@@ -1,0 +1,12 @@
+- declare hook procedures with CALLBACK instead of __stdcall
+- rename hooks.hpp to exports.hpp or something (?)
+- better error handling (show message)
+- integrate this info somewhere:
+
+WH_CALLWNDPROC and WH_CALLWNDPROCRET can monitor messages but not modify them.
+
+WH_GETMESSAGE can examine and modify messages, but only those from GetMessage or PeekMessage (i.e. posted messages).
+
+WH_MOUSE and WH_KEYBOARD can monitor messages but not modify them; they run in the thread of the application that receives the message.
+
+WH_MOUSE_LL and WH_KEYBOARD_LL can examine, modify and eat messages; they run in the thread of the application that installed the hook (!).
