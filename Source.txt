@@ -14,7 +14,7 @@ There are several ways to do what Taekwindow does, among them: hooks and window 
 
 - WH_CALLWNDPROC and WH_CALLWNDPROCRET can monitor messages but not modify them.
 - WH_GETMESSAGE can examine and modify messages, but only those from GetMessage or PeekMessage (i.e. posted messages).
-- WH_MOUSE and WH_KEYBOARD can monitor messages but not modify them; they run in the thread of the application that receives the message.
+- WH_MOUSE and WH_KEYBOARD can examine and eat messages but not modify them; they run in the thread of the application that receives the message.
 - WH_MOUSE_LL and WH_KEYBOARD_LL can examine, modify and eat messages; they run in the thread of the application that installed the hook (!).
 - Window subclassing is tricky, needs to be done on all running applications, and requires that we inject ourselves into all threads somehow.
 
