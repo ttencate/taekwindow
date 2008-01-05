@@ -6,3 +6,16 @@ To build, you need the following in your PATH:
 
 The project files may open in the Express editions of Visual C++ and Visual C#,
 but I am not sure of this and have not tested it.
+
+Internals
+---------
+
+There are several ways to do what Taekwindow does, among them: hooks and window subclassing.
+
+- WH_CALLWNDPROC and WH_CALLWNDPROCRET can monitor messages but not modify them.
+- WH_GETMESSAGE can examine and modify messages, but only those from GetMessage or PeekMessage (i.e. posted messages).
+- WH_MOUSE and WH_KEYBOARD can monitor messages but not modify them; they run in the thread of the application that receives the message.
+- WH_MOUSE_LL and WH_KEYBOARD_LL can examine, modify and eat messages; they run in the thread of the application that installed the hook (!).
+- Window subclassing is tricky, needs to be done on all running applications, and requires that we inject ourselves into all threads somehow.
+
+We currently use the WH_MOUSE and WH_KEYBOARD hooks, but in the future the _LL variants may come in useful as well, to eat key presses we don't want the application to see.

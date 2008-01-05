@@ -168,6 +168,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\shared.cpp"
 				>
 			</File>
@@ -191,6 +195,10 @@
 			</File>
 			<File
 				RelativePath=".\hooks.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\main.hpp"
 				>
 			</File>
 			<File
