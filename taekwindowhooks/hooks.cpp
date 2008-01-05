@@ -93,6 +93,18 @@ bool processButtonUp(MouseButton button) {
 	}
 }
 
+/* Processes a mouse drag event.
+ * Returns true if the event was processed and should not be passed to the application, false otherwise.
+ */
+bool processDrag(MOUSEHOOKSTRUCT *eventInfo) {
+	if (currentState == dsDragging) {
+		// We are handling the moving or resizing of a window.
+		doDragAction(eventInfo);
+		return true;
+	}
+	return currentState == dsIgnoring;
+}
+
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
  * see the SetWindowsHookEx documentation for details.
  */
@@ -112,18 +124,7 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				processed = processButtonUp(eventToButton(wParam));
 				break;
 			case WM_MOUSEMOVE:
-				switch (currentState) {
-					case dsDragging:
-						// We are handling the moving or resizing of a window.
-						processDrag(eventInfo);
-						processed = true;
-						break;
-					case dsIgnoring:
-						processed = true;
-						break;
-					case dsNone:
-						break;
-				}
+				processed = processDrag(eventInfo);
 				break;
 		}
 		lastMousePos = eventInfo->pt;

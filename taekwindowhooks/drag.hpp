@@ -9,12 +9,12 @@
  */
 void startDragAction(MouseButton button, MOUSEHOOKSTRUCT *eventInfo);
 
+/* Processes drag events that we want to handle.
+ */
+void doDragAction(MOUSEHOOKSTRUCT const *eventInfo);
+
 /* Processes the end of a drag (i.e. move/resize) action.
  */
 void endDragAction();
-
-/* Processes drag events that we want to handle.
- */
-void processDrag(MOUSEHOOKSTRUCT const *eventInfo);
 
 #endif

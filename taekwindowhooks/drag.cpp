@@ -32,12 +32,7 @@ void startDragAction(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 	}
 }
 
-void endDragAction() {
-	ReleaseCapture();
-	currentState = dsNone;
-}
-
-void processDrag(MOUSEHOOKSTRUCT const *eventInfo) {
+void doDragAction(MOUSEHOOKSTRUCT const *eventInfo) {
 	int deltaX, deltaY;
 	// Find out the movement since the last known mouse position.
 	deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
@@ -71,4 +66,9 @@ void processDrag(MOUSEHOOKSTRUCT const *eventInfo) {
 	SetWindowPos(draggedWindow, NULL,
 		lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
 		SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+}
+
+void endDragAction() {
+	ReleaseCapture();
+	currentState = dsNone;
 }
