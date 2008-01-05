@@ -1,16 +1,10 @@
 #include <windows.h>
 #include <stdio.h>
 
-const LPCSTR INIT_ORDINAL = (LPCSTR)1;
-const LPCSTR READ_CONFIG_ORDINAL = (LPCSTR)2;
-const LPCSTR MOUSEPROC_ORDINAL = (LPCSTR)3;
-const LPCSTR KEYBOARDPROC_ORDINAL = (LPCSTR)4;
-const LPCSTR UNINIT_ORDINAL = (LPCSTR)5;
-
 HMODULE dllHandle = NULL;
-DWORD (__stdcall *initProc)(DWORD) = NULL;
-void (__stdcall *uninitProc)() = NULL;
-void (__stdcall *readConfigProc)() = NULL;
+DWORD (*initProc)(DWORD) = NULL;
+void (*uninitProc)() = NULL;
+void (*readConfigProc)() = NULL;
 HOOKPROC mouseProc = NULL;
 HOOKPROC keyboardProc = NULL;
 HHOOK mouseHook = NULL;
@@ -52,19 +46,19 @@ void uninitDll() {
  * Returns true on success.
  */
 bool findProcs() {
-	initProc = (DWORD (__stdcall*)(DWORD))GetProcAddress(dllHandle, INIT_ORDINAL);
+	initProc = (DWORD (*)(DWORD))GetProcAddress(dllHandle, "init");
 	if (!initProc)
 		return false;
-	uninitProc = (void (__stdcall*)())GetProcAddress(dllHandle, UNINIT_ORDINAL);
+	uninitProc = (void (*)())GetProcAddress(dllHandle, "uninit");
 	if (!uninitProc)
 		return false;
-	readConfigProc = (void (__stdcall*)())GetProcAddress(dllHandle, READ_CONFIG_ORDINAL);
+	readConfigProc = (void (*)())GetProcAddress(dllHandle, "readConfig");
 	if (!readConfigProc)
 		return false;
-	mouseProc = (HOOKPROC)GetProcAddress(dllHandle, MOUSEPROC_ORDINAL);
+	mouseProc = (HOOKPROC)GetProcAddress(dllHandle, "mouseProc");
 	if (!mouseProc)
 		return false;
-	keyboardProc = (HOOKPROC)GetProcAddress(dllHandle, KEYBOARDPROC_ORDINAL);
+	keyboardProc = (HOOKPROC)GetProcAddress(dllHandle, "keyboardProc");
 	if (!keyboardProc)
 		return false;
 	return true;

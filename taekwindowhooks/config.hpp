@@ -23,6 +23,6 @@ extern ResizeMode resizeMode;
 /* Reads the configuration from the registry.
  * If no value is present for a certain setting, that setting remains untouched.
  */
-void __declspec(dllexport) __stdcall readConfig();
+void readConfig();
 
 #endif

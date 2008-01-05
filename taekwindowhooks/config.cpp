@@ -17,7 +17,7 @@ bool readDWord(HKEY key, LPCSTR valueName, LPDWORD out) {
 	return false;
 }
 
-void __declspec(dllexport) __stdcall readConfig() {
+void readConfig() {
 	// Open the registry keys.
 	HKEY software;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {

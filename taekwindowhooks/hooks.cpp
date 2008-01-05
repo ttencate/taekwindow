@@ -27,7 +27,7 @@ BOOL WINAPI DllMain(HANDLE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {
  * If there was already another thread ID (probably another taekwindow.exe process),
  * the function returns the thread ID of that thread and does nothing else.
  */
-DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
+DWORD init(DWORD threadId) {
 	if (mainThreadId) {
 		return mainThreadId;
 	} else {
@@ -38,7 +38,7 @@ DWORD __declspec(dllexport) __stdcall init(DWORD threadId) {
 
 /* Uninitializes the DLL by forgetting the thread ID.
  */
-void __declspec(dllexport) __stdcall uninit() {
+void uninit() {
 	mainThreadId = 0;
 }
 
@@ -132,7 +132,7 @@ bool processButtonUp(MouseButton button) {
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
  * see the SetWindowsHookEx documentation for details.
  */
-LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
@@ -174,7 +174,7 @@ LRESULT __declspec(dllexport) __stdcall mouseProc(int nCode, WPARAM wParam, LPAR
 /* The function for handling keyboard events.
  * Or rather, the function to eat keyboard events that the application shouldn't receive.
  */
-LRESULT __declspec(dllexport) __stdcall keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 #ifdef DEBUG
 	if (wParam == 0x51) {
 		// Q button pressed. Panic button for debugging.
