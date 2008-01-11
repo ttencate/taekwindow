@@ -23,7 +23,7 @@ bool isDraggableWindow(HWND window) {
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
-bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
+bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 	if (currentState == dsNone) {
 		// Nothing is yet going on. We possibly want to take action if the Modifier key is currently pressed.
 		if (modifierDown) {
@@ -64,7 +64,7 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT *eventInfo) {
 /* Processes a mouse button release event.
  * Returns true if the event was processed and should not be passed to the application, false otherwise.
  */
-bool processButtonUp(MouseButton button) {
+bool processButtonUp(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 	switch (currentState) {
 		case dsNone:
 			// Nothing going on, pass the event on.
@@ -73,7 +73,7 @@ bool processButtonUp(MouseButton button) {
 			if (button == draggingButton) {
 				// End of move or resize action.
 				// Release the capture and eat the event.
-				endDragAction();
+				endDragAction(eventInfo);
 				return true;
 			} else {
 				// Other button released during move event. (Naughty user!)
@@ -121,7 +121,7 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
 			case WM_RBUTTONUP:
-				processed = processButtonUp(eventToButton(wParam));
+				processed = processButtonUp(eventToButton(wParam), eventInfo);
 				break;
 			case WM_MOUSEMOVE:
 				processed = processDrag(eventInfo);

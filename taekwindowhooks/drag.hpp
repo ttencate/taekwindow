@@ -7,7 +7,7 @@
 
 /* Initiates a window dragging action (i.e. moving/resizing).
  */
-void startDragAction(MouseButton button, MOUSEHOOKSTRUCT *eventInfo);
+void startDragAction(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo);
 
 /* Processes drag events that we want to handle.
  */
@@ -15,6 +15,6 @@ void doDragAction(MOUSEHOOKSTRUCT const *eventInfo);
 
 /* Processes the end of a drag (i.e. move/resize) action.
  */
-void endDragAction();
+void endDragAction(MOUSEHOOKSTRUCT const *eventInfo);
 
 #endif
