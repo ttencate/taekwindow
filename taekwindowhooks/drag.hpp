@@ -15,6 +15,6 @@ void doDragAction(MOUSEHOOKSTRUCT const *eventInfo);
 
 /* Processes the end of a drag (i.e. move/resize) action.
  */
-void endDragAction(MOUSEHOOKSTRUCT const *eventInfo);
+void endDragAction();
 
 #endif

@@ -29,8 +29,6 @@ void startDragAction(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 				setResizingY(eventInfo->pt);
 				break;
 		}
-		PostMessage(draggedWindow, WM_NCLBUTTONDOWN, HTLEFT, POINTTOPOINTS(eventInfo->pt));
-		PostMessage(draggedWindow, WM_ENTERSIZEMOVE, 0, 0);
 	}
 }
 
@@ -65,17 +63,12 @@ void doDragAction(MOUSEHOOKSTRUCT const *eventInfo) {
 		}
 	}
 	// Now possibly the most important statement in the program: apply the movement/resizing to the window!
-	/*
 	SetWindowPos(draggedWindow, NULL,
 		lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top,
 		SWP_NOACTIVATE | SWP_NOOWNERZORDER);
-	*/
-	PostMessage(draggedWindow, WM_MOUSEMOVE, MK_LBUTTON, POINTTOPOINTS(eventInfo->pt));
 }
 
-void endDragAction(MOUSEHOOKSTRUCT const *eventInfo) {
-	PostMessage(draggedWindow, WM_NCLBUTTONUP, HTLEFT, POINTTOPOINTS(eventInfo->pt));
-	PostMessage(draggedWindow, WM_EXITSIZEMOVE, 0, 0);
+void endDragAction() {
 	ReleaseCapture();
 	currentState = dsNone;
 }

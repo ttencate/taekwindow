@@ -73,7 +73,7 @@ bool processButtonUp(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 			if (button == draggingButton) {
 				// End of move or resize action.
 				// Release the capture and eat the event.
-				endDragAction(eventInfo);
+				endDragAction();
 				return true;
 			} else {
 				// Other button released during move event. (Naughty user!)
@@ -116,14 +116,21 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_LBUTTONDOWN:
 			case WM_MBUTTONDOWN:
 			case WM_RBUTTONDOWN:
+			case WM_NCLBUTTONDOWN:
+			case WM_NCMBUTTONDOWN:
+			case WM_NCRBUTTONDOWN:
 				processed = processButtonDown(eventToButton(wParam), eventInfo);
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
 			case WM_RBUTTONUP:
+			case WM_NCLBUTTONUP:
+			case WM_NCMBUTTONUP:
+			case WM_NCRBUTTONUP:
 				processed = processButtonUp(eventToButton(wParam), eventInfo);
 				break;
 			case WM_MOUSEMOVE:
+			case WM_NCMOUSEMOVE:
 				processed = processDrag(eventInfo);
 				break;
 		}
