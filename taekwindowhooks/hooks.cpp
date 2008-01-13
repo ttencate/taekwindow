@@ -29,9 +29,12 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 		if (modifierDown) {
 			if (button == moveButton || button == resizeButton) {
 				// Yippee! A Modifier-drag event just started that we want to process.
-				currentState = dsDragging;
-				haveDragged = true;
+				if (button == moveButton)
+					currentState = dsMoving;
+				else /* button == resizeButton */
+					currentState = dsResizing;
 				draggingButton = button;
+				haveDragged = true;
 				// Find the actual window being dragged: this is the top-level window that is the ultimate parent
 				// of the window receiving the event. Seems to work for MDI's too.
 				draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
@@ -69,7 +72,8 @@ bool processButtonUp(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 		case dsNone:
 			// Nothing going on, pass the event on.
 			return false;
-		case dsDragging:
+		case dsMoving:
+		case dsResizing:
 			if (button == draggingButton) {
 				// End of move or resize action.
 				// Release the capture and eat the event.
@@ -97,7 +101,7 @@ bool processButtonUp(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
  * Returns true if the event was processed and should not be passed to the application, false otherwise.
  */
 bool processDrag(MOUSEHOOKSTRUCT *eventInfo) {
-	if (currentState == dsDragging) {
+	if (currentState == dsMoving || currentState == dsResizing) {
 		// We are handling the moving or resizing of a window.
 		doDragAction(eventInfo);
 		return true;

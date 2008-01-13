@@ -36,12 +36,12 @@ void doDragAction(MOUSEHOOKSTRUCT const *eventInfo) {
 	int deltaX, deltaY;
 	// Find out the movement since the last known mouse position.
 	deltaX = eventInfo->pt.x - lastMousePos.x, deltaY = eventInfo->pt.y - lastMousePos.y;
-	if (draggingButton == moveButton) {
+	if (currentState == dsMoving) {
 		lastRect.left += deltaX;
 		lastRect.top += deltaY;
 		lastRect.right += deltaX;
 		lastRect.bottom += deltaY;
-	} else if (draggingButton == resizeButton) {
+	} else if (currentState == dsResizing) {
 		// Resize at the right corner/edge.
 		switch (resizingX) {
 			case -1:

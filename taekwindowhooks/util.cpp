@@ -15,7 +15,7 @@ MouseButton eventToButton(WPARAM wParam) {
 	return mbLeft; // fallback
 }
 
-#ifdef DEBUG
+#ifdef _DEBUG
 void showLastError(LPCWSTR title) {
 	if (!GetLastError())
 		return;
