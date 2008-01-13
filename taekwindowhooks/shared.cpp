@@ -1,5 +1,7 @@
 #include "util.hpp"
 
+#include <stdio.h>
+
 /* The shared data segment.
  * These variables are shared across all instances of the DLL. This is necessary because the hook handler
  * runs in the thread of the window that would have received the event, NOT in the thread of the application
@@ -36,6 +38,12 @@ int modifier = VK_LMENU;
 MouseButton moveButton = mbLeft, resizeButton = mbRight;
 
 ResizeMode resizeMode = rmNineRectangles;
+
+// Debugging
+
+#ifdef _DEBUG
+FILE *debugLogFile = NULL;
+#endif
 
 /* End of the shared data segment.
  */

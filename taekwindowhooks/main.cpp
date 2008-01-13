@@ -1,5 +1,6 @@
 #include "main.hpp"
 #include "state.hpp"
+#include "debuglog.hpp"
 
 /* The handle of this instance of the DLL, set in DllMain.
  */
@@ -22,6 +23,8 @@ BOOL WINAPI DllMain(HANDLE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {
  * the function returns the thread ID of that thread and does nothing else.
  */
 DWORD init(DWORD threadId) {
+	OPENDEBUGLOG();
+	DEBUGLOG("DLL initializing");
 	if (mainThreadId) {
 		return mainThreadId;
 	} else {
@@ -34,4 +37,6 @@ DWORD init(DWORD threadId) {
  */
 void uninit() {
 	mainThreadId = 0;
+	DEBUGLOG("DLL uninitialized");
+	CLOSEDEBUGLOG();
 }

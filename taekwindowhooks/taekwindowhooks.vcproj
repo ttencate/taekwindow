@@ -156,6 +156,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\debuglog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\drag.cpp"
 				>
 			</File>
@@ -187,6 +191,10 @@
 			>
 			<File
 				RelativePath=".\config.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\debuglog.hpp"
 				>
 			</File>
 			<File
