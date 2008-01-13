@@ -29,10 +29,9 @@ void ensureLocalHandle() {
 		HANDLE process = OpenProcess(PROCESS_DUP_HANDLE, FALSE, mainProcessId);
 		if (process) {
 			// Duplicate the handle.
-			/* NOTE that the duplicate handle is never closed, and remains open in the process until it terminates.
-			 * The file share mode is lenient, so it shouldn't be a problem.
-			 * It's only a debug log, after all. We shouldn't do nasty things like this in release builds :)
-			 */
+			// NOTE that the duplicate handle is never closed, and remains open in the process until it terminates.
+			// The file share mode is lenient, so it shouldn't be a problem.
+			// It's only a debug log, after all. We shouldn't do nasty things like this in release builds :)
 			DuplicateHandle(process, debugLogFile, GetCurrentProcess(), &localDebugLogFile, 0, TRUE, DUPLICATE_SAME_ACCESS);
 			CloseHandle(process);
 		}
@@ -57,4 +56,4 @@ void debugLog(char const *format, ...) {
 	}
 }
 
-#endif /* _DEBUG */
+#endif // _DEBUG

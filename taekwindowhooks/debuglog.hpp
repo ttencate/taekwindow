@@ -7,21 +7,20 @@ void openDebugLog();
 void closeDebugLog();
 void debugLog(char const *format, ...);
 
-/* Note that '...' in a macro must always represent at least one argument;
- * we therefore leave the 'format' argument of debugLog off.
- */
+// Note that '...' in a macro must always represent at least one argument;
+// we therefore leave the 'format' argument of debugLog off.
 #define OPENDEBUGLOG() openDebugLog()
 #define CLOSEDEBUGLOG() closeDebugLog()
 #define DEBUGLOG(...) debugLog(__VA_ARGS__)
 #define CONDDEBUGLOG(condition, ...) if (condition) DEBUGLOG(__VA_ARGS__)
 
-#else /* !_DEBUG */
+#else // !_DEBUG
 
 #define OPENDEBUGLOG()
 #define CLOSEDEBUGLOG()
 #define DEBUGLOG(...)
 #define CONDDEBUGLOG(condition, ...)
 
-#endif /* _DEBUG */
+#endif // _DEBUG
 
 #endif
