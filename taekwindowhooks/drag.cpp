@@ -2,15 +2,23 @@
 #include "config.hpp"
 #include "state.hpp"
 
+bool isFullscreenWindow(HWND window) {
+	return false; // TODO
+}
+
 bool isMovableWindow(HWND window) {
 	if (IsZoomed(window))
 		return false; // disallow moving maximized windows
+	if (isFullscreenWindow(window))
+		return false; // disallow moving fullscreen windows
 	return true;
 }
 
 bool isResizableWindow(HWND window) {
 	if (IsZoomed(window))
 		return false; // do not allow resizing of maximized windows
+	if (isFullscreenWindow(window))
+		return false; // disallow resizing fullscreen windows
 	LONG style = GetWindowLong(window, GWL_STYLE);
 	if ((style & WS_THICKFRAME) && ((style & WS_BORDER) || !(style & WS_DLGFRAME)))
 		return true; // allow resizing of windows with resizable borders only
