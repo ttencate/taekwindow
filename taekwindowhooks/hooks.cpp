@@ -4,7 +4,6 @@
 #include "drag.hpp"
 #include "config.hpp"
 #include "util.hpp"
-#include "state.hpp"
 #include "debuglog.hpp"
 
 /* The button that we're dragging with.
@@ -91,9 +90,11 @@ bool handleButtonUp(MouseButton button, POINT mousePos) {
 				currentState = dsNone;
 				return true;
 			case dsIgnoring:
+				DEBUGLOG("Ending the ignoring");
 				currentState = dsNone;
 				return true;
 		}
+		draggingButton = mbNone;
 	}
 	// Nothing interesting.
 	return false;

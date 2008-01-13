@@ -1,6 +1,5 @@
 #include "drag.hpp"
 #include "config.hpp"
-#include "state.hpp"
 #include "debuglog.hpp"
 
 /* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.

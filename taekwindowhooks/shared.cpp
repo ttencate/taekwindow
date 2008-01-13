@@ -20,7 +20,7 @@ DragState currentState = dsNone;
 
 int resizingX = 0, resizingY = 0;
 
-MouseButton draggingButton = mbLeft;
+MouseButton draggingButton = mbNone;
 
 POINT lastMousePos = { 0, 0 };
 

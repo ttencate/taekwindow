@@ -1,5 +1,4 @@
 #include "main.hpp"
-#include "state.hpp"
 #include "debuglog.hpp"
 
 /* The handle of this instance of the DLL, set in DllMain.

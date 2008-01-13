@@ -1,7 +1,6 @@
 #ifdef _DEBUG
 
 #include "debuglog.hpp"
-#include "state.hpp"
 
 #include <windows.h>
 #include <stdio.h>

@@ -17,6 +17,6 @@ enum DragState { dsNone, dsMoving, dsResizing, dsIgnoring };
 
 /* Represents a button on the mouse.
  */
-enum MouseButton { mbLeft = 0, mbMiddle = 1, mbRight = 2 };
+enum MouseButton { mbLeft = 0, mbMiddle = 1, mbRight = 2, mbNone = 0x7FFF };
 
 #endif
