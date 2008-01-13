@@ -5,9 +5,10 @@
 
 #include "util.hpp"
 
-/* The thread ID of the first thread that called init().
+/* The thread and process ID of the first thread that called init().
  */
 extern DWORD mainThreadId;
+extern DWORD mainProcessId;
 
 /* The current state we're in.
  */

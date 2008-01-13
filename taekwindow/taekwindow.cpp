@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 HMODULE dllHandle = NULL;
-DWORD (*initProc)(DWORD) = NULL;
+DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
 void (*readConfigProc)() = NULL;
 HOOKPROC mouseProc = NULL;
@@ -30,7 +30,7 @@ bool unloadDll() {
  * Returns NULL on success, or the thread ID of the thread that was there before us on failure.
  */
 DWORD initDll() {
-	return (*initProc)(GetCurrentThreadId());
+	return (*initProc)(GetCurrentThreadId(), GetCurrentProcessId());
 }
 
 /* Uninitializes the DLL by making it forget our thread ID.
@@ -46,7 +46,7 @@ void uninitDll() {
  * Returns true on success.
  */
 bool findProcs() {
-	initProc = (DWORD (*)(DWORD))GetProcAddress(dllHandle, "init");
+	initProc = (DWORD (*)(DWORD, DWORD))GetProcAddress(dllHandle, "init");
 	if (!initProc)
 		return false;
 	uninitProc = (void (*)())GetProcAddress(dllHandle, "uninit");

@@ -5,101 +5,91 @@
 #include "config.hpp"
 #include "util.hpp"
 #include "state.hpp"
+#include "debuglog.hpp"
 
-/* Processes a button-down event.
+/* Handles a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
-bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
-	if (currentState == dsNone) {
-		// Nothing is yet going on. We possibly want to take action if the Modifier key is currently pressed.
-		if (modifierDown) {
-			if (button == moveButton || button == resizeButton) {
-				// Yippee! A Modifier-drag event just started that we want to process.
-				if (button == moveButton)
-					currentState = dsMoving;
-				else /* button == resizeButton */
-					currentState = dsResizing;
-				draggingButton = button;
-				haveDragged = true;
-				// Find the actual window being dragged: this is the top-level window that is the ultimate parent
-				// of the window receiving the event. Seems to work for MDI's too.
-				draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
-				if (currentState == dsMoving && isMovableWindow(draggedWindow) ||
-					currentState == dsResizing && isResizableWindow(draggedWindow)) {
-					// Window can be dragged.
-					startDragAction(button, eventInfo);
-				} else {
-					// Modifier-dragging an invalid window. The user won't expect her actions to be passed
-					// to that window, so we suppress all events until the mouse button is released.
-					currentState = dsIgnoring;
-				}
-				// Either way, we eat the event.
-				return true;
-			} else {
-				// Mouse-down event with a button we don't handle. Stay away from it.
-				return false;
-			}
+bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
+	if (modifierDown && currentState == dsNone && (button == moveButton || button == resizeButton)) {
+		DEBUGLOG("Handling button down event");
+		// Store the button we're using so we know when it's released.
+		draggingButton = button;
+		// Remember that we have dragged something during this press of the modifier, which means that
+		// the subsequent release event should be eaten.
+		haveDragged = true;
+		// Yippee! A Modifier-drag event just started that we want to process (or ignore).
+		// Find the actual window being dragged: this is the top-level window that is the ultimate parent
+		// of the window receiving the event. Seems to work for MDI's too.
+		window = GetAncestor(window, GA_ROOT);
+		if (button == moveButton && isMovableWindow(draggedWindow)) {
+			// Window can be moved.
+			startMoveAction(window, mousePos);
+		} else if (button == resizeButton && isResizableWindow(draggedWindow)) {
+			// Window can be resized.
+			startResizeAction(window, mousePos);
 		} else {
-			// Modifier was up, so we keep our hands off this event.
-			return false;
+			// Modifier-dragging an invalid window. The user won't expect her actions to be passed
+			// to that window, so we suppress all events until the mouse button is released.
+			currentState = dsIgnoring;
 		}
+		// Either way, we eat the event.
+		return true;
 	} else {
-		// We're already dragging, and another button was pressed.
-		// Naughty user shouldn't do this, but we pass the event anyway, because otherwise the application
-		// might receive a mouse-up event without a preceding mouse-down event and get all confused.
+		// Event we don't handle. Stay away from it.
+		CONDDEBUGLOG(!modifierDown, "Ignoring button down event because the modifier is up");
+		CONDDEBUGLOG(currentState != dsNone, "Ignoring button down event because the current state is not dsNone");
+		CONDDEBUGLOG(button != moveButton && button != resizeButton, "Ignoring button down event because the button is not interesting");
 		return false;
 	}
 }
 
-/* Processes a mouse button release event.
+/* Handles a mouse button release event.
  * Returns true if the event was processed and should not be passed to the application, false otherwise.
  */
-bool processButtonUp(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
-	switch (currentState) {
-		case dsNone:
-			// Nothing going on, pass the event on.
-			return false;
-		case dsMoving:
-		case dsResizing:
-			if (button == draggingButton) {
-				// End of move or resize action.
-				// Release the capture and eat the event.
-				endDragAction();
+bool handleButtonUp(MouseButton button, POINT mousePos) {
+	// We only want to take action if it's the current dragging button being released.
+	if (button == draggingButton) {
+		DEBUGLOG("Handling button up event");
+		// The button we're dragging with was released.
+		switch (currentState) {
+			case dsMoving:
+				endMoveAction();
 				return true;
-			} else {
-				// Other button released during move event. (Naughty user!)
-				return false;
-			}
-		case dsIgnoring:
-			// Ignoring all events until the appropriate button was released.
-			if (button == draggingButton) {
-				// Well, guess what, it was!
-				// But we still ignore this up event, of course.
+			case dsResizing:
+				endResizeAction();
+				return true;
+			case dsIgnoring:
 				currentState = dsNone;
-			}
-			return true;
-		default:
-			// Should never be reached unless the currentState enum was tortured by inserting a pineapple into its butt.
-			return false;
+				return true;
+		}
 	}
+	// Nothing interesting.
+	return false;
 }
 
-/* Processes a mouse drag event.
+/* Handles a mouse movement event.
  * Returns true if the event was processed and should not be passed to the application, false otherwise.
  */
-bool processDrag(MOUSEHOOKSTRUCT *eventInfo) {
-	if (currentState == dsMoving || currentState == dsResizing) {
+bool handleMove(POINT mousePos) {
+	if (currentState == dsMoving) {
 		// We are handling the moving or resizing of a window.
-		doDragAction(eventInfo);
+		doMoveAction(mousePos);
+		return true;
+	} else if (currentState == dsResizing) {
+		doResizeAction(mousePos);
+		return true;
+	} else if (currentState == dsIgnoring) {
 		return true;
 	}
-	return currentState == dsIgnoring;
+	return false;
 }
 
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
  * see the SetWindowsHookEx documentation for details.
  */
 LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+	DEBUGLOG("Mouse hook called");
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
@@ -110,7 +100,7 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONDOWN:
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
-				processed = processButtonDown(eventToButton(wParam), eventInfo);
+				processed = handleButtonDown(eventToButton(wParam), eventInfo->hwnd, eventInfo->pt);
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -118,14 +108,13 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONUP:
 			case WM_NCMBUTTONUP:
 			case WM_NCRBUTTONUP:
-				processed = processButtonUp(eventToButton(wParam), eventInfo);
+				processed = handleButtonUp(eventToButton(wParam), eventInfo->pt);
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
-				processed = processDrag(eventInfo);
+				processed = handleMove(eventInfo->pt);
 				break;
 		}
-		lastMousePos = eventInfo->pt;
 	}
 
 	LRESULT res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
@@ -138,8 +127,10 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
  * Or rather, the function to eat keyboard events that the application shouldn't receive.
  */
 LRESULT CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-#ifdef DEBUG
+	DEBUGLOG("Keyboard hook called");
+#ifdef _DEBUG
 	if (wParam == 0x51) {
+		DEBUGLOG("Panic button pressed");
 		// Q button pressed. Panic button for debugging.
 		PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
 		return 1;
@@ -152,12 +143,14 @@ LRESULT CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		bool wasDown = modifierDown;
 		modifierDown = GetAsyncKeyState(modifier) & 0x8000;
 		if (wasDown && !modifierDown) {
+			DEBUGLOG("Modifier released");
 			// Modifier was released. Only pass the event on if there was no drag event.
 			if (haveDragged) {
 				return 1;
 			}
 			haveDragged = false;
 		} else if (!wasDown && modifierDown) {
+			DEBUGLOG("Modifier pressed");
 			// Modifier was pressed. There has been no drag event since.
 			haveDragged = false;
 		}

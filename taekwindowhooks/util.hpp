@@ -9,7 +9,7 @@
  */
 MouseButton eventToButton(WPARAM wParam);
 
-#ifdef DEBUG
+#ifdef _DEBUG
 /* For debugging purposes: shows a messagebox with the message corresponding to GetLastError(),
  * with the given title.
  */

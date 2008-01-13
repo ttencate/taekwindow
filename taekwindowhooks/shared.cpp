@@ -14,6 +14,7 @@
 // Program state
 
 DWORD mainThreadId = 0;
+DWORD mainProcessId = 0;
 
 DragState currentState = dsNone;
 
@@ -42,7 +43,10 @@ ResizeMode resizeMode = rmNineRectangles;
 // Debugging
 
 #ifdef _DEBUG
-FILE *debugLogFile = NULL;
+/* Handle is valid only in the process that opened the log.
+ * Other processes will duplicate it into their own local address space.
+ */
+HANDLE debugLogFile = INVALID_HANDLE_VALUE;
 #endif
 
 /* End of the shared data segment.

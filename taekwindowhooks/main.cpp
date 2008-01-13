@@ -22,13 +22,14 @@ BOOL WINAPI DllMain(HANDLE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {
  * If there was already another thread ID (probably another taekwindow.exe process),
  * the function returns the thread ID of that thread and does nothing else.
  */
-DWORD init(DWORD threadId) {
-	OPENDEBUGLOG();
-	DEBUGLOG("DLL initializing");
+DWORD init(DWORD threadId, DWORD processId) {
 	if (mainThreadId) {
 		return mainThreadId;
 	} else {
 		mainThreadId = threadId;
+		mainProcessId = processId;
+		OPENDEBUGLOG();
+		DEBUGLOG("DLL initialized");
 		return NULL;
 	}
 }
@@ -36,7 +37,8 @@ DWORD init(DWORD threadId) {
 /* Uninitializes the DLL by forgetting the thread ID.
  */
 void uninit() {
-	mainThreadId = 0;
-	DEBUGLOG("DLL uninitialized");
+	DEBUGLOG("DLL uninitializing");
 	CLOSEDEBUGLOG();
+	mainThreadId = 0;
+	mainProcessId = 0;
 }

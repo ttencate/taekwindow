@@ -1,21 +1,26 @@
 #ifndef _DEBUGLOG_HPP_
 #define _DEBUGLOG_HPP_
 
-#if _DEBUG
+#ifdef _DEBUG
 
 void openDebugLog();
 void closeDebugLog();
 void debugLog(char const *format, ...);
 
-#define OPENDEBUGLOG openDebugLog
-#define CLOSEDEBUGLOG closeDebugLog
-#define DEBUGLOG debugLog
+/* Note that '...' in a macro must always represent at least one argument;
+ * we therefore leave the 'format' argument of debugLog off.
+ */
+#define OPENDEBUGLOG() openDebugLog()
+#define CLOSEDEBUGLOG() closeDebugLog()
+#define DEBUGLOG(...) debugLog(__VA_ARGS__)
+#define CONDDEBUGLOG(condition, ...) if (condition) DEBUGLOG(__VA_ARGS__)
 
 #else /* !_DEBUG */
 
 #define OPENDEBUGLOG()
 #define CLOSEDEBUGLOG()
-#define DEBUGLOG(format, ...)
+#define DEBUGLOG(...)
+#define CONDDEBUGLOG(condition, ...)
 
 #endif /* _DEBUG */
 

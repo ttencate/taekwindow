@@ -13,16 +13,28 @@ bool isMovableWindow(HWND window);
  */
 bool isResizableWindow(HWND window);
 
-/* Initiates a window dragging action (i.e. moving/resizing).
+/* Initiates a window moving action.
  */
-void startDragAction(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo);
+void startMoveAction(HWND window, POINT mousePos);
 
-/* Processes drag events that we want to handle.
+/* Initiates a window resizing action.
  */
-void doDragAction(MOUSEHOOKSTRUCT const *eventInfo);
+void startResizeAction(HWND window, POINT mousePos);
 
-/* Processes the end of a drag (i.e. move/resize) action.
+/* Processes mouse movements during moving.
  */
-void endDragAction();
+void doMoveAction(POINT mousePos);
+
+/* Processes mouse movements during resizing.
+ */
+void doResizeAction(POINT mousePos);
+
+/* Processes the end of a move action.
+ */
+void endMoveAction();
+
+/* Processes the end of a resize action.
+ */
+void endResizeAction();
 
 #endif

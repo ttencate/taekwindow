@@ -6,30 +6,54 @@
 #include <windows.h>
 #include <stdio.h>
 
-extern FILE *debugLogFile;
+extern HANDLE debugLogFile;
+HANDLE localDebugLogFile = INVALID_HANDLE_VALUE;
 
 void openDebugLog() {
-	debugLogFile = fopen("taekwindow-debug.log", "wt");
+	debugLogFile = CreateFile("taekwindow-debug.log", FILE_WRITE_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 }
 
 void closeDebugLog() {
-	if (debugLogFile) {
-		fclose(debugLogFile);
-		debugLogFile = NULL;
+	if (debugLogFile != INVALID_HANDLE_VALUE) {
+		CloseHandle(debugLogFile);
+		debugLogFile = INVALID_HANDLE_VALUE;
+	}
+}
+
+/* Clone the handle of the debug log file for use within the current process.
+ */
+void ensureLocalHandle() {
+	// Check whether we have a valid handle already.
+	if (localDebugLogFile == INVALID_HANDLE_VALUE && debugLogFile != INVALID_HANDLE_VALUE) {
+		// Get a handle to the process that originally opened the file.
+		HANDLE process = OpenProcess(PROCESS_DUP_HANDLE, FALSE, mainProcessId);
+		if (process) {
+			// Duplicate the handle.
+			/* NOTE that the duplicate handle is never closed, and remains open in the process until it terminates.
+			 * The file share mode is lenient, so it shouldn't be a problem.
+			 * It's only a debug log, after all. We shouldn't do nasty things like this in release builds :)
+			 */
+			DuplicateHandle(process, debugLogFile, GetCurrentProcess(), &localDebugLogFile, 0, TRUE, DUPLICATE_SAME_ACCESS);
+			CloseHandle(process);
+		}
 	}
 }
 
 void debugLog(char const *format, ...) {
-	if (debugLogFile) {
+	ensureLocalHandle();
+	if (localDebugLogFile != INVALID_HANDLE_VALUE) {
+		char formatBuf[1024];
 		long time = GetTickCount();
-		fprintf(debugLogFile, "%d.%03d: ", time/1000, time%1000);
+		sprintf(formatBuf, "%d.%03d: %s\r\n", time/1000, time%1000, format);
 
+		char buffer[1024];
 		va_list args;
 		va_start(args, format);
-		vfprintf(debugLogFile, format, args);
+		vsprintf(buffer, formatBuf, args);
 		va_end(args);
 
-		fprintf(debugLogFile, "\r\n");
+		DWORD written;
+		WriteFile(localDebugLogFile, buffer, strlen(buffer), &written, NULL);
 	}
 }
 

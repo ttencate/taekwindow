@@ -37,8 +37,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="DEBUG"
+				Optimization="0"
+				PreprocessorDefinitions="_DEBUG"
 				RuntimeLibrary="1"
+				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -52,7 +54,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
+				AdditionalDependencies="kernel32.lib"
 				ModuleDefinitionFile="hooks.def"
+				OptimizeReferences="1"
+				EnableCOMDATFolding="1"
 				EntryPointSymbol=""
 			/>
 			<Tool
