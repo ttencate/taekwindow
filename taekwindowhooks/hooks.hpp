@@ -4,6 +4,6 @@
 #include <windows.h>
 
 LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 #endif

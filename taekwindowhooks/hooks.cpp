@@ -155,36 +155,53 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	return res;
 }
 
-/* The function for handling keyboard events.
- * Or rather, the function to eat keyboard events that the application shouldn't receive.
+bool isModifier(DWORD vkCode) {
+	if (vkCode == modifier)
+		return true;
+	if (modifier == VK_MENU && (vkCode == VK_LMENU || vkCode == VK_RMENU))
+		return true;
+	if (modifier == VK_SHIFT && (vkCode == VK_LSHIFT || vkCode == VK_RSHIFT))
+		return true;
+	if (modifier == VK_CONTROL && (vkCode == VK_LCONTROL || vkCode == VK_RCONTROL))
+		return true;
+	return false;
+}
+
+/* The function for handling keyboard events, tracking the state of the modifier key(s).
+ * Also the function to eat keyboard events that the application shouldn't receive.
+ * Note that this runs in the context of taekwindow.exe.q
  */
-LRESULT CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	DEBUGLOG("Keyboard hook called");
+	if (nCode >= 0 && nCode == HC_ACTION) { // A little redundant, yes. But the docs say it.
+		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
 #ifdef _DEBUG
-	if (wParam == 0x51) {
-		DEBUGLOG("Panic button pressed");
-		// Q button pressed. Panic button for debugging.
-		PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
-		return 1;
-	}
+		if (info->vkCode == 0x51) {
+			DEBUGLOG("Panic button pressed");
+			// Q button pressed. Panic button for debugging.
+			PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
+		}
 #endif
-	if (nCode >= 0 && nCode == HC_ACTION) {
 		// Something MAY have happened to the modifier key.
-		// We have a key-code in wParam, but it does not distinguish e.g. left and right Alt,
-		// because it is VK_MENU for both of them. Therefore we have to use GetAsyncKeyState.
-		bool wasDown = modifierDown;
-		modifierDown = GetAsyncKeyState(modifier) & 0x8000;
-		if (wasDown && !modifierDown) {
-			DEBUGLOG("Modifier released");
-			// Modifier was released. Only pass the event on if there was no drag event.
-			if (haveDragged) {
-				return 1;
+		if (isModifier(info->vkCode)) {
+			bool wasDown = modifierDown;
+			modifierDown = info->flags & ~LLKHF_UP;
+			DEBUGLOG("Modifier going from %i to %i", wasDown, modifierDown);
+			if (wasDown && !modifierDown) {
+				DEBUGLOG("Modifier released");
+				// Modifier was released. Only pass the event on if there was no drag event.
+				/* BUG: qthe app will still think Alt is down?
+				if (haveDragged) {
+					DEBUGLOG("Eating modifier up event");
+					return 1;
+				}
+				*/
+				haveDragged = false;
+			} else if (!wasDown && modifierDown) {
+				DEBUGLOG("Modifier pressed");
+				// Modifier was pressed. There has been no drag event since.
+				haveDragged = false;
 			}
-			haveDragged = false;
-		} else if (!wasDown && modifierDown) {
-			DEBUGLOG("Modifier pressed");
-			// Modifier was pressed. There has been no drag event since.
-			haveDragged = false;
 		}
 	}
 	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored

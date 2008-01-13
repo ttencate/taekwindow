@@ -3,5 +3,5 @@ EXPORTS
 	init
 	readConfig
 	mouseProc
-	keyboardProc
+	lowLevelKeyboardProc
 	uninit

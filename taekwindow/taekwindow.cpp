@@ -6,9 +6,9 @@ DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
 void (*readConfigProc)() = NULL;
 HOOKPROC mouseProc = NULL;
-HOOKPROC keyboardProc = NULL;
+HOOKPROC lowLevelKeyboardProc = NULL;
 HHOOK mouseHook = NULL;
-HHOOK keyboardHook = NULL;
+HHOOK lowLevelKeyboardHook = NULL;
 
 /* Loads and initializes the DLL with the hook handlers.
  * Returns true on success.
@@ -58,8 +58,8 @@ bool findProcs() {
 	mouseProc = (HOOKPROC)GetProcAddress(dllHandle, "mouseProc");
 	if (!mouseProc)
 		return false;
-	keyboardProc = (HOOKPROC)GetProcAddress(dllHandle, "keyboardProc");
-	if (!keyboardProc)
+	lowLevelKeyboardProc = (HOOKPROC)GetProcAddress(dllHandle, "lowLevelKeyboardProc");
+	if (!lowLevelKeyboardProc)
 		return false;
 	return true;
 }
@@ -75,11 +75,11 @@ void readConfig() {
  * Returns true on success.
  */
 bool attachHooks() {
-	mouseHook = SetWindowsHookEx(WH_MOUSE, (HOOKPROC)mouseProc, dllHandle, NULL);
+	mouseHook = SetWindowsHookEx(WH_MOUSE, mouseProc, dllHandle, NULL);
 	if (!mouseHook)
 		return false;
-	keyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC)keyboardProc, dllHandle, NULL);
-	if (!keyboardHook)
+	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, dllHandle, NULL);
+	if (!lowLevelKeyboardHook)
 		return false;
 	return true;
 }
@@ -89,7 +89,7 @@ bool attachHooks() {
  */
 bool detachHooks() {
 	bool success = true;
-	if (!UnhookWindowsHookEx(keyboardHook))
+	if (!UnhookWindowsHookEx(lowLevelKeyboardHook))
 		success = false;
 	if (!UnhookWindowsHookEx(mouseHook))
 		success = false;
