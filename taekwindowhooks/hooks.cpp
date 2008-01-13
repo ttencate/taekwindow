@@ -6,20 +6,6 @@
 #include "util.hpp"
 #include "state.hpp"
 
-/* Returns true if the given window can be moved and resized.
- * Prevents moving/resizing of maximized windows. Other cases may be added later.
- */
-bool isDraggableWindow(HWND window) {
-	WINDOWINFO info;
-	info.cbSize = sizeof(WINDOWINFO);
-	GetWindowInfo(window, &info);
-	if (info.dwStyle & WS_MAXIMIZE) {
-		return false;
-	} else {
-		return true;
-	}
-}
-
 /* Processes a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
@@ -38,7 +24,8 @@ bool processButtonDown(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo) {
 				// Find the actual window being dragged: this is the top-level window that is the ultimate parent
 				// of the window receiving the event. Seems to work for MDI's too.
 				draggedWindow = GetAncestor(eventInfo->hwnd, GA_ROOT);
-				if (isDraggableWindow(draggedWindow)) {
+				if (currentState == dsMoving && isMovableWindow(draggedWindow) ||
+					currentState == dsResizing && isResizableWindow(draggedWindow)) {
 					// Window can be dragged.
 					startDragAction(button, eventInfo);
 				} else {

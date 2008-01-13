@@ -2,6 +2,22 @@
 #include "config.hpp"
 #include "state.hpp"
 
+bool isMovableWindow(HWND window) {
+	if (IsZoomed(window))
+		return false; // disallow moving maximized windows
+	return true;
+}
+
+bool isResizableWindow(HWND window) {
+	if (IsZoomed(window))
+		return false; // do not allow resizing of maximized windows
+	LONG style = GetWindowLong(window, GWL_STYLE);
+	if ((style & WS_THICKFRAME) && ((style & WS_BORDER) || !(style & WS_DLGFRAME)))
+		return true; // allow resizing of windows with resizable borders only
+	else
+		return false;
+}
+
 /* Sets the variables resizingX and resizingY to the proper values,
  * considering the screen-coordinate pointer location.
  */

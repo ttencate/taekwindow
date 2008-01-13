@@ -5,6 +5,14 @@
 
 #include "util.hpp"
 
+/* Returns true if we should allow moving of this window.
+ */
+bool isMovableWindow(HWND window);
+
+/* Returns true if we should allow resizing of this window.
+ */
+bool isResizableWindow(HWND window);
+
 /* Initiates a window dragging action (i.e. moving/resizing).
  */
 void startDragAction(MouseButton button, MOUSEHOOKSTRUCT const *eventInfo);
