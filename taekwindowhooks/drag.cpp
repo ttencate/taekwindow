@@ -3,6 +3,26 @@
 #include "state.hpp"
 #include "debuglog.hpp"
 
+/* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
+ * resizingX == -1 means resizing at left border, 0 means not resizing in x direction, 1 means right border.
+ * Similar for y; -1 is top border, 0 is no resizing, 1 is bottom border.
+ */
+extern int resizingX, resizingY;
+
+/* The last known location of the mouse cursor (screen coordinates).
+ * This is used in the mouse event handler to compute the distance travelled since the last mouse event.
+ */
+extern POINT lastMousePos;
+
+/* The window that we are currently dragging.
+ * Only meaningful if currentState is dsDragging.
+ */
+extern HWND draggedWindow;
+
+/* The last known window rectangle of the draggedWindow. Saves us calls to GetWindowRect().
+ */
+extern RECT lastRect;
+
 bool isFullscreenWindow(HWND window) {
 	return false; // TODO
 }
@@ -53,13 +73,11 @@ void startDragAction(HWND window, POINT mousePos) {
 
 void startMoveAction(HWND window, POINT mousePos) {
 	DEBUGLOG("Starting move action");
-	currentState = dsMoving;
 	startDragAction(window, mousePos);
 }
 
 void startResizeAction(HWND window, POINT mousePos) {
 	DEBUGLOG("Starting resize action");
-	currentState = dsResizing;
 	startDragAction(window, mousePos);
 	switch (resizeMode) {
 		case rmBottomRight:
@@ -136,7 +154,6 @@ void doResizeAction(POINT mousePos) {
 
 void endDragAction() {
 	ReleaseCapture();
-	currentState = dsNone;
 }
 
 void endMoveAction() {

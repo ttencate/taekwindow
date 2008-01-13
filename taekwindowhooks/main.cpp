@@ -6,6 +6,11 @@
  */
 HINSTANCE dllHandle = NULL;
 
+/* The thread and process ID of the first thread that called init().
+ */
+extern DWORD mainThreadId;
+extern DWORD mainProcessId;
+
 /* The entry point for the DLL. Stores the instance handle of the DLL for later use.
  */
 BOOL WINAPI DllMain(HANDLE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {

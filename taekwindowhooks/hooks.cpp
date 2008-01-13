@@ -7,6 +7,30 @@
 #include "state.hpp"
 #include "debuglog.hpp"
 
+/* The button that we're dragging with.
+ * Only meaningful while we're dragging, of course.
+ */
+extern MouseButton draggingButton;
+
+/* Whether or not the modifier key is currently down.
+ */
+extern bool modifierDown;
+
+/* The current state we're in.
+ */
+extern DragState currentState;
+
+/* Whether or not dragging has occurred since the last key-down event of the Modifier.
+ * If dragging has occurred, this prevents the key-up event to be passed on.
+ */
+extern bool haveDragged;
+
+#ifdef _DEBUG
+/* Steal this from main.cpp.
+ */
+extern DWORD mainThreadId;
+#endif
+
 /* Handles a button-down event.
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
@@ -26,9 +50,11 @@ bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
 		DEBUGLOG("Ancestor is %04x", window);
 		if (button == moveButton && isMovableWindow(window)) {
 			// Window can be moved.
+			currentState = dsMoving;
 			startMoveAction(window, mousePos);
 		} else if (button == resizeButton && isResizableWindow(window)) {
 			// Window can be resized.
+			currentState = dsResizing;
 			startResizeAction(window, mousePos);
 		} else if (button == moveButton || button == resizeButton) {
 			// Modifier-dragging an invalid window. The user won't expect her actions to be passed
@@ -58,9 +84,11 @@ bool handleButtonUp(MouseButton button, POINT mousePos) {
 		switch (currentState) {
 			case dsMoving:
 				endMoveAction();
+				currentState = dsNone;
 				return true;
 			case dsResizing:
 				endResizeAction();
+				currentState = dsNone;
 				return true;
 			case dsIgnoring:
 				currentState = dsNone;

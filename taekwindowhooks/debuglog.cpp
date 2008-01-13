@@ -9,6 +9,10 @@
 extern HANDLE debugLogFile;
 HANDLE localDebugLogFile = INVALID_HANDLE_VALUE;
 
+/* Steal this from main.cpp.
+ */
+extern DWORD mainProcessId;
+
 void openDebugLog() {
 	debugLogFile = CreateFile("taekwindow-debug.log", FILE_WRITE_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 }
