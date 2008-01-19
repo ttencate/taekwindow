@@ -169,7 +169,7 @@ bool isModifier(DWORD vkCode) {
 
 /* The function for handling keyboard events, tracking the state of the modifier key(s).
  * Also the function to eat keyboard events that the application shouldn't receive.
- * Note that this runs in the context of taekwindow.exe.q
+ * Note that this runs in the context of taekwindow.exe.
  */
 LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	DEBUGLOG("Keyboard hook called");
@@ -190,7 +190,7 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			if (wasDown && !modifierDown) {
 				DEBUGLOG("Modifier released");
 				// Modifier was released. Only pass the event on if there was no drag event.
-				/* BUG: qthe app will still think Alt is down?
+				/* BUG: the app will still think Alt is down?
 				if (haveDragged) {
 					DEBUGLOG("Eating modifier up event");
 					return 1;
