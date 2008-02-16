@@ -23,7 +23,7 @@ namespace TaekwindowConfig
 			Text = VersionInfo.Title + " configuration";
 			aboutBox.Text = "About " + VersionInfo.Title;
 			title.Text = VersionInfo.Title;
-			version.Text = VersionInfo.VersionString;
+			version.Text = "Version " + VersionInfo.VersionString;
 			author.Text = "Written by " + VersionInfo.Author;
 			website.Text = VersionInfo.Website;
 			email.Text = VersionInfo.Email;
