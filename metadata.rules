@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="Generate file from XML"
+	Version="8,00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="generateFromXML"
+			DisplayName="Generate file from XML"
+			CommandLine="&quot;$(SolutionDir)tools\msxsl.exe&quot; &quot;[InputXML]&quot; &quot;$(InputPath)&quot; -o &quot;[OutputFile]&quot;"
+			Outputs="[OutputFile]"
+			AdditionalDependencies="[InputFile]"
+			FileExtensions="*.xslt"
+			ExecutionDescription="Generating [OutputFile] from $(InputFileName) and [InputXML]..."
+			SupportsFileBatching="true"
+			>
+			<Properties>
+				<StringProperty
+					Name="InputXML"
+					DisplayName="XML input"
+					Description="The XML file to use as input to the XSLT"
+					Switch="[value]"
+					Delimited="true"
+				/>
+				<StringProperty
+					Name="OutputFile"
+					DisplayName="Output file"
+					Description="The file to write the result of XSLT processing to"
+					Switch="[value]"
+					Delimited="true"
+				/>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>

@@ -5,14 +5,19 @@
 	<xsl:import href="doc2html.xslt"/>
 	<xsl:output omit-xml-declaration="yes"/>
 
-	<xsl:template match="documentation">
+	<xsl:template match="information">
 		<xsl:comment xml:space="preserve">#set var="title" value="Documentation"</xsl:comment>
 		<xsl:comment xml:space="preserve">#set var="lastmod" value="$LAST_MODIFIED"</xsl:comment>
 		<xsl:comment xml:space="preserve">#include virtual="header.part.shtml"</xsl:comment>
 		
 		<h1>Documentation</h1>
-		
-		<xsl:apply-templates/>
+
+		<xsl:apply-templates select="installation"/>
+		<xsl:apply-templates select="usage"/>
+		<xsl:apply-templates select="configuration"/>
+		<xsl:apply-templates select="versions"/>
+		<xsl:apply-templates select="thanks"/>
+		<xsl:apply-templates select="license"/>
 
 		<xsl:comment xml:space="preserve">#include virtual="footer.part.shtml"</xsl:comment>
 	</xsl:template>

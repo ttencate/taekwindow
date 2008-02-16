@@ -35,3 +35,10 @@ We can subclass a window, which essentially wraps the original window procedure 
 It is a tricky technique, because you cannot unsubclass safely if somebody else subclassed in the meantime, you shouldn't subclass multiple times, and you should unsubclass before the window is destroyed. On Windows XP there are convenient subclassing controls in ComCtl32.dll, but these are apparently not in Windows 2000, so we should do the dirty work ourselves.
 
 Subclassing is useful if we do it only for a short while: only while the user is dragging a window, that particular window will be subclassed. However, the question arises when to subclass: upon an Alt-down is too early, because we don't know which window is about to be dragged; upon mouse-down is too late, because WM_NCHITTEST has already returned the wrong value to the system by then. In between, right before WM_NCHITTEST arrives, is possible, if we perform the subclassing from a CallWndProc hook. But this hook is expensive: it is called upon each invocation of every window procedure in the system. Perhaps the WH_MOUSE_LL hook is an option, catching the mouse-down before it results in a WM_NCHITTEST -- but because this hook handler runs in a different process, it cannot subclass the window.
+
+Build system
+------------
+
+Well yeah, that's rather complicated. information.xml is the central storage for data. The various XSLT files process this to produce version.h, Version.cs, package.bat and some .shtml files for the web site. These XSLT files are run using msxsl.exe in the tools folder. It is started from a custom build rule in the C++ projects, and from the post-build event in the C# project.
+
+Complicated, but with good reason: one-button packaging and web site updating.

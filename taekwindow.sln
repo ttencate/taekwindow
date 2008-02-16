@@ -14,10 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		doc2html.xslt = doc2html.xslt
+		documentation-page.xslt = documentation-page.xslt
+		download-page.xslt = download-page.xslt
 		information.xml = information.xml
-		readme.xslt = readme.xslt
+		metadata-c.xslt = metadata-c.xslt
+		metadata-cs.xslt = metadata-cs.xslt
+		metadata.xslt = metadata.xslt
 		Source.txt = Source.txt
-		website.xslt = website.xslt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindow", "taekwindow\taekwindow.vcproj", "{D123F33E-D34D-4B7C-89C2-A5DC286B90ED}"
@@ -26,6 +29,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindow", "taekwindow\ta
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
+		{1CA60A68-E0C4-43BA-8D37-E374C583919B} = {1CA60A68-E0C4-43BA-8D37-E374C583919B}
 		{EED18669-70C8-450F-8989-A8712FBFFA67} = {EED18669-70C8-450F-8989-A8712FBFFA67}
 	EndProjectSection
 EndProject
@@ -33,15 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taekwindowconfig", "taekwin
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{32D13502-1F48-439F-BB15-291491EB4F4C}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-	ProjectSection(SolutionItems) = preProject
-		tools\package.bat = tools\package.bat
 	EndProjectSection
 EndProject
 Global

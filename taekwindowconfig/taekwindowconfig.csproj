@@ -57,7 +57,6 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Interop.cs" />
-    <Compile Include="Properties\ProcessedVersionInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConfigForm.resx">
@@ -75,6 +74,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="types.cs" />
+    <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -99,9 +99,12 @@
     <Content Include="..\graphics\startup.png">
       <Link>graphics\startup.png</Link>
     </Content>
-    <Content Include="..\version.inc">
-      <Link>version.inc</Link>
-    </Content>
+    <None Include="..\information.xml">
+      <Link>metadata\information.xml</Link>
+    </None>
+    <None Include="..\metadata-cs.xslt">
+      <Link>metadata\metadata-cs.xslt</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
@@ -122,7 +125,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>echo "NOTE: cl.exe (the C++ compiler) and the Common7\IDE directory must be in PATH for this to work!"
-cl.exe /EP "$(ProjectDir)Properties\VersionInfo.cs" &gt; "$(ProjectDir)Properties\ProcessedVersionInfo.cs"</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)tools\msxsl.exe" "$(SolutionDir)information.xml" "$(SolutionDir)metadata-cs.xslt" -o "$(ProjectDir)Version.cs"</PreBuildEvent>
   </PropertyGroup>
 </Project>

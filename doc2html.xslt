@@ -41,7 +41,7 @@
 				<xsl:for-each select="feature">
 					<li>
 						<xsl:value-of select="."/>
-						<xsl:if test="@see!=''">
+						<xsl:if test="@see != ''">
 							<xsl:text xml:space="preserve"> </xsl:text>
 							(see <xsl:element name="a" xml:space="preserve"><xsl:attribute name="href"><xsl:value-of select="@see"/></xsl:attribute>tracker item</xsl:element>)
 						</xsl:if>
@@ -51,7 +51,7 @@
 					<li>
 						Bugfix:
 						<xsl:value-of select="."/>
-						<xsl:if test="@see!=''">
+						<xsl:if test="@see != ''">
 							<xsl:text xml:space="preserve"> </xsl:text>
 							(see <xsl:element name="a" xml:space="preserve"><xsl:attribute name="href"><xsl:value-of select="@see"/></xsl:attribute>tracker item</xsl:element>)
 						</xsl:if>

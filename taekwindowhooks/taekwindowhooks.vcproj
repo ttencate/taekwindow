@@ -12,6 +12,9 @@
 		/>
 	</Platforms>
 	<ToolFiles>
+		<ToolFile
+			RelativePath="..\metadata.rules"
+		/>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -25,6 +28,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="generateFromXML"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -96,6 +102,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="generateFromXML"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -227,10 +236,6 @@
 				RelativePath=".\util.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\version.inc"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -240,6 +245,32 @@
 			<File
 				RelativePath=".\taekwindowhooks.rc"
 				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Metadata"
+			>
+			<File
+				RelativePath="..\metadata-c.xslt"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(ProjectDir)version.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(ProjectDir)version.h"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>

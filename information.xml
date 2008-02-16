@@ -1,21 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <information>
 	
-	<appname>Taekwindow</appname>
+	<apptitle>Taekwindow</apptitle>
+	<filename>taekwindow</filename>
 	<majorversion>0</majorversion>
 	<minorversion>2</minorversion>
-	<microversion>1</microversion>
+	<revision>1</revision>
 	<build>0</build>
 	<author>Thomas ten Cate</author>
 	<email>ttencate+taekwindow@gmail.com</email>
 	<website>http://taekwindow.sf.net/</website>
 	<copyright>Copyright © 2006-2008, Thomas ten Cate</copyright>
+
+	<binaryfiles>
+		<file>Release\taekwindow.exe</file>
+		<file>Release\taekwindowhooks.dll</file>
+		<file>taekwindowconfig\bin\Release\taekwindowconfig.exe</file>
+		<file>taekwindowconfig\bin\Release\Interop.IWshRuntimeLibrary.dll</file>
+		<file>Release\readme.html</file>
+	</binaryfiles>
+
+	<sourcefiles>
+		<file>graphics\*.ico</file>
+		<file>graphics\*.ai</file>
+		<file>graphics\*.psd</file>
+		<file>graphics\*.png</file>
+		<file>taekwindow\*.cpp</file>
+		<file>taekwindow\*.h</file>
+		<file>taekwindow\*.hpp</file>
+		<file>taekwindow\*.rc</file>
+		<file>taekwindow\*.vcproj</file>
+		<file>taekwindowhooks\*.cpp</file>
+		<file>taekwindowhooks\*.h</file>
+		<file>taekwindowhooks\*.hpp</file>
+		<file>taekwindowhooks\*.def</file>
+		<file>taekwindowhooks\*.rc</file>
+		<file>taekwindowhooks\*.vcproj</file>
+		<file>taekwindowconfig\*.cs</file>
+		<file>taekwindowconfig\*.resx</file>
+		<file>taekwindowconfig\*.csproj</file>
+		<file>taekwindowconfig\Properties\*.cs</file>
+		<file>taekwindowconfig\Properties\*.resx</file>
+		<file>tools\7z.exe</file>
+		<file>tools\msxsl.exe</file>
+		<file>taekwindow.sln</file>
+		<file>*.xml</file>
+		<file>*.xslt</file>
+		<file>source.txt</file>
+	</sourcefiles>
 	
 	<description>
 		Taekwindow is a simple, lightweight and free program that allows you to
 		manipulate floating windows in Microsoft Windows in a way similar to
 		many X11 window managers.
 	</description>
+	
 	<installation>
 		<ol>
 			<li>
@@ -37,6 +76,7 @@
 			</li>
 		</ol>
 	</installation>
+	
 	<usage>
 		<p>
 			Start taekwindow.exe to load the program. Nothing will seem to happen,
@@ -56,6 +96,7 @@
 			stop it through the Task Manager if you prefer.
 		</p>
 	</usage>
+	
 	<configuration>
 		<p>
 			You can configure the program using the supplied configuration tool,
@@ -67,6 +108,7 @@
 			installed. See Installation, above, for details.
 		</p>
 	</configuration>
+	
 	<bugs>
 
 		<p>
@@ -77,6 +119,7 @@
 			any new bugs you've discovered.
 		</p>
 	</bugs>
+	
 	<feature-requests>
 		<p>
 			Please see the <a href="http://sourceforge.net/tracker/?group_id=185457&amp;atid=913356">Feature Requests Tracker</a>.
@@ -86,6 +129,7 @@
 			requests submitted by users. You can of course submit your own.
 		</p>
 	</feature-requests>
+	
 	<versions>
 		<version nr="0.2.1">
 			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653063&amp;group_id=185457&amp;atid=913353">
@@ -125,10 +169,12 @@
 			<feature>moving with Alt+left button, resizing from the bottom right corner with Alt+right button</feature>
 		</version>
 	</versions>
+	
 	<contact>
 		Taekwindow is written by Thomas ten Cate. The preferred way to contact
 		the author is through the <a href="http://taekwindow.sf.net/">Taekwindow web page</a>.
 	</contact>
+	
 	<thanks>
 		<p>I would like to thank the following people for their contributions to this project:</p>
 		<thanklist>
@@ -140,6 +186,7 @@
 			</thank>
 		</thanklist>
 	</thanks>
+	
 	<license>
 		<p>Copyright (c) 2006-2008, Thomas ten Cate.</p>
 		<p>All rights reserved.</p>

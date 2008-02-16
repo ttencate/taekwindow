@@ -13,6 +13,9 @@
 		/>
 	</Platforms>
 	<ToolFiles>
+		<ToolFile
+			RelativePath="..\metadata.rules"
+		/>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -27,6 +30,11 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="generateFromXML"
+				InputXML=""
+				OutputFile=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -103,10 +111,15 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Packaging..."
-				CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;cl.exe /EP tools\package.bat &gt; &quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;&quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;"
+				Description="Packaging ZIP files..."
+				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(SolutionDir)tools\package.bat&quot;"
 				AdditionalDependencies=""
-				Outputs="..\package\taekwindow.zip;..\package\taekwindow-src.zip"
+				Outputs="$(SolutionDir)package\taekwindow.zip"
+			/>
+			<Tool
+				Name="generateFromXML"
+				InputXML=""
+				OutputFile=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -167,6 +180,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -181,14 +195,6 @@
 			<File
 				RelativePath=".\taekwindow.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions="DEBUG"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -217,6 +223,76 @@
 			<File
 				RelativePath=".\taekwindow.rc"
 				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Metadata"
+			>
+			<File
+				RelativePath="..\metadata-c.xslt"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(ProjectDir)version.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(ProjectDir)version.h"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\package.xslt"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(SolutionDir)tools\package.bat"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(SolutionDir)tools\package.bat"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\readme.xslt"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(OutDir)readme.html"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)information.xml"
+						OutputFile="$(OutDir)\readme.html"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>
