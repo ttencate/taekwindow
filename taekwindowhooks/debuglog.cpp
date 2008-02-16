@@ -1,6 +1,7 @@
 #ifdef _DEBUG
 
 #include "debuglog.hpp"
+#include "util.hpp"
 
 #include <windows.h>
 #include <stdio.h>
@@ -13,7 +14,13 @@ HANDLE localDebugLogFile = INVALID_HANDLE_VALUE;
 extern DWORD mainProcessId;
 
 void openDebugLog() {
-	debugLogFile = CreateFile("taekwindow-debug.log", FILE_WRITE_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	debugLogFile = INVALID_HANDLE_VALUE;
+	long time = GetTickCount();
+	char fileName[64];
+	sprintf(fileName, "taekwindow-debug-%d.%03d.log", time/1000, time%1000);
+	debugLogFile = CreateFile(fileName, FILE_WRITE_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (debugLogFile == INVALID_HANDLE_VALUE)
+		showLastError(L"Error opening debug log");
 }
 
 void closeDebugLog() {

@@ -175,6 +175,7 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	DEBUGLOG("Keyboard hook called");
 	if (nCode >= 0 && nCode == HC_ACTION) { // A little redundant, yes. But the docs say it.
 		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
+		DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);
 #ifdef _DEBUG
 		if (info->vkCode == 0x51) {
 			DEBUGLOG("Panic button pressed");
@@ -183,15 +184,17 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			return 1;
 		}
 #endif
-		// Something MAY have happened to the modifier key.
 		if (isModifier(info->vkCode)) {
+			// Something MAY have happened to the modifier key, but this could also be a repeat.
 			bool wasDown = modifierDown;
-			modifierDown = info->flags & ~LLKHF_UP;
+			modifierDown = !(info->flags & LLKHF_UP);
 			DEBUGLOG("Modifier going from %i to %i", wasDown, modifierDown);
 			if (wasDown && !modifierDown) {
 				DEBUGLOG("Modifier released");
 				// Modifier was released. Only pass the event on if there was no drag event.
-				/* BUG: the app will still think Alt is down?
+				/* If we do this bit of code, the app will sometimes still think Alt is down. Test e.g. in Photoshop.
+				   This happens especially when both Alt keys are modifiers and we use them interchangably.
+				   I have not yet found a reliable way to reproduce this behaviour.
 				if (haveDragged) {
 					DEBUGLOG("Eating modifier up event");
 					return 1;
