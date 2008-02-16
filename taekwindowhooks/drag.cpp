@@ -68,6 +68,9 @@ void startDragAction(HWND window, POINT mousePos) {
 	// (could happen while resizing).
 	SetCapture(draggedWindow);
 	GetWindowRect(draggedWindow, &lastRect);
+	// Notify the window that it's going to be moved/resized.
+	// PuTTY, for one, responds to this, by not sending terminal resize events over the network during a resize.
+	SendMessage(window, WM_ENTERSIZEMOVE, 0, 0);
 }
 
 void startMoveAction(HWND window, POINT mousePos) {
@@ -148,11 +151,14 @@ void doResizeAction(POINT mousePos) {
 			setResizingY(mousePos);
 			break;
 	}
+	SendMessage(draggedWindow, WM_SIZING, WMSZ_BOTTOMRIGHT, (LPARAM)&lastRect);
 	updateWindowPos(flags);
 }
 
 void endDragAction() {
 	ReleaseCapture();
+	// Notify the window that its moving/resizing is now over.
+	SendMessage(draggedWindow, WM_EXITSIZEMOVE, 0, 0);
 }
 
 void endMoveAction() {

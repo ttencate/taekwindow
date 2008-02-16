@@ -180,6 +180,7 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			DEBUGLOG("Panic button pressed");
 			// Q button pressed. Panic button for debugging.
 			PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
+			return 1;
 		}
 #endif
 		// Something MAY have happened to the modifier key.

@@ -65,8 +65,8 @@ requests submitted by users. You can of course submit your own.
 Version history
 ---------------
 
-0.3:
-- BUGFIX: moving and resizing now works properly when dragging title bar or borders
+0.2.1:
+- FIX: moving and resizing now works properly when dragging title bar or borders
 
 0.2:
 - added a configuration tool as per
