@@ -67,6 +67,8 @@ Version history
 
 0.2.1:
 - FIX: moving and resizing now works properly when dragging title bar or borders
+- FIX: moving and resizing now works on MDI child windows, instead of the parent
+- FIX: Taekwindow should no longer occasionally behave as if Alt is pressed when it is not
 
 0.2:
 - added a configuration tool as per
