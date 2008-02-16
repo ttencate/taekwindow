@@ -16,8 +16,10 @@
 				public const string AuthorFull = "<xsl:value-of select="author"/> &lt;<xsl:value-of select="email"/>&gt;";
 				public const string Copyright = "<xsl:value-of select="copyright"/>";
 				public const string VersionString = "<xsl:call-template name="fullversion"/>";
+				public const string ShortVersionString = "<xsl:call-template name="shortversion"/>";
 				public const string Website = "<xsl:value-of select="website"/>";
 				public const string Email = "<xsl:value-of select="email"/>";
+				public const string ReadmeFile = "<xsl:value-of select="readmefile"/>";
 			}
 
 		}

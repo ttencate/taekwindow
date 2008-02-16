@@ -251,6 +251,10 @@
 			Name="Metadata"
 			>
 			<File
+				RelativePath="..\information.xml"
+				>
+			</File>
+			<File
 				RelativePath="..\metadata-c.xslt"
 				>
 				<FileConfiguration

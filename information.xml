@@ -10,6 +10,7 @@
 	<author>Thomas ten Cate</author>
 	<email>ttencate+taekwindow@gmail.com</email>
 	<website>http://taekwindow.sf.net/</website>
+	<readmefile>readme.html</readmefile>
 	<copyright>Copyright © 2006-2008, Thomas ten Cate</copyright>
 
 	<binaryfiles>
@@ -48,6 +49,7 @@
 		<file>taekwindow.sln</file>
 		<file>*.xml</file>
 		<file>*.xslt</file>
+		<file>metadata.rules</file>
 		<file>source.txt</file>
 	</sourcefiles>
 	

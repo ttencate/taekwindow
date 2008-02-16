@@ -23,10 +23,11 @@ namespace TaekwindowConfig
 			Text = VersionInfo.Title + " configuration";
 			aboutBox.Text = "About " + VersionInfo.Title;
 			title.Text = VersionInfo.Title;
-			version.Text = "Version " + VersionInfo.VersionString;
+			version.Text = "Version " + VersionInfo.ShortVersionString;
 			author.Text = "Written by " + VersionInfo.Author;
 			website.Text = VersionInfo.Website;
 			email.Text = VersionInfo.Email;
+			license.Text = "This program is licensed under the BSD license. This means you are free and welcome to distribute this program. See the " + VersionInfo.ReadmeFile + " file for details.";
 			loadSettings();
 		}
 

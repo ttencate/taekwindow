@@ -49,12 +49,12 @@ namespace TaekwindowConfig
 			this.leftAlt = new System.Windows.Forms.RadioButton();
 			this.resizing = new System.Windows.Forms.TabPage();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.nineRectangles = new System.Windows.Forms.RadioButton();
 			this.bottomRight = new System.Windows.Forms.RadioButton();
+			this.nineRectangles = new System.Windows.Forms.RadioButton();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.about = new System.Windows.Forms.TabPage();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.license = new System.Windows.Forms.Label();
 			this.aboutBox = new System.Windows.Forms.GroupBox();
 			this.logo = new System.Windows.Forms.PictureBox();
 			this.title = new System.Windows.Forms.Label();
@@ -352,16 +352,23 @@ namespace TaekwindowConfig
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Resize mode";
 			// 
-			// groupBox6
+			// bottomRight
 			// 
-			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.bottomRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox6.Location = new System.Drawing.Point(11, 129);
-			this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(288, 2);
-			this.groupBox6.TabIndex = 12;
-			this.groupBox6.TabStop = false;
+			this.bottomRight.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.bottomRight.Image = ((System.Drawing.Image)(resources.GetObject("bottomRight.Image")));
+			this.bottomRight.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+			this.bottomRight.Location = new System.Drawing.Point(11, 19);
+			this.bottomRight.Name = "bottomRight";
+			this.bottomRight.Size = new System.Drawing.Size(288, 99);
+			this.bottomRight.TabIndex = 6;
+			this.bottomRight.Text = "&Bottom right corner\r\n\r\nRegardless of where you grab the window, you always resiz" +
+				"e from its lower right corner.";
+			this.bottomRight.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.bottomRight.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.bottomRight.UseVisualStyleBackColor = true;
+			this.bottomRight.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// nineRectangles
 			// 
@@ -382,23 +389,16 @@ namespace TaekwindowConfig
 			this.nineRectangles.UseVisualStyleBackColor = true;
 			this.nineRectangles.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
-			// bottomRight
+			// groupBox6
 			// 
-			this.bottomRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.bottomRight.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.bottomRight.Image = ((System.Drawing.Image)(resources.GetObject("bottomRight.Image")));
-			this.bottomRight.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.bottomRight.Location = new System.Drawing.Point(11, 19);
-			this.bottomRight.Name = "bottomRight";
-			this.bottomRight.Size = new System.Drawing.Size(288, 99);
-			this.bottomRight.TabIndex = 6;
-			this.bottomRight.Text = "&Bottom right corner\r\n\r\nRegardless of where you grab the window, you always resiz" +
-				"e from its lower right corner.";
-			this.bottomRight.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.bottomRight.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-			this.bottomRight.UseVisualStyleBackColor = true;
-			this.bottomRight.CheckedChanged += new System.EventHandler(this.SettingChanged);
+			this.groupBox6.Location = new System.Drawing.Point(11, 129);
+			this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(288, 2);
+			this.groupBox6.TabIndex = 12;
+			this.groupBox6.TabStop = false;
 			// 
 			// about
 			// 
@@ -416,7 +416,7 @@ namespace TaekwindowConfig
 			// 
 			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox7.Controls.Add(this.label2);
+			this.groupBox7.Controls.Add(this.license);
 			this.groupBox7.Location = new System.Drawing.Point(11, 229);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Padding = new System.Windows.Forms.Padding(8, 8, 8, 13);
@@ -425,16 +425,15 @@ namespace TaekwindowConfig
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Legal";
 			// 
-			// label2
+			// license
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.license.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(11, 21);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(288, 39);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "This program is licensed under the BSD license. This means you are free and welco" +
-				"me to distribute this program. See the Readme.txt file for details.";
+			this.license.Location = new System.Drawing.Point(11, 21);
+			this.license.Name = "license";
+			this.license.Size = new System.Drawing.Size(288, 39);
+			this.license.TabIndex = 7;
+			this.license.Text = "License information";
 			// 
 			// aboutBox
 			// 
@@ -580,7 +579,7 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.Label version;
 		private System.Windows.Forms.Label title;
 		private System.Windows.Forms.LinkLabel website;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label license;
 		private System.Windows.Forms.TabPage keysAndButtons;
 		private System.Windows.Forms.TabPage resizing;
 		private System.Windows.Forms.CheckBox startAtLogon;
