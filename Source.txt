@@ -7,6 +7,13 @@ To build, you need the following in your PATH:
 The project files may open in the Express editions of Visual C++ and Visual C#,
 but I am not sure of this and have not tested it.
 
+Which window to move
+--------------------
+
+When the mouse is pressed down, we need to determine which window needs to move/resize. This can be done by finding the root ancestor window (top-level window) of the window under the cursor, using GetAncestor with GA_ROOT. However, in an MDI setting (at least in Opera) this returns the parent window, whereas we'd probably like to grab the child window.
+
+Instead, we walk the parent chain manually, stopping whenever we encounter a window that is movable/resizable according to some definition. Checking for WS_CAPTION takes care of most cases.
+
 Internals
 ---------
 

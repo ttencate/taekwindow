@@ -5,6 +5,13 @@
 
 #include "util.hpp"
 
+/* Similar to GetAncestor, but works on MDI windows as well.
+ * Returns the first parent in the parent chain of the given window
+ * that is movable/resizable (depending on wantResizable),
+ * or NULL if there is no such parent.
+ */
+HWND findGrabbedParent(HWND window, bool wantResizable);
+
 /* Returns true if we should allow moving of this window.
  */
 bool isMovableWindow(HWND window);

@@ -18,9 +18,29 @@ extern POINT lastMousePos;
  */
 extern HWND draggedWindow;
 
-/* The last known window rectangle of the draggedWindow. Saves us calls to GetWindowRect().
+/* The last known window rectangle of the draggedWindow, in client coordinates.
+ * Saves us calls to GetWindowRect() and conversions.
  */
 extern RECT lastRect;
+
+HWND findGrabbedParent(HWND window, bool wantResizable) {
+	HWND ancestor = window;
+	while (true) {
+		DEBUGLOG("Current ancestor is 0x%X", ancestor);
+		if (ancestor && ancestor != INVALID_HANDLE_VALUE) {
+			if (wantResizable && isResizableWindow(ancestor) ||
+				!wantResizable && isMovableWindow(ancestor)) {
+				DEBUGLOG("We like your style; returning 0x%X", ancestor);
+				return ancestor;
+			}
+		} else {
+			// No parent window.
+			DEBUGLOG("Window has no parent; returning NULL");
+			return NULL;
+		}
+		ancestor = GetAncestor(ancestor, GA_PARENT);
+	}
+}
 
 bool isFullscreenWindow(HWND window) {
 	return false; // TODO
@@ -31,6 +51,9 @@ bool isMovableWindow(HWND window) {
 		return false; // disallow moving maximized windows
 	if (isFullscreenWindow(window))
 		return false; // disallow moving fullscreen windows
+	LONG style = GetWindowLong(window, GWL_STYLE);
+	if ((style & WS_CAPTION) != WS_CAPTION)
+		return false;
 	return true;
 }
 
@@ -47,13 +70,15 @@ bool isResizableWindow(HWND window) {
 }
 
 /* Sets the variables resizingX and resizingY to the proper values,
- * considering the screen-coordinate pointer location.
+ * considering the client-coordinate pointer location.
+ * Note that, unlike lastRect, these are client coordinates of the dragged window itself,
+ * not those of the dragged window's parent!
  */
 void setResizingX(POINT const &pt) {
-	resizingX = (pt.x - lastRect.left) * 3 / (lastRect.right - lastRect.left) - 1;
+	resizingX = pt.x * 3 / (lastRect.right - lastRect.left) - 1;
 }
 void setResizingY(POINT const &pt) {
-	resizingY = (pt.y - lastRect.top) * 3 / (lastRect.bottom - lastRect.top) - 1;
+	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
 }
 
 /* Initiates a dragging action, be it moving or resizing.
@@ -67,10 +92,23 @@ void startDragAction(HWND window, POINT mousePos) {
 	// Capture the mouse so it'll still get events even if the mouse leaves the window
 	// (could happen while resizing).
 	SetCapture(draggedWindow);
+	// Store the current window rectangle, specified in the client coordinates of the window's parent
+	// (or, if no parent, in screen coordinates).
 	GetWindowRect(draggedWindow, &lastRect);
+	HWND parent = GetAncestor(draggedWindow, GA_PARENT);
+	if (parent) {
+		POINT topLeft = { lastRect.left, lastRect.top }, bottomRight = { lastRect.right, lastRect.bottom };
+		ScreenToClient(parent, &topLeft);
+		ScreenToClient(parent, &bottomRight);
+		lastRect.left = topLeft.x; lastRect.top = topLeft.y;
+		lastRect.right = bottomRight.x; lastRect.bottom = bottomRight.y;
+	}
 	// Notify the window that it's going to be moved/resized.
 	// PuTTY, for one, responds to this, by not sending terminal resize events over the network during a resize.
-	SendMessage(window, WM_ENTERSIZEMOVE, 0, 0);
+	// Update: don't, because it confuses some apps sometimes.
+	// E.g. try to resize the Properties window of Spy++ (which is unresizable),
+	// then the main window starts to behave oddly.
+	// SendMessage(draggedWindow, WM_ENTERSIZEMOVE, 0, 0);
 }
 
 void startMoveAction(HWND window, POINT mousePos) {
@@ -81,6 +119,8 @@ void startMoveAction(HWND window, POINT mousePos) {
 void startResizeAction(HWND window, POINT mousePos) {
 	DEBUGLOG("Starting resize action");
 	startDragAction(window, mousePos);
+	// Find out at which corner to resize.
+	ScreenToClient(draggedWindow, &mousePos);
 	switch (resizeMode) {
 		case rmBottomRight:
 			resizingX = 1;
@@ -125,6 +165,7 @@ void doResizeAction(POINT mousePos) {
 	// Do not move the window, unless resizing at its top and/or its left.
 	UINT flags = SWP_NOMOVE;
 	// Resize at the right corner/edge.
+	ScreenToClient(draggedWindow, &mousePos);
 	switch (resizingX) {
 		case -1:
 			lastRect.left += delta.x;
@@ -158,7 +199,8 @@ void doResizeAction(POINT mousePos) {
 void endDragAction() {
 	ReleaseCapture();
 	// Notify the window that its moving/resizing is now over.
-	SendMessage(draggedWindow, WM_EXITSIZEMOVE, 0, 0);
+	// Update: turned off for now, see startDragAction for explanation.
+	// SendMessage(draggedWindow, WM_EXITSIZEMOVE, 0, 0);
 }
 
 void endMoveAction() {

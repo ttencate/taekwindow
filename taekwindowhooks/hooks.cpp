@@ -44,22 +44,26 @@ bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
 		// Yippee! A Modifier-drag event just started that we want to process (or ignore).
 		// Find the actual window being dragged: this is the top-level window that is the ultimate parent
 		// of the window receiving the event. Seems to work for MDI's too.
-		DEBUGLOG("Finding ancestor of window %04x", window);
-		window = GetAncestor(window, GA_ROOT);
-		DEBUGLOG("Ancestor is %04x", window);
-		if (button == moveButton && isMovableWindow(window)) {
-			// Window can be moved.
-			currentState = dsMoving;
-			startMoveAction(window, mousePos);
-		} else if (button == resizeButton && isResizableWindow(window)) {
-			// Window can be resized.
-			currentState = dsResizing;
-			startResizeAction(window, mousePos);
-		} else if (button == moveButton || button == resizeButton) {
-			// Modifier-dragging an invalid window. The user won't expect her actions to be passed
-			// to that window, so we suppress all events until the mouse button is released.
-			DEBUGLOG("Ignoring button down event because window %04x is not movable/resizable", window);
-			currentState = dsIgnoring;
+		if (button == moveButton) {
+			// Try to find movable ancestor.
+			window = findGrabbedParent(window, false);
+			if (window) {
+				currentState = dsMoving;
+				startMoveAction(window, mousePos);
+			} else {
+				DEBUGLOG("Ignoring button down event because no movable parent was found", window);
+				currentState = dsIgnoring;
+			}
+		} else if (button == resizeButton) {
+			// Try to find resizable ancestor.
+			window = findGrabbedParent(window, true);
+			if (window) {
+				currentState = dsResizing;
+				startResizeAction(window, mousePos);
+			} else {
+				DEBUGLOG("Ignoring button down event because no resizable parent was found", window);
+				currentState = dsIgnoring;
+			}
 		}
 		// Either way, we eat the event.
 		return true;
