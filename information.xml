@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<documentation app="Taekwindow" version="0.2.1">
+<information>
+	
+	<appname>Taekwindow</appname>
+	<majorversion>0</majorversion>
+	<minorversion>2</minorversion>
+	<microversion>1</microversion>
+	<build>0</build>
+	<author>Thomas ten Cate</author>
+	<email>ttencate+taekwindow@gmail.com</email>
+	<website>http://taekwindow.sf.net/</website>
+	<copyright>Copyright © 2006-2008, Thomas ten Cate</copyright>
+	
 	<description>
 		Taekwindow is a simple, lightweight and free program that allows you to
 		manipulate floating windows in Microsoft Windows in a way similar to
@@ -162,4 +173,5 @@
 			SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		</p>
 	</license>
-</documentation>
+	
+</information>

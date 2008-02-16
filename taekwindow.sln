@@ -14,11 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		doc2html.xslt = doc2html.xslt
-		doc2readme.xslt = doc2readme.xslt
-		doc2website.xslt = doc2website.xslt
-		readme.xml = readme.xml
+		information.xml = information.xml
+		readme.xslt = readme.xslt
 		Source.txt = Source.txt
-		version.inc = version.inc
+		website.xslt = website.xslt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindow", "taekwindow\taekwindow.vcproj", "{D123F33E-D34D-4B7C-89C2-A5DC286B90ED}"
