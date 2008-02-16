@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
+		changelog-sf.xslt = changelog-sf.xslt
 		doc2html.xslt = doc2html.xslt
 		documentation-page.xslt = documentation-page.xslt
 		download-page.xslt = download-page.xslt

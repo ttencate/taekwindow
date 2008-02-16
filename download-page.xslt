@@ -23,7 +23,7 @@
 						<xsl:call-template name="binaryzipfile"/>
 					</xsl:attribute>
 					<xsl:attribute name="class">sf</xsl:attribute>
-					<xsl:text>Download Taekwindow</xsl:text>
+					<xsl:text xml:space="preserve">Download Taekwindow </xsl:text>
 					<xsl:call-template name="shortversion"/>
 				</xsl:element>
 			</strong>
@@ -45,8 +45,9 @@
 						<xsl:call-template name="sourcezipfile"/>
 					</xsl:attribute>
 					<xsl:attribute name="class">sf</xsl:attribute>
-					<xsl:text>Download Taekwindow</xsl:text>
+					<xsl:text xml:space="preserve">Download Taekwindow </xsl:text>
 					<xsl:call-template name="shortversion"/>
+					<xsl:text xml:space="preserve"> source code</xsl:text>
 				</xsl:element>
 			</strong>
 		</p>

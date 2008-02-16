@@ -83,7 +83,7 @@
 	
 	<usage>
 		<p>
-			Start taekwindow.exe to load the program. Nothing will seem to happen,
+			Start <code>taekwindow.exe</code> to load the program. Nothing will seem to happen,
 			but you can now do the following:
 		</p>
 		<ul>
