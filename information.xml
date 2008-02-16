@@ -13,14 +13,16 @@
 	<copyright>Copyright © 2006-2008, Thomas ten Cate</copyright>
 
 	<binaryfiles>
-		<file>Release\taekwindow.exe</file>
-		<file>Release\taekwindowhooks.dll</file>
-		<file>taekwindowconfig\bin\Release\taekwindowconfig.exe</file>
-		<file>taekwindowconfig\bin\Release\Interop.IWshRuntimeLibrary.dll</file>
-		<file>Release\readme.html</file>
+		<!-- Relative to the Release/ directory -->
+		<file>taekwindow.exe</file>
+		<file>taekwindowhooks.dll</file>
+		<file>taekwindowconfig.exe</file>
+		<file>Interop.IWshRuntimeLibrary.dll</file>
+		<file>readme.html</file>
 	</binaryfiles>
 
 	<sourcefiles>
+		<!-- Relative to $(SolutionDir) -->
 		<file>graphics\*.ico</file>
 		<file>graphics\*.ai</file>
 		<file>graphics\*.psd</file>

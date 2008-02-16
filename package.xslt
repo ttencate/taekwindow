@@ -21,15 +21,8 @@ mkdir "<xsl:call-template name="packagedir"/>"
 
 del "<xsl:call-template name="packagedir"/>\<xsl:call-template name="binaryzipfile"/>"
 
-REM We do not want a strange directory structure in the binary distribution,
-REM so we copy everything to a temporary location.
-
-mkdir temp
-<xsl:for-each select="binaryfiles/file">copy "<xsl:value-of select="."/>" temp
-if errorlevel 1 goto :oops
-</xsl:for-each>
-cd temp
-"..\<xsl:call-template name="sevenzip"/>" a -tzip "..\<xsl:call-template name="packagedir"/>\<xsl:call-template name="binaryzipfile"/>" *
+cd Release
+"..\<xsl:call-template name="sevenzip"/>" a -tzip "..\<xsl:call-template name="packagedir"/>\<xsl:call-template name="binaryzipfile"/>"<xsl:for-each select="binaryfiles/file"> "<xsl:value-of select="."/>"</xsl:for-each>
 if errorlevel 1 goto :oops
 cd ..
 rmdir /S /Q temp

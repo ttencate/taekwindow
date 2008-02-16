@@ -21,7 +21,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\build\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -101,9 +101,10 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\build\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
+			DeleteExtensionsOnClean="*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -112,7 +113,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Packaging ZIP files..."
-				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(SolutionDir)tools\package.bat&quot;"
+				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;"
 				AdditionalDependencies=""
 				Outputs="$(SolutionDir)package\taekwindow.zip"
 			/>
@@ -259,7 +260,7 @@
 					<Tool
 						Name="generateFromXML"
 						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(SolutionDir)tools\package.bat"
+						OutputFile="$(OutDir)\package.bat"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -268,7 +269,7 @@
 					<Tool
 						Name="generateFromXML"
 						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(SolutionDir)tools\package.bat"
+						OutputFile="$(OutDir)\package.bat"
 					/>
 				</FileConfiguration>
 			</File>
@@ -281,7 +282,7 @@
 					<Tool
 						Name="generateFromXML"
 						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(OutDir)readme.html"
+						OutputFile="$(OutDir)\readme.html"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
