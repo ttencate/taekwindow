@@ -17,7 +17,6 @@ del PACKAGE_DIR\BINARY_ZIP
 REM We do not want a strange directory structure in the binary distribution,
 REM so we copy everything to a temporary location.
 
-
 mkdir temp
 cd temp
 REM No, there is no command to copy multiple files at once...
@@ -25,7 +24,7 @@ copy ..\Release\taekwindow.exe .
 copy ..\Release\taekwindowhooks.dll .
 copy ..\taekwindowconfig\bin\Release\taekwindowconfig.exe .
 copy ..\taekwindowconfig\bin\Release\Interop.IWshRuntimeLibrary.dll .
-copy ..\Readme.txt .
+copy ..\Release\readme.html .
 ..\SEVENZIP a -tzip ..\PACKAGE_DIR\BINARY_ZIP
 cd ..
 rmdir /S /Q temp
@@ -56,6 +55,7 @@ SEVENZIP a -tzip PACKAGE_DIR\SOURCE_ZIP ^
   tools\package.bat ^
   taekwindow.sln ^
   version.inc ^
-  Readme.txt ^
-  Source.txt
+  readme.xml ^
+  *.xslt ^
+  source.txt
 
