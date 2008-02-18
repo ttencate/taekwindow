@@ -6,6 +6,11 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 
+	<xsl:template match="sysreqs">
+		<h2>System requirements</h2>
+		<xsl:apply-templates/>
+	</xsl:template>
+
 	<xsl:template match="installation">
 		<h2>Installation</h2>
 		<xsl:apply-templates/>

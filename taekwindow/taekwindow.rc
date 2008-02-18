@@ -29,7 +29,9 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "..\\graphics\\all.ico"
+APPICON               ICON                    "..\\graphics\\all.ico"
+TRAYICON_COLOUR       ICON                    "..\\graphics\\traycolour.ico"
+TRAYICON_GRAY         ICON                    "..\\graphics\\traygray.ico"
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 

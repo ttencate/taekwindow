@@ -17,6 +17,7 @@
 					<xsl:call-template name="appnameversion"/> Readme
 				</h1>
 				<xsl:apply-templates select="description"/>
+				<xsl:apply-templates select="sysreqs"/>
 				<xsl:apply-templates select="installation"/>
 				<xsl:apply-templates select="usage"/>
 				<xsl:apply-templates select="configuration"/>

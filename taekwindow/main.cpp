@@ -1,3 +1,7 @@
+#include "messages.hpp"
+#include "trayicon.hpp"
+#include "util.hpp"
+
 #include <windows.h>
 #include <stdio.h>
 
@@ -91,18 +95,29 @@ bool detachHooks() {
 	bool success = true;
 	if (!UnhookWindowsHookEx(lowLevelKeyboardHook))
 		success = false;
+	lowLevelKeyboardHook = NULL;
 	if (!UnhookWindowsHookEx(mouseHook))
 		success = false;
+	mouseHook = NULL;
 	return success;
 }
 
-/* Shows a messagebox with the message corresponding to GetLastError(), with the given title.
- */
-void showLastError(LPCWSTR title) {
-	PVOID msg;
-	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
-	MessageBoxW(NULL, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
-	LocalFree(msg);
+bool isEnabled() {
+	return (mouseHook && lowLevelKeyboardHook);
+}
+
+void enable() {
+	if (isEnabled())
+		return;
+	attachHooks();
+	updateTrayIcon();
+}
+
+void disable() {
+	if (!isEnabled())
+		return;
+	detachHooks();
+	updateTrayIcon();
 }
 
 /* The main function for the application.
@@ -132,20 +147,24 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 				if (!attachHooks()) {
 					showLastError(L"Error attaching hooks");
 				} else {
+					// Create a tray icon.
+					showTrayIcon(true);
+					// main message loop
 					BOOL getMsgRetVal;
 					MSG msg;
-					// main message loop
 					do {
 						getMsgRetVal = GetMessage(&msg, NULL, 0, 0);
 						if (getMsgRetVal == -1) {
 							// error in GetMessage... low-level, panic and abort
 							break;
 						} else {
-							if (msg.message == WM_APP) {
-								readConfig();
-							} else {
-								TranslateMessage(&msg);
-								DispatchMessage(&msg);
+							switch (msg.message) {
+								case RELOAD_CONFIG_MESSAGE:
+									readConfig();
+									break;
+								default:
+									TranslateMessage(&msg);
+									DispatchMessage(&msg);
 							}
 						}
 					} while (getMsgRetVal);
@@ -158,6 +177,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 					}
 				}
 				// Normal exit.
+				showTrayIcon(false);
 				// Note that calling detachHooks is OK if attachHooks only partly worked.
 				detachHooks();
 				// Make the DLL forget about our existence.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <information>
-	
+
 	<apptitle>Taekwindow</apptitle>
 	<filename>taekwindow</filename>
 	<majorversion>0</majorversion>
@@ -52,13 +52,25 @@
 		<file>metadata.rules</file>
 		<file>source.txt</file>
 	</sourcefiles>
-	
+
 	<description>
-		Taekwindow is a simple, lightweight and free program that allows you to
-		manipulate floating windows in Microsoft Windows in a way similar to
-		many X11 window managers.
+		<p>
+			Taekwindow is a simple, lightweight and free program that allows you to
+			manipulate floating windows in Microsoft Windows in a way similar to
+			many X11 window managers.
+		</p>
 	</description>
-	
+
+	<sysreqs>
+		<p>
+			Taekwindow runs only on Windows 2000 and above (that is, XP and Vista).
+			It also requires the .NET framework, version 2.0 or later.
+		</p>
+		<p>
+			Taekwindow is tested on Windows XP only.
+		</p>
+	</sysreqs>
+
 	<installation>
 		<ol>
 			<li>
@@ -80,7 +92,7 @@
 			</li>
 		</ol>
 	</installation>
-	
+
 	<usage>
 		<p>
 			Start <code>taekwindow.exe</code> to load the program. Nothing will seem to happen,
@@ -100,7 +112,7 @@
 			stop it through the Task Manager if you prefer.
 		</p>
 	</usage>
-	
+
 	<configuration>
 		<p>
 			You can configure the program using the supplied configuration tool,
@@ -112,7 +124,7 @@
 			installed. See Installation, above, for details.
 		</p>
 	</configuration>
-	
+
 	<bugs>
 
 		<p>
@@ -123,7 +135,7 @@
 			any new bugs you've discovered.
 		</p>
 	</bugs>
-	
+
 	<feature-requests>
 		<p>
 			Please see the <a href="http://sourceforge.net/tracker/?group_id=185457&amp;atid=913356">Feature Requests Tracker</a>.
@@ -133,7 +145,7 @@
 			requests submitted by users. You can of course submit your own.
 		</p>
 	</feature-requests>
-	
+
 	<versions>
 		<version nr="0.2.1">
 			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653063&amp;group_id=185457&amp;atid=913353">
@@ -173,12 +185,12 @@
 			<feature>moving with Alt+left button, resizing from the bottom right corner with Alt+right button</feature>
 		</version>
 	</versions>
-	
+
 	<contact>
 		Taekwindow is written by Thomas ten Cate. The preferred way to contact
 		the author is through the <a href="http://taekwindow.sf.net/">Taekwindow web page</a>.
 	</contact>
-	
+
 	<thanks>
 		<p>I would like to thank the following people for their contributions to this project:</p>
 		<thanklist>
@@ -190,7 +202,7 @@
 			</thank>
 		</thanklist>
 	</thanks>
-	
+
 	<license>
 		<p>Copyright (c) 2006-2008, Thomas ten Cate.</p>
 		<p>All rights reserved.</p>
@@ -224,5 +236,5 @@
 			SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		</p>
 	</license>
-	
+
 </information>
