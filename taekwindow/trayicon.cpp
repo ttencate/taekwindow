@@ -188,7 +188,7 @@ void createTrayIcon() {
 	}
 
 	// Finally, create the notify icon itself.
-	// We use Version 4.0, that is, Windows 95 et al. semantics.
+	// We use Version 5.0, that is, Windows 2000/XP semantics.
 	iconData.cbSize = sizeof(iconData);
 	iconData.hWnd = iconWindowHandle;
 	iconData.uID = ICON_ID;
