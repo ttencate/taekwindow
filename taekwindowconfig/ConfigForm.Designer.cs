@@ -32,6 +32,8 @@ namespace TaekwindowConfig
 			this.ok = new System.Windows.Forms.Button();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.general = new System.Windows.Forms.TabPage();
+			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.systemTrayIcon = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.startAtLogon = new System.Windows.Forms.CheckBox();
 			this.keysAndButtons = new System.Windows.Forms.TabPage();
@@ -65,6 +67,7 @@ namespace TaekwindowConfig
 			this.cancel = new System.Windows.Forms.Button();
 			this.tabControl.SuspendLayout();
 			this.general.SuspendLayout();
+			this.groupBox8.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.keysAndButtons.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -119,6 +122,7 @@ namespace TaekwindowConfig
 			// 
 			// general
 			// 
+			this.general.Controls.Add(this.groupBox8);
 			this.general.Controls.Add(this.groupBox1);
 			this.general.Location = new System.Drawing.Point(4, 22);
 			this.general.Name = "general";
@@ -127,6 +131,35 @@ namespace TaekwindowConfig
 			this.general.TabIndex = 0;
 			this.general.Text = "General";
 			this.general.UseVisualStyleBackColor = true;
+			// 
+			// groupBox8
+			// 
+			this.groupBox8.Controls.Add(this.systemTrayIcon);
+			this.groupBox8.Location = new System.Drawing.Point(11, 177);
+			this.groupBox8.Name = "groupBox8";
+			this.groupBox8.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox8.Size = new System.Drawing.Size(310, 125);
+			this.groupBox8.TabIndex = 12;
+			this.groupBox8.TabStop = false;
+			this.groupBox8.Text = "System tray";
+			// 
+			// systemTrayIcon
+			// 
+			this.systemTrayIcon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.systemTrayIcon.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.systemTrayIcon.Image = ((System.Drawing.Image)(resources.GetObject("systemTrayIcon.Image")));
+			this.systemTrayIcon.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.systemTrayIcon.Location = new System.Drawing.Point(11, 19);
+			this.systemTrayIcon.Name = "systemTrayIcon";
+			this.systemTrayIcon.Size = new System.Drawing.Size(288, 95);
+			this.systemTrayIcon.TabIndex = 0;
+			this.systemTrayIcon.Text = "Show icon in the &system tray\r\n\r\nClick the icon to temporarily disable Taekwindow" +
+				"; right-click it for a menu.";
+			this.systemTrayIcon.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.systemTrayIcon.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.systemTrayIcon.UseVisualStyleBackColor = true;
+			this.systemTrayIcon.CheckedChanged += new System.EventHandler(this.SettingChanged);
 			// 
 			// groupBox1
 			// 
@@ -547,6 +580,7 @@ namespace TaekwindowConfig
 			this.Text = "Configuration";
 			this.tabControl.ResumeLayout(false);
 			this.general.ResumeLayout(false);
+			this.groupBox8.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.keysAndButtons.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
@@ -603,6 +637,8 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.GroupBox aboutBox;
 		private System.Windows.Forms.GroupBox groupBox7;
+		private System.Windows.Forms.GroupBox groupBox8;
+		private System.Windows.Forms.CheckBox systemTrayIcon;
 	}
 }
 

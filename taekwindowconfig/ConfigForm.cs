@@ -42,6 +42,8 @@ namespace TaekwindowConfig
 		{
 			RegistryKey key = Registry.CurrentUser.OpenSubKey(settingsKey);
 			if (key != null) {
+				systemTrayIcon.Checked = ((int)key.GetValue("systemTrayIcon", true) != 0);
+
 				Modifier modifier = (Modifier)key.GetValue("modifier", Modifier.LeftAlt);
 				leftAlt.Checked = (modifier == Modifier.LeftAlt);
 				eitherAlt.Checked = (modifier == Modifier.Alt);
@@ -113,6 +115,8 @@ namespace TaekwindowConfig
 					MessageBoxIcon.Exclamation);
 				return false;
 			}
+
+			key.SetValue("systemTrayIcon", systemTrayIcon.Checked ? 1 : 0, RegistryValueKind.DWord);
 
 			Modifier modifier =
 				rightAlt.Checked ? Modifier.RightAlt :

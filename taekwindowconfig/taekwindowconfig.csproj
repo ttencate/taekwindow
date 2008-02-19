@@ -99,6 +99,9 @@
     <Content Include="..\graphics\startup.png">
       <Link>graphics\startup.png</Link>
     </Content>
+    <Content Include="..\graphics\trayicon.png">
+      <Link>graphics\trayicon.png</Link>
+    </Content>
     <None Include="..\information.xml">
       <Link>metadata\information.xml</Link>
     </None>
