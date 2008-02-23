@@ -154,6 +154,9 @@
 			<bugfix>
 				when no settings are present in the registry, the configuration tool is now filled with default values instead of none at all
 			</bugfix>
+			<bugfix>
+				it is no longer possible to start multiple instances of the configuration tool
+			</bugfix>
 		</version>
 		<version nr="0.2.1">
 			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653063&amp;group_id=185457&amp;atid=913353">
