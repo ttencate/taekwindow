@@ -1,3 +1,6 @@
+#define OEMRESOURCE
+#include <windows.h>
+
 #include "drag.hpp"
 #include "config.hpp"
 #include "debuglog.hpp"
@@ -22,6 +25,31 @@ extern HWND draggedWindow;
  * Saves us calls to GetWindowRect() and conversions.
  */
 extern RECT lastRect;
+
+/* The cursor that was active before we started dragging.
+ */
+extern HCURSOR prevCursor;
+
+/* Sets the new cursor; assumes that the current cursor is defined by the application being dragged.
+ */
+void setCursor(int ocr) {
+	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
+	prevCursor = SetCursor(newCursor);
+}
+
+/* Sets the new cursor; assumes that the current cursor is defined by ourselves.
+ * To be called in between setCursor() and restoreCursor().
+ */
+void updateCursor(int ocr) {
+	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
+	DestroyCursor(SetCursor(newCursor));
+}
+
+/* Restores the cursor to the one before setCursor() was called.
+ */
+void restoreCursor() {
+	DestroyCursor(SetCursor(prevCursor));
+}
 
 HWND findGrabbedParent(HWND window, bool wantResizable) {
 	HWND ancestor = window;
@@ -81,6 +109,20 @@ void setResizingY(POINT const &pt) {
 	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
 }
 
+/* Returns the cursor (OCR_* constant) to be used for the current resizing direction.
+ */
+int getResizingCursor() {
+	if (resizingX && !resizingY)
+		return OCR_SIZEWE;
+	if (!resizingX && resizingY)
+		return OCR_SIZENS;
+	if (resizingX * resizingY > 0)
+		return OCR_SIZENWSE;
+	if (resizingX * resizingY < 0)
+		return OCR_SIZENESW;
+	return OCR_NORMAL; // fallback
+}
+
 /* Initiates a dragging action, be it moving or resizing.
  * Called by startMoveAction and startResizeAction.
  */
@@ -114,6 +156,7 @@ void startDragAction(HWND window, POINT mousePos) {
 void startMoveAction(HWND window, POINT mousePos) {
 	DEBUGLOG("Starting move action");
 	startDragAction(window, mousePos);
+	setCursor(OCR_SIZEALL);
 }
 
 void startResizeAction(HWND window, POINT mousePos) {
@@ -132,6 +175,7 @@ void startResizeAction(HWND window, POINT mousePos) {
 			setResizingY(mousePos);
 			break;
 	}
+	setCursor(getResizingCursor());
 }
 
 POINT mouseDelta(POINT const &mousePos) {
@@ -166,6 +210,7 @@ void doResizeAction(POINT mousePos) {
 	UINT flags = SWP_NOMOVE;
 	// Resize at the right corner/edge.
 	ScreenToClient(draggedWindow, &mousePos);
+	bool needCursorUpdate = true;
 	switch (resizingX) {
 		case -1:
 			lastRect.left += delta.x;
@@ -177,6 +222,8 @@ void doResizeAction(POINT mousePos) {
 		case 0:
 			// We may have come close to a vertical border in the meantime.
 			setResizingX(mousePos);
+			if (resizingX)
+				needCursorUpdate = true;
 			break;
 	}
 	switch (resizingY) {
@@ -190,9 +237,12 @@ void doResizeAction(POINT mousePos) {
 		case 0:
 			// We may have come close to a horizontal border in the meantime.
 			setResizingY(mousePos);
+			if (resizingY)
+				needCursorUpdate = true;
 			break;
 	}
-	SendMessage(draggedWindow, WM_SIZING, WMSZ_BOTTOMRIGHT, (LPARAM)&lastRect);
+	if (needCursorUpdate)
+		updateCursor(getResizingCursor());
 	updateWindowPos(flags);
 }
 
@@ -206,9 +256,11 @@ void endDragAction() {
 void endMoveAction() {
 	DEBUGLOG("Ending move action");
 	endDragAction();
+	restoreCursor();
 }
 
 void endResizeAction() {
 	DEBUGLOG("Ending resize action");
 	endDragAction();
+	restoreCursor();
 }

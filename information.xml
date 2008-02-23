@@ -157,6 +157,9 @@
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
 				added an optional system tray icon
 			</feature>
+			<feature>
+				the mouse cursor changes while moving or resizing
+			</feature>
 			<bugfix>
 				when no settings are present in the registry, the configuration tool is now filled with default values instead of none at all
 			</bugfix>
@@ -188,7 +191,7 @@
 				shortcut in the Start Menu
 			</feature>
 			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1682619&amp;group_id=185457&amp;atid=913353">
-				The error message “This application has failed to start because the applicaation
+				The error message “This application has failed to start because the application
 				configuration is incorrect. Reinstalling the application may fix this
 				problem.” no longer appears.
 			</bugfix>

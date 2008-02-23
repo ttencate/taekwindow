@@ -34,6 +34,8 @@ bool modifierDown = false;
 
 bool haveDragged = false;
 
+HCURSOR prevCursor;
+
 // Configuration options
 
 DLLConfiguration config = {0};
