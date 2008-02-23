@@ -109,7 +109,7 @@ BEGIN
             VALUE "FileVersion", APPLICATION_VERSION_STRING
             VALUE "InternalName", APPLICATION_TITLE
             VALUE "LegalCopyright", APPLICATION_COPYRIGHT
-            VALUE "OriginalFilename", "taekwindow.exe"
+            VALUE "OriginalFilename", MAIN_EXE_FILE ".exe"
             VALUE "ProductName", APPLICATION_TITLE
             VALUE "ProductVersion", APPLICATION_VERSION_STRING
         END

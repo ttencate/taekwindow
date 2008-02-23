@@ -24,7 +24,7 @@ BOOL WINAPI DllMain(HANDLE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {
 
 /* Initializes the DLL by storing the ID of the thread that will hook up the event hooks.
  * On successful execution, the thread ID is stored and the function returns NULL.
- * If there was already another thread ID (probably another taekwindow.exe process),
+ * If there was already another thread ID (probably another main exe process),
  * the function returns the thread ID of that thread and does nothing else.
  */
 DWORD init(DWORD threadId, DWORD processId) {

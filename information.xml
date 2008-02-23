@@ -10,8 +10,12 @@
 	<author>Thomas ten Cate</author>
 	<email>ttencate+taekwindow@gmail.com</email>
 	<website>http://taekwindow.sf.net/</website>
-	<readmefile>readme.html</readmefile>
 	<copyright>Copyright © 2006-2008, Thomas ten Cate</copyright>
+	
+	<mainexefile>taekwindow</mainexefile>
+	<hooksdllfile>taekwindowhooks</hooksdllfile>
+	<configexefile>taekwindowconfig</configexefile>
+	<readmefile>readme.html</readmefile>
 
 	<binaryfiles>
 		<!-- Relative to the Release/ directory -->
@@ -28,6 +32,8 @@
 		<file>graphics\*.ai</file>
 		<file>graphics\*.psd</file>
 		<file>graphics\*.png</file>
+		<file>shared\*.cpp</file>
+		<file>shared\*.hpp</file>
 		<file>taekwindow\*.cpp</file>
 		<file>taekwindow\*.h</file>
 		<file>taekwindow\*.hpp</file>

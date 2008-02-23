@@ -120,7 +120,7 @@ namespace TaekwindowConfig
 		/// </summary>
 		private void triggerReload()
 		{
-			Process[] procs = Process.GetProcessesByName("taekwindow"); // .exe filename without extension or path
+			Process[] procs = Process.GetProcessesByName(VersionInfo.MainExeFile); // .exe filename without extension or path
 			bool attempted = false;
 			bool succeeded = false;
 			int lastError = 0;

@@ -23,27 +23,27 @@ bool readDWord(HKEY key, LPCWSTR valueName, LPDWORD out) {
 
 void readConfigFromRegistry(DLLConfiguration *dllconfig, EXEConfiguration *execonfig) {
 	// Open the registry keys.
-	HKEY software;
-	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software", 0, KEY_READ, &software) == ERROR_SUCCESS) {
-		HKEY taekwindow;
-		if (RegOpenKeyEx(software, L"Taekwindow", 0, KEY_READ, &taekwindow) == ERROR_SUCCESS) {
-			HKEY ohPointTwo;
+	HKEY softwareKey;
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software", 0, KEY_READ, &softwareKey) == ERROR_SUCCESS) {
+		HKEY appKey;
+		if (RegOpenKeyEx(softwareKey, L"Taekwindow", 0, KEY_READ, &appKey) == ERROR_SUCCESS) {
+			HKEY versionKey;
 			// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
 			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
-			if (RegOpenKeyEx(taekwindow, L"0.2", 0, KEY_READ, &ohPointTwo) == ERROR_SUCCESS) {
+			if (RegOpenKeyEx(appKey, L"0.2", 0, KEY_READ, &versionKey) == ERROR_SUCCESS) {
 				// Read stuff for the DLL.
-				readDWord(ohPointTwo, L"modifier"    , (LPDWORD)&dllconfig->modifier    );
-				readDWord(ohPointTwo, L"moveButton"  , (LPDWORD)&dllconfig->moveButton  );
-				readDWord(ohPointTwo, L"resizeButton", (LPDWORD)&dllconfig->resizeButton);
-				readDWord(ohPointTwo, L"resizeMode"  , (LPDWORD)&dllconfig->resizeMode  );
+				readDWord(versionKey, L"modifier"    , (LPDWORD)&dllconfig->modifier    );
+				readDWord(versionKey, L"moveButton"  , (LPDWORD)&dllconfig->moveButton  );
+				readDWord(versionKey, L"resizeButton", (LPDWORD)&dllconfig->resizeButton);
+				readDWord(versionKey, L"resizeMode"  , (LPDWORD)&dllconfig->resizeMode  );
 				// Read stuff for the EXE.
-				readDWord(ohPointTwo, L"systemTrayIcon", (LPDWORD)&execonfig->systemTrayIcon);
+				readDWord(versionKey, L"systemTrayIcon", (LPDWORD)&execonfig->systemTrayIcon);
 				// Close the keys again.
-				RegCloseKey(ohPointTwo);
+				RegCloseKey(versionKey);
 			}
-			RegCloseKey(taekwindow);
+			RegCloseKey(appKey);
 		}
-		RegCloseKey(software);
+		RegCloseKey(softwareKey);
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "trayicon.hpp"
 #include "util.hpp"
 #include "config.hpp"
+#include "version.h"
 
 #include <windows.h>
 #include <stdio.h>
@@ -19,7 +20,7 @@ HHOOK lowLevelKeyboardHook = NULL;
  * Returns true on success.
  */
 bool loadDll() {
-	dllHandle = LoadLibrary(L"taekwindowhooks.dll");
+	dllHandle = LoadLibrary(HOOKS_DLL_FILE_W L".dll");
 	if (!dllHandle)
 		return false;
 	return true;
@@ -153,7 +154,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (prevThreadId) {
 				// Somebody has been there before us.
 				// Kick that instance in the nuts.
-				MessageBoxW(NULL, L"Taekwindow is already running and will now be stopped.\n\nRerun the program it if you want to start it again.", L"Taekwindow already running", MB_OK | MB_ICONINFORMATION);
+				MessageBoxW(NULL, APPLICATION_TITLE_W L" is already running and will now be stopped.\n\nRerun the program it if you want to start it again.", L"Taekwindow already running", MB_OK | MB_ICONINFORMATION);
 				PostThreadMessage(prevThreadId, WM_QUIT, 0, 0);
 			} else {
 				// We're the first to initialize the DLL, continue.

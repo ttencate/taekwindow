@@ -156,16 +156,16 @@ namespace TaekwindowConfig
 		}
 
 		/// <summary>
-		/// Locates taekwindow.exe.
+		/// Locates the main exe.
 		/// </summary>
-		/// <returns>The full path to taekwindow.exe, or null if not found.</returns>
+		/// <returns>The full path to the main exe, or null if not found.</returns>
 		private static string exeFilename()
 		{
-			string f = Directory.GetParent(Application.ExecutablePath).FullName + "\\taekwindow.exe";
+			string f = Directory.GetParent(Application.ExecutablePath).FullName + "\\" + VersionInfo.MainExeFile + ".exe";
 			if (File.Exists(f))
 				return f;
 			else
-				throw new FileNotFoundException("The file taekwindow.exe cannot be found in the directory of the current application. The shortcut can not be created.");
+				throw new FileNotFoundException("The file " + VersionInfo.MainExeFile + ".exe cannot be found in the directory of the current application. The shortcut can not be created.");
 		}
 
 		/// <summary>

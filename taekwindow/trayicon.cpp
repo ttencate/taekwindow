@@ -75,7 +75,7 @@ void startConfigurationTool() {
 	TCHAR path[MAX_PATH+1];
 	int length = GetModuleFileName(NULL, path, sizeof(path));
 	if (length == 0 || length == sizeof(path)) {
-		MessageBox(NULL, L"The path to taekwindow.exe is too long.", L"Could not fetch path to taekwindow.exe", MB_ICONERROR | MB_OK);
+		MessageBox(NULL, L"The path to " MAIN_EXE_FILE_W L".exe is too long.", L"Could not fetch path to " MAIN_EXE_FILE_W L".exe", MB_ICONERROR | MB_OK);
 		return;
 	}
 
@@ -85,17 +85,17 @@ void startConfigurationTool() {
 	}
 	if (length < 0) {
 		TCHAR buffer[MAX_PATH + 256];
-		wsprintf(buffer, L"The path to taekwindow.exe could not be determined, because the full file name does not contain a backslash:\n\n'%s'", path);
-		MessageBox(NULL, buffer, L"Could not determine path to taekwindow.exe", MB_ICONERROR | MB_OK);
+		wsprintf(buffer, L"The path to " MAIN_EXE_FILE_W L".exe could not be determined, because the full file name does not contain a backslash:\n\n'%s'", path);
+		MessageBox(NULL, buffer, L"Could not determine path to " MAIN_EXE_FILE_W L".exe", MB_ICONERROR | MB_OK);
 		return;
 	}
 	path[length] = L'\0';
 
 	// Launch the configuration tool.
-	HINSTANCE res = ShellExecute(NULL, L"open", L"taekwindowconfig.exe", L"", path, SW_SHOWDEFAULT);
+	HINSTANCE res = ShellExecute(NULL, L"open", CONFIGURATION_EXE_FILE_W L".exe", L"", path, SW_SHOWDEFAULT);
 	if (res < (HINSTANCE)32) {
 		if (res == (HINSTANCE)ERROR_FILE_NOT_FOUND) {
-			MessageBox(NULL, L"The file taekwindowconfig.exe was not found in the same directory as taekwindow.exe. Reinstall the application to repair this.", L"Configuration tool cannot be started", MB_ICONERROR | MB_OK);
+			MessageBox(NULL, L"The file " CONFIGURATION_EXE_FILE_W L".exe was not found in the same directory as taekwindow.exe. Reinstall the application to repair this.", L"Configuration tool cannot be started", MB_ICONERROR | MB_OK);
 		} else {
 			showLastError(L"Configuration tool cannot be started");
 		}
@@ -169,7 +169,7 @@ void createTrayIcon() {
 	wndClass.hCursor = NULL;
 	wndClass.hbrBackground = NULL;
 	wndClass.lpszMenuName = NULL;
-	wndClass.lpszClassName = L"TaekwindowIconWindowClass";
+	wndClass.lpszClassName = L"IconWindowClass";
 	wndClass.hIconSm = NULL;
 	iconWindowClass = RegisterClassEx(&wndClass);
 	if (!iconWindowClass) {

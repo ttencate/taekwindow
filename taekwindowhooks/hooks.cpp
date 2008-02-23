@@ -173,7 +173,7 @@ bool isModifier(DWORD vkCode) {
 
 /* The function for handling keyboard events, tracking the state of the modifier key(s).
  * Also the function to eat keyboard events that the application shouldn't receive.
- * Note that this runs in the context of taekwindow.exe.
+ * Note that this runs in the context of the main exe.
  */
 LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	DEBUGLOG("Keyboard hook called");

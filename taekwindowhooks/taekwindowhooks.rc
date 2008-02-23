@@ -86,7 +86,7 @@ BEGIN
             VALUE "FileVersion", APPLICATION_VERSION_STRING
             VALUE "InternalName", APPLICATION_TITLE
             VALUE "LegalCopyright", APPLICATION_COPYRIGHT
-            VALUE "OriginalFilename", "taekwindow.dll"
+            VALUE "OriginalFilename", HOOKS_DLL_FILE ".dll"
             VALUE "ProductName", APPLICATION_TITLE
             VALUE "ProductVersion", APPLICATION_VERSION_STRING
         END
