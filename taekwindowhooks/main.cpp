@@ -33,7 +33,7 @@ DWORD init(DWORD threadId, DWORD processId) {
 	} else {
 		mainThreadId = threadId;
 		mainProcessId = processId;
-		setConfigDefaults(&config);
+		setDLLConfigDefaults(&config);
 		OPENDEBUGLOG();
 		DEBUGLOG("DLL initialized");
 		return NULL;

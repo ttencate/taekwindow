@@ -2,6 +2,7 @@
 
 #include "hooks.hpp"
 #include "drag.hpp"
+#include "actions.hpp"
 #include "config.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
@@ -30,95 +31,83 @@ extern bool haveDragged;
 extern DWORD mainThreadId;
 #endif
 
-/* Handles a button-down event.
- * Returns true if the event should not be passed on to the application, false otherwise.
+/* Handles a button-down event for the move and resize buttons.
+ * Assumes that button is the move or resize button, that the modifier is down, and that dragState is dsNone.
  */
-bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
-	if (modifierDown && currentState == dsNone && (button == config.moveButton || button == config.resizeButton)) {
-		DEBUGLOG("Handling button down event");
-		// Store the button we're using so we know when it's released.
-		draggingButton = button;
-		// Remember that we have dragged something during this press of the modifier, which means that
-		// the subsequent release event should be eaten.
-		haveDragged = true;
-		// Yippee! A Modifier-drag event just started that we want to process (or ignore).
-		// Find the actual window being dragged: this is the top-level window that is the ultimate parent
-		// of the window receiving the event. Seems to work for MDI's too.
-		if (button == config.moveButton) {
-			// Try to find movable ancestor.
-			window = findGrabbedParent(window, false);
-			if (window) {
-				currentState = dsMoving;
-				startMoveAction(window, mousePos);
-			} else {
-				DEBUGLOG("Ignoring button down event because no movable parent was found", window);
-				currentState = dsIgnoring;
-			}
-		} else if (button == config.resizeButton) {
-			// Try to find resizable ancestor.
-			window = findGrabbedParent(window, true);
-			if (window) {
-				currentState = dsResizing;
-				startResizeAction(window, mousePos);
-			} else {
-				DEBUGLOG("Ignoring button down event because no resizable parent was found", window);
-				currentState = dsIgnoring;
-			}
+void handleDragStart(MouseButton button, HWND window, POINT mousePos) {
+	DEBUGLOG("Handling button down event");
+	// Store the button we're using so we know when it's released.
+	draggingButton = button;
+	// Remember that we have dragged something during this press of the modifier, which means that
+	// the subsequent release event should be eaten.
+	haveDragged = true;
+	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
+	// Find the actual window being dragged: this is the top-level window that is the ultimate parent
+	// of the window receiving the event. Seems to work for MDI's too.
+	if (button == config.moveButton) {
+		// Try to find movable ancestor.
+		window = findGrabbedParent(window, false);
+		if (window) {
+			currentState = dsMoving;
+			startMoveAction(window, mousePos);
+		} else {
+			DEBUGLOG("Ignoring button down event because no movable parent was found", window);
+			currentState = dsIgnoring;
 		}
-		// Either way, we eat the event.
-		return true;
-	} else {
-		// Event we don't handle. Stay away from it.
-		CONDDEBUGLOG(!modifierDown, "Ignoring button down event because the modifier is up");
-		CONDDEBUGLOG(currentState != dsNone, "Ignoring button down event because the current state is not dsNone");
-		CONDDEBUGLOG(button != config.moveButton && button != config.resizeButton, "Ignoring button down event because button %d is not interesting", button);
-		return false;
+	} else if (button == config.resizeButton) {
+		// Try to find resizable ancestor.
+		window = findGrabbedParent(window, true);
+		if (window) {
+			currentState = dsResizing;
+			startResizeAction(window, mousePos);
+		} else {
+			DEBUGLOG("Ignoring button down event because no resizable parent was found", window);
+			currentState = dsIgnoring;
+		}
 	}
 }
 
-/* Handles a mouse button release event.
+/* Handles a mouse button release event for the button we're currently dragging with.
+ * Assumes that button is draggingButton.
  * Returns true if the event was processed and should not be passed to the application, false otherwise.
  */
-bool handleButtonUp(MouseButton button, POINT mousePos) {
-	// We only want to take action if it's the current dragging button being released.
-	if (button == draggingButton) {
-		DEBUGLOG("Handling button up event");
-		// The button we're dragging with was released.
-		switch (currentState) {
-			case dsMoving:
-				endMoveAction();
-				currentState = dsNone;
-				return true;
-			case dsResizing:
-				endResizeAction();
-				currentState = dsNone;
-				return true;
-			case dsIgnoring:
-				DEBUGLOG("Ending the ignoring");
-				currentState = dsNone;
-				return true;
-		}
-		draggingButton = mbNone;
+void handleDragEnd(MouseButton button, POINT mousePos) {
+	DEBUGLOG("Handling button up event");
+	// The button we're dragging with was released.
+	draggingButton = mbNone;
+	switch (currentState) {
+		case dsMoving:
+			endMoveAction();
+			currentState = dsNone;
+			return;
+		case dsResizing:
+			endResizeAction();
+			currentState = dsNone;
+			return;
+		case dsIgnoring:
+			DEBUGLOG("Ending the ignoring");
+			currentState = dsNone;
+			return;
 	}
-	// Nothing interesting.
-	return false;
 }
 
 /* Handles a mouse movement event.
- * Returns true if the event was processed and should not be passed to the application, false otherwise.
+ * Assumes that dragState is not dsNone; i.e. we are dragging something.
  */
-bool handleMove(POINT mousePos) {
+void handleDrag(POINT mousePos) {
 	if (currentState == dsMoving) {
 		// We are handling the moving or resizing of a window.
 		doMoveAction(mousePos);
-		return true;
 	} else if (currentState == dsResizing) {
 		doResizeAction(mousePos);
-		return true;
-	} else if (currentState == dsIgnoring) {
-		return true;
 	}
-	return false;
+}
+
+/* Handles a "push window to the background" event.
+ */
+void handlePushBack(HWND window) {
+	window = findGrabbedParent(window, false);
+	doPushBack(window);
 }
 
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
@@ -129,6 +118,7 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
+		MouseButton button;
 		switch (wParam) {
 			case WM_LBUTTONDOWN:
 			case WM_MBUTTONDOWN:
@@ -136,7 +126,17 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONDOWN:
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
-				processed = handleButtonDown(eventToButton(wParam), eventInfo->hwnd, eventInfo->pt);
+				button = eventToButton(wParam);
+				// Do we want to start handling a drag event?
+				if (modifierDown && currentState == dsNone && (button == config.moveButton || button == config.resizeButton)) {
+					handleDragStart(button, eventInfo->hwnd, eventInfo->pt);
+					processed = true;
+					break;
+				}
+				// Are we pushing the window to the back?
+				if (!modifierDown && button == config.pushBackButton && eventInfo->wHitTestCode == HTCAPTION) {
+					handlePushBack(eventInfo->hwnd);
+				}
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -144,11 +144,20 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONUP:
 			case WM_NCMBUTTONUP:
 			case WM_NCRBUTTONUP:
-				processed = handleButtonUp(eventToButton(wParam), eventInfo->pt);
+				button = eventToButton(wParam);
+				// We only want to take action if it's the current dragging button being released.
+				if (button == draggingButton) {
+					handleDragEnd(button, eventInfo->pt);
+					processed = true;
+					break;
+				}
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
-				processed = handleMove(eventInfo->pt);
+				if (currentState != dsNone) {
+					handleDrag(eventInfo->pt);
+					processed = true;
+				}
 				break;
 		}
 	}

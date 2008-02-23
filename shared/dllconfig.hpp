@@ -19,6 +19,10 @@ class DLLConfiguration {
 		/* The behaviour to use when resizing windows.
 		 */
 		ResizeMode resizeMode;
+
+		/* The mouse button that, when clicked on the title bar, pushes the window to the back.
+		 */
+		MouseButton pushBackButton;
 };
 
 #endif
