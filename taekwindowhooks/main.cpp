@@ -52,5 +52,4 @@ void uninit() {
 void applyConfig(DLLConfiguration *newConfig) {
 	DEBUGLOG("Updating configuration");
 	config = *newConfig;
-	DEBUGLOG("Move button: %d; resize button: %d; modifier: %d", config.moveButton, config.resizeButton, config.modifier);
 }

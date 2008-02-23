@@ -106,7 +106,7 @@ void handleDrag(POINT mousePos) {
 /* Handles a "push window to the background" event.
  */
 void handlePushBack(HWND window) {
-	window = findGrabbedParent(window, false);
+	window = GetAncestor(window, GA_ROOT);
 	doPushBack(window);
 }
 
@@ -114,9 +114,13 @@ void handlePushBack(HWND window) {
  * see the SetWindowsHookEx documentation for details.
  */
 LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	DEBUGLOG("Mouse hook called");
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
+		// Store last known foreground window for focus hack (see 
+		HWND lfw = GetForegroundWindow();
+		if (lfw) {
+			lastForegroundWindow = lfw;
+		}
 		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
 		MouseButton button;
 		switch (wParam) {
@@ -136,6 +140,8 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				// Are we pushing the window to the back?
 				if (!modifierDown && button == config.pushBackButton && eventInfo->wHitTestCode == HTCAPTION) {
 					handlePushBack(eventInfo->hwnd);
+					processed = true;
+					break;
 				}
 				break;
 			case WM_LBUTTONUP:
@@ -185,7 +191,6 @@ bool isModifier(DWORD vkCode) {
  * Note that this runs in the context of the main exe.
  */
 LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	DEBUGLOG("Keyboard hook called");
 	if (nCode >= 0 && nCode == HC_ACTION) { // A little redundant, yes. But the docs say it.
 		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
 		DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);

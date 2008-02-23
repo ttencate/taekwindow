@@ -3,6 +3,10 @@
 
 #include <windows.h>
 
+/* The last known window that was in the foreground.
+ */
+extern HWND lastForegroundWindow;
+
 void doPushBack(HWND window);
 
 #endif

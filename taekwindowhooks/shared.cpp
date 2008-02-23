@@ -36,6 +36,8 @@ bool haveDragged = false;
 
 HCURSOR prevCursor;
 
+HWND lastForegroundWindow = NULL;
+
 // Configuration options
 
 DLLConfiguration config = {0};
