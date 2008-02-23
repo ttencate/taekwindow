@@ -173,10 +173,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\config.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\debuglog.cpp"
 				>
 			</File>
@@ -297,6 +293,14 @@
 						OutputFile="$(ProjectDir)version.h"
 					/>
 				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Source Files (shared)"
+			>
+			<File
+				RelativePath="..\shared\dllconfig.cpp"
+				>
 			</File>
 		</Filter>
 	</Files>

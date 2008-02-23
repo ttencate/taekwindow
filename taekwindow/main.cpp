@@ -132,6 +132,7 @@ void applyEXEConfig(EXEConfiguration *config) {
 
 void reloadConfig() {
 	DLLConfiguration dllconfig;
+	dllconfig.setDefaults();
 	readConfigFromRegistry(&dllconfig, &config);
 	applyDLLConfig(&dllconfig);
 	applyEXEConfig(&config);

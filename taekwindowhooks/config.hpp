@@ -5,6 +5,4 @@
 
 extern DLLConfiguration config;
 
-void setConfigDefaults(DLLConfiguration *dllconfig);
-
 #endif

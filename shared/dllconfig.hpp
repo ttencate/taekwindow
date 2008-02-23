@@ -23,6 +23,12 @@ class DLLConfiguration {
 		/* The mouse button that, when clicked on the title bar, pushes the window to the back.
 		 */
 		MouseButton pushBackButton;
+		
+		/* Sets all fields to their default values.
+		 */
+		void setDefaults();
 };
+
+
 
 #endif
