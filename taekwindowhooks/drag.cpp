@@ -121,7 +121,7 @@ void startResizeAction(HWND window, POINT mousePos) {
 	startDragAction(window, mousePos);
 	// Find out at which corner to resize.
 	ScreenToClient(draggedWindow, &mousePos);
-	switch (resizeMode) {
+	switch (config.resizeMode) {
 		case rmBottomRight:
 			resizingX = 1;
 			resizingY = 1;

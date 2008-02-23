@@ -34,7 +34,7 @@ extern DWORD mainThreadId;
  * Returns true if the event should not be passed on to the application, false otherwise.
  */
 bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
-	if (modifierDown && currentState == dsNone && (button == moveButton || button == resizeButton)) {
+	if (modifierDown && currentState == dsNone && (button == config.moveButton || button == config.resizeButton)) {
 		DEBUGLOG("Handling button down event");
 		// Store the button we're using so we know when it's released.
 		draggingButton = button;
@@ -44,7 +44,7 @@ bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
 		// Yippee! A Modifier-drag event just started that we want to process (or ignore).
 		// Find the actual window being dragged: this is the top-level window that is the ultimate parent
 		// of the window receiving the event. Seems to work for MDI's too.
-		if (button == moveButton) {
+		if (button == config.moveButton) {
 			// Try to find movable ancestor.
 			window = findGrabbedParent(window, false);
 			if (window) {
@@ -54,7 +54,7 @@ bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
 				DEBUGLOG("Ignoring button down event because no movable parent was found", window);
 				currentState = dsIgnoring;
 			}
-		} else if (button == resizeButton) {
+		} else if (button == config.resizeButton) {
 			// Try to find resizable ancestor.
 			window = findGrabbedParent(window, true);
 			if (window) {
@@ -71,7 +71,7 @@ bool handleButtonDown(MouseButton button, HWND window, POINT mousePos) {
 		// Event we don't handle. Stay away from it.
 		CONDDEBUGLOG(!modifierDown, "Ignoring button down event because the modifier is up");
 		CONDDEBUGLOG(currentState != dsNone, "Ignoring button down event because the current state is not dsNone");
-		CONDDEBUGLOG(button != moveButton && button != resizeButton, "Ignoring button down event because the button is not interesting");
+		CONDDEBUGLOG(button != config.moveButton && button != config.resizeButton, "Ignoring button down event because button %d is not interesting", button);
 		return false;
 	}
 }
@@ -160,13 +160,13 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 }
 
 bool isModifier(DWORD vkCode) {
-	if (vkCode == modifier)
+	if (vkCode == config.modifier)
 		return true;
-	if (modifier == VK_MENU && (vkCode == VK_LMENU || vkCode == VK_RMENU))
+	if (config.modifier == VK_MENU && (vkCode == VK_LMENU || vkCode == VK_RMENU))
 		return true;
-	if (modifier == VK_SHIFT && (vkCode == VK_LSHIFT || vkCode == VK_RSHIFT))
+	if (config.modifier == VK_SHIFT && (vkCode == VK_LSHIFT || vkCode == VK_RSHIFT))
 		return true;
-	if (modifier == VK_CONTROL && (vkCode == VK_LCONTROL || vkCode == VK_RCONTROL))
+	if (config.modifier == VK_CONTROL && (vkCode == VK_LCONTROL || vkCode == VK_RCONTROL))
 		return true;
 	return false;
 }

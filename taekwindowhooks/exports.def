@@ -1,7 +1,7 @@
 LIBRARY	"taekwindowhooks"
 EXPORTS
 	init
-	readConfig
+	applyConfig
 	mouseProc
 	lowLevelKeyboardProc
 	uninit

@@ -1,4 +1,5 @@
 #include "main.hpp"
+#include "config.hpp"
 #include "debuglog.hpp"
 
 /* The handle of this instance of the DLL, set in DllMain.
@@ -45,4 +46,10 @@ void uninit() {
 	CLOSEDEBUGLOG();
 	mainThreadId = 0;
 	mainProcessId = 0;
+}
+
+void applyConfig(DLLConfiguration *newConfig) {
+	DEBUGLOG("Updating configuration");
+	config = *newConfig;
+	DEBUGLOG("Move button: %d; resize button: %d; modifier: %d", config.moveButton, config.resizeButton, config.modifier);
 }

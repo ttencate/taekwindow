@@ -231,6 +231,7 @@ void destroyTrayIcon() {
 	DestroyWindow(iconWindowHandle);
 	UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
 	DestroyIcon(iconHandle);
+
 	haveIcon = false;
 }
 

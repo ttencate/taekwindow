@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include "config.hpp"
 
 #include <stdio.h>
 
@@ -34,11 +35,7 @@ bool haveDragged = false;
 
 // Configuration options
 
-int modifier = VK_LMENU;
-
-MouseButton moveButton = mbLeft, resizeButton = mbRight;
-
-ResizeMode resizeMode = rmNineRectangles;
+DLLConfiguration config = {0};
 
 // Debugging
 

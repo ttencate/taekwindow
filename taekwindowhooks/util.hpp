@@ -1,7 +1,7 @@
 #ifndef _UTIL_HPP_
 #define _UTIL_HPP_
 
-#include "types.hpp"
+#include "../shared/types.hpp"
 
 #include <windows.h>
 

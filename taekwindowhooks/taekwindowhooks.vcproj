@@ -22,6 +22,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)\build\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -61,7 +62,7 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalDependencies="kernel32.lib"
-				ModuleDefinitionFile="hooks.def"
+				ModuleDefinitionFile="exports.def"
 				OptimizeReferences="1"
 				EnableCOMDATFolding="1"
 				EntryPointSymbol=""
@@ -96,6 +97,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)\build\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -130,7 +132,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				ModuleDefinitionFile="hooks.def"
+				ModuleDefinitionFile="exports.def"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -167,10 +169,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\config.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\debuglog.cpp"
 				>
 			</File>
@@ -180,10 +178,6 @@
 			</File>
 			<File
 				RelativePath=".\hooks.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\hooks.def"
 				>
 			</File>
 			<File
@@ -229,10 +223,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\types.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\util.hpp"
 				>
 			</File>
@@ -252,8 +242,24 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="Header Files (shared)"
+			>
+			<File
+				RelativePath="..\shared\dllconfig.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\shared\types.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="Metadata"
 			>
+			<File
+				RelativePath=".\exports.def"
+				>
+			</File>
 			<File
 				RelativePath="..\information.xml"
 				>

@@ -1,6 +1,7 @@
 #include "messages.hpp"
 #include "trayicon.hpp"
 #include "util.hpp"
+#include "config.hpp"
 
 #include <windows.h>
 #include <stdio.h>
@@ -8,7 +9,7 @@
 HMODULE dllHandle = NULL;
 DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
-void (*readConfigProc)() = NULL;
+void (*applyConfigProc)(DLLConfiguration*) = NULL;
 HOOKPROC mouseProc = NULL;
 HOOKPROC lowLevelKeyboardProc = NULL;
 HHOOK mouseHook = NULL;
@@ -46,6 +47,12 @@ void uninitDll() {
 	(*uninitProc)();
 }
 
+/* Updates the configuration settings in the DLL.
+ */
+void applyDLLConfig(DLLConfiguration *dllconfig) {
+	(*applyConfigProc)(dllconfig);
+}
+
 /* Initializes the function pointers to functions in the DLL.
  * Returns true on success.
  */
@@ -56,8 +63,8 @@ bool findProcs() {
 	uninitProc = (void (*)())GetProcAddress(dllHandle, "uninit");
 	if (!uninitProc)
 		return false;
-	readConfigProc = (void (*)())GetProcAddress(dllHandle, "readConfig");
-	if (!readConfigProc)
+	applyConfigProc = (void (*)(DLLConfiguration*))GetProcAddress(dllHandle, "applyConfig");
+	if (!applyConfigProc)
 		return false;
 	mouseProc = (HOOKPROC)GetProcAddress(dllHandle, "mouseProc");
 	if (!mouseProc)
@@ -66,12 +73,6 @@ bool findProcs() {
 	if (!lowLevelKeyboardProc)
 		return false;
 	return true;
-}
-
-/* Kicks the DLL to read its configuration from the registry.
- */
-void readConfig() {
-	(*readConfigProc)();
 }
 
 /* Attaches global event hooks.
@@ -120,9 +121,20 @@ void disable() {
 	updateTrayIcon();
 }
 
+void applyEXEConfig(EXEConfiguration *config) {
+	showTrayIcon(config->systemTrayIcon);
+}
+
+void reloadConfig() {
+	DLLConfiguration dllconfig;
+	readConfigFromRegistry(&dllconfig, &config);
+	applyDLLConfig(&dllconfig);
+	applyEXEConfig(&config);
+}
+
 /* The main function for the application.
  */
-int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 	// First, load the DLL with the event handlers in it.
 	if (!loadDll()) {
@@ -142,7 +154,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 			} else {
 				// We're the first to initialize the DLL, continue.
 				// Load the configuration from the registry.
-				readConfig();
+				reloadConfig();
 				// Attach the event hooks.
 				if (!attachHooks()) {
 					showLastError(L"Error attaching hooks");
@@ -160,7 +172,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 						} else {
 							switch (msg.message) {
 								case RELOAD_CONFIG_MESSAGE:
-									readConfig();
+									reloadConfig();
 									break;
 								default:
 									TranslateMessage(&msg);

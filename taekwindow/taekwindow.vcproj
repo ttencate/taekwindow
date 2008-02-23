@@ -194,6 +194,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\config.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -211,6 +215,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\config.hpp"
+				>
+			</File>
 			<File
 				RelativePath=".\main.hpp"
 				>
@@ -330,6 +338,18 @@
 						OutputFile="$(OutDir)\readme.html"
 					/>
 				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files (shared)"
+			>
+			<File
+				RelativePath="..\shared\dllconfig.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\shared\types.hpp"
+				>
 			</File>
 		</Filter>
 	</Files>
