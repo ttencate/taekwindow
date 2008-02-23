@@ -147,6 +147,14 @@
 	</feature-requests>
 
 	<versions>
+		<version nr="0.3">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
+				added an optional system tray icon
+			</feature>
+			<bugfix>
+				when no settings are present in the registry, the configuration tool is now filled with default values instead of none at all
+			</bugfix>
+		</version>
 		<version nr="0.2.1">
 			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653063&amp;group_id=185457&amp;atid=913353">
 				moving and resizing now works properly when dragging title bar or borders

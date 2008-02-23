@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
-using Microsoft.Win32;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
@@ -15,8 +14,6 @@ namespace TaekwindowConfig
 {
 	public partial class ConfigForm : Form
 	{
-		private static string settingsKey = "Software\\Taekwindow\\0.2";
-
 		public ConfigForm()
 		{
 			InitializeComponent();
@@ -28,41 +25,41 @@ namespace TaekwindowConfig
 			website.Text = VersionInfo.Website;
 			email.Text = VersionInfo.Email;
 			license.Text = "This program is licensed under the BSD license. This means you are free and welcome to distribute this program. See the " + VersionInfo.ReadmeFile + " file for details.";
+
 			loadSettings();
 		}
 
 		private void loadSettings()
 		{
-			readRegistry();
-			startAtLogon.Checked = File.Exists(linkFilename());
+			Configuration config = new Configuration();
+			try {
+				config.ReadFromEnvironment();
+			} catch (Exception ex) {
+				MessageBox.Show(ex.Message, "Error loading configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			configToGui(config);
 			settingsSaved = true;
 		}
 
-		private void readRegistry()
+		private void configToGui(Configuration config)
 		{
-			RegistryKey key = Registry.CurrentUser.OpenSubKey(settingsKey);
-			if (key != null) {
-				systemTrayIcon.Checked = ((int)key.GetValue("systemTrayIcon", true) != 0);
+			startAtLogon.Checked = config.StartAtLogon;
+			systemTrayIcon.Checked = config.SystemTrayIcon;
 
-				Modifier modifier = (Modifier)key.GetValue("modifier", Modifier.LeftAlt);
-				leftAlt.Checked = (modifier == Modifier.LeftAlt);
-				eitherAlt.Checked = (modifier == Modifier.Alt);
-				rightAlt.Checked = (modifier == Modifier.RightAlt);
+			leftAlt.Checked = (config.Modifier == Modifier.LeftAlt);
+			eitherAlt.Checked = (config.Modifier == Modifier.Alt);
+			rightAlt.Checked = (config.Modifier == Modifier.RightAlt);
 
-				MouseButton moveButton = (MouseButton)key.GetValue("moveButton", MouseButton.Left);
-				moveLeft.Checked = (moveButton == MouseButton.Left);
-				moveMiddle.Checked = (moveButton == MouseButton.Middle);
-				moveRight.Checked = (moveButton == MouseButton.Right);
+			moveLeft.Checked = (config.MoveButton == MouseButton.Left);
+			moveMiddle.Checked = (config.MoveButton == MouseButton.Middle);
+			moveRight.Checked = (config.MoveButton == MouseButton.Right);
 
-				MouseButton resizeButton = (MouseButton)key.GetValue("resizeButton", MouseButton.Right);
-				resizeLeft.Checked = (resizeButton == MouseButton.Left);
-				resizeMiddle.Checked = (resizeButton == MouseButton.Middle);
-				resizeRight.Checked = (resizeButton == MouseButton.Right);
+			resizeLeft.Checked = (config.ResizeButton == MouseButton.Left);
+			resizeMiddle.Checked = (config.ResizeButton == MouseButton.Middle);
+			resizeRight.Checked = (config.ResizeButton == MouseButton.Right);
 
-				ResizeMode resizeMode = (ResizeMode)key.GetValue("resizeMode", ResizeMode.NineRectangles);
-				bottomRight.Checked = (resizeMode == ResizeMode.BottomRight);
-				nineRectangles.Checked = (resizeMode == ResizeMode.NineRectangles);
-			}
+			bottomRight.Checked = (config.ResizeMode == ResizeMode.BottomRight);
+			nineRectangles.Checked = (config.ResizeMode == ResizeMode.NineRectangles);
 		}
 
 		/// <summary>
@@ -78,69 +75,44 @@ namespace TaekwindowConfig
 		/// </summary>
 		private void saveSettings()
 		{
-			bool success = true;
-			if (writeRegistry()) {
-				triggerReload();
-			} else {
-				success = false;
+			Configuration config = guiToConfig();
+			try {
+				config.WriteToEnvironment();
+			} catch (Exception ex) {
+				MessageBox.Show(ex.Message, "Error saving configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
 			}
-			if (startAtLogon.Checked) {
-				if (!createShortcut()) {
-					success = false;
-				}
-			} else {
-				if (!deleteShortcut()) {
-					success = false;
-				}
-			}
-			if (success) {
-				settingsSaved = true;
-			}
+			settingsSaved = true;
+
+			triggerReload();
 		}
 
 		/// <summary>
-		/// Writes the settings to the registry.
+		/// Takes the settings from the GUI controls and puts them into a Configuration object.
 		/// </summary>
-		/// <returns>true on success</returns>
-		private bool writeRegistry()
+		private Configuration guiToConfig()
 		{
-			RegistryKey key;
-			try {
-				key = Registry.CurrentUser.CreateSubKey(settingsKey);
-			} catch (Exception ex) {
-				MessageBox.Show(
-					String.Format("Could not open registry key {0} for writing:\n{1}\n\nYour settings were not saved.", ex.Message, settingsKey),
-					"Error saving settings",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Exclamation);
-				return false;
-			}
+			Configuration config = new Configuration();
 
-			key.SetValue("systemTrayIcon", systemTrayIcon.Checked ? 1 : 0, RegistryValueKind.DWord);
-
-			Modifier modifier =
+			config.StartAtLogon = startAtLogon.Checked;
+			config.SystemTrayIcon = systemTrayIcon.Checked;
+			config.Modifier =
 				rightAlt.Checked ? Modifier.RightAlt :
 				eitherAlt.Checked ? Modifier.Alt :
 				Modifier.LeftAlt;
-			key.SetValue("modifier", modifier, RegistryValueKind.DWord);
-
-			MouseButton moveButton =
+			config.MoveButton =
 				moveMiddle.Checked ? MouseButton.Middle :
 				moveRight.Checked ? MouseButton.Right :
 				MouseButton.Left;
-			key.SetValue("moveButton", moveButton, RegistryValueKind.DWord);
-
-			MouseButton resizeButton =
+			config.ResizeButton =
 				resizeLeft.Checked ? MouseButton.Left :
 				resizeMiddle.Checked ? MouseButton.Middle :
 				MouseButton.Right;
-			key.SetValue("resizeButton", resizeButton, RegistryValueKind.DWord);
+			config.ResizeMode =
+				bottomRight.Checked ? ResizeMode.BottomRight :
+				ResizeMode.NineRectangles;
 
-			ResizeMode resizeMode = bottomRight.Checked ? ResizeMode.BottomRight : ResizeMode.NineRectangles;
-			key.SetValue("resizeMode", resizeMode, RegistryValueKind.DWord);
-
-			key.Close();
-			return true;
+			return config;
 		}
 
 		/// <summary>
@@ -167,87 +139,6 @@ namespace TaekwindowConfig
 			if (attempted && !succeeded) {
 				MessageBox.Show(this, String.Format("{1} seems to be running, but the reloading of its settings failed:\n{0}\n\nYour settings were saved successfully. Restart {1} manually to make them effective.", new Win32Exception(lastError).Message, VersionInfo.Title), "Error triggering settings reload", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
-		}
-
-		/// <summary>
-		/// Locates taekwindow.exe.
-		/// </summary>
-		/// <returns>The full path to taekwindow.exe, or null if not found.</returns>
-		private string exeFilename()
-		{
-			string f = Directory.GetParent(Application.ExecutablePath).FullName + "\\taekwindow.exe";
-			if (File.Exists(f))
-				return f;
-			else
-				return null;
-		}
-
-		/// <summary>
-		/// Determines where to place the startup shortcut.
-		/// </summary>
-		/// <returns>The full path to the startup shortcut, or null if it could not be determined.</returns>
-		private string linkFilename()
-		{
-			return System.Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\Taekwindow.lnk";
-		}
-
-		/// <summary>
-		/// Creates a startup shortcut, or leaves it alone if it exists.
-		/// </summary>
-		/// <returns>true on success</returns>
-		private bool createShortcut()
-		{
-			string lnk = linkFilename();
-			if (File.Exists(lnk))
-				return true;
-
-			string exe = exeFilename();
-			if (exe == null) {
-				MessageBox.Show(this, "The file taekwindow.exe cannot be found in the directory of the current application. The shortcut can not be created.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-				return false;
-			}
-
-			try {
-				// Use the Windows Scripting Host to create a shortcut.
-				// It would probably be better to use the IShellLink COM interface from shell32.dll,
-				// but I somehow can't get that to work.
-				// Also, it would be nice if I managed to manually declare the required interfaces,
-				// so we could do away with the generated interop DLL.
-				IWshRuntimeLibrary.IWshShell shell = new IWshRuntimeLibrary.WshShell();
-				IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(lnk);
-				link.TargetPath = exe;
-				link.Arguments = "";
-				link.WorkingDirectory = Directory.GetParent(exe).FullName;
-				link.Description = VersionInfo.Title;
-				link.IconLocation = exe;
-				link.Save();
-			} catch (Exception ex) {
-				MessageBox.Show(this, String.Format("The shortcut can not be created for the following reason:\n{0}", ex.Message), "Failed to create shortcut", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-				return false;
-			}
-			
-			return true;
-		}
-
-		/// <summary>
-		/// Deletes the startup shortcut if it is there.
-		/// </summary>
-		/// <returns>true on success</returns>
-		private bool deleteShortcut()
-		{
-			string lnk = linkFilename();
-			if (!File.Exists(lnk)) {
-				return true;
-			}
-			
-			try {
-				File.Delete(lnk);
-			} catch (Exception ex) {
-				MessageBox.Show(this, String.Format("The shortcut can not be deleted for the following reason:\n{0}", ex.Message), "Failed to create shortcut", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-				return false;
-			}
-
-			return true;
 		}
 
 		private void okButton_Click(object sender, EventArgs e)

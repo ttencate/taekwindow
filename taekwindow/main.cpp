@@ -107,18 +107,22 @@ bool isEnabled() {
 	return (mouseHook && lowLevelKeyboardHook);
 }
 
-void enable() {
+bool enable() {
 	if (isEnabled())
-		return;
-	attachHooks();
+		return true;
+	if (!attachHooks())
+		return false;
 	updateTrayIcon();
+	return true;
 }
 
-void disable() {
+bool disable() {
 	if (!isEnabled())
-		return;
-	detachHooks();
+		return true;
+	if (!detachHooks())
+		return false;
 	updateTrayIcon();
+	return true;
 }
 
 void applyEXEConfig(EXEConfiguration *config) {
@@ -156,11 +160,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				// Load the configuration from the registry.
 				reloadConfig();
 				// Attach the event hooks.
-				if (!attachHooks()) {
+				if (!enable()) {
 					showLastError(L"Error attaching hooks");
 				} else {
-					// Create a tray icon.
-					showTrayIcon(true);
 					// main message loop
 					BOOL getMsgRetVal;
 					MSG msg;

@@ -9,6 +9,7 @@
  * that hooked up the handler in the first place.
  * Everything in this segment must be initialized in order to actually become shared.
  * This syntax probably only works with the Microsoft compiler...
+ * See http://support.microsoft.com/kb/125677 for more information.
  */
 #pragma data_seg(".SHARED")
 

@@ -6,9 +6,10 @@
  */
 bool isEnabled();
 
-/* Enables and disables the program.
+/* Enables or disables the program.
+ * Returns true on success.
  */
-void enable();
-void disable();
+bool enable();
+bool disable();
 
 #endif
