@@ -14,7 +14,7 @@
 			<xsl:if test="@nr = $shortversion">
 				<xsl:for-each select="feature">
 					<xsl:text xml:space="preserve">- </xsl:text>
-					<xsl:value-of select="."/>
+					<xsl:value-of select="normalize-space(.)"/>
 					<xsl:text xml:space="preserve">
 </xsl:text>
 				</xsl:for-each>

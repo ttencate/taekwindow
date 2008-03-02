@@ -56,6 +56,11 @@
 			</strong>
 		</p>
 
+		<h1>RSS feed</h1>
+
+		<p>
+			To stay updated with the latest version, you can subscribe to the <a href="http://sourceforge.net/export/rss2_projnews.php?group_id=185457&amp;rss_fulltext=1">Taekwindow News RSS Feed</a>.
+		</p>
 
 		<xsl:comment xml:space="preserve">#include virtual="footer.part.shtml"</xsl:comment>
 	</xsl:template>

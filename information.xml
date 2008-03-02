@@ -5,7 +5,7 @@
 	<filename>taekwindow</filename>
 	<majorversion>0</majorversion>
 	<minorversion>2</minorversion>
-	<revision>1</revision>
+	<revision>2</revision>
 	<build>0</build>
 	<author>Thomas ten Cate</author>
 	<email>ttencate+taekwindow@gmail.com</email>
@@ -169,12 +169,15 @@
 	</feature-requests>
 
 	<versions>
-		<version nr="0.3">
+		<version nr="0.2.2">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
 				added an optional system tray icon
 			</feature>
 			<feature>
 				the mouse cursor changes while moving or resizing
+			</feature>
+			<feature>
+				middle mouse click on the title bar pushes a window to the background
 			</feature>
 			<bugfix>
 				when no settings are present in the registry, the configuration tool is now filled with default values instead of none at all
