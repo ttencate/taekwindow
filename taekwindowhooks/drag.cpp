@@ -2,6 +2,7 @@
 #include <windows.h>
 
 #include "drag.hpp"
+#include "actions.hpp"
 #include "config.hpp"
 #include "debuglog.hpp"
 
@@ -20,6 +21,16 @@ extern POINT lastMousePos;
  * Only meaningful if currentState is dsDragging.
  */
 extern HWND draggedWindow;
+
+/* The window in the Z order that comes before draggedWindow.
+ * Needed because mouse actions on the window pull it to the front, and we need to put it back.
+ */
+extern HWND prevInZOrder;
+
+/* The window that was last active.
+ * Needed because some actions change the focus to another window, and we need to restore it.
+ */
+extern HWND lastForegroundWindow;
 
 /* The last known window rectangle of the draggedWindow, in client coordinates.
  * Saves us calls to GetWindowRect() and conversions.
@@ -127,8 +138,9 @@ int getResizingCursor() {
  * Called by startMoveAction and startResizeAction.
  */
 void startDragAction(HWND window, POINT mousePos) {
-	// Store window handle of the victim.
+	// Store window handle and Z order position of the victim.
 	draggedWindow = window;
+	prevInZOrder = GetNextWindow(window, GW_HWNDPREV);
 	// Store current mouse position.
 	lastMousePos = mousePos;
 	// Capture the mouse so it'll still get events even if the mouse leaves the window
@@ -145,12 +157,6 @@ void startDragAction(HWND window, POINT mousePos) {
 		lastRect.left = topLeft.x; lastRect.top = topLeft.y;
 		lastRect.right = bottomRight.x; lastRect.bottom = bottomRight.y;
 	}
-	// Notify the window that it's going to be moved/resized.
-	// PuTTY, for one, responds to this, by not sending terminal resize events over the network during a resize.
-	// Update: don't, because it confuses some apps sometimes.
-	// E.g. try to resize the Properties window of Spy++ (which is unresizable),
-	// then the main window starts to behave oddly.
-	// SendMessage(draggedWindow, WM_ENTERSIZEMOVE, 0, 0);
 }
 
 void startMoveAction(HWND window, POINT mousePos) {
@@ -190,7 +196,7 @@ POINT mouseDelta(POINT const &mousePos) {
 }
 
 void updateWindowPos(UINT flags) {
-	SetWindowPos(draggedWindow, NULL, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | SWP_NOOWNERZORDER | flags);
+	SetWindowPos(draggedWindow, prevInZOrder, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | flags);
 }
 
 void doMoveAction(POINT mousePos) {
@@ -248,9 +254,11 @@ void doResizeAction(POINT mousePos) {
 
 void endDragAction() {
 	ReleaseCapture();
-	// Notify the window that its moving/resizing is now over.
-	// Update: turned off for now, see startDragAction for explanation.
-	// SendMessage(draggedWindow, WM_EXITSIZEMOVE, 0, 0);
+	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
+		// The active window was deactivated when we clicked the dragged window.
+		// Restore the previously active window to active.
+		activateWithoutRaise(lastForegroundWindow);
+	}
 }
 
 void endMoveAction() {

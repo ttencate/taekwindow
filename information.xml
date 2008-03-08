@@ -170,6 +170,12 @@
 
 	<versions>
 		<version nr="0.2.3">
+			<feature see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913356">
+				windows are no longer raised when they are moved or resized
+			</feature>
+			<feature see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913356">
+				windows are no longer activated when they are moved or resized
+			</feature>
 			<bugfix see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1908683&amp;group_id=185457&amp;atid=913353">
 				the error message “Specified cast is not valid” no longer appears when starting the configuration tool after an upgrade from 0.2.1 or earlier
 			</bugfix>

@@ -28,6 +28,8 @@ POINT lastMousePos = { 0, 0 };
 
 HWND draggedWindow = NULL;
 
+HWND prevInZOrder = NULL;
+
 RECT lastRect = { 0, 0, 0, 0 };
 
 bool modifierDown = false;

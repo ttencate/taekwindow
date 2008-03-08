@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include "debuglog.hpp"
 
 MouseButton eventToButton(WPARAM wParam) {
 	switch (wParam) {
@@ -19,6 +20,16 @@ MouseButton eventToButton(WPARAM wParam) {
 			return mbRight;
 	}
 	return mbLeft; // fallback
+}
+
+void activateWithoutRaise(HWND window) 
+{
+	DEBUGLOG("Activating window 0x%X without raising", window);
+	// Save the Z position of the previously active window.
+	HWND insertAfter = GetNextWindow(window, GW_HWNDPREV);
+	SetForegroundWindow(window);
+	// This has pulled it to the front; so change its position in the Z order back.
+	SetWindowPos(window, insertAfter, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 #ifdef _DEBUG
