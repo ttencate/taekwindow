@@ -112,7 +112,7 @@ namespace TaekwindowConfig
 		{
 			RegistryKey key = Registry.CurrentUser.OpenSubKey(settingsKey);
 			if (key != null) {
-				SystemTrayIcon = ((int)key.GetValue("systemTrayIcon", SystemTrayIcon) != 0);
+				SystemTrayIcon = ((int)key.GetValue("systemTrayIcon", SystemTrayIcon ? 1 : 0) != 0);
 				Modifier = (Modifier)key.GetValue("modifier", Modifier);
 				MoveButton = (MouseButton)key.GetValue("moveButton", MoveButton);
 				ResizeButton = (MouseButton)key.GetValue("resizeButton", ResizeButton);
