@@ -169,6 +169,14 @@
 	</feature-requests>
 
 	<versions>
+		<version nr="0.2.3">
+			<bugfix see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1908683&amp;group_id=185457&amp;atid=913353">
+				the error message “Specified cast is not valid” no longer appears when starting the configuration tool after an upgrade from 0.2.1 or earlier
+			</bugfix>
+			<bugfix see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1905700&amp;group_id=185457&amp;atid=913353">
+				pushing back an inactive window no longer raises the active one
+			</bugfix>
+		</version>
 		<version nr="0.2.2">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
 				added an optional system tray icon
