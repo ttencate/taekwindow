@@ -13,9 +13,13 @@ void doPushBack(HWND window) {
 	// Push the window to the back.
 	SetWindowPos(window, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 
-	// Reactivate the previous window, which pulls it to the front; so change its position in the Z order back.
+	// Reactivate the previous window.
 	if (lastForegroundWindow && lastForegroundWindow != window) {
 		DEBUGLOG("Activating previously active window 0x%X", lastForegroundWindow);
+		// Save the Z position of the previously active window.
+		HWND insertAfter = GetNextWindow(lastForegroundWindow, GW_HWNDPREV);
 		SetForegroundWindow(lastForegroundWindow);
+		// This has pulled it to the front; so change its position in the Z order back.
+		SetWindowPos(lastForegroundWindow, insertAfter, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 	}
 }
