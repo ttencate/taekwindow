@@ -235,11 +235,23 @@ bool MaximizedMoveState::onMouseMove(POINT mousePos) {
 		monitorInfo.cbSize = sizeof(monitorInfo);
 		GetMonitorInfo(currentMonitor, &monitorInfo);
 		DEBUGLOG("Monitor work area at %d,%d (%dx%d)", monitorInfo.rcWork.left, monitorInfo.rcWork.top, monitorInfo.rcWork.right - monitorInfo.rcWork.left, monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-		// Set the window's new rectangle.
-		lastRect = monitorInfo.rcWork;
-		// Set the new placement of the window.
-		// Note that this may involve resizing; hence we do not pass in SWP_NORESIZE.
-		updateWindowPos(0);
+		// Now move the window by unmaximizing, moving, remaximizing.
+		// First, lock drawing to prevent annoying flicker.
+		LockWindowUpdate(draggedWindow);
+		// Use SetWindowPlacement to change the style to SW_RESTORE, because ShowWindow does animations.
+		WINDOWPLACEMENT windowPlacement;
+		windowPlacement.length = sizeof(windowPlacement);
+		GetWindowPlacement(draggedWindow, &windowPlacement);
+		windowPlacement.showCmd = SW_RESTORE;
+		SetWindowPlacement(draggedWindow, &windowPlacement);
+		// Move the restored window to the top left of the working area of the desired monitor.
+		SetWindowPos(draggedWindow, prevInZOrder, monitorInfo.rcWork.left, monitorInfo.rcWork.top, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE);
+		// Unlock window drawing for the final stage.
+		LockWindowUpdate(NULL);
+		// And remaximize.
+		GetWindowPlacement(draggedWindow, &windowPlacement);
+		windowPlacement.showCmd = SW_MAXIMIZE;
+		SetWindowPlacement(draggedWindow, &windowPlacement);
 	}
 	return true;
 }
