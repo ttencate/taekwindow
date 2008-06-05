@@ -16,13 +16,12 @@ void BaseState::enter() {
 	currentState = this;
 }
 
-HWND NormalState::findGrabbedParent(HWND window, bool wantResizable) {
+HWND NormalState::findParent(HWND window, bool (*criterium)(HWND)) {
 	HWND ancestor = window;
 	while (true) {
 		DEBUGLOG("Current ancestor is 0x%X", ancestor);
 		if (ancestor && ancestor != INVALID_HANDLE_VALUE) {
-			if (wantResizable && isResizableWindow(ancestor) ||
-				!wantResizable && isMovableWindow(ancestor)) {
+			if (criterium(ancestor)) {
 				DEBUGLOG("We like your style; returning 0x%X", ancestor);
 				return ancestor;
 			}
@@ -40,14 +39,11 @@ bool NormalState::isFullscreenWindow(HWND window) {
 }
 
 bool NormalState::isMovableWindow(HWND window) {
-	if (IsZoomed(window))
-		return false; // disallow moving maximized windows
-	if (isFullscreenWindow(window))
-		return false; // disallow moving fullscreen windows
-	LONG style = GetWindowLong(window, GWL_STYLE);
-	if ((style & WS_CAPTION) != WS_CAPTION)
-		return false;
-	return true;
+	return isCaptionWindow(window) && !IsZoomed(window) && !isFullscreenWindow(window);
+}
+
+bool NormalState::isMaximizedMovableWindow(HWND window) {
+	return isCaptionWindow(window) && IsZoomed(window) && !isFullscreenWindow(window);
 }
 
 bool NormalState::isResizableWindow(HWND window) {
@@ -62,6 +58,11 @@ bool NormalState::isResizableWindow(HWND window) {
 		return false;
 }
 
+bool NormalState::isCaptionWindow(HWND window) {
+	LONG style = GetWindowLong(window, GWL_STYLE);
+	return (style & WS_CAPTION) == WS_CAPTION;
+}
+
 bool NormalState::isModifierDown() {
 	return GetAsyncKeyState(config.modifier) & 0x8000;
 }
@@ -71,29 +72,30 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 		// This is not interesting. Discard ASAP.
 		return false;
 	}
+	if (button != config.moveButton && button != config.resizeButton) {
+		// Wrong button. Discard.
+		return false;
+	}
 	DEBUGLOG("Handling button down event");
 	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
 	if (button == config.moveButton) {
-		// Try to find movable ancestor.
-		window = findGrabbedParent(window, false);
+		window = findParent(window, isMovableWindow);
 		if (window) {
 			moveState.enter(button, window, mousePos);
-		} else {
-			DEBUGLOG("Ignoring button down event because no movable parent was found", window);
-			ignoreState.enter(button);
+			return true;
 		}
-		return true;
 	} else if (button == config.resizeButton) {
-		// Try to find resizable ancestor.
-		window = findGrabbedParent(window, true);
+		window = findParent(window, isResizableWindow);
 		if (window) {
 			resizeState.enter(button, window, mousePos);
-		} else {
-			DEBUGLOG("Ignoring button down event because no resizable parent was found", window);
-			ignoreState.enter(button);
+			return true;
 		}
-		return true;
+	} else {
+		// Nothing of interest: unused button.
+		return false;
 	}
+	// Unsuitable window. Ignore.
+	ignoreState.enter(button);
 	return false;
 }
 
@@ -110,11 +112,11 @@ bool MouseDownState::onMouseUp(MouseButton button, HWND window, POINT mousePos) 
 	return true;
 }
 
-void DeformState::enter(MouseButton button, HWND window, POINT mousePos) {
+void DeformState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
 	MouseDownState::enter(button);
 	// Store window handle and Z order position of the victim.
-	draggedWindow = window;
-	prevInZOrder = GetNextWindow(window, GW_HWNDPREV);
+	draggedWindow = parentWindow;
+	prevInZOrder = GetNextWindow(parentWindow, GW_HWNDPREV);
 	// Store current mouse position.
 	lastMousePos = mousePos;
 	// Capture the mouse so it'll still get events even if the mouse leaves the window
@@ -172,9 +174,9 @@ void DeformState::restoreCursor() {
 	DestroyCursor(SetCursor(prevCursor));
 }
 
-void MoveState::enter(MouseButton button, HWND window, POINT mousePos) {
+void MoveState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting move action");
-	DeformState::enter(button, window, mousePos);
+	DeformState::enter(button, parentWindow, mousePos);
 	setCursor(OCR_SIZEALL);
 }
 
@@ -195,9 +197,9 @@ bool MoveState::onMouseMove(POINT mousePos) {
 	return true;
 }
 
-void ResizeState::enter(MouseButton button, HWND window, POINT mousePos) {
+void ResizeState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting resize action");
-	DeformState::enter(button, window, mousePos);
+	DeformState::enter(button, parentWindow, mousePos);
 	// Find out at which corner to resize.
 	ScreenToClient(draggedWindow, &mousePos);
 	switch (config.resizeMode) {

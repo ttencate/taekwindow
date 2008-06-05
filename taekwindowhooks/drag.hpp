@@ -6,8 +6,6 @@
 #include "util.hpp"
 #include "offset_ptr.hpp"
 
-// TODO restore comments above everything
-
 /* The dragging system is essentially a state machine. Its input consists of mouse events.
  * Upon state transitions, it may do something. This class is the ancestor of all states.
  */
@@ -61,10 +59,9 @@ public:
 protected:
 	/* Similar to GetAncestor, but works on MDI windows as well.
 	 * Returns the first parent in the parent chain of the given window
-	 * that is movable/resizable (depending on wantResizable),
-	 * or NULL if there is no such parent.
+	 * that meets the given criterium, or NULL if there is no such parent.
 	 */
-	static HWND findGrabbedParent(HWND window, bool wantResizable);
+	static HWND findParent(HWND window, bool (*criterium)(HWND));
 
 	/* Returns true if the modifier key is currently down.
 	 */
@@ -74,9 +71,17 @@ protected:
 	 */
 	static bool isMovableWindow(HWND window);
 
+	/* Return true if this window is maximized, but could be moved to another monitor.
+	 */
+	static bool isMaximizedMovableWindow(HWND window);
+
 	/* Returns true if we should allow resizing of this window.
 	 */
 	static bool isResizableWindow(HWND window);
+
+	/* Returns true if the window has the WS_CAPTION style.
+	 */
+	static bool isCaptionWindow(HWND window);
 
 	/* Returns true if the window is fullscreen.
 	 */
@@ -111,8 +116,10 @@ protected:
 class DeformState : public MouseDownState {
 public:
 	/* Stores the initial state for later use.
+	 * Note that parentWindow refers to the window we should move/resize,
+	 * not the one bottommost window that receives the actual events.
 	 */
-	virtual void enter(MouseButton button, HWND window, POINT mousePos);
+	virtual void enter(MouseButton button, HWND parentWindow, POINT mousePos);
 
 	/* Ends the drag action.
 	 */
@@ -172,7 +179,7 @@ public:
 
 	/* Sets up the cursor.
 	 */
-	virtual void enter(MouseButton button, HWND window, POINT mousePos);
+	virtual void enter(MouseButton button, HWND parentWindow, POINT mousePos);
 
 	/* Restores the cursor.
 	 */
@@ -189,7 +196,7 @@ public:
 
 	/* Sets up the cursor and the resize type.
 	 */
-	virtual void enter(MouseButton button, HWND window, POINT mousePos);
+	virtual void enter(MouseButton button, HWND parentWindow, POINT mousePos);
 
 	/* Restores the cursor.
 	 */
