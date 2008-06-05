@@ -27,6 +27,7 @@ DWORD mainProcessId = 0;
 
 NormalState normalState;
 MoveState moveState;
+MaximizedMoveState maximizedMoveState;
 ResizeState resizeState;
 IgnoreState ignoreState;
 offset_ptr<BaseState> currentState = &normalState;

@@ -8,6 +8,7 @@
 
 extern NormalState normalState;
 extern MoveState moveState;
+extern MaximizedMoveState maximizedMoveState;
 extern ResizeState resizeState;
 extern IgnoreState ignoreState;
 
@@ -39,11 +40,17 @@ bool NormalState::isFullscreenWindow(HWND window) {
 }
 
 bool NormalState::isMovableWindow(HWND window) {
-	return isCaptionWindow(window) && !IsZoomed(window) && !isFullscreenWindow(window);
+	return
+		isCaptionWindow(window) &&
+		!IsZoomed(window) &&
+		!isFullscreenWindow(window);
 }
 
 bool NormalState::isMaximizedMovableWindow(HWND window) {
-	return isCaptionWindow(window) && IsZoomed(window) && !isFullscreenWindow(window);
+	return
+		isCaptionWindow(window) &&
+		IsZoomed(window) &&
+		!isFullscreenWindow(window);
 }
 
 bool NormalState::isResizableWindow(HWND window) {
@@ -79,15 +86,21 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 	DEBUGLOG("Handling button down event");
 	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
 	if (button == config.moveButton) {
-		window = findParent(window, isMovableWindow);
-		if (window) {
-			moveState.enter(button, window, mousePos);
+		HWND parentWindow = findParent(window, isMovableWindow);
+		if (parentWindow) {
+			moveState.enter(button, parentWindow, mousePos);
 			return true;
+		} else {
+			parentWindow = findParent(window, isMaximizedMovableWindow);
+			if (parentWindow) {
+				maximizedMoveState.enter(button, parentWindow, mousePos);
+				return true;
+			}
 		}
 	} else if (button == config.resizeButton) {
-		window = findParent(window, isResizableWindow);
-		if (window) {
-			resizeState.enter(button, window, mousePos);
+		HWND parentWindow = findParent(window, isResizableWindow);
+		if (parentWindow) {
+			resizeState.enter(button, parentWindow, mousePos);
 			return true;
 		}
 	} else {
@@ -194,6 +207,40 @@ bool MoveState::onMouseMove(POINT mousePos) {
 	lastRect.right += delta.x;
 	lastRect.bottom += delta.y;
 	updateWindowPos(SWP_NOSIZE);
+	return true;
+}
+
+void MaximizedMoveState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
+	DEBUGLOG("Starting maximized move action");
+	DeformState::enter(button, parentWindow, mousePos);
+	// Remember the monitor that currently contains the window.
+	currentMonitor = MonitorFromWindow(parentWindow, MONITOR_DEFAULTTONULL);
+	setCursor(OCR_SIZEALL);
+}
+
+void MaximizedMoveState::exit() {
+	DEBUGLOG("Ending maximized move action");
+	DeformState::exit();
+	restoreCursor();
+}
+
+bool MaximizedMoveState::onMouseMove(POINT mousePos) {
+	DEBUGLOG("Handling maximized move action");
+	HMONITOR mouseMonitor = MonitorFromPoint(mousePos, MONITOR_DEFAULTTONEAREST);
+	if (mouseMonitor != currentMonitor) {
+		// Window needs to be moved to another monitor, while retaining its maximized state.
+		currentMonitor = mouseMonitor;
+		// Figure out where the monitor is on the virtual screen.
+		MONITORINFO monitorInfo;
+		monitorInfo.cbSize = sizeof(monitorInfo);
+		GetMonitorInfo(currentMonitor, &monitorInfo);
+		DEBUGLOG("Monitor work area at %d,%d (%dx%d)", monitorInfo.rcWork.left, monitorInfo.rcWork.top, monitorInfo.rcWork.right - monitorInfo.rcWork.left, monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+		// Set the window's new rectangle.
+		lastRect = monitorInfo.rcWork;
+		// Set the new placement of the window.
+		// Note that this may involve resizing; hence we do not pass in SWP_NORESIZE.
+		updateWindowPos(0);
+	}
 	return true;
 }
 

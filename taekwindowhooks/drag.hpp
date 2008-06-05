@@ -186,6 +186,29 @@ public:
 	virtual void exit();
 };
 
+/* The state active while the user is moving a maximized window.
+ * This is only possible across monitors; the window will retain its maximized state.
+ */
+class MaximizedMoveState : public DeformState {
+public:
+	/* Moves the window accordingly.
+	 */
+	virtual bool onMouseMove(POINT mousePos);
+
+	/* Sets up the cursor.
+	 */
+	virtual void enter(MouseButton button, HWND parentWindow, POINT mousePos);
+
+	/* Restores the cursor.
+	 */
+	virtual void exit();
+
+protected:
+	/* The monitor that the window is currently on.
+	 */
+	HMONITOR currentMonitor;
+};
+
 /* The state active while the user is resizing a window.
  */
 class ResizeState : public DeformState {
