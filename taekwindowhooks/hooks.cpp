@@ -22,6 +22,7 @@ extern DragState currentState;
 
 /* Whether or not dragging has occurred since the last key-down event of the Modifier.
  * If dragging has occurred, this prevents the key-up event to be passed on.
+ * TODO: this is currently not used; see comment in lowLevelKeyboardProc.
  */
 extern bool haveDragged;
 
@@ -110,6 +111,37 @@ void handlePushBack(HWND window) {
 	doPushBack(window);
 }
 
+/* Sets the value of modifierDown, and updates the other state variables accordingly.
+ */
+void setModifierDown(bool newDown) {
+	DEBUGLOG("Modifier going from %i to %i", wasDown, modifierDown);
+	if (modifierDown && !newDown) {
+		DEBUGLOG("Modifier released");
+		// Modifier was released. Only pass the event on if there was no drag event.
+		/* If we do this bit of code, the app will sometimes still think Alt is down. Test e.g. in Photoshop.
+		   This happens especially when both Alt keys are modifiers and we use them interchangably.
+		   I have not yet found a reliable way to reproduce this behaviour.
+		if (haveDragged) {
+			DEBUGLOG("Eating modifier up event");
+			return 1;
+		}
+		*/
+		haveDragged = false;
+	} else if (!modifierDown && newDown) {
+		DEBUGLOG("Modifier pressed");
+		// Modifier was pressed. There has been no drag event since.
+		haveDragged = false;
+	}
+	modifierDown = newDown;
+}
+
+/* Updates the value of the modifierDown variable from GetAsyncKeyState.
+ */
+void updateModifierDown() {
+	SHORT keyState = GetAsyncKeyState(config.modifier);
+	setModifierDown(keyState & 0x8000);
+}
+
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
  * see the SetWindowsHookEx documentation for details.
  */
@@ -130,7 +162,13 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONDOWN:
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
+				// Find out which button was pressed.
 				button = eventToButton(wParam);
+				// It can sometimes happen that the Alt-up event is not received by the lowLevelKeyboardProc.
+				// For example, when the user hits Ctrl+Alt+Del, the OS takes over before Alt is released,
+				// and we never get the release event, causing Alt to 'hang' after the user returns to the desktop.
+				// This hack prevents this problem.
+				updateModifierDown();
 				// Do we want to start handling a drag event?
 				if (modifierDown && currentState == dsNone && (button == config.moveButton || button == config.resizeButton)) {
 					handleDragStart(button, eventInfo->hwnd, eventInfo->pt);
@@ -174,6 +212,8 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	return res;
 }
 
+/* Whether or not the specified virtual-key code represents a modifier key that we're tracking.
+ */
 bool isModifier(DWORD vkCode) {
 	if (vkCode == config.modifier)
 		return true;
@@ -204,26 +244,8 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 #endif
 		if (isModifier(info->vkCode)) {
 			// Something MAY have happened to the modifier key, but this could also be a repeat.
-			bool wasDown = modifierDown;
-			modifierDown = !(info->flags & LLKHF_UP);
-			DEBUGLOG("Modifier going from %i to %i", wasDown, modifierDown);
-			if (wasDown && !modifierDown) {
-				DEBUGLOG("Modifier released");
-				// Modifier was released. Only pass the event on if there was no drag event.
-				/* If we do this bit of code, the app will sometimes still think Alt is down. Test e.g. in Photoshop.
-				   This happens especially when both Alt keys are modifiers and we use them interchangably.
-				   I have not yet found a reliable way to reproduce this behaviour.
-				if (haveDragged) {
-					DEBUGLOG("Eating modifier up event");
-					return 1;
-				}
-				*/
-				haveDragged = false;
-			} else if (!wasDown && modifierDown) {
-				DEBUGLOG("Modifier pressed");
-				// Modifier was pressed. There has been no drag event since.
-				haveDragged = false;
-			}
+			// The function handles both cases.
+			setModifierDown(!(info->flags & LLKHF_UP));
 		}
 	}
 	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored

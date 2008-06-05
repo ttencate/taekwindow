@@ -182,6 +182,9 @@
 			<bugfix see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1905700&amp;group_id=185457&amp;atid=913353">
 				pushing back an inactive window no longer raises the active one
 			</bugfix>
+			<bugfix see="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1982738&amp;group_id=185457&amp;atid=913353">
+				Alt no longer “hangs” after returning to a desktop that was locked with Ctrl+Alt+Del
+			</bugfix>
 		</version>
 		<version nr="0.2.2">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
