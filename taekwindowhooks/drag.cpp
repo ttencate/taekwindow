@@ -66,7 +66,7 @@ bool NormalState::isModifierDown() {
 	return GetAsyncKeyState(config.modifier) & 0x8000;
 }
 
-bool NormalState::onMouseDown(MouseButton button, HWND window, POINT pos) {
+bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 	if (!isModifierDown()) {
 		// This is not interesting. Discard ASAP.
 		return false;
@@ -77,7 +77,7 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT pos) {
 		// Try to find movable ancestor.
 		window = findGrabbedParent(window, false);
 		if (window) {
-			moveState.enter(button, window, pos);
+			moveState.enter(button, window, mousePos);
 		} else {
 			DEBUGLOG("Ignoring button down event because no movable parent was found", window);
 			ignoreState.enter(button);
@@ -87,7 +87,7 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT pos) {
 		// Try to find resizable ancestor.
 		window = findGrabbedParent(window, true);
 		if (window) {
-			resizeState.enter(button, window, pos);
+			resizeState.enter(button, window, mousePos);
 		} else {
 			DEBUGLOG("Ignoring button down event because no resizable parent was found", window);
 			ignoreState.enter(button);
@@ -103,20 +103,20 @@ void MouseDownState::enter(MouseButton button) {
 	downButton = button;
 }
 
-bool MouseDownState::onMouseUp(MouseButton button, HWND window, POINT pos) {
+bool MouseDownState::onMouseUp(MouseButton button, HWND window, POINT mousePos) {
 	if (button == downButton) {
 		normalState.enter();
 	}
 	return true;
 }
 
-void DeformState::enter(MouseButton button, HWND window, POINT pos) {
+void DeformState::enter(MouseButton button, HWND window, POINT mousePos) {
 	MouseDownState::enter(button);
 	// Store window handle and Z order position of the victim.
 	draggedWindow = window;
 	prevInZOrder = GetNextWindow(window, GW_HWNDPREV);
 	// Store current mouse position.
-	lastMousePos = pos;
+	lastMousePos = mousePos;
 	// Capture the mouse so it'll still get events even if the mouse leaves the window
 	// (could happen while resizing).
 	SetCapture(draggedWindow);
@@ -184,9 +184,9 @@ void MoveState::exit() {
 	restoreCursor();
 }
 
-bool MoveState::onMouseMove(POINT pos) {
+bool MoveState::onMouseMove(POINT mousePos) {
 	DEBUGLOG("Handling move action");
-	POINT delta = mouseDelta(pos);
+	POINT delta = mouseDelta(mousePos);
 	lastRect.left += delta.x;
 	lastRect.top += delta.y;
 	lastRect.right += delta.x;

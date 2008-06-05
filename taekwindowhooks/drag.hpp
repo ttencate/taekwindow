@@ -23,21 +23,21 @@ public:
 	{ }
 
 	/* Called when a mouse button is pressed.
-	 * window is the bottommost window in the hierarchy. pos is the location of the mouse cursor.
+	 * window is the bottommost window in the hierarchy. mousePos is the location of the mouse cursor.
 	 * If true is returned, the event will not be passed to the application.
 	 */
-	virtual bool onMouseDown(MouseButton button, HWND window, POINT pos) = 0;
+	virtual bool onMouseDown(MouseButton button, HWND window, POINT mousePos) = 0;
 
 	/* Called when a mouse button is released.
-	 * window is the bottommost window in the hierarchy. pos is the location of the mouse cursor.
+	 * window is the bottommost window in the hierarchy. mousePos is the location of the mouse cursor.
 	 * If true is returned, the event will not be passed to the application.
 	 */
-	virtual bool onMouseUp(MouseButton button, HWND window, POINT pos) = 0;
+	virtual bool onMouseUp(MouseButton button, HWND window, POINT mousePos) = 0;
 
 	/* Called when the mouse is moved. Overriding functions must call the base function.
 	 * If true is returned, the event will not be passed to the application.
 	 */
-	virtual bool onMouseMove(POINT pos) = 0;
+	virtual bool onMouseMove(POINT mousePos) = 0;
 };
 
 /* The normal state, when no cool dragging stuff is going on.
@@ -46,16 +46,16 @@ class NormalState : public BaseState {
 public:
 	/* Switches to another state if the button press is of interest to us.
 	 */
-	virtual bool onMouseDown(MouseButton button, HWND window, POINT pos);
+	virtual bool onMouseDown(MouseButton button, HWND window, POINT mousePos);
 
-	/* Does nothing.
+	/* Does nothing, not even eat events.
 	 */
-	virtual bool onMouseUp(MouseButton button, HWND window, POINT pos)
+	virtual bool onMouseUp(MouseButton button, HWND window, POINT mousePos)
 	{ return false; }
 
-	/* Does nothing.
+	/* Does nothing, not even eat events.
 	 */
-	virtual bool onMouseMove(POINT pos)
+	virtual bool onMouseMove(POINT mousePos)
 	{ return false; }
 
 protected:
@@ -87,13 +87,22 @@ protected:
  */
 class MouseDownState : public BaseState {
 public:
-	virtual bool onMouseDown(MouseButton button, HWND window, POINT pos)
+	/* Does nothing, but eats the event.
+	 */
+	virtual bool onMouseDown(MouseButton button, HWND window, POINT mousePos)
 	{ return true; }
 
-	virtual bool onMouseUp(MouseButton button, HWND window, POINT pos);
+	/* Returns us to the normal state if the button that was previously down was released.
+	 */
+	virtual bool onMouseUp(MouseButton button, HWND window, POINT mousePos);
 
+	/* Stores the button for later use.
+	 */
 	virtual void enter(MouseButton button);
+
 protected:
+	/* The button that was pressed down and caused us to be in this state.
+	 */
 	MouseButton downButton;
 };
 
@@ -101,14 +110,42 @@ protected:
  */
 class DeformState : public MouseDownState {
 public:
-	virtual void enter(MouseButton button, HWND window, POINT pos);
+	/* Stores the initial state for later use.
+	 */
+	virtual void enter(MouseButton button, HWND window, POINT mousePos);
+
+	/* Ends the drag action.
+	 */
 	virtual void exit();
 protected:
+	/* The point at which the mouse cursor was last seen.
+	 */
 	POINT lastMousePos;
+
+	/* The window that we're dragging.
+	 */
 	HWND draggedWindow;
+
+	/* The window in the Z-order previous to the draggedWindow.
+	 * Used to keep the order intact when calling SetWindowPos.
+	 */
 	HWND prevInZOrder;
+
+	/* The current position of the window. Saves calls to GetWindowRect.
+	 */
 	RECT lastRect;
+
+	/* The cursor that was set by the application, before we changed it.
+	 */
 	HCURSOR prevCursor;
+
+	/* Returns the movement of the mouse since the last time.
+	 */
+	POINT mouseDelta(POINT const &mousePos);
+	
+	/* Calls SetWindowPos with the appropriate arguments. Extra flags can be passed in.
+	 */
+	void updateWindowPos(UINT flags);
 
 	/* Sets the new cursor; assumes that the current cursor is defined by the application being dragged.
 	 * Expects one of the OCR_* constants.
@@ -123,22 +160,22 @@ protected:
 	/* Restores the cursor to the one before setCursor() was called.
 	 */
 	void restoreCursor();
-
-	/* Returns the movement of the mouse since the last time.
-	 */
-	POINT mouseDelta(POINT const &mousePos);
-	
-	/* Calls SetWindowPos with the appropriate arguments. Extra flags can be passed in.
-	 */
-	void updateWindowPos(UINT flags);
 };
 
 /* The state active while the user is moving a window.
  */
 class MoveState : public DeformState {
 public:
-	virtual bool onMouseMove(POINT pos);
-	virtual void enter(MouseButton button, HWND window, POINT pos);
+	/* Moves the window accordingly.
+	 */
+	virtual bool onMouseMove(POINT mousePos);
+
+	/* Sets up the cursor.
+	 */
+	virtual void enter(MouseButton button, HWND window, POINT mousePos);
+
+	/* Restores the cursor.
+	 */
 	virtual void exit();
 };
 
@@ -146,10 +183,20 @@ public:
  */
 class ResizeState : public DeformState {
 public:
-	virtual bool onMouseMove(POINT pos);
-	virtual void enter(MouseButton button, HWND window, POINT pos);
+	/* Resizes the window accordingly.
+	 */
+	virtual bool onMouseMove(POINT mousePos);
+
+	/* Sets up the cursor and the resize type.
+	 */
+	virtual void enter(MouseButton button, HWND window, POINT mousePos);
+
+	/* Restores the cursor.
+	 */
 	virtual void exit();
 protected:
+	/* The side(s) on which the window is resized. Both either -1, 0 or 1.
+	 */
 	int resizingX, resizingY;
 
 	/* Sets the variables resizingX and resizingY to the proper values,
@@ -169,14 +216,14 @@ protected:
  * This state makes sure that those events are not passed to the application.
  */
 class IgnoreState : public MouseDownState {
-	/* Does nothing.
+	/* Does nothing, but eats the event.
 	 */
-	virtual bool onMouseDown(MouseButton button, HWND window, POINT pos)
+	virtual bool onMouseDown(MouseButton button, HWND window, POINT mousePos)
 	{ return true; }
 
-	/* Does nothing.
+	/* Does nothing, but eats the event.
 	 */
-	virtual bool onMouseMove(POINT pos)
+	virtual bool onMouseMove(POINT mousePos)
 	{ return true; }
 };
 
