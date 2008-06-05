@@ -6,63 +6,17 @@
 #include "config.hpp"
 #include "debuglog.hpp"
 
-/* Whether we're resizing in the x and/or y direction. Only meaningful while dragging.
- * resizingX == -1 means resizing at left border, 0 means not resizing in x direction, 1 means right border.
- * Similar for y; -1 is top border, 0 is no resizing, 1 is bottom border.
- */
-extern int resizingX, resizingY;
+extern NormalState normalState;
+extern MoveState moveState;
+extern ResizeState resizeState;
+extern IgnoreState ignoreState;
 
-/* The last known location of the mouse cursor (screen coordinates).
- * This is used in the mouse event handler to compute the distance travelled since the last mouse event.
- */
-extern POINT lastMousePos;
-
-/* The window that we are currently dragging.
- * Only meaningful if currentState is dsDragging.
- */
-extern HWND draggedWindow;
-
-/* The window in the Z order that comes before draggedWindow.
- * Needed because mouse actions on the window pull it to the front, and we need to put it back.
- */
-extern HWND prevInZOrder;
-
-/* The window that was last active.
- * Needed because some actions change the focus to another window, and we need to restore it.
- */
-extern HWND lastForegroundWindow;
-
-/* The last known window rectangle of the draggedWindow, in client coordinates.
- * Saves us calls to GetWindowRect() and conversions.
- */
-extern RECT lastRect;
-
-/* The cursor that was active before we started dragging.
- */
-extern HCURSOR prevCursor;
-
-/* Sets the new cursor; assumes that the current cursor is defined by the application being dragged.
- */
-void setCursor(int ocr) {
-	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
-	prevCursor = SetCursor(newCursor);
+void BaseState::enter() {
+	currentState->exit();
+	currentState = this;
 }
 
-/* Sets the new cursor; assumes that the current cursor is defined by ourselves.
- * To be called in between setCursor() and restoreCursor().
- */
-void updateCursor(int ocr) {
-	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
-	DestroyCursor(SetCursor(newCursor));
-}
-
-/* Restores the cursor to the one before setCursor() was called.
- */
-void restoreCursor() {
-	DestroyCursor(SetCursor(prevCursor));
-}
-
-HWND findGrabbedParent(HWND window, bool wantResizable) {
+HWND NormalState::findGrabbedParent(HWND window, bool wantResizable) {
 	HWND ancestor = window;
 	while (true) {
 		DEBUGLOG("Current ancestor is 0x%X", ancestor);
@@ -81,11 +35,11 @@ HWND findGrabbedParent(HWND window, bool wantResizable) {
 	}
 }
 
-bool isFullscreenWindow(HWND window) {
+bool NormalState::isFullscreenWindow(HWND window) {
 	return false; // TODO
 }
 
-bool isMovableWindow(HWND window) {
+bool NormalState::isMovableWindow(HWND window) {
 	if (IsZoomed(window))
 		return false; // disallow moving maximized windows
 	if (isFullscreenWindow(window))
@@ -96,7 +50,7 @@ bool isMovableWindow(HWND window) {
 	return true;
 }
 
-bool isResizableWindow(HWND window) {
+bool NormalState::isResizableWindow(HWND window) {
 	if (IsZoomed(window))
 		return false; // do not allow resizing of maximized windows
 	if (isFullscreenWindow(window))
@@ -108,41 +62,61 @@ bool isResizableWindow(HWND window) {
 		return false;
 }
 
-/* Sets the variables resizingX and resizingY to the proper values,
- * considering the client-coordinate pointer location.
- * Note that, unlike lastRect, these are client coordinates of the dragged window itself,
- * not those of the dragged window's parent!
- */
-void setResizingX(POINT const &pt) {
-	resizingX = pt.x * 3 / (lastRect.right - lastRect.left) - 1;
-}
-void setResizingY(POINT const &pt) {
-	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
+bool NormalState::isModifierDown() {
+	return GetAsyncKeyState(config.modifier) & 0x8000;
 }
 
-/* Returns the cursor (OCR_* constant) to be used for the current resizing direction.
- */
-int getResizingCursor() {
-	if (resizingX && !resizingY)
-		return OCR_SIZEWE;
-	if (!resizingX && resizingY)
-		return OCR_SIZENS;
-	if (resizingX * resizingY > 0)
-		return OCR_SIZENWSE;
-	if (resizingX * resizingY < 0)
-		return OCR_SIZENESW;
-	return OCR_NORMAL; // fallback
+bool NormalState::onMouseDown(MouseButton button, HWND window, POINT pos) {
+	if (!isModifierDown()) {
+		// This is not interesting. Discard ASAP.
+		return false;
+	}
+	DEBUGLOG("Handling button down event");
+	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
+	if (button == config.moveButton) {
+		// Try to find movable ancestor.
+		window = findGrabbedParent(window, false);
+		if (window) {
+			moveState.enter(button, window, pos);
+		} else {
+			DEBUGLOG("Ignoring button down event because no movable parent was found", window);
+			ignoreState.enter(button);
+		}
+		return true;
+	} else if (button == config.resizeButton) {
+		// Try to find resizable ancestor.
+		window = findGrabbedParent(window, true);
+		if (window) {
+			resizeState.enter(button, window, pos);
+		} else {
+			DEBUGLOG("Ignoring button down event because no resizable parent was found", window);
+			ignoreState.enter(button);
+		}
+		return true;
+	}
+	return false;
 }
 
-/* Initiates a dragging action, be it moving or resizing.
- * Called by startMoveAction and startResizeAction.
- */
-void startDragAction(HWND window, POINT mousePos) {
+void MouseDownState::enter(MouseButton button) {
+	DEBUGLOG("Handling button up event");
+	BaseState::enter();
+	downButton = button;
+}
+
+bool MouseDownState::onMouseUp(MouseButton button, HWND window, POINT pos) {
+	if (button == downButton) {
+		normalState.enter();
+	}
+	return true;
+}
+
+void DeformState::enter(MouseButton button, HWND window, POINT pos) {
+	MouseDownState::enter(button);
 	// Store window handle and Z order position of the victim.
 	draggedWindow = window;
 	prevInZOrder = GetNextWindow(window, GW_HWNDPREV);
 	// Store current mouse position.
-	lastMousePos = mousePos;
+	lastMousePos = pos;
 	// Capture the mouse so it'll still get events even if the mouse leaves the window
 	// (could happen while resizing).
 	SetCapture(draggedWindow);
@@ -159,15 +133,71 @@ void startDragAction(HWND window, POINT mousePos) {
 	}
 }
 
-void startMoveAction(HWND window, POINT mousePos) {
+void DeformState::exit() {
+	MouseDownState::exit();
+	ReleaseCapture();
+	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
+		// The active window was deactivated when we clicked the dragged window.
+		// Restore the previously active window to active.
+		activateWithoutRaise(lastForegroundWindow);
+	}
+}
+
+POINT DeformState::mouseDelta(POINT const &mousePos) {
+	// Find out the movement since the last known mouse position.
+	POINT delta;
+	delta.x = mousePos.x - lastMousePos.x;
+	delta.y = mousePos.y - lastMousePos.y;
+	// Store the current mouse position as last known.
+	lastMousePos = mousePos;
+	// Return the relative movement.
+	return delta;
+}
+
+void DeformState::updateWindowPos(UINT flags) {
+	SetWindowPos(draggedWindow, prevInZOrder, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | flags);
+}
+
+void DeformState::setCursor(int ocr) {
+	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
+	prevCursor = SetCursor(newCursor);
+}
+
+void DeformState::updateCursor(int ocr) {
+	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
+	DestroyCursor(SetCursor(newCursor));
+}
+
+void DeformState::restoreCursor() {
+	DestroyCursor(SetCursor(prevCursor));
+}
+
+void MoveState::enter(MouseButton button, HWND window, POINT mousePos) {
 	DEBUGLOG("Starting move action");
-	startDragAction(window, mousePos);
+	DeformState::enter(button, window, mousePos);
 	setCursor(OCR_SIZEALL);
 }
 
-void startResizeAction(HWND window, POINT mousePos) {
+void MoveState::exit() {
+	DEBUGLOG("Ending move action");
+	DeformState::exit();
+	restoreCursor();
+}
+
+bool MoveState::onMouseMove(POINT pos) {
+	DEBUGLOG("Handling move action");
+	POINT delta = mouseDelta(pos);
+	lastRect.left += delta.x;
+	lastRect.top += delta.y;
+	lastRect.right += delta.x;
+	lastRect.bottom += delta.y;
+	updateWindowPos(SWP_NOSIZE);
+	return true;
+}
+
+void ResizeState::enter(MouseButton button, HWND window, POINT mousePos) {
 	DEBUGLOG("Starting resize action");
-	startDragAction(window, mousePos);
+	DeformState::enter(button, window, mousePos);
 	// Find out at which corner to resize.
 	ScreenToClient(draggedWindow, &mousePos);
 	switch (config.resizeMode) {
@@ -184,32 +214,13 @@ void startResizeAction(HWND window, POINT mousePos) {
 	setCursor(getResizingCursor());
 }
 
-POINT mouseDelta(POINT const &mousePos) {
-	// Find out the movement since the last known mouse position.
-	POINT delta;
-	delta.x = mousePos.x - lastMousePos.x;
-	delta.y = mousePos.y - lastMousePos.y;
-	// Store the current mouse position as last known.
-	lastMousePos = mousePos;
-	// Return the relative movement.
-	return delta;
+void ResizeState::exit() {
+	DEBUGLOG("Ending resize action");
+	DeformState::exit();
+	restoreCursor();
 }
 
-void updateWindowPos(UINT flags) {
-	SetWindowPos(draggedWindow, prevInZOrder, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | flags);
-}
-
-void doMoveAction(POINT mousePos) {
-	DEBUGLOG("Handling move action");
-	POINT delta = mouseDelta(mousePos);
-	lastRect.left += delta.x;
-	lastRect.top += delta.y;
-	lastRect.right += delta.x;
-	lastRect.bottom += delta.y;
-	updateWindowPos(SWP_NOSIZE);
-}
-
-void doResizeAction(POINT mousePos) {
+bool ResizeState::onMouseMove(POINT mousePos) {
 	DEBUGLOG("Handling resize action");
 	POINT delta = mouseDelta(mousePos);
 	// Do not move the window, unless resizing at its top and/or its left.
@@ -250,25 +261,25 @@ void doResizeAction(POINT mousePos) {
 	if (needCursorUpdate)
 		updateCursor(getResizingCursor());
 	updateWindowPos(flags);
+	return true;
 }
 
-void endDragAction() {
-	ReleaseCapture();
-	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
-		// The active window was deactivated when we clicked the dragged window.
-		// Restore the previously active window to active.
-		activateWithoutRaise(lastForegroundWindow);
-	}
+void ResizeState::setResizingX(POINT const &pt) {
+	resizingX = pt.x * 3 / (lastRect.right - lastRect.left) - 1;
 }
 
-void endMoveAction() {
-	DEBUGLOG("Ending move action");
-	endDragAction();
-	restoreCursor();
+void ResizeState::setResizingY(POINT const &pt) {
+	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
 }
 
-void endResizeAction() {
-	DEBUGLOG("Ending resize action");
-	endDragAction();
-	restoreCursor();
+int ResizeState::getResizingCursor() {
+	if (resizingX && !resizingY)
+		return OCR_SIZEWE;
+	if (!resizingX && resizingY)
+		return OCR_SIZENS;
+	if (resizingX * resizingY > 0)
+		return OCR_SIZENWSE;
+	if (resizingX * resizingY < 0)
+		return OCR_SIZENESW;
+	return OCR_NORMAL; // fallback
 }
