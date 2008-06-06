@@ -60,6 +60,9 @@ namespace TaekwindowConfig
 
 			bottomRight.Checked = (config.ResizeMode == ResizeMode.BottomRight);
 			nineRectangles.Checked = (config.ResizeMode == ResizeMode.NineRectangles);
+
+			scrollFocused.Checked = !config.ScrollWindowUnderCursor;
+			scrollUnderCursor.Checked = config.ScrollWindowUnderCursor;
 		}
 
 		/// <summary>
@@ -111,6 +114,7 @@ namespace TaekwindowConfig
 			config.ResizeMode =
 				bottomRight.Checked ? ResizeMode.BottomRight :
 				ResizeMode.NineRectangles;
+			config.ScrollWindowUnderCursor = scrollUnderCursor.Checked;
 
 			return config;
 		}

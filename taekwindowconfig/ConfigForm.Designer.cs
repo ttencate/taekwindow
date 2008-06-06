@@ -65,6 +65,11 @@ namespace TaekwindowConfig
 			this.email = new System.Windows.Forms.LinkLabel();
 			this.author = new System.Windows.Forms.Label();
 			this.cancel = new System.Windows.Forms.Button();
+			this.scrolling = new System.Windows.Forms.TabPage();
+			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.groupBox10 = new System.Windows.Forms.GroupBox();
+			this.scrollFocused = new System.Windows.Forms.RadioButton();
+			this.scrollUnderCursor = new System.Windows.Forms.RadioButton();
 			this.tabControl.SuspendLayout();
 			this.general.SuspendLayout();
 			this.groupBox8.SuspendLayout();
@@ -79,6 +84,8 @@ namespace TaekwindowConfig
 			this.groupBox7.SuspendLayout();
 			this.aboutBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
+			this.scrolling.SuspendLayout();
+			this.groupBox9.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// apply
@@ -113,12 +120,13 @@ namespace TaekwindowConfig
 			this.tabControl.Controls.Add(this.general);
 			this.tabControl.Controls.Add(this.keysAndButtons);
 			this.tabControl.Controls.Add(this.resizing);
+			this.tabControl.Controls.Add(this.scrolling);
 			this.tabControl.Controls.Add(this.about);
 			this.tabControl.Location = new System.Drawing.Point(12, 12);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
 			this.tabControl.Size = new System.Drawing.Size(340, 339);
-			this.tabControl.TabIndex = 4;
+			this.tabControl.TabIndex = 3;
 			// 
 			// general
 			// 
@@ -561,6 +569,72 @@ namespace TaekwindowConfig
 			this.cancel.UseVisualStyleBackColor = true;
 			this.cancel.Click += new System.EventHandler(this.cancel_Click);
 			// 
+			// scrolling
+			// 
+			this.scrolling.Controls.Add(this.groupBox9);
+			this.scrolling.Location = new System.Drawing.Point(4, 22);
+			this.scrolling.Name = "scrolling";
+			this.scrolling.Padding = new System.Windows.Forms.Padding(8);
+			this.scrolling.Size = new System.Drawing.Size(332, 313);
+			this.scrolling.TabIndex = 4;
+			this.scrolling.Text = "Scrolling";
+			this.scrolling.UseVisualStyleBackColor = true;
+			// 
+			// groupBox9
+			// 
+			this.groupBox9.Controls.Add(this.scrollUnderCursor);
+			this.groupBox9.Controls.Add(this.scrollFocused);
+			this.groupBox9.Controls.Add(this.groupBox10);
+			this.groupBox9.Location = new System.Drawing.Point(11, 11);
+			this.groupBox9.Name = "groupBox9";
+			this.groupBox9.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+			this.groupBox9.Size = new System.Drawing.Size(310, 164);
+			this.groupBox9.TabIndex = 0;
+			this.groupBox9.TabStop = false;
+			this.groupBox9.Text = "Scroll wheel behaviour";
+			// 
+			// groupBox10
+			// 
+			this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox10.Location = new System.Drawing.Point(11, 86);
+			this.groupBox10.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
+			this.groupBox10.Name = "groupBox10";
+			this.groupBox10.Size = new System.Drawing.Size(288, 2);
+			this.groupBox10.TabIndex = 13;
+			this.groupBox10.TabStop = false;
+			// 
+			// scrollFocused
+			// 
+			this.scrollFocused.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.scrollFocused.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.scrollFocused.Location = new System.Drawing.Point(11, 19);
+			this.scrollFocused.Name = "scrollFocused";
+			this.scrollFocused.Size = new System.Drawing.Size(288, 56);
+			this.scrollFocused.TabIndex = 14;
+			this.scrollFocused.TabStop = true;
+			this.scrollFocused.Text = "Scroll the &focused window\r\n\r\nThe scroll wheel on the mouse affects the window th" +
+				"at currently has the focus (Windows default).";
+			this.scrollFocused.UseVisualStyleBackColor = true;
+			this.scrollFocused.CheckedChanged += new System.EventHandler(this.SettingChanged);
+			// 
+			// scrollUnderCursor
+			// 
+			this.scrollUnderCursor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.scrollUnderCursor.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.scrollUnderCursor.Location = new System.Drawing.Point(11, 96);
+			this.scrollUnderCursor.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.scrollUnderCursor.Name = "scrollUnderCursor";
+			this.scrollUnderCursor.Size = new System.Drawing.Size(288, 56);
+			this.scrollUnderCursor.TabIndex = 15;
+			this.scrollUnderCursor.TabStop = true;
+			this.scrollUnderCursor.Text = "Scroll the window under the &cursor\r\n\r\nThe scroll wheel affects the window that i" +
+				"s currently under the mouse cursor.";
+			this.scrollUnderCursor.UseVisualStyleBackColor = true;
+			this.scrollUnderCursor.CheckedChanged += new System.EventHandler(this.SettingChanged);
+			// 
 			// ConfigForm
 			// 
 			this.AcceptButton = this.apply;
@@ -596,6 +670,8 @@ namespace TaekwindowConfig
 			this.aboutBox.ResumeLayout(false);
 			this.aboutBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
+			this.scrolling.ResumeLayout(false);
+			this.groupBox9.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -639,6 +715,11 @@ namespace TaekwindowConfig
 		private System.Windows.Forms.GroupBox groupBox7;
 		private System.Windows.Forms.GroupBox groupBox8;
 		private System.Windows.Forms.CheckBox systemTrayIcon;
+		private System.Windows.Forms.TabPage scrolling;
+		private System.Windows.Forms.GroupBox groupBox9;
+		private System.Windows.Forms.GroupBox groupBox10;
+		private System.Windows.Forms.RadioButton scrollFocused;
+		private System.Windows.Forms.RadioButton scrollUnderCursor;
 	}
 }
 

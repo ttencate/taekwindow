@@ -15,6 +15,7 @@ namespace TaekwindowConfig
 		public MouseButton MoveButton;
 		public MouseButton ResizeButton;
 		public ResizeMode ResizeMode;
+		public bool ScrollWindowUnderCursor;
 
 		private static string settingsKey = "Software\\Taekwindow\\0.2";
 
@@ -34,6 +35,7 @@ namespace TaekwindowConfig
 			MoveButton = MouseButton.Left;
 			ResizeButton = MouseButton.Right;
 			ResizeMode = ResizeMode.NineRectangles;
+			ScrollWindowUnderCursor = true;
 		}
 
 		/// <summary>
@@ -99,6 +101,7 @@ namespace TaekwindowConfig
 			key.SetValue("moveButton", MoveButton, RegistryValueKind.DWord);
 			key.SetValue("resizeButton", ResizeButton, RegistryValueKind.DWord);
 			key.SetValue("resizeMode", ResizeMode, RegistryValueKind.DWord);
+			key.SetValue("scrollWindowUnderCursor", ScrollWindowUnderCursor ? 1 : 0, RegistryValueKind.DWord);
 
 			key.Close();
 		}
@@ -117,6 +120,7 @@ namespace TaekwindowConfig
 				MoveButton = (MouseButton)key.GetValue("moveButton", MoveButton);
 				ResizeButton = (MouseButton)key.GetValue("resizeButton", ResizeButton);
 				ResizeMode = (ResizeMode)key.GetValue("resizeMode", ResizeMode);
+				ScrollWindowUnderCursor = ((int)key.GetValue("scrollWindowUnderCursor", ScrollWindowUnderCursor ? 1 : 0) != 0);
 			}
 		}
 
