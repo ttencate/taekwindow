@@ -238,7 +238,8 @@ bool MaximizedMoveState::onMouseMove(POINT mousePos) {
 		// Now move the window by unmaximizing, moving, remaximizing.
 		// First, lock drawing to prevent annoying flicker.
 		LockWindowUpdate(draggedWindow);
-		// Use SetWindowPlacement to change the style to SW_RESTORE, because ShowWindow does animations.
+		// Use SetWindowPlacement to change the style to SW_RESTORE, because ShowWindow does animations
+		// (simpler ones than AnimateWindow, but still annoying).
 		WINDOWPLACEMENT windowPlacement;
 		windowPlacement.length = sizeof(windowPlacement);
 		GetWindowPlacement(draggedWindow, &windowPlacement);

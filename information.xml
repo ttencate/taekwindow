@@ -105,7 +105,7 @@
 			(the icon area in the taskbar, next to the clock) and you can now do the following:
 		</p>
 		<ul>
-			<li>Hold left Alt and drag a window with the left mouse button to move it.</li>
+			<li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>
 			<li>Hold left Alt and drag a window with the right mouse button to resize it.</li>
 			<li>Middle-click on the title bar of a window to push it to the background.</li>
 		</ul>
