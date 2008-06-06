@@ -8,4 +8,5 @@ void DLLConfiguration::setDefaults() {
 	resizeButton = mbRight;
 	resizeMode = rmNineRectangles;
 	pushBackButton = mbMiddle;
+	scrollWindowUnderCursor = true;
 }

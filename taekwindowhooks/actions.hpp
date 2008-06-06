@@ -7,6 +7,12 @@
  */
 extern HWND lastForegroundWindow;
 
-void doPushBack(HWND window);
+/* Push a window to the background.
+ */
+bool doPushBack(HWND window);
+
+/* Handle a mouse wheel event by dispatching it to the window under the cursor.
+ */
+bool doMouseWheel(HWND window, POINT mousePos, WPARAM wParam);
 
 #endif

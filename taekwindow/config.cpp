@@ -32,11 +32,12 @@ void readConfigFromRegistry(DLLConfiguration *dllconfig, EXEConfiguration *execo
 			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
 			if (RegOpenKeyEx(appKey, L"0.2", 0, KEY_READ, &versionKey) == ERROR_SUCCESS) {
 				// Read stuff for the DLL.
-				readDWord(versionKey, L"modifier"      , (LPDWORD)&dllconfig->modifier      );
-				readDWord(versionKey, L"moveButton"    , (LPDWORD)&dllconfig->moveButton    );
-				readDWord(versionKey, L"resizeButton"  , (LPDWORD)&dllconfig->resizeButton  );
-				readDWord(versionKey, L"resizeMode"    , (LPDWORD)&dllconfig->resizeMode    );
-				readDWord(versionKey, L"pushBackButton", (LPDWORD)&dllconfig->pushBackButton);
+				readDWord(versionKey, L"modifier"               , (LPDWORD)&dllconfig->modifier      );
+				readDWord(versionKey, L"moveButton"             , (LPDWORD)&dllconfig->moveButton    );
+				readDWord(versionKey, L"resizeButton"           , (LPDWORD)&dllconfig->resizeButton  );
+				readDWord(versionKey, L"resizeMode"             , (LPDWORD)&dllconfig->resizeMode    );
+				readDWord(versionKey, L"pushBackButton"         , (LPDWORD)&dllconfig->pushBackButton);
+				readDWord(versionKey, L"scrollWindowUnderCursor", (LPDWORD)&dllconfig->scrollWindowUnderCursor);
 				// Read stuff for the EXE.
 				readDWord(versionKey, L"systemTrayIcon", (LPDWORD)&execonfig->systemTrayIcon);
 				// Close the keys again.

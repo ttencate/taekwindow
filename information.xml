@@ -108,6 +108,7 @@
 			<li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>
 			<li>Hold left Alt and drag a window with the right mouse button to resize it. If you resize a maximized window, it will automatically be unmaximized.</li>
 			<li>Middle-click on the title bar of a window to push it to the background.</li>
+			<li>Use the scroll wheel on the window under the mouse cursor, instead of the window that happens to have the focus.</li>
 		</ul>
 		<p>
 			The system tray icon can be used in the following ways:
@@ -175,6 +176,9 @@
 			</feature>
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913356">
 				windows are no longer activated when they are moved or resized
+			</feature>
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629767&amp;group_id=185457&amp;atid=913356">
+				the scroll wheel optionally affects the window under the mouse cursor, instead of the focused window
 			</feature>
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913356">
 				maximized windows can now be moved across multiple monitors while remaining maximized

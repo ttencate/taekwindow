@@ -23,12 +23,14 @@ class DLLConfiguration {
 		/* The mouse button that, when clicked on the title bar, pushes the window to the back.
 		 */
 		MouseButton pushBackButton;
+
+		/* The mouse wheel behaviour: scroll the window under the cursor (1), or the focused window (0)?
+		 */
+		int scrollWindowUnderCursor;
 		
 		/* Sets all fields to their default values.
 		 */
 		void setDefaults();
 };
-
-
 
 #endif
