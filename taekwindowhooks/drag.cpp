@@ -17,7 +17,7 @@ void BaseState::enter() {
 	currentState = this;
 }
 
-HWND NormalState::findParent(HWND window, bool (*criterium)(HWND)) {
+HWND NormalState::findFirstParent(HWND window, bool (*criterium)(HWND)) {
 	HWND ancestor = window;
 	while (true) {
 		DEBUGLOG("Current ancestor is 0x%X", ancestor);
@@ -33,6 +33,20 @@ HWND NormalState::findParent(HWND window, bool (*criterium)(HWND)) {
 		}
 		ancestor = GetAncestor(ancestor, GA_PARENT);
 	}
+}
+
+HWND NormalState::findLastParent(HWND window, bool (*criterium)(HWND)) {
+	HWND ancestor = window;
+	HWND match = NULL;
+	while (ancestor && ancestor != INVALID_HANDLE_VALUE) {
+		DEBUGLOG("Current ancestor is 0x%X", ancestor);
+		if (criterium(ancestor)) {
+			DEBUGLOG("We like your style; storing candidate 0x%X", ancestor);
+			match = ancestor;
+		}
+		ancestor = GetAncestor(ancestor, GA_PARENT);
+	}
+	return match;
 }
 
 bool NormalState::isFullscreenWindow(HWND window) {
@@ -54,12 +68,20 @@ bool NormalState::isMaximizedMovableWindow(HWND window) {
 }
 
 bool NormalState::isResizableWindow(HWND window) {
-	/* Resizing of maximized windows can be done, by unmaximizing first. Checking is caller's responsibility.
-	if (IsZoomed(window))
-		return false;
-	*/
-	if (isFullscreenWindow(window))
-		return false; // disallow resizing fullscreen windows
+	return
+		isThickBorderWindow(window) &&
+		!IsZoomed(window) &&
+		!isFullscreenWindow(window);
+}
+
+bool NormalState::isMaximizedResizableWindow(HWND window) {
+	return
+		isThickBorderWindow(window) &&
+		IsZoomed(window) &&
+		!isFullscreenWindow(window);
+}
+
+bool NormalState::isThickBorderWindow(HWND window) {
 	LONG style = GetWindowLong(window, GWL_STYLE);
 	if ((style & WS_THICKFRAME) && ((style & WS_BORDER) || !(style & WS_DLGFRAME)))
 		return true; // allow resizing of windows with resizable borders only
@@ -88,22 +110,38 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 	DEBUGLOG("Handling button down event");
 	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
 	if (button == config.moveButton) {
-		HWND parentWindow = findParent(window, isMovableWindow);
+		// We prefer windows that are not maximized over those that are, which makes sense in an MDI environment.
+		// This would be what the user expected.
+		HWND parentWindow = findFirstParent(window, isMovableWindow);
 		if (parentWindow) {
 			moveState.enter(button, parentWindow, mousePos);
 			return true;
 		} else {
-			parentWindow = findParent(window, isMaximizedMovableWindow);
+			// No unmaximized movable window found; look for a maximized one that can be kicked to another monitor.
+			// Only top-level windows can be moved to other monitors, I guess.
+			// So prefer the outermost (last) parent that is maximized.
+			parentWindow = findLastParent(window, isMaximizedMovableWindow);
 			if (parentWindow) {
 				maximizedMoveState.enter(button, parentWindow, mousePos);
 				return true;
 			}
 		}
 	} else if (button == config.resizeButton) {
-		HWND parentWindow = findParent(window, isResizableWindow);
+		// Try to find a parent window that we can resize without unmaximizing.
+		// This one is probably the one that the user meant.
+		HWND parentWindow = findFirstParent(window, isResizableWindow);
 		if (parentWindow) {
 			resizeState.enter(button, parentWindow, mousePos);
 			return true;
+		} else {
+			// No unmaximized window; perhaps we have a maximized one?
+			// We prefer the outermost, so that a maximized MDI parent is preferred over a maximized MDI child inside it.
+			// This makes the most sense, because users often forget that there is an MDI at all when their MDI childs are maximized.
+			parentWindow = findLastParent(window, isMaximizedResizableWindow);
+			if (parentWindow) {
+				resizeState.enter(button, parentWindow, mousePos);
+				return true;
+			}
 		}
 	} else {
 		// Nothing of interest: unused button.

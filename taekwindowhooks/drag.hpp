@@ -57,11 +57,15 @@ public:
 	{ return false; }
 
 protected:
-	/* Similar to GetAncestor, but works on MDI windows as well.
-	 * Returns the first parent in the parent chain of the given window
+	/* Returns the first parent in the parent chain of the given window
 	 * that meets the given criterium, or NULL if there is no such parent.
 	 */
-	static HWND findParent(HWND window, bool (*criterium)(HWND));
+	static HWND findFirstParent(HWND window, bool (*criterium)(HWND));
+
+	/* Returns the last parent in the parent chain of the given window
+	 * that meets the given criterium, or NULL if there is no such parent.
+	 */
+	static HWND findLastParent(HWND window, bool (*criterium)(HWND));
 
 	/* Returns true if the modifier key is currently down.
 	 */
@@ -79,9 +83,17 @@ protected:
 	 */
 	static bool isResizableWindow(HWND window);
 
+	/* Returns true if this window is maximized, but could be resized after demaximizing.
+	 */
+	static bool isMaximizedResizableWindow(HWND window);
+
 	/* Returns true if the window has the WS_CAPTION style.
 	 */
 	static bool isCaptionWindow(HWND window);
+
+	/* Returns true if the window has a thick border (i.e. is resizable).
+	 */
+	static bool isThickBorderWindow(HWND window);
 
 	/* Returns true if the window is fullscreen.
 	 */
