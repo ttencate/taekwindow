@@ -106,7 +106,7 @@
 		</p>
 		<ul>
 			<li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>
-			<li>Hold left Alt and drag a window with the right mouse button to resize it.</li>
+			<li>Hold left Alt and drag a window with the right mouse button to resize it. If you resize a maximized window, it will automatically be unmaximized.</li>
 			<li>Middle-click on the title bar of a window to push it to the background.</li>
 		</ul>
 		<p>
@@ -185,12 +185,15 @@
 			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1982738&amp;group_id=185457&amp;atid=913353">
 				Alt no longer “hangs” after returning to a desktop that was locked with Ctrl+Alt+Del
 			</bugfix>
-      <feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913356">
-        maximized windows can now be moved across multiple monitors while remaining maximized
-      </feature>
-      <feature>
-        a code overhaul should make it much easier to implement future improvements
-      </feature>
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913356">
+				maximized windows can now be moved across multiple monitors while remaining maximized
+			</feature>
+			<feature>
+				maximized windows can now be resized and will become unmaximized
+			</feature>
+			<feature>
+				a code overhaul should make it much easier to implement future improvements
+			</feature>
 		</version>
 		<version nr="0.2.2">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">

@@ -54,8 +54,10 @@ bool NormalState::isMaximizedMovableWindow(HWND window) {
 }
 
 bool NormalState::isResizableWindow(HWND window) {
+	/* Resizing of maximized windows can be done, by unmaximizing first. Checking is caller's responsibility.
 	if (IsZoomed(window))
-		return false; // do not allow resizing of maximized windows
+		return false;
+	*/
 	if (isFullscreenWindow(window))
 		return false; // disallow resizing fullscreen windows
 	LONG style = GetWindowLong(window, GWL_STYLE);
@@ -260,6 +262,27 @@ bool MaximizedMoveState::onMouseMove(POINT mousePos) {
 void ResizeState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting resize action");
 	DeformState::enter(button, parentWindow, mousePos);
+	if (IsZoomed(parentWindow)) {
+		// When resizing a maximized window, unmaximize it first.
+		// Set its restored size to its maximized size, but pull the borders onto the screen.
+		// When a window is maximized, it is actually slightly off the screen on all sides, to hide its borders.
+		GetWindowRect(draggedWindow, &lastRect);
+		WINDOWINFO windowInfo;
+		windowInfo.cbSize = sizeof(windowInfo);
+		GetWindowInfo(draggedWindow, &windowInfo);
+		lastRect.left += windowInfo.cxWindowBorders;
+		lastRect.top += windowInfo.cyWindowBorders;
+		lastRect.right -= windowInfo.cxWindowBorders;
+		lastRect.bottom -= windowInfo.cyWindowBorders;
+		// Use SetWindowPlacement for demaximizing to prevent animation.
+		// And while we're at it, set the size too.
+		WINDOWPLACEMENT windowPlacement;
+		windowPlacement.length = sizeof(windowPlacement);
+		GetWindowPlacement(draggedWindow, &windowPlacement);
+		windowPlacement.showCmd = SW_RESTORE;
+		windowPlacement.rcNormalPosition = lastRect;
+		SetWindowPlacement(draggedWindow, &windowPlacement);
+	}
 	// Find out at which corner to resize.
 	ScreenToClient(draggedWindow, &mousePos);
 	switch (config.resizeMode) {
