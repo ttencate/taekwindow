@@ -176,15 +176,6 @@
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913356">
 				windows are no longer activated when they are moved or resized
 			</feature>
-			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1908683&amp;group_id=185457&amp;atid=913353">
-				the error message “Specified cast is not valid” no longer appears when starting the configuration tool after an upgrade from 0.2.1 or earlier
-			</bugfix>
-			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1905700&amp;group_id=185457&amp;atid=913353">
-				pushing back an inactive window no longer raises the active one
-			</bugfix>
-			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1982738&amp;group_id=185457&amp;atid=913353">
-				Alt no longer “hangs” after returning to a desktop that was locked with Ctrl+Alt+Del
-			</bugfix>
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913356">
 				maximized windows can now be moved across multiple monitors while remaining maximized
 			</feature>
@@ -194,6 +185,15 @@
 			<feature>
 				a code overhaul should make it much easier to implement future improvements
 			</feature>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1908683&amp;group_id=185457&amp;atid=913353">
+				the error message “Specified cast is not valid” no longer appears when starting the configuration tool after an upgrade from 0.2.1 or earlier
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1905700&amp;group_id=185457&amp;atid=913353">
+				pushing back an inactive window no longer raises the active one
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1982738&amp;group_id=185457&amp;atid=913353">
+				Alt no longer “hangs” after returning to a desktop that was locked with Ctrl+Alt+Del
+			</bugfix>
 		</version>
 		<version nr="0.2.2">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
