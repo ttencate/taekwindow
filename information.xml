@@ -171,18 +171,18 @@
 
 	<versions>
     <version nr="0.2.4">
-      <bug see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">
         Google Talk now responds to move and resize actions
-      </bug>
-      <bug see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2095157&amp;group_id=185457&amp;atid=913353">
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2095157&amp;group_id=185457&amp;atid=913353">
         Google Chrome now responds to move and resize actions
-      </bug>
-      <bug see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000712&amp;group_id=185457&amp;atid=913353">
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000712&amp;group_id=185457&amp;atid=913353">
         the scroll wheel now works correctly in mIRC when it has the focus
-      </bug>
-      <bug see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000149&amp;group_id=185457&amp;atid=913353">
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000149&amp;group_id=185457&amp;atid=913353">
         Microsoft Word 2007 now moves and resizes correctly
-      </bug>
+      </bugfix>
     </version>
 		<version nr="0.2.3">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913356">
