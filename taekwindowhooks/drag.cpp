@@ -20,20 +20,24 @@ void BaseState::enter() {
 // BEGIN HACKs for specific applications
 
 bool NormalState::isGoogleTalk(HWND window) {
-	// The contact list window and the chat view window do not have WS_CAPTION style.
+	// The contact list window and the chat view window do not have WS_CAPTION style, but is movable/resizable.
 	return
 		windowHasClass(window, L"Google Talk - Google Xmpp Client GUI Window") ||
 		windowHasClass(window, L"Chat View");
 }
 
 bool NormalState::isGoogleChrome(HWND window) {
-	// Google Chrome does not have WS_CAPTION style.
+	// Google Chrome does not have WS_CAPTION style, but is movable/resizable.
 	return windowHasClass(window, L"Chrome_XPFrame");
 }
 
 bool NormalState::isMSOfficeDocument(HWND window) {
-	// Microsoft Office 2007 does internally use MDI, but does not show it,
+	// Microsoft Office Word 2007 does internally use MDI, but does not show it,
 	// so we pretend that an Office document is not movable/resizable.
+	// Microsoft Office Excel 2007 uses an MDI and shows it too, but does its own handling
+	// of maximization (i.e. does not set WS_MAXIMIZED).
+	// We just pretend that these windows are not floating windows at all,
+	// so it is always the parent window that gets manipulated.
 	return
 		windowHasClass(window, L"_WwB") || // Word 2007
 		windowHasClass(window, L"EXCEL7"); // Excel 2007
