@@ -71,25 +71,13 @@ protected:
 	 */
 	static bool windowHasClass(HWND window, wchar_t const *className);
 
-	/* Returns true if the modifier key is currently down.
+	/* Returns true if the window is currently maximized.
 	 */
-	static bool isModifierDown();
+	static bool isMaximizedWindow(HWND window);
 
-	/* Returns true if we should allow moving of this window.
+	/* Returns true if the window is fullscreen.
 	 */
-	static bool isMovableWindow(HWND window);
-
-	/* Return true if this window is maximized, but could be moved to another monitor.
-	 */
-	static bool isMaximizedMovableWindow(HWND window);
-
-	/* Returns true if we should allow resizing of this window.
-	 */
-	static bool isResizableWindow(HWND window);
-
-	/* Returns true if this window is maximized, but could be resized after demaximizing.
-	 */
-	static bool isMaximizedResizableWindow(HWND window);
+	static bool isFullscreenWindow(HWND window);
 
 	/* Returns true if the window has the WS_CAPTION style.
 	 */
@@ -99,14 +87,29 @@ protected:
 	 */
 	static bool isThickBorderWindow(HWND window);
 
-	/* Returns true if the window is fullscreen.
+	/* Returns true if we should allow moving of this window (be it maximized or not).
 	 */
-	static bool isFullscreenWindow(HWND window);
+	static bool isMovableWindow(HWND window);
+
+	/* Returns true if we should allow resizing of this window (be it maximized or not).
+	 */
+	static bool isResizableWindow(HWND window);
+
+	/* Various combinations of movability, resizability and being maximized or not.
+	 */
+	static bool isRestoredMovableWindow(HWND window);
+	static bool isRestoredResizableWindow(HWND window);
+	static bool isMaximizedMovableWindow(HWND window);
+	static bool isMaximizedResizableWindow(HWND window);
 
 	/* HACKs for specific applications.
 	 */
 	static bool isGoogleTalk(HWND window);
 	static bool isGoogleChrome(HWND window);
+	/* Returns true if the modifier key is currently down.
+	 */
+
+	static bool isModifierDown();
 };
 
 /* The base for all states when some button is currently pressed down.

@@ -60,92 +60,17 @@ bool NormalState::windowHasClass(HWND window, wchar_t const *className) {
 	}
 }
 
+bool NormalState::isMaximizedWindow(HWND window) {
+	return IsZoomed(window);
+}
+
 bool NormalState::isFullscreenWindow(HWND window) {
 	return false; // TODO
 }
 
-bool NormalState::isMovableWindow(HWND window) {
-	if (
-		isCaptionWindow(window) &&
-		!IsZoomed(window) &&
-		!isFullscreenWindow(window)
-	) {
-		// A normal movable window.
-		return true;
-	}
-
-	// BEGIN HACK for Google Talk
-	if (isGoogleTalk(window)) {
-		return true;
-	}
-	// END HACK
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window) && !IsZoomed(window)) {
-		return true;
-	}
-	// END HACK
-
-	// No reason why this should be considered movable.
-	return false;
-}
-
-bool NormalState::isMaximizedMovableWindow(HWND window) {
-	if (
-		isCaptionWindow(window) &&
-		IsZoomed(window) &&
-		!isFullscreenWindow(window)
-	) {
-		return true;
-	}
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window) && IsZoomed(window)) {
-		return true;
-	}
-	// END HACK
-
-	return false;
-}
-
-bool NormalState::isResizableWindow(HWND window) {
-	if (
-		isThickBorderWindow(window) &&
-		!IsZoomed(window) &&
-		!isFullscreenWindow(window)
-	) {
-		return true;
-	}
-
-	// BEGIN HACK for Google Talk
-	if (isGoogleTalk(window)) {
-		return true;
-	}
-	// END HACK
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window) && !IsZoomed(window)) {
-		return true;
-	}
-	// END HACK
-
-	return false;
-}
-
-bool NormalState::isMaximizedResizableWindow(HWND window) {
-	if (
-		isThickBorderWindow(window) &&
-		IsZoomed(window) &&
-		!isFullscreenWindow(window)
-	) {
-		return true;
-	}
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window) && !IsZoomed(window)) {
-		return true;
-	}
-	// END HACK
+bool NormalState::isCaptionWindow(HWND window) {
+	LONG style = GetWindowLong(window, GWL_STYLE);
+	return (style & WS_CAPTION) == WS_CAPTION;
 }
 
 bool NormalState::isThickBorderWindow(HWND window) {
@@ -154,11 +79,6 @@ bool NormalState::isThickBorderWindow(HWND window) {
 		return true; // allow resizing of windows with resizable borders only
 	else
 		return false;
-}
-
-bool NormalState::isCaptionWindow(HWND window) {
-	LONG style = GetWindowLong(window, GWL_STYLE);
-	return (style & WS_CAPTION) == WS_CAPTION;
 }
 
 bool NormalState::isGoogleTalk(HWND window) {
@@ -171,6 +91,67 @@ bool NormalState::isGoogleTalk(HWND window) {
 bool NormalState::isGoogleChrome(HWND window) {
 	// Google Chrome does not have WS_CAPTION style.
 	return windowHasClass(window, L"Chrome_XPFrame");
+}
+
+bool NormalState::isMovableWindow(HWND window) {
+	if (isCaptionWindow(window) && !isFullscreenWindow(window)) {
+		// A normal movable window.
+		return true;
+	}
+
+	// BEGIN HACK for Google Talk
+	if (isGoogleTalk(window)) {
+		return true;
+	}
+	// END HACK
+
+	// BEGIN HACK for Google Chrome
+	if (isGoogleChrome(window)) {
+		return true;
+	}
+	// END HACK
+
+	// No reason why this should be considered movable.
+	return false;
+}
+
+bool NormalState::isResizableWindow(HWND window) {
+	if (
+		isThickBorderWindow(window) &&
+		!isFullscreenWindow(window)
+	) {
+		return true;
+	}
+
+	// BEGIN HACK for Google Talk
+	if (isGoogleTalk(window)) {
+		return true;
+	}
+	// END HACK
+
+	// BEGIN HACK for Google Chrome
+	if (isGoogleChrome(window)) {
+		return true;
+	}
+	// END HACK
+
+	return false;
+}
+
+bool NormalState::isRestoredMovableWindow(HWND window) {
+	return isMovableWindow(window) && !isMaximizedWindow(window);
+}
+
+bool NormalState::isRestoredResizableWindow(HWND window) {
+	return isResizableWindow(window) && !isMaximizedWindow(window);
+}
+
+bool NormalState::isMaximizedMovableWindow(HWND window) {
+	return isMovableWindow(window) && isMaximizedWindow(window);
+}
+
+bool NormalState::isMaximizedResizableWindow(HWND window) {
+	return isResizableWindow(window) && isMaximizedWindow(window);
 }
 
 bool NormalState::isModifierDown() {
@@ -191,7 +172,7 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 	if (button == config.moveButton) {
 		// We prefer windows that are not maximized over those that are, which makes sense in an MDI environment.
 		// This would be what the user expected.
-		HWND parentWindow = findFirstParent(window, isMovableWindow);
+		HWND parentWindow = findFirstParent(window, isRestoredMovableWindow);
 		if (parentWindow) {
 			moveState.enter(button, parentWindow, mousePos);
 			return true;
@@ -208,7 +189,7 @@ bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 	} else if (button == config.resizeButton) {
 		// Try to find a parent window that we can resize without unmaximizing.
 		// This one is probably the one that the user meant.
-		HWND parentWindow = findFirstParent(window, isResizableWindow);
+		HWND parentWindow = findFirstParent(window, isRestoredResizableWindow);
 		if (parentWindow) {
 			resizeState.enter(button, parentWindow, mousePos);
 			return true;
