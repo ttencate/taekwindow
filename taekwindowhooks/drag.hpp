@@ -57,36 +57,6 @@ public:
 	{ return false; }
 
 protected:
-	/* Returns the first parent in the parent chain of the given window
-	 * that meets the given criterium, or NULL if there is no such parent.
-	 */
-	static HWND findFirstParent(HWND window, bool (*criterium)(HWND));
-
-	/* Returns the last parent in the parent chain of the given window
-	 * that meets the given criterium, or NULL if there is no such parent.
-	 */
-	static HWND findLastParent(HWND window, bool (*criterium)(HWND));
-
-	/* Returns true if the given window has the given window class name.
-	 */
-	static bool windowHasClass(HWND window, wchar_t const *className);
-
-	/* Returns true if the window is currently maximized.
-	 */
-	static bool isMaximizedWindow(HWND window);
-
-	/* Returns true if the window is fullscreen.
-	 */
-	static bool isFullscreenWindow(HWND window);
-
-	/* Returns true if the window has the WS_CAPTION style.
-	 */
-	static bool isCaptionWindow(HWND window);
-
-	/* Returns true if the window has a thick border (i.e. is resizable).
-	 */
-	static bool isThickBorderWindow(HWND window);
-
 	/* Returns true if we should allow moving of this window (be it maximized or not).
 	 */
 	static bool isMovableWindow(HWND window);

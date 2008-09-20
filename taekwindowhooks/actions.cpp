@@ -23,8 +23,38 @@ bool doPushBack(HWND window) {
 	return true;
 }
 
+// BEGIN HACK for mIRC.
+// The mIRC status and chat windows do not respond to the scroll wheel forwarding
+// when they do not have focus. The cause is that WindowFromPoint returns
+// the containing MDI child window, instead of the chat text window (of class "Static") inside it.
+// When the window doesn't have focus, all is fine. Probably a bug in mIRC.
+
+bool isMIRCWindow(HWND window) {
+	return
+		windowHasClass(window, L"mIRC_Status") ||
+		windowHasClass(window, L"mIRC_Channel") ||
+		windowHasClass(window, L"mIRC_Query");
+}
+
+HWND findMIRCTextWindow(HWND containerWindow) {
+	HWND textWindow = FindWindowEx(containerWindow, NULL, L"Static", NULL);
+	if (textWindow)
+		return textWindow;
+	else
+		return containerWindow;
+}
+
+// END HACK
+
 bool doMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
 	HWND targetWindow = WindowFromPoint(mousePos);
+
+	// BEGIN HACK for mIRC
+	if (isMIRCWindow(targetWindow)) {
+		targetWindow = findMIRCTextWindow(targetWindow);
+	}
+	// END HACK
+
 	if (targetWindow != window) {
 		DEBUGLOG("Forwarding mouse wheel for window 0x%X to window 0x%X", window, targetWindow);
 		LPARAM lParam = ((short)(mousePos.x)) | (((short)(mousePos.y)) << 16);
