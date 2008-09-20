@@ -1,0 +1,39 @@
+How to release a new version of Taekwindow
+------------------------------------------
+
+Update the version number in information.xml.
+
+Update the changelog in information.xml. Full sentences, starting with lowercase letter, no period at the end, describing the end result of the change/bugfix.
+
+Clean and rebuild the solution.
+
+Commit the changes.
+
+Create a new tag in Subversion.
+
+Upload the zip files from package/ to https://frs.sourceforge.net/webupload
+
+Create a new release in SourceForge with just the version number as the title.
+
+Write a textual description of the highlights of the release in the Release notes field. Double line break for paragraph separation.
+
+Open changelog-sf.xslt in Visual Studio and view its XSLT output. Copy and paste this into the Changes field on SourceForge.
+
+Check "Preserve my pre-formatted text."
+
+Add the files and set their properties.
+
+Create a new News Item. Use as title: "Taekwindow <version number>: <snappy title>". Describe the release, then end with:
+---
+Taekwindow is a simple, lightweight program that allows you to manipulate floating windows in Microsoft Windows very efficiently using the Alt key, in a way similar to many X11 window managers.  
+ 
+For more information, and for downloading the program, visit:  
+ 
+http://taekwindow.sf.net/
+---
+
+Add a Group in the Bug tracker for the new version, called "Version <version number>".
+
+Open download-page.xslt and documentation-page.xslt and view their output. It should be saved in website/. Upload both files to scp://web.sourceforge.net/home/groups/t/ta/taekwindow/htdocs 
+
+Check on http://taekwindow.sf.net/ whether the website looks ok.
