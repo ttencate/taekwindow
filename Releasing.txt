@@ -36,6 +36,8 @@ http://taekwindow.sf.net/
 
 Add a Group in the Bug tracker for the new version, called "Version <version number>".
 
+Update the screenshots and the screenshots page if necessary. Remember to turn ClearType off first.
+
 Open download-page.xslt and documentation-page.xslt and view their output. It should be saved in website/. Upload both files to scp://web.sourceforge.net/home/groups/t/ta/taekwindow/htdocs 
 
 Check on http://taekwindow.sf.net/ whether the website looks ok.
