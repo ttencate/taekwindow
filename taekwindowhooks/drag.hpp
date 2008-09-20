@@ -76,6 +76,8 @@ protected:
 	 */
 	static bool isGoogleTalk(HWND window);
 	static bool isGoogleChrome(HWND window);
+	static bool isMSOfficeDocument(HWND window);
+
 	/* Returns true if the modifier key is currently down.
 	 */
 

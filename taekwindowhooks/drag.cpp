@@ -31,9 +31,23 @@ bool NormalState::isGoogleChrome(HWND window) {
 	return windowHasClass(window, L"Chrome_XPFrame");
 }
 
+bool NormalState::isMSOfficeDocument(HWND window) {
+	// Microsoft Office 2007 does internally use MDI, but does not show it,
+	// so we pretend that an Office document is not movable/resizable.
+	return
+		windowHasClass(window, L"_WwB") || // Word 2007
+		windowHasClass(window, L"EXCEL7"); // Excel 2007
+}
+
 // END HACKs
 
 bool NormalState::isMovableWindow(HWND window) {
+	// BEGIN HACK for MS Office
+	if (isMSOfficeDocument(window)) {
+		return false;
+	}
+	// END HACK
+
 	if (isCaptionWindow(window) && !isFullscreenWindow(window)) {
 		// A normal movable window.
 		return true;
@@ -56,10 +70,13 @@ bool NormalState::isMovableWindow(HWND window) {
 }
 
 bool NormalState::isResizableWindow(HWND window) {
-	if (
-		isThickBorderWindow(window) &&
-		!isFullscreenWindow(window)
-	) {
+	// BEGIN HACK for MS Office
+	if (isMSOfficeDocument(window)) {
+		return false;
+	}
+	// END HACK
+
+	if (isThickBorderWindow(window) && !isFullscreenWindow(window)) {
 		return true;
 	}
 
