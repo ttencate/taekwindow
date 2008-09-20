@@ -49,15 +49,39 @@ HWND NormalState::findLastParent(HWND window, bool (*criterium)(HWND)) {
 	return match;
 }
 
+bool NormalState::windowHasClass(HWND window, wchar_t const *className) {
+	const int BUFFER_SIZE = 256;
+	wchar_t buffer[BUFFER_SIZE];
+	if (GetClassName(window, buffer, BUFFER_SIZE) < BUFFER_SIZE) {
+		return wcscmp(buffer, className) == 0;
+	} else {
+		// It will not be equal to className if it is that long.
+		return false;
+	}
+}
+
 bool NormalState::isFullscreenWindow(HWND window) {
 	return false; // TODO
 }
 
 bool NormalState::isMovableWindow(HWND window) {
-	return
+	if (
 		isCaptionWindow(window) &&
 		!IsZoomed(window) &&
-		!isFullscreenWindow(window);
+		!isFullscreenWindow(window)
+	) {
+		// A normal movable window.
+		return true;
+	}
+
+	// BEGIN HACK for Google Talk
+	if (isGoogleTalk(window)) {
+		return true;
+	}
+	// END HACK
+
+	// No reason why this should be considered movable.
+	return false;
 }
 
 bool NormalState::isMaximizedMovableWindow(HWND window) {
@@ -68,10 +92,21 @@ bool NormalState::isMaximizedMovableWindow(HWND window) {
 }
 
 bool NormalState::isResizableWindow(HWND window) {
-	return
+	if (
 		isThickBorderWindow(window) &&
 		!IsZoomed(window) &&
-		!isFullscreenWindow(window);
+		!isFullscreenWindow(window)
+	) {
+		return true;
+	}
+
+	// BEGIN HACK for Google Talk
+	if (isGoogleTalk(window)) {
+		return true;
+	}
+	// END HACK
+
+	return false;
 }
 
 bool NormalState::isMaximizedResizableWindow(HWND window) {
@@ -92,6 +127,13 @@ bool NormalState::isThickBorderWindow(HWND window) {
 bool NormalState::isCaptionWindow(HWND window) {
 	LONG style = GetWindowLong(window, GWL_STYLE);
 	return (style & WS_CAPTION) == WS_CAPTION;
+}
+
+bool NormalState::isGoogleTalk(HWND window) {
+	// The contact list window and the chat view window do not have WS_CAPTION style.
+	return
+		windowHasClass(window, L"Google Talk - Google Xmpp Client GUI Window") ||
+		windowHasClass(window, L"Chat View");
 }
 
 bool NormalState::isModifierDown() {

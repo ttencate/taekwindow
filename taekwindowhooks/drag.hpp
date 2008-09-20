@@ -67,6 +67,10 @@ protected:
 	 */
 	static HWND findLastParent(HWND window, bool (*criterium)(HWND));
 
+	/* Returns true if the given window has the given window class name.
+	 */
+	static bool windowHasClass(HWND window, wchar_t const *className);
+
 	/* Returns true if the modifier key is currently down.
 	 */
 	static bool isModifierDown();
@@ -98,6 +102,10 @@ protected:
 	/* Returns true if the window is fullscreen.
 	 */
 	static bool isFullscreenWindow(HWND window);
+
+	/* HACKs for specific applications.
+	 */
+	static bool isGoogleTalk(HWND window);
 };
 
 /* The base for all states when some button is currently pressed down.
