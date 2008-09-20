@@ -34,7 +34,7 @@ if errorlevel 1 goto :oops
 goto :done
 
 :oops
-echo "Some kind of error occurred when creating distribution ZIPs!"
+echo Some kind of error occurred when creating distribution ZIPs
 
 :done
 </xsl:template>
