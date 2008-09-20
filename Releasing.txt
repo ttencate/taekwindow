@@ -7,6 +7,8 @@ Update the changelog in information.xml. Full sentences, starting with lowercase
 
 Clean and rebuild the solution.
 
+If anything in terms of files or build structure was changed, extract the source zip file and check whether it builds cleanly.
+
 Commit the changes.
 
 Create a new tag in Subversion.
