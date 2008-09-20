@@ -66,13 +66,18 @@ HWND findLastParent(HWND window, bool (*criterium)(HWND)) {
 
 bool windowHasClass(HWND window, wchar_t const *className) {
 	const int BUFFER_SIZE = 256;
-	wchar_t buffer[BUFFER_SIZE];
-	if (GetClassName(window, buffer, BUFFER_SIZE) < BUFFER_SIZE) {
-		return wcscmp(buffer, className) == 0;
-	} else {
-		// It will not be equal to className if it is that long.
-		return false;
+
+	// A simple cache: if the window handle matches the previously fetched one,
+	// we do not need to call GetClassName again.
+	static HWND prevWindow = NULL;
+	static wchar_t buffer[BUFFER_SIZE];
+	if (window != prevWindow) {
+		prevWindow = window;
+		if (!GetClassName(window, buffer, BUFFER_SIZE))
+			return false;
 	}
+
+	return (wcscmp(buffer, className) == 0);
 }
 
 bool isMaximizedWindow(HWND window) {
