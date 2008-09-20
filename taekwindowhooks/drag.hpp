@@ -106,6 +106,7 @@ protected:
 	/* HACKs for specific applications.
 	 */
 	static bool isGoogleTalk(HWND window);
+	static bool isGoogleChrome(HWND window);
 };
 
 /* The base for all states when some button is currently pressed down.

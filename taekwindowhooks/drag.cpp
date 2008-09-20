@@ -80,15 +80,32 @@ bool NormalState::isMovableWindow(HWND window) {
 	}
 	// END HACK
 
+	// BEGIN HACK for Google Chrome
+	if (isGoogleChrome(window) && !IsZoomed(window)) {
+		return true;
+	}
+	// END HACK
+
 	// No reason why this should be considered movable.
 	return false;
 }
 
 bool NormalState::isMaximizedMovableWindow(HWND window) {
-	return
+	if (
 		isCaptionWindow(window) &&
 		IsZoomed(window) &&
-		!isFullscreenWindow(window);
+		!isFullscreenWindow(window)
+	) {
+		return true;
+	}
+
+	// BEGIN HACK for Google Chrome
+	if (isGoogleChrome(window) && IsZoomed(window)) {
+		return true;
+	}
+	// END HACK
+
+	return false;
 }
 
 bool NormalState::isResizableWindow(HWND window) {
@@ -106,14 +123,29 @@ bool NormalState::isResizableWindow(HWND window) {
 	}
 	// END HACK
 
+	// BEGIN HACK for Google Chrome
+	if (isGoogleChrome(window) && !IsZoomed(window)) {
+		return true;
+	}
+	// END HACK
+
 	return false;
 }
 
 bool NormalState::isMaximizedResizableWindow(HWND window) {
-	return
+	if (
 		isThickBorderWindow(window) &&
 		IsZoomed(window) &&
-		!isFullscreenWindow(window);
+		!isFullscreenWindow(window)
+	) {
+		return true;
+	}
+
+	// BEGIN HACK for Google Chrome
+	if (isGoogleChrome(window) && !IsZoomed(window)) {
+		return true;
+	}
+	// END HACK
 }
 
 bool NormalState::isThickBorderWindow(HWND window) {
@@ -134,6 +166,11 @@ bool NormalState::isGoogleTalk(HWND window) {
 	return
 		windowHasClass(window, L"Google Talk - Google Xmpp Client GUI Window") ||
 		windowHasClass(window, L"Chat View");
+}
+
+bool NormalState::isGoogleChrome(HWND window) {
+	// Google Chrome does not have WS_CAPTION style.
+	return windowHasClass(window, L"Chrome_XPFrame");
 }
 
 bool NormalState::isModifierDown() {
