@@ -170,6 +170,11 @@
 	</feature-requests>
 
 	<versions>
+    <version nr="0.2.5">
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2145527&amp;group_id=185457&amp;atid=913353">
+        the tray icon is now shown even if no settings are present in the registry
+      </bugfix>
+    </version>
     <version nr="0.2.4">
       <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">
         Google Talk now responds to move and resize actions

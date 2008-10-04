@@ -4,6 +4,10 @@
 
 EXEConfiguration config;
 
+void EXEConfiguration::setDefaults() {
+	systemTrayIcon = true;
+}
+
 /* Reads a DWORD from the specified value in the specified registry key.
  * If the value exists and has the DWORD type, it is written to the variable pointed to by out and true is returned.
  * Otherwise, nothing happens and false is returned.

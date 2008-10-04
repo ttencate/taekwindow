@@ -10,7 +10,10 @@ class EXEConfiguration {
 		/* Whether or not to show the system tray icon while the application is running.
 		 */
 		bool systemTrayIcon;
-
+		
+		/* Sets all fields to their default values.
+		 */
+		void setDefaults();
 };
 
 extern EXEConfiguration config;
