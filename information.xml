@@ -89,7 +89,7 @@
 				Make sure that the files are all in the same directory.
 			</li>
 			<li>
-				Run <code>taekwindowconfig.exe</code> to configure the Taekwindow. The configuration
+				Run <code>taekwindowconfig.exe</code> to configure Taekwindow. The configuration
 				tool can create a shortcut in the Startup section of your Start Menu, so
 				Taekwindow is started when you log on to your computer.
 			</li>
