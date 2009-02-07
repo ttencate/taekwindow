@@ -190,16 +190,16 @@
       </bugfix>
     </version>
 		<version nr="0.2.3">
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913353">
 				windows are no longer raised when they are moved or resized
 			</feature>
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913353">
 				windows are no longer activated when they are moved or resized
 			</feature>
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629767&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629767&amp;group_id=185457&amp;atid=913353">
 				the scroll wheel optionally affects the window under the mouse cursor, instead of the focused window
 			</feature>
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913353">
 				maximized windows can now be moved across multiple monitors while remaining maximized
 			</feature>
 			<feature>
@@ -219,7 +219,7 @@
 			</bugfix>
 		</version>
 		<version nr="0.2.2">
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913353">
 				added an optional system tray icon
 			</feature>
 			<feature>
@@ -247,10 +247,10 @@
 			</bugfix>
 		</version>
 		<version nr="0.2">
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629762&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629762&amp;group_id=185457&amp;atid=913353">
 				added a configuration tool
 			</feature>
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653698&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653698&amp;group_id=185457&amp;atid=913353">
 				made the modifier and mouse buttons, as well as closest-corner resizing,
 				into options
 			</feature>
@@ -265,7 +265,7 @@
 			</bugfix>
 		</version>
 		<version nr="0.1.1">
-			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1632182&amp;group_id=185457&amp;atid=913356">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1632182&amp;group_id=185457&amp;atid=913353">
 				implemented closest-corner resizing
 			</feature>
 		</version>
