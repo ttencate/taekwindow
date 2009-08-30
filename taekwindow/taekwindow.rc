@@ -111,7 +111,7 @@ BEGIN
     CONTROL         "Copyright",IDC_APPCOPYRIGHT,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,72,42,144,8
     CONTROL         "<a>E-mail</a>",IDC_APPEMAIL,"SysLink",WS_TABSTOP,72,54,144,8
     CONTROL         "<a>Website</a>",IDC_APPWEBSITE,"SysLink",WS_TABSTOP,72,66,144,8
-    CONTROL         "",IDC_APPLOGO,"Static",SS_BITMAP,12,18,21,20
+    CONTROL         "",IDC_APPLOGO,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,12,18,54,60
     GROUPBOX        "License",IDC_LICENSEGROUP,6,150,216,42
     CONTROL         "This program is licensed under the BSD license. This means you are free and welcome to distribute this program. See the <a>readme.html</a> file for details.",IDC_LICENSE,
                     "SysLink",WS_TABSTOP,12,162,204,24
@@ -177,7 +177,8 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-
+
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
