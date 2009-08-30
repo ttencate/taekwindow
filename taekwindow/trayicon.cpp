@@ -50,7 +50,7 @@ void doIconMenu(POINT pos) {
 }
 
 bool loadIcon() {
-	WORD iconId = isEnabled() ? TRAYICON_COLOUR : TRAYICON_GRAY;
+	WORD iconId = isEnabled() ? IDI_TRAY_COLOUR : IDI_TRAY_GRAY;
 	HICON newHandle = (HICON)LoadImage(instanceHandle, MAKEINTRESOURCE(iconId), IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
 	if (newHandle) {
 		if (iconHandle) {

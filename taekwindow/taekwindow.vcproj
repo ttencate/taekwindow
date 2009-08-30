@@ -257,15 +257,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath="..\graphics\64x64-shadow.png"
+				>
+			</File>
+			<File
 				RelativePath="..\graphics\all.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\configdlg.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\configdlgres.h"
 				>
 			</File>
 			<File

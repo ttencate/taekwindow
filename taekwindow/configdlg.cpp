@@ -2,15 +2,19 @@
 #include "util.hpp"
 #include "configdlg.hpp"
 #include "resource.h"
-#include "configdlgres.h"
 #include "version.h"
 
 #include <windows.h>
 #include <commctrl.h>
+#include <tchar.h>
 
 /* Handle of the configuration dialog's window.
  */
 HWND configWindowHandle = 0;
+
+void hyperlinkClicked(LONG_PTR controlID) {
+	// TODO
+}
 
 BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
@@ -23,12 +27,19 @@ BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, 
 
 BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
+		case WM_INITDIALOG:
+			SetDlgItemText(dialogHandle, IDC_ABOUTGROUP, _T("About ") _T(APPLICATION_TITLE));
+			SetDlgItemText(dialogHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
+			SetDlgItemText(dialogHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
+			SetDlgItemText(dialogHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
+			SetDlgItemText(dialogHandle, IDC_APPEMAIL, _T("<a>") _T(APPLICATION_EMAIL) _T("</a>"));
+			SetDlgItemText(dialogHandle, IDC_APPWEBSITE, _T("<a>") _T(APPLICATION_WEBSITE) _T("</a>"));
+			break;
 		case WM_COMMAND:
-			// TODO process hyperlink click
+			hyperlinkClicked(GetWindowLongPtr(dialogHandle, GWLP_ID));
 			return TRUE;
-		default:
-			return defaultDialogProc(dialogHandle, message, wParam, lParam);
 	}
+	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
 
 void showConfig() {
@@ -64,7 +75,7 @@ void showConfig() {
 	header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP | PSH_USEICONID;
 	header.hwndParent = NULL;
 	header.hInstance = getCurrentInstance();
-	header.pszIcon = MAKEINTRESOURCE(APPICON);
+	header.pszIcon = MAKEINTRESOURCE(IDI_APP);
 	header.pszCaption = APPLICATION_TITLE_W L" configuration";
 	header.nPages = NUM_PAGES;
 	header.nStartPage = 0;

@@ -2,7 +2,7 @@ TODO
 ----
 
 - Eliminate dependency on CRT. Shaves off some bytes, and WinAPI functions can do pretty much the same things.
-- Make it build with and without UNICODE by replacing L"" by _T("").
+- Make it build with and without UNICODE by replacing L"" by _T(""); remove needless L"" items from version.h.
 - Eliminate the /Wp64 warning.
 - Set warning level to maximum and treat warnings as errors.
-- Fix icon to look nice on Windows 7 taskbar.
+- Fix icon to look nice on Windows 7 taskbar; provide 20x20 and 24x24 icons for the tray.
