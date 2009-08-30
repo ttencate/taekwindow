@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <stdio.h>
 
+HINSTANCE currentInstance = NULL;
 HMODULE dllHandle = NULL;
 DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
@@ -15,6 +16,10 @@ HOOKPROC mouseProc = NULL;
 HOOKPROC lowLevelKeyboardProc = NULL;
 HHOOK mouseHook = NULL;
 HHOOK lowLevelKeyboardHook = NULL;
+
+HINSTANCE getCurrentInstance() {
+	return currentInstance;
+}
 
 /* Loads and initializes the DLL with the hook handlers.
  * Returns true on success.
@@ -142,6 +147,7 @@ void reloadConfig() {
 /* The main function for the application.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+	currentInstance = hInstance;
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 	// First, load the DLL with the event handlers in it.
 	if (!loadDll()) {

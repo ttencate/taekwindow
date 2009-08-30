@@ -1,0 +1,8 @@
+TODO
+----
+
+- Eliminate dependency on CRT. Shaves off some bytes, and WinAPI functions can do pretty much the same things.
+- Make it build with and without UNICODE by replacing L"" by _T("").
+- Eliminate the /Wp64 warning.
+- Set warning level to maximum and treat warnings as errors.
+- Fix icon to look nice on Windows 7 taskbar.

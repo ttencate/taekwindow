@@ -1,4 +1,5 @@
 #include "trayicon.hpp"
+#include "configdlg.hpp"
 #include "messages.hpp"
 #include "version.h"
 #include "resource.h"
@@ -30,14 +31,14 @@ void doIconMenu(POINT pos) {
 	}
 
 	// Populate the pop-up menu.
-	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, L"En&able");
+	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, L"En&able Taekwindow");
 	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_CONFIGURE, L"&Configure...");
 	AppendMenu(menuHandle, MF_SEPARATOR, 0, NULL);
 	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_EXIT, L"&Exit");
 
 	// Show the pop-up menu.
 	// Set the foreground window, so that the menu will be closed when the user clicks elsewhere.
-	// Post a dummy message to get it to show up the next time (I don't this problem myself, but the KB says it).
+	// Post a dummy message to get it to show up the next time (I don't see this problem myself, but the KB says it).
 	// See Microsoft KB article 135788: "PRB: Menus for Notification Icons Do Not Work Correctly".
 	SetForegroundWindow(iconWindowHandle);
 	TrackPopupMenuEx(menuHandle,
@@ -70,6 +71,7 @@ void toggleEnabled() {
 	}
 }
 
+/*
 void startConfigurationTool() {
 	// Find the full filename of the currently running executable.
 	TCHAR path[MAX_PATH+1];
@@ -99,6 +101,15 @@ void startConfigurationTool() {
 		} else {
 			showLastError(L"Configuration tool cannot be started");
 		}
+	}
+}
+*/
+
+void startConfigurationTool() {
+	if (isConfigShowing()) {
+		focusConfig();
+	} else {
+		showConfig();
 	}
 }
 
