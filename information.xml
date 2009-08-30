@@ -50,7 +50,7 @@
 		<file>taekwindowconfig\*.csproj</file>
 		<file>taekwindowconfig\Properties\*.cs</file>
 		<file>taekwindowconfig\Properties\*.resx</file>
-		<file>tools\7z.exe</file>
+		<file>tools\7za.exe</file>
 		<file>tools\msxsl.exe</file>
 		<file>taekwindow.sln</file>
 		<file>*.xml</file>
