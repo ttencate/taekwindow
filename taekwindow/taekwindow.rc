@@ -143,12 +143,12 @@ CAPTION "General"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     GROUPBOX        "Startup",IDC_STARTUPGROUP,6,6,216,96
-    CONTROL         "Start when &logging on",IDC_STARTATLOGON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,18,204,10
-    LTEXT           "This option creates or removes a shortcut to Taekwindow in the Startup folder in the Start Menu for your user account.",IDC_STATIC,24,30,186,24
+    CONTROL         "Start when &logging on\r\n\r\nThis option creates or removes a shortcut to Taekwindow in the Startup folder in the Start Menu for your user account.",IDC_STARTATLOGON,
+                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,18,204,36
     CONTROL         "",IDC_STARTUPIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,24,60,192,30
     GROUPBOX        "System tray",IDC_SYSTRAYGROUP,6,108,216,84
-    CONTROL         "Show icon in the &system tray",IDC_SYSTRAYICON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,120,204,10
-    LTEXT           "Click the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_STATIC,24,132,96,54
+    CONTROL         "Show icon in the &system tray\r\n\r\nClick the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_SYSTRAYICON,
+                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,120,108,42
     CONTROL         "",IDC_SYSTRAYIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,126,132,90,54
 END
 
