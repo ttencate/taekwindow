@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966
 		metadata-cs.xslt = metadata-cs.xslt
 		metadata.xslt = metadata.xslt
 		Source.txt = Source.txt
+		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindowhooks", "taekwindowhooks\taekwindowhooks.vcproj", "{EED18669-70C8-450F-8989-A8712FBFFA67}"

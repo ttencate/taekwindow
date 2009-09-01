@@ -265,7 +265,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\graphics\resize-bottom-right.png"
+				>
+			</File>
+			<File
+				RelativePath="..\graphics\resize-nine-rectangles.png"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graphics\startup.png"
 				>
 			</File>
 			<File
@@ -278,6 +290,10 @@
 			</File>
 			<File
 				RelativePath="..\graphics\traygray.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\graphics\trayicon.png"
 				>
 			</File>
 		</Filter>
@@ -353,10 +369,6 @@
 						OutputFile="$(OutDir)\readme.html"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\TODO.txt"
-				>
 			</File>
 		</Filter>
 		<Filter

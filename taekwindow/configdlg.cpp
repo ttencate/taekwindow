@@ -20,28 +20,44 @@ HWND configWindowHandle = 0;
  */
 ULONG_PTR gdiplusToken;
 
-enum ImageID { LOGO_IMAGE, NUM_IMAGES };
-const int IMAGE_RESOURCE_IDS[NUM_IMAGES] = { IDB_LOGO };
-Gdiplus::Image *images[NUM_IMAGES];
+/* The PNG images in the dialog.
+ */
+const int NUM_IMAGES = 5;
+const int IMAGE_CONTROL_IDS[NUM_IMAGES] = { IDC_STARTUPIMAGE, IDC_SYSTRAYIMAGE, 0, 0, IDC_APPLOGO };
+const int IMAGE_RESOURCE_IDS[NUM_IMAGES] = { IDB_STARTUP, IDB_TRAYICON, IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
+Gdiplus::Bitmap *images[NUM_IMAGES];
 
-BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
-	switch (message) {
-		case WM_INITDIALOG:
-			return TRUE;
-		default:
-			return FALSE;
-	}
+void initDynamicLabels(HWND dialogHandle) {
+	SetDlgItemText(dialogHandle, IDC_ABOUTGROUP, _T("About ") _T(APPLICATION_TITLE));
+	SetDlgItemText(dialogHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
+	SetDlgItemText(dialogHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
+	SetDlgItemText(dialogHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
+	SetDlgItemText(dialogHandle, IDC_APPEMAIL, _T("<a>") _T(APPLICATION_EMAIL) _T("</a>"));
+	SetDlgItemText(dialogHandle, IDC_APPWEBSITE, _T("<a>") _T(APPLICATION_WEBSITE) _T("</a>"));
 }
 
-void drawImage(DRAWITEMSTRUCT *item, ImageID imageID) {
-	if (images[imageID]) {
-		Gdiplus::Image *image = images[imageID];
-		RECT &rect = item->rcItem;
-		int x = (rect.left + rect.right - image->GetWidth()) / 2;
-		int y = (rect.top + rect.bottom - image->GetHeight()) / 2;
-		HDC dc = item->hDC;
-		Gdiplus::Graphics graphics(dc);
-		graphics.DrawImage(image, x, y);
+void drawImage(DRAWITEMSTRUCT *item, Gdiplus::Bitmap *image) {
+	HDC dc = item->hDC;
+	Gdiplus::Graphics graphics(dc);
+
+	image->SetResolution(graphics.GetDpiX(), graphics.GetDpiY());
+
+	RECT &rect = item->rcItem;
+	int x = (rect.left + rect.right - (int)image->GetWidth()) / 2;
+	int y = (rect.top + rect.bottom - (int)image->GetHeight()) / 2;
+
+	graphics.DrawImage(image, x, y);
+}
+
+void drawImageControl(int controlID, DRAWITEMSTRUCT *item) {
+	for (int i = 0; i < NUM_IMAGES; ++i) {
+		if (IMAGE_CONTROL_IDS[i] == controlID) {
+			Gdiplus::Bitmap *image = images[i];
+			if (image) {
+				drawImage(item, image);
+			}
+			break;
+		}
 	}
 }
 
@@ -49,21 +65,22 @@ void hyperlinkClicked(LONG_PTR controlID) {
 	// TODO
 }
 
+BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+		case WM_INITDIALOG:
+			return TRUE;
+		case WM_DRAWITEM:
+			drawImageControl((int)wParam, (DRAWITEMSTRUCT*)lParam);
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
 BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			SetDlgItemText(dialogHandle, IDC_ABOUTGROUP, _T("About ") _T(APPLICATION_TITLE));
-			SetDlgItemText(dialogHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
-			SetDlgItemText(dialogHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
-			SetDlgItemText(dialogHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
-			SetDlgItemText(dialogHandle, IDC_APPEMAIL, _T("<a>") _T(APPLICATION_EMAIL) _T("</a>"));
-			SetDlgItemText(dialogHandle, IDC_APPWEBSITE, _T("<a>") _T(APPLICATION_WEBSITE) _T("</a>"));
-			break;
-		case WM_DRAWITEM:
-			if (wParam == IDC_APPLOGO) {
-				drawImage((DRAWITEMSTRUCT*)lParam, LOGO_IMAGE);
-				return TRUE;
-			}
+			initDynamicLabels(dialogHandle);
 			break;
 		case WM_COMMAND:
 			hyperlinkClicked(GetWindowLongPtr(dialogHandle, GWLP_ID));
@@ -188,7 +205,7 @@ void loadImages() {
 		stream->SetSize(largeBytes);
 
 		// Create an image from the stream.
-		images[i] = new Gdiplus::Image(stream);
+		images[i] = new Gdiplus::Bitmap(stream);
 
 		// Clean up.
 		stream->Release();
@@ -213,9 +230,11 @@ void showConfig() {
 	initGdiplus(); // we CAN work without GDI+, so ignore any errors
 	loadImages();
 
-	const int NUM_PAGES = 1;
-	const int PAGE_TEMPLATES[NUM_PAGES] = { IDD_ABOUTPAGE };
-	const DLGPROC PAGE_DIALOG_PROCS[NUM_PAGES] = { &aboutPageDialogProc };
+	/* The property sheet pages in the configuration dialog.
+	 */
+	const int NUM_PAGES = 5;
+	const int PAGE_TEMPLATES[NUM_PAGES] = { IDD_GENERALPAGE, IDD_BUTTONSPAGE, IDD_RESIZINGPAGE, IDD_SCROLLINGPAGE, IDD_ABOUTPAGE };
+	const DLGPROC PAGE_DIALOG_PROCS[NUM_PAGES] = { &defaultDialogProc, &defaultDialogProc, &defaultDialogProc, &defaultDialogProc, &aboutPageDialogProc };
 
 	PROPSHEETPAGE pages[NUM_PAGES];
 	for (int i = 0; i < NUM_PAGES; ++i) {

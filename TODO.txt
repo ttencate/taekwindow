@@ -6,3 +6,4 @@ TODO
 - Eliminate the /Wp64 warning.
 - Set warning level to maximum and treat warnings as errors.
 - Fix icon to look nice on Windows 7 taskbar; provide 20x20 and 24x24 icons for the tray.
+- See what changes from the MFC branch need to be backported to trunk. There are at least useful changes to information.xml.
