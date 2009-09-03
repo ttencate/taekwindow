@@ -157,6 +157,19 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Keys and buttons"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
+    GROUPBOX        "Keyboard",IDC_KEYBOARDGROUP,6,6,216,54
+    CONTROL         "Move and resize with &left Alt",IDC_LEFTALT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,18,204,12
+    CONTROL         "Move and resize with a&ny Alt",IDC_ANYALT,"Button",BS_AUTORADIOBUTTON,12,30,204,12
+    CONTROL         "Move and resize with &right Alt",IDC_RIGHTALT,"Button",BS_AUTORADIOBUTTON,12,42,204,12
+    GROUPBOX        "Moving",IDC_MOVINGGROUP,6,66,216,54
+    CONTROL         "Move with l&eft mouse button",IDC_MOVELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,78,204,12
+    CONTROL         "Move with &middle mouse button",IDC_MOVEMIDDLE,"Button",BS_AUTORADIOBUTTON,12,90,204,12
+    CONTROL         "Move with ri&ght mouse button",IDC_MOVERIGHT,"Button",BS_AUTORADIOBUTTON,12,102,204,12
+    GROUPBOX        "Resizing",IDC_RESIZINGGROUP,6,126,216,54
+    CONTROL         "Resize with le&ft mouse button",IDC_RESIZELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,138,204,12
+    CONTROL         "Resize with mi&ddle mouse button",IDC_RESIZEMIDDLE,
+                    "Button",BS_AUTORADIOBUTTON,12,150,204,12
+    CONTROL         "Resize with rig&ht mouse button",IDC_RESIZERIGHT,"Button",BS_AUTORADIOBUTTON,12,162,204,12
 END
 
 IDD_RESIZINGPAGE DIALOGEX 0, 0, 229, 199
@@ -164,6 +177,13 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Resizing"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
+    GROUPBOX        "Resize mode",IDC_RESIZEMODEGROUP,6,6,216,156
+    CONTROL         "&Bottom right corner\r\n\r\nRegardless of where you grab the window, you always resize from its lower right corner.",IDC_BOTTOMRIGHT,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,18,102,66
+    CONTROL         "&Nine rectangles\n\nThe window is resized from the corner or edge that is closest to the point where you grab it.",IDC_NINERECTANGLES,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,90,102,66
+    CONTROL         "",IDC_BOTTOMRIGHTIMAGE,"Static",SS_OWNERDRAW,120,18,96,66
+    CONTROL         "",IDC_NINERECTANGLESIMAGE,"Static",SS_OWNERDRAW,120,90,96,66
 END
 
 IDD_SCROLLINGPAGE DIALOGEX 0, 0, 229, 199
@@ -171,6 +191,11 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Scrolling"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
+    GROUPBOX        "Scroll wheel behaviour",IDC_SCROLLINGGROUP,6,6,216,96
+    CONTROL         "Scroll the &focused window\r\n\r\nThe scroll wheel on the mouse affects the window that currently has the focus (Windows default).",IDC_SCROLLFOCUSED,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,18,204,36
+    CONTROL         "Scroll the window under the &cursor\r\n\r\nThe scroll wheel affects the window that is currently under the mouse cursor.",IDC_SCROLLUNDERCURSOR,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,60,204,36
 END
 
 IDD_ABOUTPAGE DIALOGEX 0, 0, 229, 199
