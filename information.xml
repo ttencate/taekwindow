@@ -11,6 +11,7 @@
 	<email>ttencate+taekwindow@gmail.com</email>
 	<website>http://taekwindow.sf.net/</website>
 	<copyright>Copyright © 2006-2008, Thomas ten Cate</copyright>
+	<licensebrief>This program is licensed under the BSD license. This means you are free and welcome to distribute it.</licensebrief>
 
 	<mainexefile>taekwindow</mainexefile>
 	<hooksdllfile>taekwindowhooks</hooksdllfile>

@@ -164,7 +164,7 @@ void createTrayIcon() {
 	// Load the icon.
 	loadIcon();
 	if (!iconHandle) {
-		showLastError(L"Error loading icon");
+		showLastError(NULL, L"Error loading icon");
 		return;
 	}
 
@@ -184,7 +184,7 @@ void createTrayIcon() {
 	wndClass.hIconSm = NULL;
 	iconWindowClass = RegisterClassEx(&wndClass);
 	if (!iconWindowClass) {
-		showLastError(L"Error registering window class");
+		showLastError(NULL, L"Error registering window class");
 		DestroyIcon(iconHandle);
 		return;
 	}
@@ -192,7 +192,7 @@ void createTrayIcon() {
 	// Create the dummy window that receives the icon's messages.
 	iconWindowHandle = CreateWindow(wndClass.lpszClassName, APPLICATION_TITLE_W, 0, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, HWND_MESSAGE, NULL, instanceHandle, 0);
 	if (!iconWindowHandle) {
-		showLastError(L"Error creating window");
+		showLastError(NULL, L"Error creating window");
 		UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
 		DestroyIcon(iconHandle);
 		return;
@@ -214,7 +214,7 @@ void createTrayIcon() {
 	iconData.szInfoTitle[0] = L'\0';
 	iconData.dwInfoFlags = 0;
 	if (!Shell_NotifyIcon(NIM_ADD, &iconData)) {
-		showLastError(L"Error creating notify icon");
+		showLastError(NULL, L"Error creating notify icon");
 		DestroyWindow(iconWindowHandle);
 		UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
 		DestroyIcon(iconHandle);

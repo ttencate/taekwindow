@@ -9,9 +9,6 @@
 #include <tchar.h>
 #include <gdiplus.h>
 
-// TODO remove
-#include <stdio.h>
-
 /* Handle of the configuration dialog's window.
  */
 HWND configWindowHandle = 0;
@@ -32,8 +29,9 @@ void initDynamicLabels(HWND dialogHandle) {
 	SetDlgItemText(dialogHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
 	SetDlgItemText(dialogHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
 	SetDlgItemText(dialogHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
-	SetDlgItemText(dialogHandle, IDC_APPEMAIL, _T("<a>") _T(APPLICATION_EMAIL) _T("</a>"));
-	SetDlgItemText(dialogHandle, IDC_APPWEBSITE, _T("<a>") _T(APPLICATION_WEBSITE) _T("</a>"));
+	SetDlgItemText(dialogHandle, IDC_APPEMAIL, _T("<a href=\"mailto:") _T(APPLICATION_EMAIL) _T("\">") _T(APPLICATION_EMAIL) _T("</a>"));
+	SetDlgItemText(dialogHandle, IDC_APPWEBSITE, _T("<a href=\"") _T(APPLICATION_WEBSITE) _T("\">") _T(APPLICATION_WEBSITE) _T("</a>"));
+	SetDlgItemText(dialogHandle, IDC_LICENSE, _T(APPLICATION_LICENSE_BRIEF) _T(" See the file <a href=\"") _T(APPLICATION_README_FILE) _T("\">") _T(APPLICATION_README_FILE) _T("</a> for details."));
 }
 
 void drawImage(DRAWITEMSTRUCT *item, Gdiplus::Bitmap *image) {
@@ -61,8 +59,25 @@ void drawImageControl(int controlID, DRAWITEMSTRUCT *item) {
 	}
 }
 
-void hyperlinkClicked(LONG_PTR controlID) {
-	// TODO
+void hyperlinkClicked(int controlID, NMLINK *nmLink) {
+	LPCTSTR url = nmLink->item.szUrl;
+	if (url) {
+		if ((int)ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOWDEFAULT) <= 32) {
+			switch (controlID) {
+				case IDC_APPEMAIL:
+					showError(configWindowHandle, _T("Could not launch e-mail program"), _T("It seems that your system does not have an e-mail program installed, or it is not set up properly to handle \"mailto:\" links.\r\n\r\nYou can still send e-mail to %1 manually."), url);
+					break;
+				case IDC_APPWEBSITE:
+					showError(configWindowHandle, _T("Could not launch web browser"), _T("It seems that your system does not have a web browser installed, or it is not set up properly to handle \"http\" links.\r\n\r\nIf you do have a browser, point it to %1 manually."), url);
+					break;
+				case IDC_LICENSE:
+					showError(configWindowHandle, _T("Could not find readme file"), _T("The file %1 could not be found in the current directory. You should have received this file along with %2.exe."), url, _T(MAIN_EXE_FILE));
+					break;
+				default:
+					showLastError(configWindowHandle, _T("Could not open URL"));
+			}
+		}
+	}
 }
 
 BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -81,12 +96,27 @@ BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam
 	switch (message) {
 		case WM_INITDIALOG:
 			initDynamicLabels(dialogHandle);
+			break; // special case: must not return TRUE, but allow default processing
+		case WM_NOTIFY:
+			NMHDR *nmHdr = (NMHDR*)lParam;
+			switch (nmHdr->code) {
+				case NM_CLICK:
+				case NM_RETURN:
+					hyperlinkClicked((int)wParam, (NMLINK*)lParam);
+					return TRUE;
+			}
 			break;
-		case WM_COMMAND:
-			hyperlinkClicked(GetWindowLongPtr(dialogHandle, GWLP_ID));
-			return TRUE;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM lParam) {
+	switch (message) {
+		case PSCB_INITIALIZED:
+			configWindowHandle = dialogHandle;
+			break;
+	}
+	return 0;
 }
 
 /* Initializes the Common Controls library.
@@ -98,7 +128,7 @@ bool initCommonControls() {
 	icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	icc.dwICC = ICC_STANDARD_CLASSES | ICC_LINK_CLASS;
 	if (InitCommonControlsEx(&icc) != TRUE) {
-		showLastError(_T("Unable to initialize common controls"));
+		showLastError(NULL, _T("Unable to initialize common controls"));
 		return false;
 	}
 	return true;
@@ -119,7 +149,7 @@ bool initGdiplus() {
 	gsi.SuppressExternalCodecs = TRUE;
 	Gdiplus::Status status = Gdiplus::GdiplusStartup(&gdiplusToken, &gsi, NULL);
 	if (status != Gdiplus::Ok) {
-		showError(_T("Could not initialize GDI+"), _T("The GDI+ graphics library could not be initialized. Some images will not be visible.\n\nGdiplusStartup returned the error code %1!d!."), status);
+		showError(NULL, _T("Could not initialize GDI+"), _T("The GDI+ graphics library could not be initialized. Some images will not be visible.\n\nGdiplusStartup returned the error code %1!d!."), status);
 		return false;
 	}
 	return true;
@@ -255,7 +285,7 @@ void showConfig() {
 
 	PROPSHEETHEADER header;
 	header.dwSize = sizeof(PROPSHEETHEADER);
-	header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP | PSH_USEICONID;
+	header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP | PSH_USEICONID | PSH_USECALLBACK;
 	header.hwndParent = NULL;
 	header.hInstance = getCurrentInstance();
 	header.pszIcon = MAKEINTRESOURCE(IDI_APP);
@@ -263,7 +293,7 @@ void showConfig() {
 	header.nPages = NUM_PAGES;
 	header.nStartPage = 0;
 	header.ppsp = pages;
-	header.pfnCallback = NULL;
+	header.pfnCallback = &configPropSheetProc;
 	header.hbmWatermark = NULL;
 	header.pszbmWatermark = NULL;
 	header.hplWatermark = NULL;
@@ -274,6 +304,7 @@ void showConfig() {
 
 	unloadImages();
 	shutdownGdiplus();
+	configWindowHandle = 0;
 }
 
 bool isConfigShowing() {

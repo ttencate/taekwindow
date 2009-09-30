@@ -23,7 +23,6 @@
 #define IDC_APPVERSION                  1005
 #define IDC_SYSTRAYICON                 1005
 #define IDC_APPCOPYRIGHT                1006
-#define IDC_SYSTRAYPICTURE              1006
 #define IDC_SYSTRAYIMAGE                1006
 #define IDC_APPWEBSITE                  1007
 #define IDC_SYSTRAYGROUP                1007
@@ -44,7 +43,6 @@
 #define IDC_RESIZEMIDDLE                1018
 #define IDC_RESIZERIGHT                 1019
 #define IDC_RESIZEMODEGROUP             1020
-#define IDC_MOVINGGROUP2                1020
 #define IDC_BOTTOMRIGHT                 1021
 #define IDC_BOTTOMRIGHTIMAGE            1022
 #define IDC_NINERECTANGLES              1024

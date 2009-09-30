@@ -211,8 +211,7 @@ BEGIN
     CONTROL         "<a>Website</a>",IDC_APPWEBSITE,"SysLink",WS_TABSTOP,72,66,144,8
     CONTROL         "",IDC_APPLOGO,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,12,18,54,60
     GROUPBOX        "License",IDC_LICENSEGROUP,6,150,216,42
-    CONTROL         "This program is licensed under the BSD license. This means you are free and welcome to distribute this program. See the <a>readme.html</a> file for details.",IDC_LICENSE,
-                    "SysLink",WS_TABSTOP,12,162,204,24
+    CONTROL         "License",IDC_LICENSE,"SysLink",WS_TABSTOP,12,162,204,24
 END
 
 #endif    // English (U.S.) resources

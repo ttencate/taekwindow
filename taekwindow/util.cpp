@@ -1,6 +1,6 @@
 #include "util.hpp"
 
-void showError(LPCWSTR title, LPCWSTR text, ...) {
+void showError(HWND parent, LPCWSTR title, LPCWSTR text, ...) {
 	va_list list;
 	va_start(list, text);
 	PVOID msg;
@@ -10,9 +10,9 @@ void showError(LPCWSTR title, LPCWSTR text, ...) {
 	LocalFree(msg);
 }
 
-void showLastError(LPCWSTR title) {
+void showLastError(HWND parent, LPCWSTR title) {
 	PVOID msg;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&msg, 0, NULL);
-	MessageBox(NULL, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
+	MessageBox(parent, (LPCWSTR)msg, title, MB_OK | MB_ICONERROR);
 	LocalFree(msg);
 }

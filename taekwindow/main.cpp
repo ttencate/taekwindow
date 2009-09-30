@@ -151,11 +151,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 	// First, load the DLL with the event handlers in it.
 	if (!loadDll()) {
-		showLastError(L"Error loading DLL");
+		showLastError(NULL, L"Error loading DLL");
 	} else {
 		// DLL loaded, get pointers to the functions in it that we need.
 		if (!findProcs()) {
-			showLastError(L"Error getting handler address");
+			showLastError(NULL, L"Error getting handler address");
 		} else {
 			// Function pointers acquired, initialize the DLL.
 			DWORD prevThreadId = initDll();
@@ -170,7 +170,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				reloadConfig();
 				// Attach the event hooks.
 				if (!enable()) {
-					showLastError(L"Error attaching hooks");
+					showLastError(NULL, L"Error attaching hooks");
 				} else {
 					// main message loop
 					BOOL getMsgRetVal;

@@ -5,12 +5,14 @@
 
 /* Shows a message box with the given message, in which argument substitution is done
  * according to the format of FormatMessage (not printf syntax!).
+ * The parent may be NULL.
  */
-void showError(LPCWSTR title, LPCWSTR text, ...);
+void showError(HWND parent, LPCWSTR title, LPCWSTR text, ...);
 
 /* Shows a message box with the message corresponding to GetLastError(), with the given title.
+ * The parent may be NULL.
  */
-void showLastError(LPCWSTR title);
+void showLastError(HWND parent, LPCWSTR title);
 
 /* Only calls showLastError in debug mode.
  * Useful for checking cases that are very unlikely to go wrong once they go right,
