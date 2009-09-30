@@ -120,21 +120,38 @@ BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
 
+void mutexButtonRadios(HWND dialogHandle, WPARAM wParam, int move, int resize) {
+	if (wParam == move && IsDlgButtonChecked(dialogHandle, resize)) {
+		CheckRadioButton(dialogHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
+			resize == IDC_RESIZERIGHT ? IDC_RESIZEMIDDLE : IDC_RESIZERIGHT);
+	}
+	if (wParam == resize && IsDlgButtonChecked(dialogHandle, move)) {
+		CheckRadioButton(dialogHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
+			move == IDC_MOVELEFT ? IDC_MOVEMIDDLE : IDC_MOVELEFT);
+	}
+}
+
 BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckDlgButton(dialogHandle, IDC_LEFTALT , newDllConfig.modifier == VK_LMENU);
-			CheckDlgButton(dialogHandle, IDC_ANYALT  , newDllConfig.modifier == VK_MENU );
-			CheckDlgButton(dialogHandle, IDC_RIGHTALT, newDllConfig.modifier == VK_RMENU);
-			CheckDlgButton(dialogHandle, IDC_MOVELEFT  , newDllConfig.moveButton == mbLeft  );
-			CheckDlgButton(dialogHandle, IDC_MOVEMIDDLE, newDllConfig.moveButton == mbMiddle);
-			CheckDlgButton(dialogHandle, IDC_MOVERIGHT , newDllConfig.moveButton == mbRight );
-			CheckDlgButton(dialogHandle, IDC_RESIZELEFT  , newDllConfig.resizeButton == mbLeft  );
-			CheckDlgButton(dialogHandle, IDC_RESIZEMIDDLE, newDllConfig.resizeButton == mbMiddle);
-			CheckDlgButton(dialogHandle, IDC_RESIZERIGHT , newDllConfig.resizeButton == mbRight );
+			CheckRadioButton(dialogHandle, IDC_LEFTALT, IDC_RIGHTALT,
+				newDllConfig.modifier == VK_MENU ? IDC_ANYALT :
+				newDllConfig.modifier == VK_RMENU ? IDC_RIGHTALT :
+				IDC_LEFTALT);
+			CheckRadioButton(dialogHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
+				newDllConfig.moveButton == mbMiddle ? IDC_MOVEMIDDLE :
+				newDllConfig.moveButton == mbRight ? IDC_MOVERIGHT :
+				IDC_MOVELEFT);
+			CheckRadioButton(dialogHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
+				newDllConfig.resizeButton == mbLeft ? IDC_RESIZELEFT :
+				newDllConfig.resizeButton == mbMiddle ? IDC_RESIZEMIDDLE :
+				IDC_RESIZERIGHT);
 			break;
 		case WM_COMMAND:
-			// TODO prevent same button for different functions
+			// Prevent same button for different functions.
+			mutexButtonRadios(dialogHandle, wParam, IDC_MOVELEFT  , IDC_RESIZELEFT  );
+			mutexButtonRadios(dialogHandle, wParam, IDC_MOVEMIDDLE, IDC_RESIZEMIDDLE);
+			mutexButtonRadios(dialogHandle, wParam, IDC_MOVERIGHT , IDC_RESIZERIGHT );
 			PropSheet_Changed(configWindowHandle, dialogHandle);
 			return TRUE;
 		case WM_NOTIFY:
@@ -162,8 +179,9 @@ BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckDlgButton(dialogHandle, IDC_BOTTOMRIGHT   , newDllConfig.resizeMode == rmBottomRight   );
-			CheckDlgButton(dialogHandle, IDC_NINERECTANGLES, newDllConfig.resizeMode == rmNineRectangles);
+			CheckRadioButton(dialogHandle, IDC_BOTTOMRIGHT, IDC_NINERECTANGLES,
+				newDllConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT :
+				IDC_NINERECTANGLES);
 			break;
 		case WM_COMMAND:
 			PropSheet_Changed(configWindowHandle, dialogHandle);
@@ -184,8 +202,8 @@ BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPa
 BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckDlgButton(dialogHandle, IDC_SCROLLFOCUSED    , !newDllConfig.scrollWindowUnderCursor);
-			CheckDlgButton(dialogHandle, IDC_SCROLLUNDERCURSOR,  newDllConfig.scrollWindowUnderCursor);
+			CheckRadioButton(dialogHandle, IDC_SCROLLFOCUSED, IDC_SCROLLUNDERCURSOR,
+				newDllConfig.scrollWindowUnderCursor ? IDC_SCROLLUNDERCURSOR : IDC_SCROLLFOCUSED);
 			break;
 		case WM_COMMAND:
 			PropSheet_Changed(configWindowHandle, dialogHandle);
@@ -193,7 +211,7 @@ BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wP
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					// TODO
+					newDllConfig.scrollWindowUnderCursor = IsDlgButtonChecked(dialogHandle, IDC_SCROLLUNDERCURSOR) == BST_CHECKED;
 					return TRUE;
 			}
 			break;
@@ -230,6 +248,7 @@ int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM lParam)
 		case PSCB_BUTTONPRESSED:
 			if (lParam == PSBTN_OK || lParam == PSBTN_APPLYNOW) {
 				// TODO this will be run before each of the pages' PSN_APPLY handlers...
+				// Go back to WINVER = 0x0501 if this is not what we should use.
 				applyConfig(&newDllConfig, &newExeConfig);
 			}
 			break;
