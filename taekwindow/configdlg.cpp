@@ -92,11 +92,47 @@ BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, 
 	}
 }
 
+BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+		case WM_INITDIALOG:
+			// TODO
+			break;
+	}
+	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+		case WM_INITDIALOG:
+			// TODO
+			break;
+	}
+	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+		case WM_INITDIALOG:
+			// TODO
+			break;
+	}
+	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+		case WM_INITDIALOG:
+			// TODO
+			break;
+	}
+	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+}
+
 BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
 			initDynamicLabels(dialogHandle);
-			break; // special case: must not return TRUE, but allow default processing
+			break;
 		case WM_NOTIFY:
 			NMHDR *nmHdr = (NMHDR*)lParam;
 			switch (nmHdr->code) {
@@ -264,7 +300,7 @@ void showConfig() {
 	 */
 	const int NUM_PAGES = 5;
 	const int PAGE_TEMPLATES[NUM_PAGES] = { IDD_GENERALPAGE, IDD_BUTTONSPAGE, IDD_RESIZINGPAGE, IDD_SCROLLINGPAGE, IDD_ABOUTPAGE };
-	const DLGPROC PAGE_DIALOG_PROCS[NUM_PAGES] = { &defaultDialogProc, &defaultDialogProc, &defaultDialogProc, &defaultDialogProc, &aboutPageDialogProc };
+	const DLGPROC PAGE_DIALOG_PROCS[NUM_PAGES] = { &generalPageDialogProc, &buttonsPageDialogProc, &resizingPageDialogProc, &scrollingPageDialogProc, &aboutPageDialogProc };
 
 	PROPSHEETPAGE pages[NUM_PAGES];
 	for (int i = 0; i < NUM_PAGES; ++i) {
