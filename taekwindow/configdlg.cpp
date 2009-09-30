@@ -105,6 +105,17 @@ BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 			CheckDlgButton(dialogHandle, IDC_SYSTRAYICON, newExeConfig.systemTrayIcon);
 			CheckDlgButton(dialogHandle, IDC_STARTATLOGON, newExeConfig.startAtLogon);
 			break;
+		case WM_COMMAND:
+			PropSheet_Changed(configWindowHandle, dialogHandle);
+			return TRUE;
+		case WM_NOTIFY:
+			switch (((NMHDR*)lParam)->code) {
+				case PSN_APPLY:
+					newExeConfig.systemTrayIcon = IsDlgButtonChecked(dialogHandle, IDC_SYSTRAYICON) == BST_CHECKED;
+					newExeConfig.startAtLogon = IsDlgButtonChecked(dialogHandle, IDC_STARTATLOGON) == BST_CHECKED;
+					return TRUE;
+			}
+			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
@@ -122,6 +133,28 @@ BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 			CheckDlgButton(dialogHandle, IDC_RESIZEMIDDLE, newDllConfig.resizeButton == mbMiddle);
 			CheckDlgButton(dialogHandle, IDC_RESIZERIGHT , newDllConfig.resizeButton == mbRight );
 			break;
+		case WM_COMMAND:
+			// TODO prevent same button for different functions
+			PropSheet_Changed(configWindowHandle, dialogHandle);
+			return TRUE;
+		case WM_NOTIFY:
+			switch (((NMHDR*)lParam)->code) {
+				case PSN_APPLY:
+					newDllConfig.modifier =
+						IsDlgButtonChecked(dialogHandle, IDC_ANYALT) ? VK_MENU :
+						IsDlgButtonChecked(dialogHandle, IDC_RIGHTALT) ? VK_RMENU :
+						VK_LMENU;
+					newDllConfig.moveButton =
+						IsDlgButtonChecked(dialogHandle, IDC_MOVEMIDDLE) ? mbMiddle :
+						IsDlgButtonChecked(dialogHandle, IDC_MOVERIGHT) ? mbRight :
+						mbLeft;
+					newDllConfig.resizeButton =
+						IsDlgButtonChecked(dialogHandle, IDC_RESIZELEFT) ? mbLeft :
+						IsDlgButtonChecked(dialogHandle, IDC_RESIZEMIDDLE) ? mbMiddle :
+						mbRight;
+					return TRUE;
+			}
+			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
@@ -132,6 +165,18 @@ BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPa
 			CheckDlgButton(dialogHandle, IDC_BOTTOMRIGHT   , newDllConfig.resizeMode == rmBottomRight   );
 			CheckDlgButton(dialogHandle, IDC_NINERECTANGLES, newDllConfig.resizeMode == rmNineRectangles);
 			break;
+		case WM_COMMAND:
+			PropSheet_Changed(configWindowHandle, dialogHandle);
+			return TRUE;
+		case WM_NOTIFY:
+			switch (((NMHDR*)lParam)->code) {
+				case PSN_APPLY:
+					newDllConfig.resizeMode =
+						IsDlgButtonChecked(dialogHandle, IDC_BOTTOMRIGHT) ? rmBottomRight :
+						rmNineRectangles;
+					return TRUE;
+			}
+			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
@@ -141,6 +186,16 @@ BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wP
 		case WM_INITDIALOG:
 			CheckDlgButton(dialogHandle, IDC_SCROLLFOCUSED    , !newDllConfig.scrollWindowUnderCursor);
 			CheckDlgButton(dialogHandle, IDC_SCROLLUNDERCURSOR,  newDllConfig.scrollWindowUnderCursor);
+			break;
+		case WM_COMMAND:
+			PropSheet_Changed(configWindowHandle, dialogHandle);
+			return TRUE;
+		case WM_NOTIFY:
+			switch (((NMHDR*)lParam)->code) {
+				case PSN_APPLY:
+					// TODO
+					return TRUE;
+			}
 			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
@@ -164,10 +219,19 @@ BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
 
+/* PropSheetProc for the configuration dialog.
+ * Must return 0.
+ */
 int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM lParam) {
 	switch (message) {
 		case PSCB_INITIALIZED:
 			configWindowHandle = dialogHandle;
+			break;
+		case PSCB_BUTTONPRESSED:
+			if (lParam == PSBTN_OK || lParam == PSBTN_APPLYNOW) {
+				// TODO this will be run before each of the pages' PSN_APPLY handlers...
+				applyConfig(&newDllConfig, &newExeConfig);
+			}
 			break;
 	}
 	return 0;
