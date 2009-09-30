@@ -9,13 +9,18 @@
 
 HINSTANCE currentInstance = NULL;
 HMODULE dllHandle = NULL;
+
 DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
 void (*applyConfigProc)(DLLConfiguration*) = NULL;
+
 HOOKPROC mouseProc = NULL;
 HOOKPROC lowLevelKeyboardProc = NULL;
+
 HHOOK mouseHook = NULL;
 HHOOK lowLevelKeyboardHook = NULL;
+
+EXEConfiguration activeExeConfig;
 
 HINSTANCE getCurrentInstance() {
 	return currentInstance;
@@ -55,7 +60,7 @@ void uninitDll() {
 
 /* Updates the configuration settings in the DLL.
  */
-void applyDLLConfig(DLLConfiguration *dllconfig) {
+void applyDllConfig(DLLConfiguration *dllconfig) {
 	(*applyConfigProc)(dllconfig);
 }
 
@@ -131,17 +136,26 @@ bool disable() {
 	return true;
 }
 
-void applyEXEConfig(EXEConfiguration *config) {
+void applyExeConfig(EXEConfiguration *config) {
+	activeExeConfig = *config;
 	showTrayIcon(config->systemTrayIcon);
 }
 
-void reloadConfig() {
-	DLLConfiguration dllconfig;
-	dllconfig.setDefaults();
-	config.setDefaults();
-	readConfigFromRegistry(&dllconfig, &config);
-	applyDLLConfig(&dllconfig);
-	applyEXEConfig(&config);
+void applyConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
+	applyDllConfig(dllConfig);
+	applyExeConfig(exeConfig);
+}
+
+void loadAndApplyConfig() {
+	DLLConfiguration dllConfig;
+	EXEConfiguration exeConfig;
+
+	dllConfig.setDefaults();
+	exeConfig.setDefaults();
+
+	loadConfig(&dllConfig, &exeConfig);
+
+	applyConfig(&dllConfig, &exeConfig);
 }
 
 /* The main function for the application.
@@ -167,7 +181,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			} else {
 				// We're the first to initialize the DLL, continue.
 				// Load the configuration from the registry.
-				reloadConfig();
+				loadAndApplyConfig();
 				// Attach the event hooks.
 				if (!enable()) {
 					showLastError(NULL, L"Error attaching hooks");
@@ -181,14 +195,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 							// error in GetMessage... low-level, panic and abort
 							break;
 						} else {
-							switch (msg.message) {
-								case RELOAD_CONFIG_MESSAGE:
-									reloadConfig();
-									break;
-								default:
-									TranslateMessage(&msg);
-									DispatchMessage(&msg);
-							}
+							TranslateMessage(&msg);
+							DispatchMessage(&msg);
 						}
 					} while (getMsgRetVal);
 					if (getMsgRetVal) {

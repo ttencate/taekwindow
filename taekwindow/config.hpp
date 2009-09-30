@@ -3,23 +3,24 @@
 
 #include "../shared/dllconfig.hpp"
 
-class EXEConfiguration {
+struct EXEConfiguration {
 
-	public:
+	/* Whether or not to show the system tray icon while the application is running.
+	 */
+	bool systemTrayIcon;
 
-		/* Whether or not to show the system tray icon while the application is running.
-		 */
-		bool systemTrayIcon;
-		
-		/* Sets all fields to their default values.
-		 */
-		void setDefaults();
+	/* Whether or not to launch at logon.
+	 * Implemented by a shortcut in the Startup folder in the Start Menu.
+	 */
+	bool startAtLogon;
+	
+	/* Sets all fields to their default values.
+	 */
+	void setDefaults();
+
 };
 
-extern EXEConfiguration config;
-
-/* Reads the configuration settings from the registry and places them in the objects pointed to.
- */
-void readConfigFromRegistry(DLLConfiguration *dllconfig, EXEConfiguration *execonfig);
+void loadConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig);
+void saveConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig);
 
 #endif

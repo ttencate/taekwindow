@@ -1,5 +1,6 @@
 #include "main.hpp"
 #include "util.hpp"
+#include "config.hpp"
 #include "configdlg.hpp"
 #include "resource.h"
 #include "version.h"
@@ -12,6 +13,12 @@
 /* Handle of the configuration dialog's window.
  */
 HWND configWindowHandle = 0;
+
+/* The currently active DLL configuration.
+ * Only valid when the dialog is visible.
+ */
+DLLConfiguration newDllConfig;
+EXEConfiguration newExeConfig;
 
 /* GDI+ token.
  */
@@ -95,7 +102,8 @@ BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, 
 BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			// TODO
+			CheckDlgButton(dialogHandle, IDC_SYSTRAYICON, newExeConfig.systemTrayIcon);
+			CheckDlgButton(dialogHandle, IDC_STARTATLOGON, newExeConfig.startAtLogon);
 			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
@@ -104,7 +112,15 @@ BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			// TODO
+			CheckDlgButton(dialogHandle, IDC_LEFTALT , newDllConfig.modifier == VK_LMENU);
+			CheckDlgButton(dialogHandle, IDC_ANYALT  , newDllConfig.modifier == VK_MENU );
+			CheckDlgButton(dialogHandle, IDC_RIGHTALT, newDllConfig.modifier == VK_RMENU);
+			CheckDlgButton(dialogHandle, IDC_MOVELEFT  , newDllConfig.moveButton == mbLeft  );
+			CheckDlgButton(dialogHandle, IDC_MOVEMIDDLE, newDllConfig.moveButton == mbMiddle);
+			CheckDlgButton(dialogHandle, IDC_MOVERIGHT , newDllConfig.moveButton == mbRight );
+			CheckDlgButton(dialogHandle, IDC_RESIZELEFT  , newDllConfig.resizeButton == mbLeft  );
+			CheckDlgButton(dialogHandle, IDC_RESIZEMIDDLE, newDllConfig.resizeButton == mbMiddle);
+			CheckDlgButton(dialogHandle, IDC_RESIZERIGHT , newDllConfig.resizeButton == mbRight );
 			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
@@ -113,7 +129,8 @@ BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			// TODO
+			CheckDlgButton(dialogHandle, IDC_BOTTOMRIGHT   , newDllConfig.resizeMode == rmBottomRight   );
+			CheckDlgButton(dialogHandle, IDC_NINERECTANGLES, newDllConfig.resizeMode == rmNineRectangles);
 			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
@@ -122,7 +139,8 @@ BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPa
 BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			// TODO
+			CheckDlgButton(dialogHandle, IDC_SCROLLFOCUSED    , !newDllConfig.scrollWindowUnderCursor);
+			CheckDlgButton(dialogHandle, IDC_SCROLLUNDERCURSOR,  newDllConfig.scrollWindowUnderCursor);
 			break;
 	}
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
@@ -287,11 +305,11 @@ void unloadImages() {
 	}
 }
 
-void showConfig() {
+INT_PTR showPropSheet() {
 	// Most of the runs, the user will not use the configuration dialog.
 	// That's why we do not initialize in WinMain, but only when it is used.
 	if (!initCommonControls()) {
-		return;
+		return -1;
 	}
 	initGdiplus(); // we CAN work without GDI+, so ignore any errors
 	loadImages();
@@ -336,11 +354,27 @@ void showConfig() {
 	header.hbmHeader = NULL;
 	header.pszbmHeader = NULL;
 
-	PropertySheet(&header);
+	INT_PTR result = PropertySheet(&header);
 
 	unloadImages();
 	shutdownGdiplus();
 	configWindowHandle = 0;
+	return result;
+}
+
+void showConfig() {
+	// Load the most current settings from the environment, in case they've changed since startup
+	// by some external factor.
+	loadConfig(&newDllConfig, &newExeConfig);
+
+	// Show the dialog (modally).
+	int result = showPropSheet();
+
+	if (result >= 1) {
+		// Changes were saved. They have already been applied;
+		// now save them to the environment (registry, file system) as well.
+		saveConfig(&newDllConfig, &newExeConfig);
+	}
 }
 
 bool isConfigShowing() {
