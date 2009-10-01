@@ -158,6 +158,31 @@ void loadAndApplyConfig() {
 	applyConfig(&dllConfig, &exeConfig);
 }
 
+/* Runs the message loop until it is time to quit.
+ * Returns the desired exit status of the program.
+ */
+int messageLoop() {
+	BOOL getMsgRetVal;
+	MSG msg;
+	do {
+		getMsgRetVal = GetMessage(&msg, NULL, 0, 0);
+		if (getMsgRetVal == -1) {
+			// error in GetMessage... low-level, panic and abort
+			break;
+		} else {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	} while (getMsgRetVal);
+	if (getMsgRetVal) {
+		// GetMessage returned -1: error code.
+		return -1;
+	} else {
+		// Normal exit: return the WPARAM from the WM_QUIT.
+		return (int)msg.wParam;
+	}
+}
+
 /* The main function for the application.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -187,25 +212,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					showLastError(NULL, L"Error attaching hooks");
 				} else {
 					// main message loop
-					BOOL getMsgRetVal;
-					MSG msg;
-					do {
-						getMsgRetVal = GetMessage(&msg, NULL, 0, 0);
-						if (getMsgRetVal == -1) {
-							// error in GetMessage... low-level, panic and abort
-							break;
-						} else {
-							TranslateMessage(&msg);
-							DispatchMessage(&msg);
-						}
-					} while (getMsgRetVal);
-					if (getMsgRetVal) {
-						// GetMessage returned -1: error code.
-						retVal = -1;
-					} else {
-						// Normal exit: return the WPARAM from the WM_QUIT.
-						retVal = (int)msg.wParam;
-					}
+					retVal = messageLoop();
 				}
 				// Normal exit.
 				showTrayIcon(false);

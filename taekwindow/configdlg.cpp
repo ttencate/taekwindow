@@ -10,9 +10,20 @@
 #include <tchar.h>
 #include <gdiplus.h>
 
+/* It ain't pretty, but it doesn't seem to be in standard headers.
+ * Anyway, so much legacy code relies on this that
+ * Microsoft will not change it in the near future.
+ */
+#define ID_APPLY_NOW 0x3021
+
 /* Handle of the configuration dialog's window.
  */
 HWND configWindowHandle = 0;
+
+/* Original window procedure of the property sheet dialog.
+ * We override this with our own, but call the original.
+ */
+WNDPROC origConfigWindowProc;
 
 /* The currently active DLL configuration.
  * Only valid when the dialog is visible.
@@ -237,6 +248,30 @@ BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam
 	return defaultDialogProc(dialogHandle, message, wParam, lParam);
 }
 
+/* The subclassed window procedure for the property sheet dialog.
+ *
+ * We need this because we want to apply the configuration *after*
+ * all the pages have written to it.
+ * The PropSheetProc can get us a notification (on Windows XP and above)
+ * but it is sent *before* the pages get a PSN_APPLY notification,
+ * so the configuration is not yet up to date at that point.
+ */
+LRESULT CALLBACK configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	LRESULT retVal = CallWindowProc(origConfigWindowProc, dialogHandle, message, wParam, lParam);
+	switch (message) {
+		case WM_COMMAND:
+			switch (LOWORD(wParam)) {
+				case IDOK:
+				case ID_APPLY_NOW:
+					applyConfig(&newDllConfig, &newExeConfig);
+					saveConfig(&newDllConfig, &newExeConfig);
+					break;
+			}
+			break;
+	}	
+	return retVal;
+}
+
 /* PropSheetProc for the configuration dialog.
  * Must return 0.
  */
@@ -244,13 +279,7 @@ int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM lParam)
 	switch (message) {
 		case PSCB_INITIALIZED:
 			configWindowHandle = dialogHandle;
-			break;
-		case PSCB_BUTTONPRESSED:
-			if (lParam == PSBTN_OK || lParam == PSBTN_APPLYNOW) {
-				// TODO this will be run before each of the pages' PSN_APPLY handlers...
-				// Go back to WINVER = 0x0501 if this is not what we should use.
-				applyConfig(&newDllConfig, &newExeConfig);
-			}
+			origConfigWindowProc = (WNDPROC)SetWindowLongPtr(dialogHandle, GWLP_WNDPROC, (LONG_PTR)&configWindowProc);
 			break;
 	}
 	return 0;

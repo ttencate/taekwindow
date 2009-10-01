@@ -1,4 +1,6 @@
 #include "config.hpp"
+#include "util.hpp"
+#include "version.h"
 
 #include <windows.h>
 #include <shlobj.h>
@@ -40,6 +42,47 @@ bool readDWord(HKEY key, LPCWSTR valueName, T &out) {
 		}
 	}
 	return false;
+}
+
+/* Uses the COM interface IShellLink to create a shortcut.
+ */
+void createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description) {
+	HRESULT res;
+
+	// Initialize COM.
+	res = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+	if (res != S_OK && res != S_FALSE) {
+		showError(NULL, _T("Error creating shortcut"), _T("COM initialization failed. Error code: %1!lx!."), res);
+		return;
+	}
+
+	// Create the ShellLink object.
+	IShellLink *link;
+	res = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void**)&link);
+	if (res != S_OK) {
+		showError(NULL, _T("Error creating shortcut"), _T("The ShellLink object could not be created. Error code: %1!lx!."), res);
+	} else {
+		// Set the link's properties.
+		link->SetPath(target);
+		link->SetDescription(description);
+		link->SetWorkingDirectory(workingDir);
+		link->SetIconLocation(target, 0);
+
+		// Save the link to the file.
+		IPersistFile *pf;
+		link->QueryInterface(IID_IPersistFile, (void**)&pf);
+		if (res != S_OK) {
+			showError(NULL, _T("Error creating shortcut"), _T("The IPersistFile interface could not be acquired. Error code: %1!lx!."), res);
+		} else {
+			res = pf->Save(filename, TRUE);
+			if (res != S_OK) {
+				showError(NULL, _T("Error creating shortcut"), _T("The ShellLink could not be saved. Error code: %1!lx!."), res);
+			}
+			// Clean up.
+			pf->Release();
+		}
+		link->Release();
+	}
 }
 
 /* Reads the configuration settings from the registry and places them in the objects pointed to.
@@ -91,7 +134,22 @@ void loadConfigFromStartup(EXEConfiguration *exeConfig) {
 /* Creates or removes a Startup shortcut as necessary.
  */
 void saveConfigToStartup(EXEConfiguration *exeConfig) {
-	// TODO
+	TCHAR linkFilename[MAX_PATH];
+	getStartupLinkFilename(linkFilename);
+	bool exists = GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES;
+	if (exists && !exeConfig->startAtLogon) {
+		DeleteFile(linkFilename);
+	} else if (!exists && exeConfig->startAtLogon) {
+		TCHAR target[MAX_PATH];
+		GetModuleFileName(NULL, target, MAX_PATH);
+		TCHAR workingDir[MAX_PATH];
+		TCHAR *filePart;
+		GetFullPathName(target, MAX_PATH, workingDir, &filePart);
+		if (filePart) {
+			*filePart = '\0';
+		}
+		createLink(linkFilename, target, workingDir, _T(APPLICATION_TITLE) _T(" startup link (automatically created; can safely be removed)"));
+	}
 }
 
 void loadConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
