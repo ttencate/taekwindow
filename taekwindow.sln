@@ -9,20 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{892966
 		download-page.xslt = download-page.xslt
 		information.xml = information.xml
 		metadata-c.xslt = metadata-c.xslt
-		metadata-cs.xslt = metadata-cs.xslt
 		metadata.xslt = metadata.xslt
 		Source.txt = Source.txt
+		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindowhooks", "taekwindowhooks\taekwindowhooks.vcproj", "{EED18669-70C8-450F-8989-A8712FBFFA67}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taekwindow", "taekwindow\taekwindow.vcproj", "{D123F33E-D34D-4B7C-89C2-A5DC286B90ED}"
 	ProjectSection(ProjectDependencies) = postProject
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B} = {1CA60A68-E0C4-43BA-8D37-E374C583919B}
 		{EED18669-70C8-450F-8989-A8712FBFFA67} = {EED18669-70C8-450F-8989-A8712FBFFA67}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taekwindowconfig", "taekwindowconfig\taekwindowconfig.csproj", "{1CA60A68-E0C4-43BA-8D37-E374C583919B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,16 +51,6 @@ Global
 		{D123F33E-D34D-4B7C-89C2-A5DC286B90ED}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{D123F33E-D34D-4B7C-89C2-A5DC286B90ED}.Release|Win32.ActiveCfg = Release|Win32
 		{D123F33E-D34D-4B7C-89C2-A5DC286B90ED}.Release|Win32.Build.0 = Release|Win32
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1CA60A68-E0C4-43BA-8D37-E374C583919B}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

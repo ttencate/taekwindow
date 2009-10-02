@@ -7,14 +7,24 @@
 #include <windows.h>
 #include <stdio.h>
 
+HINSTANCE currentInstance = NULL;
 HMODULE dllHandle = NULL;
+
 DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
 void (*applyConfigProc)(DLLConfiguration*) = NULL;
+
 HOOKPROC mouseProc = NULL;
 HOOKPROC lowLevelKeyboardProc = NULL;
+
 HHOOK mouseHook = NULL;
 HHOOK lowLevelKeyboardHook = NULL;
+
+EXEConfiguration activeExeConfig;
+
+HINSTANCE getCurrentInstance() {
+	return currentInstance;
+}
 
 /* Loads and initializes the DLL with the hook handlers.
  * Returns true on success.
@@ -50,7 +60,7 @@ void uninitDll() {
 
 /* Updates the configuration settings in the DLL.
  */
-void applyDLLConfig(DLLConfiguration *dllconfig) {
+void applyDllConfig(DLLConfiguration *dllconfig) {
 	(*applyConfigProc)(dllconfig);
 }
 
@@ -126,30 +136,65 @@ bool disable() {
 	return true;
 }
 
-void applyEXEConfig(EXEConfiguration *config) {
+void applyExeConfig(EXEConfiguration *config) {
+	activeExeConfig = *config;
 	showTrayIcon(config->systemTrayIcon);
 }
 
-void reloadConfig() {
-	DLLConfiguration dllconfig;
-	dllconfig.setDefaults();
-	config.setDefaults();
-	readConfigFromRegistry(&dllconfig, &config);
-	applyDLLConfig(&dllconfig);
-	applyEXEConfig(&config);
+void applyConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
+	applyDllConfig(dllConfig);
+	applyExeConfig(exeConfig);
+}
+
+void loadAndApplyConfig() {
+	DLLConfiguration dllConfig;
+	EXEConfiguration exeConfig;
+
+	dllConfig.setDefaults();
+	exeConfig.setDefaults();
+
+	loadConfig(&dllConfig, &exeConfig);
+
+	applyConfig(&dllConfig, &exeConfig);
+}
+
+/* Runs the message loop until it is time to quit.
+ * Returns the desired exit status of the program.
+ */
+int messageLoop() {
+	BOOL getMsgRetVal;
+	MSG msg;
+	do {
+		getMsgRetVal = GetMessage(&msg, NULL, 0, 0);
+		if (getMsgRetVal == -1) {
+			// error in GetMessage... low-level, panic and abort
+			break;
+		} else {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	} while (getMsgRetVal);
+	if (getMsgRetVal) {
+		// GetMessage returned -1: error code.
+		return -1;
+	} else {
+		// Normal exit: return the WPARAM from the WM_QUIT.
+		return (int)msg.wParam;
+	}
 }
 
 /* The main function for the application.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+	currentInstance = hInstance;
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 	// First, load the DLL with the event handlers in it.
 	if (!loadDll()) {
-		showLastError(L"Error loading DLL");
+		showLastError(NULL, L"Error loading DLL");
 	} else {
 		// DLL loaded, get pointers to the functions in it that we need.
 		if (!findProcs()) {
-			showLastError(L"Error getting handler address");
+			showLastError(NULL, L"Error getting handler address");
 		} else {
 			// Function pointers acquired, initialize the DLL.
 			DWORD prevThreadId = initDll();
@@ -161,37 +206,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			} else {
 				// We're the first to initialize the DLL, continue.
 				// Load the configuration from the registry.
-				reloadConfig();
+				loadAndApplyConfig();
 				// Attach the event hooks.
 				if (!enable()) {
-					showLastError(L"Error attaching hooks");
+					showLastError(NULL, L"Error attaching hooks");
 				} else {
 					// main message loop
-					BOOL getMsgRetVal;
-					MSG msg;
-					do {
-						getMsgRetVal = GetMessage(&msg, NULL, 0, 0);
-						if (getMsgRetVal == -1) {
-							// error in GetMessage... low-level, panic and abort
-							break;
-						} else {
-							switch (msg.message) {
-								case RELOAD_CONFIG_MESSAGE:
-									reloadConfig();
-									break;
-								default:
-									TranslateMessage(&msg);
-									DispatchMessage(&msg);
-							}
-						}
-					} while (getMsgRetVal);
-					if (getMsgRetVal) {
-						// GetMessage returned -1: error code.
-						retVal = -1;
-					} else {
-						// Normal exit: return the WPARAM from the WM_QUIT.
-						retVal = (int)msg.wParam;
-					}
+					retVal = messageLoop();
 				}
 				// Normal exit.
 				showTrayIcon(false);

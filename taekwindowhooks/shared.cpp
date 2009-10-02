@@ -11,7 +11,7 @@
  * that hooked up the handler in the first place.
  * Everything in this segment must be initialized in order to actually become shared.
  * This syntax only works with the Microsoft build environment...
- * See http://support.microsoft.com/kb/125677 for more information.
+ * See http://msdn.microsoft.com/en-us/library/h90dkhs0%28VS.80%29.aspx for more information.
  * 
  * VERY IMPORTANT: this segment may be mapped to different addresses in different processes.
  * DO NOT store pointers in the shared data segment, not even if they point to something else in this segment.

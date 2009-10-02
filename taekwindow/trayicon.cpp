@@ -1,4 +1,5 @@
 #include "trayicon.hpp"
+#include "configdlg.hpp"
 #include "messages.hpp"
 #include "version.h"
 #include "resource.h"
@@ -30,14 +31,14 @@ void doIconMenu(POINT pos) {
 	}
 
 	// Populate the pop-up menu.
-	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, L"En&able");
+	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, L"En&able Taekwindow");
 	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_CONFIGURE, L"&Configure...");
 	AppendMenu(menuHandle, MF_SEPARATOR, 0, NULL);
 	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_EXIT, L"&Exit");
 
 	// Show the pop-up menu.
 	// Set the foreground window, so that the menu will be closed when the user clicks elsewhere.
-	// Post a dummy message to get it to show up the next time (I don't this problem myself, but the KB says it).
+	// Post a dummy message to get it to show up the next time (I don't see this problem myself, but the KB says it).
 	// See Microsoft KB article 135788: "PRB: Menus for Notification Icons Do Not Work Correctly".
 	SetForegroundWindow(iconWindowHandle);
 	TrackPopupMenuEx(menuHandle,
@@ -49,7 +50,7 @@ void doIconMenu(POINT pos) {
 }
 
 bool loadIcon() {
-	WORD iconId = isEnabled() ? TRAYICON_COLOUR : TRAYICON_GRAY;
+	WORD iconId = isEnabled() ? IDI_TRAY_COLOUR : IDI_TRAY_GRAY;
 	HICON newHandle = (HICON)LoadImage(instanceHandle, MAKEINTRESOURCE(iconId), IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
 	if (newHandle) {
 		if (iconHandle) {
@@ -70,6 +71,7 @@ void toggleEnabled() {
 	}
 }
 
+/*
 void startConfigurationTool() {
 	// Find the full filename of the currently running executable.
 	TCHAR path[MAX_PATH+1];
@@ -99,6 +101,15 @@ void startConfigurationTool() {
 		} else {
 			showLastError(L"Configuration tool cannot be started");
 		}
+	}
+}
+*/
+
+void startConfigurationTool() {
+	if (isConfigShowing()) {
+		focusConfig();
+	} else {
+		showConfig();
 	}
 }
 
@@ -153,7 +164,7 @@ void createTrayIcon() {
 	// Load the icon.
 	loadIcon();
 	if (!iconHandle) {
-		showLastError(L"Error loading icon");
+		showLastError(NULL, L"Error loading icon");
 		return;
 	}
 
@@ -173,7 +184,7 @@ void createTrayIcon() {
 	wndClass.hIconSm = NULL;
 	iconWindowClass = RegisterClassEx(&wndClass);
 	if (!iconWindowClass) {
-		showLastError(L"Error registering window class");
+		showLastError(NULL, L"Error registering window class");
 		DestroyIcon(iconHandle);
 		return;
 	}
@@ -181,7 +192,7 @@ void createTrayIcon() {
 	// Create the dummy window that receives the icon's messages.
 	iconWindowHandle = CreateWindow(wndClass.lpszClassName, APPLICATION_TITLE_W, 0, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, HWND_MESSAGE, NULL, instanceHandle, 0);
 	if (!iconWindowHandle) {
-		showLastError(L"Error creating window");
+		showLastError(NULL, L"Error creating window");
 		UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
 		DestroyIcon(iconHandle);
 		return;
@@ -203,7 +214,7 @@ void createTrayIcon() {
 	iconData.szInfoTitle[0] = L'\0';
 	iconData.dwInfoFlags = 0;
 	if (!Shell_NotifyIcon(NIM_ADD, &iconData)) {
-		showLastError(L"Error creating notify icon");
+		showLastError(NULL, L"Error creating notify icon");
 		DestroyWindow(iconWindowHandle);
 		UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
 		DestroyIcon(iconHandle);

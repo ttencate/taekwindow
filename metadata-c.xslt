@@ -17,12 +17,12 @@
 		#define APPLICATION_VERSION_FILENAME  <xsl:call-template name="shortversion"/>
 		#define APPLICATION_WEBSITE           "<xsl:value-of select="website"/>"
 		#define APPLICATION_EMAIL             "<xsl:value-of select="email"/>"
+		#define APPLICATION_LICENSE_BRIEF     "<xsl:value-of select="licensebrief"/>"
+		#define APPLICATION_README_FILE       "<xsl:value-of select="readmefile"/>"
 		#define MAIN_EXE_FILE                 "<xsl:value-of select="mainexefile"/>"
 		#define HOOKS_DLL_FILE                "<xsl:value-of select="hooksdllfile"/>"
-		#define CONFIGURATION_EXE_FILE        "<xsl:value-of select="configexefile"/>"
 		#define MAIN_EXE_FILE_W              L"<xsl:value-of select="mainexefile"/>"
 		#define HOOKS_DLL_FILE_W             L"<xsl:value-of select="hooksdllfile"/>"
-		#define CONFIGURATION_EXE_FILE_W     L"<xsl:value-of select="configexefile"/>"
 	</xsl:template>
 
 </xsl:stylesheet> 
