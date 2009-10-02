@@ -7,6 +7,11 @@
 #include <tchar.h>
 #include <strsafe.h>
 
+/* We'll only change the version number of the key once the registry structure is no longer backwards compatible.
+ * That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
+ */
+TCHAR const REG_KEY[] = _T("Software\\Taekwindow\\0.2");
+
 void EXEConfiguration::setDefaults() {
 	systemTrayIcon = true;
 	startAtLogon = false;
@@ -24,25 +29,6 @@ void getStartupLinkFilename(TCHAR *buffer) {
  */
 template<typename T> void assign(T &out, DWORD data) { out = T(data); }
 template<> void assign<bool>(bool &out, DWORD data) { out = (data != 0); }
-
-/* Reads a DWORD from the specified value in the specified registry key,
- * and converts it to some compatible type.
- * If the value exists and has the DWORD type, it is written to the variable pointed to by out and true is returned.
- * Otherwise, nothing happens and false is returned.
- */
-template<typename T>
-bool readDWord(HKEY key, LPCWSTR valueName, T &out) {
-	DWORD type;
-	DWORD data;
-	DWORD size = sizeof(data);
-	if (RegQueryValueEx(key, valueName, NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS) {
-		if (type == REG_DWORD && size == sizeof(data)) {
-			assign(out, data);
-			return true;
-		}
-	}
-	return false;
-}
 
 /* Uses the COM interface IShellLink to create a shortcut.
  */
@@ -85,42 +71,77 @@ void createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *descri
 	}
 }
 
+struct Read {
+	/* Reads a DWORD from the specified value in the specified registry key,
+	 * and converts it to some compatible type.
+	 * If the value exists and has the DWORD type, it is written to the variable pointed to by out and true is returned.
+	 * Otherwise, nothing happens and false is returned.
+	 */
+	template<typename T>
+	static bool apply(T &out, TCHAR const *valueName, HKEY key) {
+		DWORD type;
+		DWORD data;
+		DWORD size = sizeof(data);
+		if (RegQueryValueEx(key, valueName, NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS) {
+			if (type == REG_DWORD && size == sizeof(data)) {
+				assign(out, data);
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
+struct Write {
+	/* Writes a DWORD to the specified value in the specified registry key,
+	 * converting it from its original type.
+	 * If writing was successful, true is returned.
+	 */
+	template<typename T>
+	static bool apply(T &in, TCHAR const *valueName, HKEY key) {
+		DWORD data = (DWORD)in;
+		return RegSetValueEx(key, valueName, 0, REG_DWORD, (const BYTE*)&data, sizeof(data)) == ERROR_SUCCESS;
+	}
+};
+
+/* Applies the function F::apply() to all configuration items that are stored in the registry.
+ * F::apply<T>(T&, TCHAR const*, P)
+ * where T is the type of the configuration item, and P the type of some parameter.
+ */
+template<typename F, typename P>
+void applyFunctor(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig, P param) {
+	F::apply(dllConfig->modifier, _T("modifier"), param);
+	F::apply(dllConfig->moveButton, _T("moveButton"), param);
+	F::apply(dllConfig->resizeButton, _T("resizeButton"), param);
+	F::apply(dllConfig->resizeMode, _T("resizeMode"), param);
+	F::apply(dllConfig->pushBackButton, _T("pushBackButton"), param);
+	F::apply(dllConfig->scrollWindowUnderCursor, _T("scrollWindowUnderCursor"), param);
+
+	F::apply(exeConfig->systemTrayIcon, _T("systemTrayIcon"), param);
+}
+
 /* Reads the configuration settings from the registry and places them in the objects pointed to.
  */
 void loadConfigFromRegistry(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
-	// Open the registry keys.
-	HKEY softwareKey;
-	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software", 0, KEY_READ, &softwareKey) == ERROR_SUCCESS) {
-		HKEY appKey;
-		if (RegOpenKeyEx(softwareKey, L"Taekwindow", 0, KEY_READ, &appKey) == ERROR_SUCCESS) {
-			HKEY versionKey;
-			// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
-			// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
-			if (RegOpenKeyEx(appKey, L"0.2", 0, KEY_READ, &versionKey) == ERROR_SUCCESS) {
-				// Read stuff for the DLL.
-				int x = sizeof(DWORD);
-				int y = sizeof(int);
-				readDWord(versionKey, L"modifier"               , dllConfig->modifier      );
-				readDWord(versionKey, L"moveButton"             , dllConfig->moveButton    );
-				readDWord(versionKey, L"resizeButton"           , dllConfig->resizeButton  );
-				readDWord(versionKey, L"resizeMode"             , dllConfig->resizeMode    );
-				readDWord(versionKey, L"pushBackButton"         , dllConfig->pushBackButton);
-				readDWord(versionKey, L"scrollWindowUnderCursor", dllConfig->scrollWindowUnderCursor);
-				// Read stuff for the EXE.
-				readDWord(versionKey, L"systemTrayIcon", exeConfig->systemTrayIcon);
-				// Close the keys again.
-				RegCloseKey(versionKey);
-			}
-			RegCloseKey(appKey);
-		}
-		RegCloseKey(softwareKey);
+	HKEY key;
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_READ, &key) == ERROR_SUCCESS) {
+		applyFunctor<Read>(dllConfig, exeConfig, key);
+		RegCloseKey(key);
 	}
 }
 
 /* Saves the given configuration to the registry.
  */
 void saveConfigToRegistry(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
-	// TODO
+	// Open the registry key.
+	HKEY key;
+	// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
+	// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_SET_VALUE, &key) == ERROR_SUCCESS) {
+		applyFunctor<Write>(dllConfig, exeConfig, key);
+		// Close the key again.
+		RegCloseKey(key);
+	}
 }
 
 /* Checks the existence of a Startup shortcut and places it in execonfig.
@@ -153,6 +174,9 @@ void saveConfigToStartup(EXEConfiguration *exeConfig) {
 }
 
 void loadConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
+	// Set the defaults, in case settings are missing.
+	dllConfig->setDefaults();
+	exeConfig->setDefaults();
 	loadConfigFromRegistry(dllConfig, exeConfig);
 	loadConfigFromStartup(exeConfig);
 }

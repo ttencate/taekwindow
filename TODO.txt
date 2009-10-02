@@ -10,3 +10,4 @@ TODO
 - Update the Readme.
 - Important: we are storing classes with virtual functions in the DLL's shared data segment. This is evil and shouldn't even work! Rethink this.
 - Remove C# configuration dialog and references to it in information.xml.
+- Switch back to WINVER 0x0501!

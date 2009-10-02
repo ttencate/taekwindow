@@ -83,7 +83,8 @@ void hyperlinkClicked(int controlID, NMLINK *nmLink) {
 		if ((int)ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOWDEFAULT) <= 32) {
 			switch (controlID) {
 				case IDC_APPEMAIL:
-					showError(configWindowHandle, _T("Could not launch e-mail program"), _T("It seems that your system does not have an e-mail program installed, or it is not set up properly to handle \"mailto:\" links.\r\n\r\nYou can still send e-mail to %1 manually."), url);
+					// N.B. skip "mailto:" in the string, start at 7th character (hackish).
+					showError(configWindowHandle, _T("Could not launch e-mail program"), _T("It seems that your system does not have an e-mail program installed, or it is not set up properly to handle \"mailto:\" links.\r\n\r\nYou can still send e-mail to %1 manually."), &url[7]);
 					break;
 				case IDC_APPWEBSITE:
 					showError(configWindowHandle, _T("Could not launch web browser"), _T("It seems that your system does not have a web browser installed, or it is not set up properly to handle \"http\" links.\r\n\r\nIf you do have a browser, point it to %1 manually."), url);
