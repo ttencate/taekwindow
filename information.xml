@@ -4,8 +4,8 @@
 	<apptitle>Taekwindow</apptitle>
 	<filename>taekwindow</filename>
 	<majorversion>0</majorversion>
-	<minorversion>2</minorversion>
-	<revision>4</revision>
+	<minorversion>3</minorversion>
+	<revision>0</revision>
 	<build>0</build>
 	<author>Thomas ten Cate</author>
 	<email>ttencate+taekwindow@gmail.com</email>
@@ -15,15 +15,12 @@
 
 	<mainexefile>taekwindow</mainexefile>
 	<hooksdllfile>taekwindowhooks</hooksdllfile>
-	<configexefile>taekwindowconfig</configexefile>
 	<readmefile>readme.html</readmefile>
 
 	<binaryfiles>
 		<!-- Relative to the Release/ directory -->
 		<file>taekwindow.exe</file>
 		<file>taekwindowhooks.dll</file>
-		<file>taekwindowconfig.exe</file>
-		<file>Interop.IWshRuntimeLibrary.dll</file>
 		<file>readme.html</file>
 	</binaryfiles>
 
@@ -46,11 +43,6 @@
 		<file>taekwindowhooks\*.def</file>
 		<file>taekwindowhooks\*.rc</file>
 		<file>taekwindowhooks\*.vcproj</file>
-		<file>taekwindowconfig\*.cs</file>
-		<file>taekwindowconfig\*.resx</file>
-		<file>taekwindowconfig\*.csproj</file>
-		<file>taekwindowconfig\Properties\*.cs</file>
-		<file>taekwindowconfig\Properties\*.resx</file>
 		<file>tools\7za.exe</file>
 		<file>tools\msxsl.exe</file>
 		<file>taekwindow.sln</file>
@@ -78,21 +70,13 @@
 	<installation>
 		<ol>
 			<li>
-				You need to have the Microsoft .NET Framework, version 2.0 or later,
-				installed to use the configuration tool. You can get the latest version
-				of the framework from the <a href="http://msdn2.microsoft.com/en-us/netframework/aa569263.aspx">Microsoft website</a>.
-			</li>
-			<li>
 				To install Taekwindow, simply extract the archive to any place you like.
 				Make sure that the files are all in the same directory.
 			</li>
 			<li>
-				Run <code>taekwindowconfig.exe</code> to configure Taekwindow. The configuration
-				tool can create a shortcut in the Startup section of your Start Menu, so
+				Through the configuration dialog can create a shortcut
+				in the Startup section of your Start Menu, so
 				Taekwindow is started when you log on to your computer.
-			</li>
-			<li>
-				Optional: create a shortcut to taekwindowconfig.exe in your Start Menu.
 			</li>
 		</ol>
 	</installation>
@@ -118,17 +102,17 @@
 				it completely. Left-click the icon again to re-enable.
 			</li>
 			<li>
-				Double-click the icon to go to the configuration tool.
+				Double-click the icon to openthe configuration dialog.
 			</li>
 			<li>
-				Right-click the icon to show a menu, through which you can enable/disable the program, go to
-				the configuration tool, and exit Taekwindow completely.
+				Right-click the icon to show a menu, through which you can enable/disable the program,
+				open the configuration dialog, and exit Taekwindow completely.
 			</li>
 		</ul>
 
 		<p>
 			To stop the program, use the system tray icon. In case you have turned the icon off in the
-			configuration tool, just run <code>taekwindow.exe</code> again. It will not load itself,
+			configuration dialog, just run <code>taekwindow.exe</code> again. It will not load itself,
 			but rather stop the running instance and then quit. You can also stop it through the Task Manager
 			if you prefer.
 		</p>
@@ -136,18 +120,12 @@
 
 	<configuration>
 		<p>
-			You can configure the program using the supplied configuration tool,
-			<code>taekwindowconfig.exe</code>. Its usage should be self-explanatory.
-		</p>
-
-		<p>
-			If the tool refuses to start, make sure that the .NET framework is
-			installed. See Installation, above, for details.
+			You can configure the program by right-clicking the system tray icon and choosing Configure.
+			This will open the configuration dialog; its usage should be self-explanatory.
 		</p>
 	</configuration>
 
 	<bugs>
-
 		<p>
 			Please see the <a href="http://sourceforge.net/tracker/?group_id=185457&amp;atid=913353">Bugs and feature requests tracker</a> at SourceForge.
 		</p>
@@ -168,25 +146,25 @@
 	</feature-requests>
 
 	<versions>
-    <version nr="0.2.5">
-      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2145527&amp;group_id=185457&amp;atid=913353">
-        the tray icon is now shown even if no settings are present in the registry
-      </bugfix>
-    </version>
-    <version nr="0.2.4">
-      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">
-        Google Talk now responds to move and resize actions
-      </bugfix>
-      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2095157&amp;group_id=185457&amp;atid=913353">
-        Google Chrome now responds to move and resize actions
-      </bugfix>
-      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000712&amp;group_id=185457&amp;atid=913353">
-        the scroll wheel now works correctly in mIRC when it has the focus
-      </bugfix>
-      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000149&amp;group_id=185457&amp;atid=913353">
-        Microsoft Word 2007 now moves and resizes correctly
-      </bugfix>
-    </version>
+		<version nr="0.3.0">
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2145527&amp;group_id=185457&amp;atid=913353">
+				the tray icon is now shown even if no settings are present in the registry
+			</bugfix>
+		</version>
+		<version nr="0.2.4">
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">
+				Google Talk now responds to move and resize actions
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2095157&amp;group_id=185457&amp;atid=913353">
+				Google Chrome now responds to move and resize actions
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000712&amp;group_id=185457&amp;atid=913353">
+				the scroll wheel now works correctly in mIRC when it has the focus
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000149&amp;group_id=185457&amp;atid=913353">
+				Microsoft Word 2007 now moves and resizes correctly
+			</bugfix>
+		</version>
 		<version nr="0.2.3">
 			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913353">
 				windows are no longer raised when they are moved or resized
