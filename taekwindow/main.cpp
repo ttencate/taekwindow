@@ -5,7 +5,6 @@
 #include "version.h"
 
 #include <windows.h>
-#include <stdio.h>
 
 HINSTANCE currentInstance = NULL;
 HMODULE dllHandle = NULL;
