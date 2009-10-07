@@ -268,19 +268,15 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\graphics\64x64-shadow.png"
+				RelativePath="..\graphics\icons\all.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\all.ico"
+				RelativePath="..\graphics\gui\resize-bottom-right.png"
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\resize-bottom-right.png"
-				>
-			</File>
-			<File
-				RelativePath="..\graphics\resize-nine-rectangles.png"
+				RelativePath="..\graphics\gui\resize-nine-rectangles.png"
 				>
 			</File>
 			<File
@@ -288,7 +284,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\startup.png"
+				RelativePath="..\graphics\gui\startup.png"
 				>
 			</File>
 			<File
@@ -296,15 +292,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\traycolour.ico"
+				RelativePath="..\graphics\icons\traycolour.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\traygray.ico"
+				RelativePath="..\graphics\icons\traygray.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\trayicon.png"
+				RelativePath="..\graphics\gui\trayicon.png"
 				>
 			</File>
 		</Filter>

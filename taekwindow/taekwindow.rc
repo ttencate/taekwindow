@@ -28,20 +28,20 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_APP                 ICON                    "..\\graphics\\all.ico"
-IDI_TRAY_COLOUR         ICON                    "..\\graphics\\traycolour.ico"
-IDI_TRAY_GRAY           ICON                    "..\\graphics\\traygray.ico"
+IDI_APP                 ICON                    "..\\graphics\\icons\\all.ico"
+IDI_TRAY_COLOUR         ICON                    "..\\graphics\\icons\\traycolour.ico"
+IDI_TRAY_GRAY           ICON                    "..\\graphics\\icons\\traygray.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // PNG
 //
 
-IDB_STARTUP             PNG                     "..\\graphics\\startup.png"
-IDB_TRAYICON            PNG                     "..\\graphics\\trayicon.png"
-IDB_RESIZEBOTTOMRIGHT   PNG                     "..\\graphics\\resize-bottom-right.png"
-IDB_RESIZENINERECTANGLES PNG                     "..\\graphics\\resize-nine-rectangles.png"
-IDB_LOGO                PNG                     "..\\graphics\\64x64-shadow.png"
+IDB_STARTUP             PNG                     "..\\graphics\\gui\\startup.png"
+IDB_TRAYICON            PNG                     "..\\graphics\\gui\\trayicon.png"
+IDB_RESIZEBOTTOMRIGHT   PNG                     "..\\graphics\\gui\\resize-bottom-right.png"
+IDB_RESIZENINERECTANGLES PNG                     "..\\graphics\\gui\\resize-nine-rectangles.png"
+IDB_LOGO                PNG                     "..\\graphics\\gui\\64x64-shadow.png"
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
