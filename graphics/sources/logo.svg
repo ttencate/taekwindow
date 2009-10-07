@@ -17,9 +17,9 @@
    version="1.0"
    sodipodi:docname="logo.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="C:\Users\thomas\Documents\taekwindow\trunk\graphics\logo-16x16.png"
-   inkscape:export-xdpi="1.40625"
-   inkscape:export-ydpi="1.40625">
+   inkscape:export-filename="C:\Users\thomas\Documents\taekwindow\trunk\graphics\intermediate\logo-64.png"
+   inkscape:export-xdpi="5.625"
+   inkscape:export-ydpi="5.625">
   <defs
      id="defs2546">
     <linearGradient
@@ -45,10 +45,10 @@
          id="stop3558" />
       <stop
          id="stop3577"
-         offset="0.39329004"
+         offset="0.5"
          style="stop-color:#ffffff;stop-opacity:1;" />
       <stop
-         style="stop-color:#c0c0c0;stop-opacity:1;"
+         style="stop-color:#e0e0e0;stop-opacity:1;"
          offset="1"
          id="stop3560" />
     </linearGradient>
@@ -159,11 +159,11 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.38602941"
+     inkscape:zoom="0.5"
      inkscape:cx="474.60334"
      inkscape:cy="670.24968"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1364"
      inkscape:window-height="1047"
@@ -227,22 +227,6 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="circle glow"
-     style="display:inline"
-     sodipodi:insensitive="true">
-    <path
-       sodipodi:type="arc"
-       style="opacity:0.75;fill:url(#radialGradient3408);fill-opacity:1;stroke:none;stroke-width:32;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path3400"
-       sodipodi:cx="512"
-       sodipodi:cy="512"
-       sodipodi:rx="512"
-       sodipodi:ry="512"
-       d="M 1024,512 A 512,512 0 1 1 0,512 A 512,512 0 1 1 1024,512 z" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="arrow shadow"
      style="display:inline"
@@ -257,12 +241,27 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="arrow"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
-       style="opacity:1;fill:url(#radialGradient3562);fill-opacity:1;fill-rule:evenodd;stroke:#303030;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:url(#radialGradient3562);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:32;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 352.80369,127.66611 L 352.79338,703.67216 C 352.79284,733.74113 377.84814,746.63016 395.84448,733.29594 L 501.85519,654.74832 L 599.82215,891.26148 C 607.07679,908.77574 625.01088,915.46452 641.63216,908.57976 L 700.76045,884.08802 C 717.38174,877.20325 725.33337,859.79226 718.07873,842.278 L 620.11177,605.76484 L 750.61422,586.34551 C 772.76827,583.04889 781.37112,556.2182 760.10877,534.9566 L 352.80369,127.66611 z"
        id="path3327"
        sodipodi:nodetypes="cccccccccccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="circle glow"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.75;fill:url(#radialGradient3408);fill-opacity:1;stroke:none;stroke-width:32;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path3400"
+       sodipodi:cx="512"
+       sodipodi:cy="512"
+       sodipodi:rx="512"
+       sodipodi:ry="512"
+       d="M 1024,512 A 512,512 0 1 1 0,512 A 512,512 0 1 1 1024,512 z" />
   </g>
 </svg>
