@@ -272,6 +272,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\graphics\gui\logo-64.png"
+				>
+			</File>
+			<File
 				RelativePath="..\graphics\gui\resize-bottom-right.png"
 				>
 			</File>

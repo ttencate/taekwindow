@@ -41,7 +41,7 @@ IDB_STARTUP             PNG                     "..\\graphics\\gui\\startup.png"
 IDB_TRAYICON            PNG                     "..\\graphics\\gui\\trayicon.png"
 IDB_RESIZEBOTTOMRIGHT   PNG                     "..\\graphics\\gui\\resize-bottom-right.png"
 IDB_RESIZENINERECTANGLES PNG                     "..\\graphics\\gui\\resize-nine-rectangles.png"
-IDB_LOGO                PNG                     "..\\graphics\\gui\\64x64-shadow.png"
+IDB_LOGO                PNG                     "..\\graphics\\gui\\logo-64.png"
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
