@@ -1,10 +1,13 @@
-The project and solution files were made in Microsoft Visual Studio 2005.
+Environment
+-----------
+
+The project and solution files were made in Microsoft Visual Studio 2008.
 
 To build, you need the following in your PATH:
 [Visual Studio directory]\VC\bin
 [Visual Studio directory]\Common7\IDE
 
-The project files may open in the Express editions of Visual C++ and Visual C#,
+The project files may work in the Express edition of Visual C++,
 but I am not sure of this and have not tested it.
 
 Which window to move
@@ -24,6 +27,7 @@ There are several ways to do what Taekwindow does, among them: hooks and window 
 - WH_MOUSE and WH_KEYBOARD can examine and eat messages but not modify them; they run in the thread of the application that receives the message.
 - WH_MOUSE_LL and WH_KEYBOARD_LL can examine, modify and eat messages; they run in the thread of the application that installed the hook (!).
 - Window subclassing is tricky, but might be the cleanest solution in the end.
+- A modal loop, just like Windows itself does when a window is moved or resized.
 
 We currently use the WH_MOUSE and WH_KEYBOARD_LL hooks. The advantage of WH_KEYBOARD_LL is that it has the power to eat messages that the application should not get. However, keep in mind that it runs in Taekwindow's process, not in the application that is to receive the message!
 
