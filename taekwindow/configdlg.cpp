@@ -4,6 +4,7 @@
 #include "configdlg.hpp"
 #include "resource.h"
 #include "version.h"
+#include "picostdlib.h"
 
 #include <windows.h>
 #include <commctrl.h>
@@ -99,7 +100,7 @@ void hyperlinkClicked(int controlID, NMLINK *nmLink) {
 	}
 }
 
-BOOL CALLBACK defaultDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL CALLBACK defaultDialogProc(HWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
 			return TRUE;
@@ -133,11 +134,11 @@ BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 }
 
 void mutexButtonRadios(HWND dialogHandle, WPARAM wParam, int move, int resize) {
-	if (wParam == move && IsDlgButtonChecked(dialogHandle, resize)) {
+	if ((int)wParam == move && IsDlgButtonChecked(dialogHandle, resize)) {
 		CheckRadioButton(dialogHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
 			resize == IDC_RESIZERIGHT ? IDC_RESIZEMIDDLE : IDC_RESIZERIGHT);
 	}
-	if (wParam == resize && IsDlgButtonChecked(dialogHandle, move)) {
+	if ((int)wParam == resize && IsDlgButtonChecked(dialogHandle, move)) {
 		CheckRadioButton(dialogHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
 			move == IDC_MOVELEFT ? IDC_MOVEMIDDLE : IDC_MOVELEFT);
 	}
@@ -276,7 +277,7 @@ LRESULT CALLBACK configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam
 /* PropSheetProc for the configuration dialog.
  * Must return 0.
  */
-int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM lParam) {
+int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM) {
 	switch (message) {
 		case PSCB_INITIALIZED:
 			configWindowHandle = dialogHandle;
@@ -377,7 +378,7 @@ void loadImages() {
 			debugShowLastError(_T("Could not lock memory"));
 			continue;
 		}
-		if (!CopyMemory(memData, resourceData, bytes)) {
+		if (!memcpy(memData, resourceData, bytes)) {
 			debugShowLastError(_T("Could not copy memory"));
 			continue;
 		}

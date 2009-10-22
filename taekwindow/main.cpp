@@ -5,6 +5,7 @@
 #include "version.h"
 
 #include <windows.h>
+#include <tchar.h>
 
 HINSTANCE currentInstance = NULL;
 HMODULE dllHandle = NULL;
@@ -183,8 +184,9 @@ int messageLoop() {
 }
 
 /* The main function for the application.
+ * Called from entryPoint().
  */
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int myMain(HINSTANCE hInstance) {
 	currentInstance = hInstance;
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 	// First, load the DLL with the event handlers in it.
@@ -224,4 +226,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		unloadDll();
 	}
 	return retVal;
+}
+
+/* The actual entry point to the application.
+ * This replaces WinMainCRTStartup from the CRT.
+ */
+int entryPoint() {
+	int mainret = 0;
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	mainret = myMain(hInstance);
+	return mainret;
 }

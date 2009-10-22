@@ -8,6 +8,7 @@
 
 #include <windows.h>
 #include <windowsx.h>
+#include <strsafe.h>
 
 const UINT ICON_ID = 42;
 
@@ -206,7 +207,7 @@ void createTrayIcon() {
 	iconData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	iconData.uCallbackMessage = TRAYICON_MESSAGE;
 	iconData.hIcon = iconHandle;
-	wcscpy_s(iconData.szTip, APPLICATION_TITLE_W);
+	StringCchCopy(iconData.szTip, sizeof(iconData.szTip), APPLICATION_TITLE_W);
 	iconData.dwState = 0;
 	iconData.dwStateMask = 0;
 	iconData.szInfo[0] = L'\0';
