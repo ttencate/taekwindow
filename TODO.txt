@@ -7,3 +7,4 @@ TODO
 - Important: we are storing classes with virtual functions in the DLL's shared data segment. This is evil and shouldn't even work! Rethink this.
 - Add some way to get to the configuration dialog if the tray icon is hidden.
 - Make the DLL independent of the CRT as well.
+- Set the DLL to warning level 4 and treat warnings as errors.
