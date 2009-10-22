@@ -8,6 +8,7 @@
 
 #include <windows.h>
 #include <windowsx.h>
+#include <tchar.h>
 #include <strsafe.h>
 
 const UINT ICON_ID = 42;
@@ -32,10 +33,10 @@ void doIconMenu(POINT pos) {
 	}
 
 	// Populate the pop-up menu.
-	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, L"En&able Taekwindow");
-	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_CONFIGURE, L"&Configure...");
+	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, _T("En&able Taekwindow"));
+	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_CONFIGURE, _T("&Configure..."));
 	AppendMenu(menuHandle, MF_SEPARATOR, 0, NULL);
-	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_EXIT, L"&Exit");
+	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_EXIT, _T("&Exit"));
 
 	// Show the pop-up menu.
 	// Set the foreground window, so that the menu will be closed when the user clicks elsewhere.
@@ -165,7 +166,7 @@ void createTrayIcon() {
 	// Load the icon.
 	loadIcon();
 	if (!iconHandle) {
-		showLastError(NULL, L"Error loading icon");
+		showLastError(NULL, _T("Error loading icon"));
 		return;
 	}
 
@@ -181,20 +182,20 @@ void createTrayIcon() {
 	wndClass.hCursor = NULL;
 	wndClass.hbrBackground = NULL;
 	wndClass.lpszMenuName = NULL;
-	wndClass.lpszClassName = L"IconWindowClass";
+	wndClass.lpszClassName = _T("IconWindowClass");
 	wndClass.hIconSm = NULL;
 	iconWindowClass = RegisterClassEx(&wndClass);
 	if (!iconWindowClass) {
-		showLastError(NULL, L"Error registering window class");
+		showLastError(NULL, _T("Error registering window class"));
 		DestroyIcon(iconHandle);
 		return;
 	}
 
 	// Create the dummy window that receives the icon's messages.
-	iconWindowHandle = CreateWindow(wndClass.lpszClassName, APPLICATION_TITLE_W, 0, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, HWND_MESSAGE, NULL, instanceHandle, 0);
+	iconWindowHandle = CreateWindow(wndClass.lpszClassName, _T(APPLICATION_TITLE), 0, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, HWND_MESSAGE, NULL, instanceHandle, 0);
 	if (!iconWindowHandle) {
-		showLastError(NULL, L"Error creating window");
-		UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
+		showLastError(NULL, _T("Error creating window"));
+		UnregisterClass((LPCTSTR)iconWindowClass, instanceHandle);
 		DestroyIcon(iconHandle);
 		return;
 	}
@@ -207,17 +208,17 @@ void createTrayIcon() {
 	iconData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	iconData.uCallbackMessage = TRAYICON_MESSAGE;
 	iconData.hIcon = iconHandle;
-	StringCchCopy(iconData.szTip, sizeof(iconData.szTip), APPLICATION_TITLE_W);
+	StringCchCopy(iconData.szTip, sizeof(iconData.szTip), _T( APPLICATION_TITLE));
 	iconData.dwState = 0;
 	iconData.dwStateMask = 0;
-	iconData.szInfo[0] = L'\0';
+	iconData.szInfo[0] = _T('\0');
 	iconData.uVersion = NOTIFYICON_VERSION;
-	iconData.szInfoTitle[0] = L'\0';
+	iconData.szInfoTitle[0] = _T('\0');
 	iconData.dwInfoFlags = 0;
 	if (!Shell_NotifyIcon(NIM_ADD, &iconData)) {
-		showLastError(NULL, L"Error creating notify icon");
+		showLastError(NULL, _T("Error creating notify icon"));
 		DestroyWindow(iconWindowHandle);
-		UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
+		UnregisterClass((LPCTSTR)iconWindowClass, instanceHandle);
 		DestroyIcon(iconHandle);
 		return;
 	}
@@ -241,7 +242,7 @@ void updateTrayIcon() {
 void destroyTrayIcon() {
 	Shell_NotifyIcon(NIM_DELETE, &iconData);
 	DestroyWindow(iconWindowHandle);
-	UnregisterClass((LPCWSTR)iconWindowClass, instanceHandle);
+	UnregisterClass((LPCTSTR)iconWindowClass, instanceHandle);
 	DestroyIcon(iconHandle);
 
 	haveIcon = false;

@@ -30,7 +30,7 @@ HINSTANCE getCurrentInstance() {
  * Returns true on success.
  */
 bool loadDll() {
-	dllHandle = LoadLibrary(HOOKS_DLL_FILE_W L".dll");
+	dllHandle = LoadLibrary(_T(HOOKS_DLL_FILE) _T(".dll"));
 	if (!dllHandle)
 		return false;
 	return true;
@@ -191,18 +191,18 @@ int myMain(HINSTANCE hInstance) {
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 	// First, load the DLL with the event handlers in it.
 	if (!loadDll()) {
-		showLastError(NULL, L"Error loading DLL");
+		showLastError(NULL, _T("Error loading DLL"));
 	} else {
 		// DLL loaded, get pointers to the functions in it that we need.
 		if (!findProcs()) {
-			showLastError(NULL, L"Error getting handler address");
+			showLastError(NULL, _T("Error getting handler address"));
 		} else {
 			// Function pointers acquired, initialize the DLL.
 			DWORD prevThreadId = initDll();
 			if (prevThreadId) {
 				// Somebody has been there before us.
 				// Kick that instance in the nuts.
-				MessageBoxW(NULL, APPLICATION_TITLE_W L" is already running and will now be stopped.\n\nRerun the program it if you want to start it again.", L"Taekwindow already running", MB_OK | MB_ICONINFORMATION);
+				MessageBox(NULL, _T(APPLICATION_TITLE) _T(" is already running and will now be stopped.\n\nRerun the program it if you want to start it again."), _T("Taekwindow already running"), MB_OK | MB_ICONINFORMATION);
 				PostThreadMessage(prevThreadId, WM_QUIT, 0, 0);
 			} else {
 				// We're the first to initialize the DLL, continue.
@@ -210,7 +210,7 @@ int myMain(HINSTANCE hInstance) {
 				loadAndApplyConfig();
 				// Attach the event hooks.
 				if (!enable()) {
-					showLastError(NULL, L"Error attaching hooks");
+					showLastError(NULL, _T("Error attaching hooks"));
 				} else {
 					// main message loop
 					retVal = messageLoop();

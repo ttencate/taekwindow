@@ -1,3 +1,5 @@
+#include <tchar.h>
+
 #include "actions.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
@@ -31,13 +33,13 @@ bool doPushBack(HWND window) {
 
 bool isMIRCWindow(HWND window) {
 	return
-		windowHasClass(window, L"mIRC_Status") ||
-		windowHasClass(window, L"mIRC_Channel") ||
-		windowHasClass(window, L"mIRC_Query");
+		windowHasClass(window, _T("mIRC_Status")) ||
+		windowHasClass(window, _T("mIRC_Channel")) ||
+		windowHasClass(window, _T("mIRC_Query"));
 }
 
 HWND findMIRCTextWindow(HWND containerWindow) {
-	HWND textWindow = FindWindowEx(containerWindow, NULL, L"Static", NULL);
+	HWND textWindow = FindWindowEx(containerWindow, NULL, _T("Static"), NULL);
 	if (textWindow)
 		return textWindow;
 	else

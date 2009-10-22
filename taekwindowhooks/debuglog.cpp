@@ -4,6 +4,7 @@
 #include "util.hpp"
 
 #include <windows.h>
+#include <tchar.h>
 #include <stdio.h>
 
 extern HANDLE debugLogFile;
@@ -17,10 +18,10 @@ void openDebugLog() {
 	debugLogFile = INVALID_HANDLE_VALUE;
 	long time = GetTickCount();
 	TCHAR fileName[64];
-	wsprintf(fileName, L"taekwindow-debug-%d.%03d.log", time/1000, time%1000);
+	wsprintf(fileName, _T("taekwindow-debug-%d.%03d.log"), time/1000, time%1000);
 	debugLogFile = CreateFile(fileName, FILE_WRITE_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (debugLogFile == INVALID_HANDLE_VALUE)
-		showLastError(L"Error opening debug log");
+		showLastError(_T("Error opening debug log"));
 }
 
 void closeDebugLog() {

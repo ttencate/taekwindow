@@ -340,7 +340,7 @@ void loadImages() {
 		// Find and load the resource from the executable.
 		// It has the undocumented type "PNG".
 		int resourceID = IMAGE_RESOURCE_IDS[i];
-		HRSRC resourceHandle = FindResource(NULL, MAKEINTRESOURCE(resourceID), L"PNG");
+		HRSRC resourceHandle = FindResource(NULL, MAKEINTRESOURCE(resourceID), _T("PNG"));
 		if (!resourceHandle) {
 			debugShowLastError(_T("Could not find resource"));
 			continue;
@@ -457,7 +457,7 @@ INT_PTR showPropSheet() {
 	header.hwndParent = NULL;
 	header.hInstance = getCurrentInstance();
 	header.pszIcon = MAKEINTRESOURCE(IDI_APP);
-	header.pszCaption = APPLICATION_TITLE_W L" configuration";
+	header.pszCaption = _T(APPLICATION_TITLE) _T(" configuration");
 	header.nPages = NUM_PAGES;
 	header.nStartPage = 0;
 	header.ppsp = pages;

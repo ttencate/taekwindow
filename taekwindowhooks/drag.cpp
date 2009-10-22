@@ -1,5 +1,6 @@
 #define OEMRESOURCE
 #include <windows.h>
+#include <tchar.h>
 
 #include "drag.hpp"
 #include "actions.hpp"
@@ -22,13 +23,13 @@ void BaseState::enter() {
 bool NormalState::isGoogleTalk(HWND window) {
 	// The contact list window and the chat view window do not have WS_CAPTION style, but is movable/resizable.
 	return
-		windowHasClass(window, L"Google Talk - Google Xmpp Client GUI Window") ||
-		windowHasClass(window, L"Chat View");
+		windowHasClass(window, _T("Google Talk - Google Xmpp Client GUI Window")) ||
+		windowHasClass(window, _T("Chat View"));
 }
 
 bool NormalState::isGoogleChrome(HWND window) {
 	// Google Chrome does not have WS_CAPTION style, but is movable/resizable.
-	return windowHasClass(window, L"Chrome_XPFrame");
+	return windowHasClass(window, _T("Chrome_XPFrame"));
 }
 
 bool NormalState::isMSOfficeDocument(HWND window) {
@@ -39,8 +40,8 @@ bool NormalState::isMSOfficeDocument(HWND window) {
 	// We just pretend that these windows are not floating windows at all,
 	// so it is always the parent window that gets manipulated.
 	return
-		windowHasClass(window, L"_WwB") || // Word 2007
-		windowHasClass(window, L"EXCEL7"); // Excel 2007
+		windowHasClass(window, _T("_WwB")) || // Word 2007
+		windowHasClass(window, _T("EXCEL7")); // Excel 2007
 }
 
 // END HACKs
