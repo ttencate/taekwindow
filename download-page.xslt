@@ -11,11 +11,17 @@
 		<xsl:comment xml:space="preserve">#set var="lastmod" value="$LAST_MODIFIED"</xsl:comment>
 		<xsl:comment xml:space="preserve">#include virtual="header.part.shtml"</xsl:comment>
 
-	<a href="http://www.softpedia.com/progClean/Taekwindow-Clean-70130.html">
-		<img src="softpedia-free-award.gif" alt="100% FREE award granted by Softpedia" title="Softpedia guarantees that Taekwindow 0.2.4 is 100% Free, which means it does not contain any form of malware, including but not limited to: spyware, viruses, trojans and backdoors." class="rightmargin"/>
-	</a>
-	
-    <h1>Download <xsl:value-of select="apptitle"/></h1>
+		<a href="http://www.softpedia.com/progClean/Taekwindow-Clean-70130.html">
+			<img src="softpedia-free-award.gif" alt="100% FREE award granted by Softpedia" title="Softpedia guarantees that Taekwindow 0.2.4 is 100% Free, which means it does not contain any form of malware, including but not limited to: spyware, viruses, trojans and backdoors." class="rightmargin"/>
+		</a>
+		<a href="http://www.geardownload.com/desktop/taekwindow.html">
+			<img src="geardownload-clean.gif" alt="Tested 100% clean on GearDownload.com" title="This download was tested thoroughly and was found 100% clean." class="rightmargin"/>
+		</a>
+		<a href="http://www.geardownload.com/desktop/taekwindow.html">
+			<img src="geardownload-5stars.gif" alt="Rated 5 stars on GearDownload.com" title="Rated 5 stars on GearDownload.com" class="rightmargin"/>
+		</a>
+
+		<h1>Download <xsl:value-of select="apptitle"/></h1>
 
 		<p>This ZIP file contains the latest version of the program itself and other required files.</p>
 
