@@ -1,9 +1,7 @@
 TODO
 ----
 
-- Eliminate dependency on CRT: http://stackoverflow.com/questions/1495173/producing-small-windows-binaries/1499517#1499517
 - Make it build with and without UNICODE by replacing L"" by _T(""); remove needless L"" items from version.h.
-- Set warning level to maximum and treat warnings as errors.
 - Fix icon to look nice on Windows 7 taskbar; provide 20x20 and 24x24 icons for the tray.
 - Rename "Configuration" to "Preferences" to blend in better with Windows conventions.
 - Update the Readme.
