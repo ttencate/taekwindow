@@ -1,7 +1,6 @@
 #include "util.hpp"
 #include "config.hpp"
 #include "drag.hpp"
-#include "offset_ptr.hpp"
 
 /* The shared data segment.
  * These variables are shared across all instances of the DLL. This is necessary because the hook handler
@@ -23,12 +22,7 @@
 DWORD mainThreadId = 0;
 DWORD mainProcessId = 0;
 
-NormalState normalState;
-MoveState moveState;
-MaximizedMoveState maximizedMoveState;
-ResizeState resizeState;
-IgnoreState ignoreState;
-offset_ptr<BaseState> currentState = &normalState;
+DragState currentState = dsNormal;
 
 HWND lastForegroundWindow = NULL;
 

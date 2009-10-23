@@ -11,7 +11,7 @@
 
 /* The current state we're in.
  */
-extern offset_ptr<BaseState> currentState;
+extern DragState currentState;
 
 #ifdef _DEBUG
 /* Steal this from main.cpp.
@@ -66,7 +66,7 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				button = eventToButton(wParam);
 				// Are we pushing the window to the back?
 				processed |= considerPushBack(eventInfo->hwnd, button, eventInfo->wHitTestCode);
-				processed |= currentState->onMouseDown(button, eventInfo->hwnd, eventInfo->pt);
+				processed |= onMouseDown(button, eventInfo->hwnd, eventInfo->pt);
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -76,11 +76,11 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCRBUTTONUP:
 				button = eventToButton(wParam);
 				// We only want to take action if it's the current dragging button being released.
-				processed |= currentState->onMouseUp(button, eventInfo->hwnd, eventInfo->pt);
+				processed |= onMouseUp(button, eventInfo->hwnd, eventInfo->pt);
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
-				processed |= currentState->onMouseMove(eventInfo->pt);
+				processed |= onMouseMove(eventInfo->pt);
 				break;
 			case WM_MOUSEWHEEL:
 				processed |= considerMouseWheel(eventInfo->hwnd, eventInfo->pt, eventInfoEx->mouseData);

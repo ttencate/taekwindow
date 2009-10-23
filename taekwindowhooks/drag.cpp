@@ -8,13 +8,9 @@
 #include "config.hpp"
 #include "debuglog.hpp"
 
-extern NormalState normalState;
-extern MoveState moveState;
-extern MaximizedMoveState maximizedMoveState;
-extern ResizeState resizeState;
-extern IgnoreState ignoreState;
-
 // BEGIN RIPOUT
+
+extern DragState currentState;
 
 /* The monitor that the window is currently on.
  */
@@ -118,85 +114,87 @@ POINT mouseDelta(POINT const &mousePos) {
 	return delta;
 }
 
-void BaseState::enter() {
-	currentState->exit();
-	currentState = this;
-}
-
-
+/* Returns true if the modifier key (e.g. Alt) is currently pressed.
+ */
 bool isModifierDown() {
 	return GetAsyncKeyState(config.modifier) & 0x8000;
 }
 
-bool NormalState::onMouseDown(MouseButton button, HWND window, POINT mousePos) {
-	if (!isModifierDown()) {
-		// This is not interesting. Discard ASAP.
-		return false;
-	}
-	if (button != config.moveButton && button != config.resizeButton) {
-		// Wrong button. Discard.
-		return false;
-	}
-	DEBUGLOG("Handling button down event");
-	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
-	if (button == config.moveButton) {
-		// We prefer windows that are not maximized over those that are, which makes sense in an MDI environment.
-		// This would be what the user expected.
-		HWND parentWindow = findFirstParent(window, isRestoredMovableWindow);
-		if (parentWindow) {
-			moveState.enter(button, parentWindow, mousePos);
-			return true;
-		} else {
-			// No unmaximized movable window found; look for a maximized one that can be kicked to another monitor.
-			// Only top-level windows can be moved to other monitors, I guess.
-			// So prefer the outermost (last) parent that is maximized.
-			parentWindow = findLastParent(window, isMaximizedMovableWindow);
-			if (parentWindow) {
-				maximizedMoveState.enter(button, parentWindow, mousePos);
-				return true;
-			}
-		}
-	} else if (button == config.resizeButton) {
-		// Try to find a parent window that we can resize without unmaximizing.
-		// This one is probably the one that the user meant.
-		HWND parentWindow = findFirstParent(window, isRestoredResizableWindow);
-		if (parentWindow) {
-			resizeState.enter(button, parentWindow, mousePos);
-			return true;
-		} else {
-			// No unmaximized window; perhaps we have a maximized one?
-			// We prefer the outermost, so that a maximized MDI parent is preferred over a maximized MDI child inside it.
-			// This makes the most sense, because users often forget that there is an MDI at all when their MDI childs are maximized.
-			parentWindow = findLastParent(window, isMaximizedResizableWindow);
-			if (parentWindow) {
-				resizeState.enter(button, parentWindow, mousePos);
-				return true;
-			}
-		}
-	} else {
-		// Nothing of interest: unused button.
-		return false;
-	}
-	// Unsuitable window. Ignore.
-	ignoreState.enter(button);
-	return false;
+// STATE EXITING --------------------------------------------------------------
+
+/* Restores the cursor.
+ */
+void exitMoveState() {
+	DEBUGLOG("Ending move action");
+	restoreCursor();
 }
 
-void MouseDownState::enter(MouseButton button) {
-	DEBUGLOG("Handling button up event");
-	BaseState::enter();
+/* Ends the drag action.
+ */
+void exitDeformState() {
+	ReleaseCapture();
+	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
+		// The active window was deactivated when we clicked the dragged window.
+		// Restore the previously active window to active.
+		activateWithoutRaise(lastForegroundWindow);
+	}
+}
+
+/* Restores the cursor.
+ */
+void exitMaximizedMoveState() {
+	DEBUGLOG("Ending maximized move action");
+	exitDeformState();
+	restoreCursor();
+}
+
+/* Restores the cursor.
+ */
+void exitResizeState() {
+	DEBUGLOG("Ending resize action");
+	exitDeformState();
+	restoreCursor();
+}
+
+/* Called right before the current state is exited.
+ */
+void exitState() {
+	switch (currentState) {
+		case dsMove:
+			exitMoveState();
+			break;
+		case dsMaximizedMove:
+			exitMaximizedMoveState();
+			break;
+		case dsResize:
+			exitResizeState();
+			break;
+	}
+}
+
+// STATE ENTERING -------------------------------------------------------------
+
+/* Switches to the given new state, calling the exit handler for the current state.
+ * Is called from the enter*State functions.
+ */
+void changeState(DragState newState) {
+	exitState();
+	currentState = newState;
+}
+
+/* Stores the button for later use.
+ */
+void enterMouseDownState(MouseButton button) {
+	DEBUGLOG("Handling button down event");
 	downButton = button;
 }
 
-bool MouseDownState::onMouseUp(MouseButton button, HWND window, POINT mousePos) {
-	if (button == downButton) {
-		normalState.enter();
-	}
-	return true;
-}
-
-void DeformState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
-	MouseDownState::enter(button);
+/* Stores the initial state for later use.
+ * Note that parentWindow refers to the window we should move/resize,
+ * not the one bottommost window that receives the actual events.
+ */
+void enterDeformState(MouseButton button, HWND parentWindow, POINT mousePos) {
+	enterMouseDownState(button);
 	// Store window handle and Z order position of the victim.
 	draggedWindow = parentWindow;
 	prevInZOrder = GetNextWindow(parentWindow, GW_HWNDPREV);
@@ -218,89 +216,38 @@ void DeformState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
 	}
 }
 
-void DeformState::exit() {
-	MouseDownState::exit();
-	ReleaseCapture();
-	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
-		// The active window was deactivated when we clicked the dragged window.
-		// Restore the previously active window to active.
-		activateWithoutRaise(lastForegroundWindow);
-	}
-}
-
-void MoveState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
+/* Sets up the cursor.
+ */
+void enterMoveState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting move action");
-	DeformState::enter(button, parentWindow, mousePos);
+	changeState(dsMove);
+	enterDeformState(button, parentWindow, mousePos);
 	setCursor(OCR_SIZEALL);
 }
 
-void MoveState::exit() {
-	DEBUGLOG("Ending move action");
-	DeformState::exit();
-	restoreCursor();
+/* Switches back to the normal state.
+ */
+void enterNormalState() {
+	changeState(dsNormal);
 }
 
-bool MoveState::onMouseMove(POINT mousePos) {
-	DEBUGLOG("Handling move action");
-	POINT delta = mouseDelta(mousePos);
-	lastRect.left += delta.x;
-	lastRect.top += delta.y;
-	lastRect.right += delta.x;
-	lastRect.bottom += delta.y;
-	updateWindowPos(SWP_NOSIZE);
-	return true;
-}
-
-void MaximizedMoveState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
+/* Sets up the cursor.
+ */
+void enterMaximizedMoveState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting maximized move action");
-	DeformState::enter(button, parentWindow, mousePos);
+	changeState(dsMaximizedMove);
+	enterDeformState(button, parentWindow, mousePos);
 	// Remember the monitor that currently contains the window.
 	currentMonitor = MonitorFromWindow(parentWindow, MONITOR_DEFAULTTONULL);
 	setCursor(OCR_SIZEALL);
 }
 
-void MaximizedMoveState::exit() {
-	DEBUGLOG("Ending maximized move action");
-	DeformState::exit();
-	restoreCursor();
-}
-
-bool MaximizedMoveState::onMouseMove(POINT mousePos) {
-	DEBUGLOG("Handling maximized move action");
-	HMONITOR mouseMonitor = MonitorFromPoint(mousePos, MONITOR_DEFAULTTONEAREST);
-	if (mouseMonitor != currentMonitor) {
-		// Window needs to be moved to another monitor, while retaining its maximized state.
-		currentMonitor = mouseMonitor;
-		// Figure out where the monitor is on the virtual screen.
-		MONITORINFO monitorInfo;
-		monitorInfo.cbSize = sizeof(monitorInfo);
-		GetMonitorInfo(currentMonitor, &monitorInfo);
-		DEBUGLOG("Monitor work area at %d,%d (%dx%d)", monitorInfo.rcWork.left, monitorInfo.rcWork.top, monitorInfo.rcWork.right - monitorInfo.rcWork.left, monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-		// Now move the window by unmaximizing, moving, remaximizing.
-		// First, lock drawing to prevent annoying flicker.
-		LockWindowUpdate(draggedWindow);
-		// Use SetWindowPlacement to change the style to SW_RESTORE, because ShowWindow does animations
-		// (simpler ones than AnimateWindow, but still annoying).
-		WINDOWPLACEMENT windowPlacement;
-		windowPlacement.length = sizeof(windowPlacement);
-		GetWindowPlacement(draggedWindow, &windowPlacement);
-		windowPlacement.showCmd = SW_RESTORE;
-		SetWindowPlacement(draggedWindow, &windowPlacement);
-		// Move the restored window to the top left of the working area of the desired monitor.
-		SetWindowPos(draggedWindow, prevInZOrder, monitorInfo.rcWork.left, monitorInfo.rcWork.top, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE);
-		// Unlock window drawing for the final stage.
-		LockWindowUpdate(NULL);
-		// And remaximize.
-		GetWindowPlacement(draggedWindow, &windowPlacement);
-		windowPlacement.showCmd = SW_MAXIMIZE;
-		SetWindowPlacement(draggedWindow, &windowPlacement);
-	}
-	return true;
-}
-
-void ResizeState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
+/* Sets up the cursor and the resize type.
+ */
+void enterResizeState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting resize action");
-	DeformState::enter(button, parentWindow, mousePos);
+	changeState(dsResize);
+	enterDeformState(button, parentWindow, mousePos);
 	if (IsZoomed(parentWindow)) {
 		// When resizing a maximized window, unmaximize it first.
 		// Set its restored size to its maximized size, but pull the borders onto the screen.
@@ -338,13 +285,119 @@ void ResizeState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
 	setCursor(getResizingCursor());
 }
 
-void ResizeState::exit() {
-	DEBUGLOG("Ending resize action");
-	DeformState::exit();
-	restoreCursor();
+void enterIgnoreState(MouseButton button) {
+	DEBUGLOG("Starting ignore action");
+	changeState(dsIgnore);
+	enterMouseDownState(button);
 }
 
-bool ResizeState::onMouseMove(POINT mousePos) {
+// EVENT HANDLING -------------------------------------------------------------
+
+bool onMouseDownNormalState(MouseButton button, HWND window, POINT mousePos) {
+	if (!isModifierDown()) {
+		// This is not interesting. Discard ASAP.
+		return false;
+	}
+	if (button != config.moveButton && button != config.resizeButton) {
+		// Wrong button. Discard.
+		return false;
+	}
+	DEBUGLOG("Handling button down event");
+	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
+	if (button == config.moveButton) {
+		// We prefer windows that are not maximized over those that are, which makes sense in an MDI environment.
+		// This would be what the user expected.
+		HWND parentWindow = findFirstParent(window, isRestoredMovableWindow);
+		if (parentWindow) {
+			enterMoveState(button, parentWindow, mousePos);
+			return true;
+		} else {
+			// No unmaximized movable window found; look for a maximized one that can be kicked to another monitor.
+			// Only top-level windows can be moved to other monitors, I guess.
+			// So prefer the outermost (last) parent that is maximized.
+			parentWindow = findLastParent(window, isMaximizedMovableWindow);
+			if (parentWindow) {
+				enterMaximizedMoveState(button, parentWindow, mousePos);
+				return true;
+			}
+		}
+	} else if (button == config.resizeButton) {
+		// Try to find a parent window that we can resize without unmaximizing.
+		// This one is probably the one that the user meant.
+		HWND parentWindow = findFirstParent(window, isRestoredResizableWindow);
+		if (parentWindow) {
+			enterResizeState(button, parentWindow, mousePos);
+			return true;
+		} else {
+			// No unmaximized window; perhaps we have a maximized one?
+			// We prefer the outermost, so that a maximized MDI parent is preferred over a maximized MDI child inside it.
+			// This makes the most sense, because users often forget that there is an MDI at all when their MDI childs are maximized.
+			parentWindow = findLastParent(window, isMaximizedResizableWindow);
+			if (parentWindow) {
+				enterResizeState(button, parentWindow, mousePos);
+				return true;
+			}
+		}
+	} else {
+		// Nothing of interest: unused button.
+		return false;
+	}
+	// Unsuitable window. Ignore.
+	enterIgnoreState(button);
+	return false;
+}
+
+/* Moves the window accordingly.
+ */
+bool onMouseMoveMoveState(POINT mousePos) {
+	DEBUGLOG("Handling move action");
+	POINT delta = mouseDelta(mousePos);
+	lastRect.left += delta.x;
+	lastRect.top += delta.y;
+	lastRect.right += delta.x;
+	lastRect.bottom += delta.y;
+	updateWindowPos(SWP_NOSIZE);
+	return true;
+}
+
+/* Moves the window accordingly.
+ */
+bool onMouseMoveMaximizedMoveState(POINT mousePos) {
+	DEBUGLOG("Handling maximized move action");
+	HMONITOR mouseMonitor = MonitorFromPoint(mousePos, MONITOR_DEFAULTTONEAREST);
+	if (mouseMonitor != currentMonitor) {
+		// Window needs to be moved to another monitor, while retaining its maximized state.
+		currentMonitor = mouseMonitor;
+		// Figure out where the monitor is on the virtual screen.
+		MONITORINFO monitorInfo;
+		monitorInfo.cbSize = sizeof(monitorInfo);
+		GetMonitorInfo(currentMonitor, &monitorInfo);
+		DEBUGLOG("Monitor work area at %d,%d (%dx%d)", monitorInfo.rcWork.left, monitorInfo.rcWork.top, monitorInfo.rcWork.right - monitorInfo.rcWork.left, monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+		// Now move the window by unmaximizing, moving, remaximizing.
+		// First, lock drawing to prevent annoying flicker.
+		LockWindowUpdate(draggedWindow);
+		// Use SetWindowPlacement to change the style to SW_RESTORE, because ShowWindow does animations
+		// (simpler ones than AnimateWindow, but still annoying).
+		WINDOWPLACEMENT windowPlacement;
+		windowPlacement.length = sizeof(windowPlacement);
+		GetWindowPlacement(draggedWindow, &windowPlacement);
+		windowPlacement.showCmd = SW_RESTORE;
+		SetWindowPlacement(draggedWindow, &windowPlacement);
+		// Move the restored window to the top left of the working area of the desired monitor.
+		SetWindowPos(draggedWindow, prevInZOrder, monitorInfo.rcWork.left, monitorInfo.rcWork.top, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE);
+		// Unlock window drawing for the final stage.
+		LockWindowUpdate(NULL);
+		// And remaximize.
+		GetWindowPlacement(draggedWindow, &windowPlacement);
+		windowPlacement.showCmd = SW_MAXIMIZE;
+		SetWindowPlacement(draggedWindow, &windowPlacement);
+	}
+	return true;
+}
+
+/* Resizes the window accordingly.
+ */
+bool onMouseMoveResizeState(POINT mousePos) {
 	DEBUGLOG("Handling resize action");
 	POINT delta = mouseDelta(mousePos);
 	// Do not move the window, unless resizing at its top and/or its left.
@@ -385,5 +438,42 @@ bool ResizeState::onMouseMove(POINT mousePos) {
 	if (needCursorUpdate)
 		updateCursor(getResizingCursor());
 	updateWindowPos(flags);
+	return true;
+}
+
+bool onMouseDown(MouseButton button, HWND window, POINT mousePos) {
+	switch (currentState) {
+		case dsNormal:
+			return onMouseDownNormalState(button, window, mousePos);
+		default:
+			return true;
+	}
+}
+
+bool onMouseUp(MouseButton button, HWND window, POINT mousePos) {
+	switch (currentState) {
+		case dsNormal:
+			return false;
+		default:
+			if (button == downButton) {
+				enterNormalState();
+			}
+			return true;
+	}
+}
+
+bool onMouseMove(POINT mousePos) {
+	switch (currentState) {
+		case dsNormal:
+			return false;
+		case dsMove:
+			return onMouseMoveMoveState(mousePos);
+		case dsMaximizedMove:
+			return onMouseMoveMaximizedMoveState(mousePos);
+		case dsResize:
+			return onMouseMoveResizeState(mousePos);
+		case dsIgnore:
+			return true;
+	}
 	return true;
 }
