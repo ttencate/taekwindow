@@ -1,5 +1,7 @@
 #ifdef _DEBUG
 
+#define STRSAFE_USE_SECURE_CRT 1
+
 #include <windows.h>
 #include <tchar.h>
 #include <strsafe.h>
@@ -55,12 +57,12 @@ void debugLog(LPCTSTR format, ...) {
 		const int BUF_SIZE = 512;
 		TCHAR formatBuf[BUF_SIZE];
 		long time = GetTickCount();
-		StringCchPrintf(formatBuf, BUF_SIZE, _T("%d.%03d: %s\r\n"), time/1000, time%1000, format);
+		wsprintf(formatBuf, _T("%d.%03d: %s\r\n"), time/1000, time%1000, format);
 
 		TCHAR buffer[BUF_SIZE];
 		va_list args;
 		va_start(args, format);
-		StringCchVPrintf(buffer, BUF_SIZE, formatBuf, args);
+		wvsprintf(buffer, formatBuf, args);
 		va_end(args);
 
 		DWORD written;

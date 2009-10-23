@@ -16,9 +16,12 @@ extern DWORD mainProcessId;
 
 /* The entry point for the DLL. Stores the instance handle of the DLL for later use.
  */
-BOOL WINAPI DllMain(HANDLE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpvReserved) {
 	if (dwReason == DLL_PROCESS_ATTACH || dwReason == DLL_THREAD_ATTACH) {
 		dllHandle = (HINSTANCE)hinstDLL;
+		// We don't need these, so save some time.
+		// The CRT needs them, but we're not linking the CRT anymore.
+		DisableThreadLibraryCalls(hinstDLL);
 	} else if (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH) {
 		// Nothing to do for the moment.
 	}

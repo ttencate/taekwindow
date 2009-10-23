@@ -33,11 +33,11 @@ bool isThickBorderWindow(HWND window);
 
 /* Returns true if we should allow moving of this window (be it maximized or not).
  */
-static bool isMovableWindow(HWND window);
+bool isMovableWindow(HWND window);
 
 /* Returns true if we should allow resizing of this window (be it maximized or not).
  */
-static bool isResizableWindow(HWND window);
+bool isResizableWindow(HWND window);
 
 /* Various combinations of movability, resizability and being maximized or not.
  */

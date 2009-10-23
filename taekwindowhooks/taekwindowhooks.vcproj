@@ -52,7 +52,7 @@
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="false"
 				DebugInformationFormat="4"
-				OmitDefaultLibName="false"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -70,7 +70,7 @@
 				ModuleDefinitionFile="exports.def"
 				OptimizeReferences="1"
 				EnableCOMDATFolding="1"
-				EntryPointSymbol=""
+				EntryPointSymbol="DllMain"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -141,6 +141,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				ModuleDefinitionFile="exports.def"
+				GenerateMapFile="true"
+				EntryPointSymbol="DllMain"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
