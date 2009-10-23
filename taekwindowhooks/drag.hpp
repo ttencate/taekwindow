@@ -6,6 +6,10 @@
 #include "util.hpp"
 #include "offset_ptr.hpp"
 
+enum DragState {
+	dsNormal, dsMove, dsMaximizedMove, dsResize, dsIgnore
+};
+
 /* The dragging system is essentially a state machine. Its input consists of mouse events.
  * Upon state transitions, it may do something. This class is the ancestor of all states.
  */
@@ -55,33 +59,6 @@ public:
 	 */
 	virtual bool onMouseMove(POINT mousePos)
 	{ return false; }
-
-protected:
-	/* Returns true if we should allow moving of this window (be it maximized or not).
-	 */
-	static bool isMovableWindow(HWND window);
-
-	/* Returns true if we should allow resizing of this window (be it maximized or not).
-	 */
-	static bool isResizableWindow(HWND window);
-
-	/* Various combinations of movability, resizability and being maximized or not.
-	 */
-	static bool isRestoredMovableWindow(HWND window);
-	static bool isRestoredResizableWindow(HWND window);
-	static bool isMaximizedMovableWindow(HWND window);
-	static bool isMaximizedResizableWindow(HWND window);
-
-	/* HACKs for specific applications.
-	 */
-	static bool isGoogleTalk(HWND window);
-	static bool isGoogleChrome(HWND window);
-	static bool isMSOfficeDocument(HWND window);
-
-	/* Returns true if the modifier key is currently down.
-	 */
-
-	static bool isModifierDown();
 };
 
 /* The base for all states when some button is currently pressed down.
@@ -100,11 +77,6 @@ public:
 	/* Stores the button for later use.
 	 */
 	virtual void enter(MouseButton button);
-
-protected:
-	/* The button that was pressed down and caused us to be in this state.
-	 */
-	MouseButton downButton;
 };
 
 /* The base state for both moving and resizing actions. These have much in common.
@@ -120,49 +92,6 @@ public:
 	/* Ends the drag action.
 	 */
 	virtual void exit();
-protected:
-	/* The point at which the mouse cursor was last seen.
-	 */
-	POINT lastMousePos;
-
-	/* The window that we're dragging.
-	 */
-	HWND draggedWindow;
-
-	/* The window in the Z-order previous to the draggedWindow.
-	 * Used to keep the order intact when calling SetWindowPos.
-	 */
-	HWND prevInZOrder;
-
-	/* The current position of the window. Saves calls to GetWindowRect.
-	 */
-	RECT lastRect;
-
-	/* The cursor that was set by the application, before we changed it.
-	 */
-	HCURSOR prevCursor;
-
-	/* Returns the movement of the mouse since the last time.
-	 */
-	POINT mouseDelta(POINT const &mousePos);
-	
-	/* Calls SetWindowPos with the appropriate arguments. Extra flags can be passed in.
-	 */
-	void updateWindowPos(UINT flags);
-
-	/* Sets the new cursor; assumes that the current cursor is defined by the application being dragged.
-	 * Expects one of the OCR_* constants.
-	 */
-	void setCursor(int ocr);
-
-	/* Sets the new cursor; assumes that the current cursor is defined by ourselves.
-	 * To be called in between setCursor() and restoreCursor().
-	 */
-	void updateCursor(int ocr);
-
-	/* Restores the cursor to the one before setCursor() was called.
-	 */
-	void restoreCursor();
 };
 
 /* The state active while the user is moving a window.
@@ -198,11 +127,6 @@ public:
 	/* Restores the cursor.
 	 */
 	virtual void exit();
-
-protected:
-	/* The monitor that the window is currently on.
-	 */
-	HMONITOR currentMonitor;
 };
 
 /* The state active while the user is resizing a window.
@@ -220,22 +144,6 @@ public:
 	/* Restores the cursor.
 	 */
 	virtual void exit();
-protected:
-	/* The side(s) on which the window is resized. Both either -1, 0 or 1.
-	 */
-	int resizingX, resizingY;
-
-	/* Sets the variables resizingX and resizingY to the proper values,
-	 * considering the client-coordinate pointer location.
-	 * Note that, unlike lastRect, these are client coordinates of the dragged window itself,
-	 * not those of the dragged window's parent!
-	 */
-	void setResizingX(POINT const &pt);
-	void setResizingY(POINT const &pt);
-
-	/* Returns the cursor (OCR_* constant) to be used for the current resizing direction.
-	 */
-	int getResizingCursor();
 };
 
 /* The ignore state, activated when the user tries to move/resize a window that is not movable or resizable.

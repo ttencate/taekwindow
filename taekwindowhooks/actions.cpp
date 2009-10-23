@@ -1,6 +1,7 @@
 #include <tchar.h>
 
 #include "actions.hpp"
+#include "wininfo.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
 

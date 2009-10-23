@@ -32,6 +32,43 @@ offset_ptr<BaseState> currentState = &normalState;
 
 HWND lastForegroundWindow = NULL;
 
+// BEGIN RIPOUT
+
+/* The monitor that the window is currently on.
+ */
+HMONITOR currentMonitor; // MaximizedMoveState
+
+/* The side(s) on which the window is resized. Both either -1, 0 or 1.
+ */
+int resizingX, resizingY; // ResizeState
+
+/* The point at which the mouse cursor was last seen.
+ */
+POINT lastMousePos; // DeformState
+
+/* The window that we're dragging.
+ */
+HWND draggedWindow; // DeformState
+
+/* The window in the Z-order previous to the draggedWindow.
+ * Used to keep the order intact when calling SetWindowPos.
+ */
+HWND prevInZOrder; // DeformState
+
+/* The current position of the window. Saves calls to GetWindowRect.
+ */
+RECT lastRect; // DeformState
+
+/* The cursor that was set by the application, before we changed it.
+ */
+HCURSOR prevCursor; // DeformState
+
+/* The button that was pressed down and caused us to be in this state.
+ */
+MouseButton downButton; // MouseDownState
+
+// END RIPOUT
+
 // Configuration options
 
 DLLConfiguration config = {0};

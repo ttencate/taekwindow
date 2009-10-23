@@ -3,6 +3,7 @@
 #include <tchar.h>
 
 #include "drag.hpp"
+#include "wininfo.hpp"
 #include "actions.hpp"
 #include "config.hpp"
 #include "debuglog.hpp"
@@ -13,110 +14,117 @@ extern MaximizedMoveState maximizedMoveState;
 extern ResizeState resizeState;
 extern IgnoreState ignoreState;
 
+// BEGIN RIPOUT
+
+/* The monitor that the window is currently on.
+ */
+extern HMONITOR currentMonitor; // MaximizedMoveState
+
+/* The side(s) on which the window is resized. Both either -1, 0 or 1.
+ */
+extern int resizingX, resizingY; // ResizeState
+
+/* The point at which the mouse cursor was last seen.
+ */
+extern POINT lastMousePos; // DeformState
+
+/* The window that we're dragging.
+ */
+extern HWND draggedWindow; // DeformState
+
+/* The window in the Z-order previous to the draggedWindow.
+ * Used to keep the order intact when calling SetWindowPos.
+ */
+extern HWND prevInZOrder; // DeformState
+
+/* The current position of the window. Saves calls to GetWindowRect.
+ */
+extern RECT lastRect; // DeformState
+
+/* The cursor that was set by the application, before we changed it.
+ */
+extern HCURSOR prevCursor; // DeformState
+
+/* The button that was pressed down and caused us to be in this state.
+ */
+extern MouseButton downButton; // MouseDownState
+
+// END RIPOUT
+
+/* Calls SetWindowPos with the appropriate arguments. Extra flags can be passed in.
+ */
+void updateWindowPos(UINT flags) {
+	SetWindowPos(draggedWindow, prevInZOrder, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | flags);
+}
+
+/* Sets the new cursor; assumes that the current cursor is defined by the application being dragged.
+ * Expects one of the OCR_* constants.
+ */
+void setCursor(int ocr) {
+	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
+	prevCursor = SetCursor(newCursor);
+}
+
+/* Sets the new cursor; assumes that the current cursor is defined by ourselves.
+ * To be called in between setCursor() and restoreCursor().
+ */
+void updateCursor(int ocr) {
+	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
+	DestroyCursor(SetCursor(newCursor));
+}
+
+/* Restores the cursor to the one before setCursor() was called.
+ */
+void restoreCursor() {
+	DestroyCursor(SetCursor(prevCursor));
+}
+
+/* Sets the variables resizingX and resizingY to the proper values,
+ * considering the client-coordinate pointer location.
+ * Note that, unlike lastRect, these are client coordinates of the dragged window itself,
+ * not those of the dragged window's parent!
+ */
+void setResizingX(POINT const &pt) {
+	resizingX = pt.x * 3 / (lastRect.right - lastRect.left) - 1;
+}
+void setResizingY(POINT const &pt) {
+	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
+}
+
+/* Returns the cursor (OCR_* constant) to be used for the current resizing direction.
+ */
+int getResizingCursor() {
+	if (resizingX && !resizingY)
+		return OCR_SIZEWE;
+	if (!resizingX && resizingY)
+		return OCR_SIZENS;
+	if (resizingX * resizingY > 0)
+		return OCR_SIZENWSE;
+	if (resizingX * resizingY < 0)
+		return OCR_SIZENESW;
+	return OCR_NORMAL; // fallback
+}
+
+/* Returns the movement of the mouse since the last time.
+ */
+POINT mouseDelta(POINT const &mousePos) {
+	// Find out the movement since the last known mouse position.
+	POINT delta;
+	delta.x = mousePos.x - lastMousePos.x;
+	delta.y = mousePos.y - lastMousePos.y;
+	// Store the current mouse position as last known.
+	lastMousePos = mousePos;
+	// Return the relative movement.
+	return delta;
+}
+
 void BaseState::enter() {
 	currentState->exit();
 	currentState = this;
 }
 
-// BEGIN HACKs for specific applications
 
-bool NormalState::isGoogleTalk(HWND window) {
-	// The contact list window and the chat view window do not have WS_CAPTION style, but is movable/resizable.
-	return
-		windowHasClass(window, _T("Google Talk - Google Xmpp Client GUI Window")) ||
-		windowHasClass(window, _T("Chat View"));
-}
-
-bool NormalState::isGoogleChrome(HWND window) {
-	// Google Chrome does not have WS_CAPTION style, but is movable/resizable.
-	return windowHasClass(window, _T("Chrome_XPFrame"));
-}
-
-bool NormalState::isMSOfficeDocument(HWND window) {
-	// Microsoft Office Word 2007 does internally use MDI, but does not show it,
-	// so we pretend that an Office document is not movable/resizable.
-	// Microsoft Office Excel 2007 uses an MDI and shows it too, but does its own handling
-	// of maximization (i.e. does not set WS_MAXIMIZED).
-	// We just pretend that these windows are not floating windows at all,
-	// so it is always the parent window that gets manipulated.
-	return
-		windowHasClass(window, _T("_WwB")) || // Word 2007
-		windowHasClass(window, _T("EXCEL7")); // Excel 2007
-}
-
-// END HACKs
-
-bool NormalState::isMovableWindow(HWND window) {
-	// BEGIN HACK for MS Office
-	if (isMSOfficeDocument(window)) {
-		return false;
-	}
-	// END HACK
-
-	if (isCaptionWindow(window) && !isFullscreenWindow(window)) {
-		// A normal movable window.
-		return true;
-	}
-
-	// BEGIN HACK for Google Talk
-	if (isGoogleTalk(window)) {
-		return true;
-	}
-	// END HACK
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window)) {
-		return true;
-	}
-	// END HACK
-
-	// No reason why this should be considered movable.
-	return false;
-}
-
-bool NormalState::isResizableWindow(HWND window) {
-	// BEGIN HACK for MS Office
-	if (isMSOfficeDocument(window)) {
-		return false;
-	}
-	// END HACK
-
-	if (isThickBorderWindow(window) && !isFullscreenWindow(window)) {
-		return true;
-	}
-
-	// BEGIN HACK for Google Talk
-	if (isGoogleTalk(window)) {
-		return true;
-	}
-	// END HACK
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window)) {
-		return true;
-	}
-	// END HACK
-
-	return false;
-}
-
-bool NormalState::isRestoredMovableWindow(HWND window) {
-	return isMovableWindow(window) && !isMaximizedWindow(window);
-}
-
-bool NormalState::isRestoredResizableWindow(HWND window) {
-	return isResizableWindow(window) && !isMaximizedWindow(window);
-}
-
-bool NormalState::isMaximizedMovableWindow(HWND window) {
-	return isMovableWindow(window) && isMaximizedWindow(window);
-}
-
-bool NormalState::isMaximizedResizableWindow(HWND window) {
-	return isResizableWindow(window) && isMaximizedWindow(window);
-}
-
-bool NormalState::isModifierDown() {
+bool isModifierDown() {
 	return GetAsyncKeyState(config.modifier) & 0x8000;
 }
 
@@ -218,35 +226,6 @@ void DeformState::exit() {
 		// Restore the previously active window to active.
 		activateWithoutRaise(lastForegroundWindow);
 	}
-}
-
-POINT DeformState::mouseDelta(POINT const &mousePos) {
-	// Find out the movement since the last known mouse position.
-	POINT delta;
-	delta.x = mousePos.x - lastMousePos.x;
-	delta.y = mousePos.y - lastMousePos.y;
-	// Store the current mouse position as last known.
-	lastMousePos = mousePos;
-	// Return the relative movement.
-	return delta;
-}
-
-void DeformState::updateWindowPos(UINT flags) {
-	SetWindowPos(draggedWindow, prevInZOrder, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | flags);
-}
-
-void DeformState::setCursor(int ocr) {
-	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
-	prevCursor = SetCursor(newCursor);
-}
-
-void DeformState::updateCursor(int ocr) {
-	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
-	DestroyCursor(SetCursor(newCursor));
-}
-
-void DeformState::restoreCursor() {
-	DestroyCursor(SetCursor(prevCursor));
 }
 
 void MoveState::enter(MouseButton button, HWND parentWindow, POINT mousePos) {
@@ -407,24 +386,4 @@ bool ResizeState::onMouseMove(POINT mousePos) {
 		updateCursor(getResizingCursor());
 	updateWindowPos(flags);
 	return true;
-}
-
-void ResizeState::setResizingX(POINT const &pt) {
-	resizingX = pt.x * 3 / (lastRect.right - lastRect.left) - 1;
-}
-
-void ResizeState::setResizingY(POINT const &pt) {
-	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
-}
-
-int ResizeState::getResizingCursor() {
-	if (resizingX && !resizingY)
-		return OCR_SIZEWE;
-	if (!resizingX && resizingY)
-		return OCR_SIZENS;
-	if (resizingX * resizingY > 0)
-		return OCR_SIZENWSE;
-	if (resizingX * resizingY < 0)
-		return OCR_SIZENESW;
-	return OCR_NORMAL; // fallback
 }
