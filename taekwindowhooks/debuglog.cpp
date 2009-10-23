@@ -1,6 +1,6 @@
 #ifdef _DEBUG
 
-#define STRSAFE_USE_SECURE_CRT 1
+#define STRSAFE_NO_DEPRECATE
 
 #include <windows.h>
 #include <tchar.h>

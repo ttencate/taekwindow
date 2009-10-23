@@ -100,9 +100,9 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
  */
 LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	if (nCode >= 0 && nCode == HC_ACTION) { // A little redundant, yes. But the docs say it.
+#ifdef _DEBUG
 		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
 		DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);
-#ifdef _DEBUG
 		if (info->vkCode == 0x51) {
 			DEBUGLOG("Panic button pressed");
 			// Q button pressed. Panic button for debugging.

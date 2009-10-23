@@ -116,7 +116,7 @@ POINT mouseDelta(POINT const &mousePos) {
 /* Returns true if the modifier key (e.g. Alt) is currently pressed.
  */
 bool isModifierDown() {
-	return GetAsyncKeyState(config.modifier) & 0x8000;
+	return (GetAsyncKeyState(config.modifier) & 0x8000) != 0;
 }
 
 // STATE EXITING --------------------------------------------------------------
@@ -427,7 +427,7 @@ bool onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 	}
 }
 
-bool onMouseUp(MouseButton button, HWND window, POINT mousePos) {
+bool onMouseUp(MouseButton button, HWND, POINT) {
 	switch (currentState) {
 		case dsNormal:
 			return false;

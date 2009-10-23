@@ -51,6 +51,8 @@
 				RuntimeLibrary="1"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="false"
+				WarningLevel="4"
+				WarnAsError="true"
 				DebugInformationFormat="4"
 				OmitDefaultLibName="true"
 			/>
@@ -123,10 +125,19 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="3"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				WholeProgramOptimization="true"
 				PreprocessorDefinitions="_WIN32_WINNT=0x0500"
+				StringPooling="true"
 				ExceptionHandling="0"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="false"
+				WarningLevel="4"
+				WarnAsError="true"
 				OmitDefaultLibName="true"
 			/>
 			<Tool
@@ -142,6 +153,9 @@
 				Name="VCLinkerTool"
 				ModuleDefinitionFile="exports.def"
 				GenerateMapFile="true"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="1"
 				EntryPointSymbol="DllMain"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"

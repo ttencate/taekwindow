@@ -6,20 +6,22 @@
 
 HWND findFirstParent(HWND window, bool (*criterium)(HWND)) {
 	HWND ancestor = window;
-	while (true) {
+	while (ancestor) {
 		DEBUGLOG("Current ancestor is 0x%X", ancestor);
 		if (ancestor && ancestor != INVALID_HANDLE_VALUE) {
 			if (criterium(ancestor)) {
 				DEBUGLOG("We like your style; returning 0x%X", ancestor);
-				return ancestor;
+				break;
 			}
 		} else {
 			// No parent window.
 			DEBUGLOG("Window has no parent; returning NULL");
-			return NULL;
+			ancestor = NULL;
+			break;
 		}
 		ancestor = GetAncestor(ancestor, GA_PARENT);
 	}
+	return ancestor;
 }
 
 HWND findLastParent(HWND window, bool (*criterium)(HWND)) {
@@ -53,10 +55,10 @@ bool windowHasClass(HWND window, wchar_t const *className) {
 }
 
 bool isMaximizedWindow(HWND window) {
-	return IsZoomed(window);
+	return IsZoomed(window) == TRUE;
 }
 
-bool isFullscreenWindow(HWND window) {
+bool isFullscreenWindow(HWND) {
 	return false; // TODO
 }
 
