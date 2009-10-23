@@ -9,3 +9,4 @@ TODO
 - Make the DLL independent of the CRT as well.
 - Set the DLL to warning level 4 and treat warnings as errors.
 - It doesn't remember middle mouse button setting for resize!
+- Try to hook with WH_MOUSE_LL instead of WH_MOUSE, to hook both 32-bits and 64-bits processes.

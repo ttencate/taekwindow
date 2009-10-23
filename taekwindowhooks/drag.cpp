@@ -121,37 +121,17 @@ bool isModifierDown() {
 
 // STATE EXITING --------------------------------------------------------------
 
-/* Restores the cursor.
- */
-void exitMoveState() {
-	DEBUGLOG("Ending move action");
-	restoreCursor();
-}
-
 /* Ends the drag action.
+ * Releases the mouse capture and restores the cursor.
  */
 void exitDeformState() {
+	DEBUGLOG("Ending drag action");
 	ReleaseCapture();
 	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
 		// The active window was deactivated when we clicked the dragged window.
 		// Restore the previously active window to active.
 		activateWithoutRaise(lastForegroundWindow);
 	}
-}
-
-/* Restores the cursor.
- */
-void exitMaximizedMoveState() {
-	DEBUGLOG("Ending maximized move action");
-	exitDeformState();
-	restoreCursor();
-}
-
-/* Restores the cursor.
- */
-void exitResizeState() {
-	DEBUGLOG("Ending resize action");
-	exitDeformState();
 	restoreCursor();
 }
 
@@ -160,13 +140,9 @@ void exitResizeState() {
 void exitState() {
 	switch (currentState) {
 		case dsMove:
-			exitMoveState();
-			break;
 		case dsMaximizedMove:
-			exitMaximizedMoveState();
-			break;
 		case dsResize:
-			exitResizeState();
+			exitDeformState();
 			break;
 	}
 }
@@ -288,6 +264,7 @@ void enterIgnoreState(MouseButton button) {
 	DEBUGLOG("Starting ignore action");
 	changeState(dsIgnore);
 	enterMouseDownState(button);
+	setCursor(OCR_NO);
 }
 
 // EVENT HANDLING -------------------------------------------------------------

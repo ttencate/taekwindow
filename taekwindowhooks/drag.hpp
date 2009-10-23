@@ -4,7 +4,6 @@
 #include <windows.h>
 
 #include "util.hpp"
-#include "offset_ptr.hpp"
 
 enum DragState {
 	/* The state active while nothing is happening.

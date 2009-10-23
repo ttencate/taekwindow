@@ -238,10 +238,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\offset_ptr.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\resource.h"
 				>
 			</File>

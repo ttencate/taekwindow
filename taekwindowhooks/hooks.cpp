@@ -6,7 +6,6 @@
 #include "actions.hpp"
 #include "config.hpp"
 #include "util.hpp"
-#include "offset_ptr.hpp"
 #include "debuglog.hpp"
 
 /* The current state we're in.
