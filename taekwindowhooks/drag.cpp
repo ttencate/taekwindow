@@ -8,44 +8,43 @@
 #include "config.hpp"
 #include "debuglog.hpp"
 
-// BEGIN RIPOUT
-
-extern DragState currentState;
-
-/* The monitor that the window is currently on.
+/* The current state of the state machine.
+ * Must only be changed through changeState().
  */
-extern HMONITOR currentMonitor; // MaximizedMoveState
+DragState currentState = dsNormal;
 
-/* The side(s) on which the window is resized. Both either -1, 0 or 1.
+/* The button that was pressed down and caused us to be in this state.
  */
-extern int resizingX, resizingY; // ResizeState
+MouseButton downButton;
 
 /* The point at which the mouse cursor was last seen.
  */
-extern POINT lastMousePos; // DeformState
+POINT lastMousePos;
 
 /* The window that we're dragging.
  */
-extern HWND draggedWindow; // DeformState
+HWND draggedWindow;
 
 /* The window in the Z-order previous to the draggedWindow.
  * Used to keep the order intact when calling SetWindowPos.
  */
-extern HWND prevInZOrder; // DeformState
+HWND prevInZOrder;
 
 /* The current position of the window. Saves calls to GetWindowRect.
  */
-extern RECT lastRect; // DeformState
+RECT lastRect;
 
 /* The cursor that was set by the application, before we changed it.
  */
-extern HCURSOR prevCursor; // DeformState
+HCURSOR prevCursor;
 
-/* The button that was pressed down and caused us to be in this state.
+/* The monitor that the window is currently on.
  */
-extern MouseButton downButton; // MouseDownState
+HMONITOR currentMonitor;
 
-// END RIPOUT
+/* The side(s) on which the window is resized. Both either -1, 0 or 1.
+ */
+int resizingX, resizingY;
 
 /* Calls SetWindowPos with the appropriate arguments. Extra flags can be passed in.
  */
@@ -446,6 +445,7 @@ bool onMouseDown(MouseButton button, HWND window, POINT mousePos) {
 		case dsNormal:
 			return onMouseDownNormalState(button, window, mousePos);
 		default:
+			// If we're in some special state, mouse-downs are always ignored.
 			return true;
 	}
 }
@@ -455,9 +455,12 @@ bool onMouseUp(MouseButton button, HWND window, POINT mousePos) {
 		case dsNormal:
 			return false;
 		default:
+			// We're in a state in which a special button was down.
 			if (button == downButton) {
+				// Go back to normal, but eat the event.
 				enterNormalState();
 			}
+			// Some other button was released; eat that event too.
 			return true;
 	}
 }

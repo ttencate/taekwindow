@@ -8,3 +8,4 @@ TODO
 - Add some way to get to the configuration dialog if the tray icon is hidden.
 - Make the DLL independent of the CRT as well.
 - Set the DLL to warning level 4 and treat warnings as errors.
+- It doesn't remember middle mouse button setting for resize!
