@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <tchar.h>
 
 #include "hooks.hpp"
 #include "drag.hpp"

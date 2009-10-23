@@ -1,11 +1,11 @@
 #ifdef _DEBUG
 
-#include "debuglog.hpp"
-#include "util.hpp"
-
 #include <windows.h>
 #include <tchar.h>
-#include <stdio.h>
+#include <strsafe.h>
+
+#include "debuglog.hpp"
+#include "util.hpp"
 
 extern HANDLE debugLogFile;
 HANDLE localDebugLogFile = INVALID_HANDLE_VALUE;
@@ -49,21 +49,24 @@ void ensureLocalHandle() {
 	}
 }
 
-void debugLog(char const *format, ...) {
+void debugLog(LPCTSTR format, ...) {
 	ensureLocalHandle();
 	if (localDebugLogFile != INVALID_HANDLE_VALUE) {
-		char formatBuf[1024];
+		const int BUF_SIZE = 512;
+		TCHAR formatBuf[BUF_SIZE];
 		long time = GetTickCount();
-		sprintf(formatBuf, "%d.%03d: %s\r\n", time/1000, time%1000, format);
+		StringCchPrintf(formatBuf, BUF_SIZE, _T("%d.%03d: %s\r\n"), time/1000, time%1000, format);
 
-		char buffer[1024];
+		TCHAR buffer[BUF_SIZE];
 		va_list args;
 		va_start(args, format);
-		vsprintf(buffer, formatBuf, args);
+		StringCchVPrintf(buffer, BUF_SIZE, formatBuf, args);
 		va_end(args);
 
 		DWORD written;
-		WriteFile(localDebugLogFile, buffer, strlen(buffer), &written, NULL);
+		size_t length;
+		StringCbLength(buffer, BUF_SIZE / sizeof(buffer[0]), &length);
+		WriteFile(localDebugLogFile, buffer, length, &written, NULL);
 	}
 }
 

@@ -1,3 +1,6 @@
+#include <windows.h>
+#include <tchar.h>
+
 #include "util.hpp"
 #include "debuglog.hpp"
 
@@ -77,7 +80,7 @@ bool windowHasClass(HWND window, wchar_t const *className) {
 			return false;
 	}
 
-	return (wcscmp(buffer, className) == 0);
+	return (lstrcmp(buffer, className) == 0);
 }
 
 bool isMaximizedWindow(HWND window) {

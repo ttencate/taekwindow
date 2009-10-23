@@ -47,8 +47,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				PreprocessorDefinitions="_DEBUG;_WIN32_WINNT=0x0500"
+				ExceptionHandling="0"
 				RuntimeLibrary="1"
+				BufferSecurityCheck="false"
+				RuntimeTypeInfo="false"
 				DebugInformationFormat="4"
+				OmitDefaultLibName="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -120,6 +124,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="_WIN32_WINNT=0x0500"
+				ExceptionHandling="0"
+				BufferSecurityCheck="false"
+				RuntimeTypeInfo="false"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

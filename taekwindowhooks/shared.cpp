@@ -3,13 +3,11 @@
 #include "drag.hpp"
 #include "offset_ptr.hpp"
 
-#include <stdio.h>
-
 /* The shared data segment.
  * These variables are shared across all instances of the DLL. This is necessary because the hook handler
  * runs in the thread of the window that would have received the event, NOT in the thread of the application
  * that hooked up the handler in the first place.
- * Everything in this segment must be initialized in order to actually become shared.
+ * IMPORTANT: Everything in this segment must be initialized in order to actually become shared.
  * This syntax only works with the Microsoft build environment...
  * See http://msdn.microsoft.com/en-us/library/h90dkhs0%28VS.80%29.aspx for more information.
  * 

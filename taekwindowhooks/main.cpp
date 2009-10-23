@@ -1,3 +1,6 @@
+#include <windows.h>
+#include <tchar.h>
+
 #include "main.hpp"
 #include "config.hpp"
 #include "debuglog.hpp"
