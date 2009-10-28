@@ -451,12 +451,14 @@ INT_PTR showPropSheet() {
 		page.pszHeaderSubTitle = NULL;
 	}
 
+	HICON iconHandle = LoadIcon(getCurrentInstance(), MAKEINTRESOURCE(IDI_APP));
+
 	PROPSHEETHEADER header;
 	header.dwSize = sizeof(PROPSHEETHEADER);
-	header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP | PSH_USEICONID | PSH_USECALLBACK;
+	header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP | PSH_USEHICON | PSH_USECALLBACK;
 	header.hwndParent = NULL;
 	header.hInstance = getCurrentInstance();
-	header.pszIcon = MAKEINTRESOURCE(IDI_APP);
+	header.hIcon = iconHandle; // if we use pszIcon instead, the Win7 taskbar button gets the 16x16 icon...
 	header.pszCaption = _T(APPLICATION_TITLE) _T(" Preferences");
 	header.nPages = NUM_PAGES;
 	header.nStartPage = 0;
@@ -472,6 +474,7 @@ INT_PTR showPropSheet() {
 
 	unloadImages();
 	shutdownGdiplus();
+
 	configWindowHandle = 0;
 	return result;
 }
