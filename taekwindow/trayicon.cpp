@@ -34,7 +34,7 @@ void doIconMenu(POINT pos) {
 
 	// Populate the pop-up menu.
 	AppendMenu(menuHandle, (isEnabled() ? MF_CHECKED : 0) | MF_ENABLED | MF_STRING, IDM_ENABLE, _T("En&able Taekwindow"));
-	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_CONFIGURE, _T("&Configure..."));
+	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_CONFIGURE, _T("&Preferences..."));
 	AppendMenu(menuHandle, MF_SEPARATOR, 0, NULL);
 	AppendMenu(menuHandle, MF_ENABLED | MF_STRING, IDM_EXIT, _T("&Exit"));
 

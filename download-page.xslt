@@ -42,12 +42,12 @@
 		</p>
 
 		<p>
-			Note that the configuration tool requires the Microsoft .NET Framework, version 2.0 or above. It can be downloaded from the <a href="http://msdn2.microsoft.com/en-us/netframework/aa569263.aspx">Microsoft .NET Framework download page</a>.
+			Note that the .NET Framework is no longer a requirement.
 		</p>
 
 		<h1>Source code</h1>
 
-		It is possible to download the source code of the program, in the form of a Visual Studio 2005 solution. This is probably only interesting for developers.
+		It is possible to download the source code of the program, in the form of a Visual Studio 2008 solution. This is probably only interesting for developers.
 
 		<p>
 			<strong>

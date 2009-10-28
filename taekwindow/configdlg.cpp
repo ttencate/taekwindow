@@ -457,7 +457,7 @@ INT_PTR showPropSheet() {
 	header.hwndParent = NULL;
 	header.hInstance = getCurrentInstance();
 	header.pszIcon = MAKEINTRESOURCE(IDI_APP);
-	header.pszCaption = _T(APPLICATION_TITLE) _T(" configuration");
+	header.pszCaption = _T(APPLICATION_TITLE) _T(" Preferences");
 	header.nPages = NUM_PAGES;
 	header.nStartPage = 0;
 	header.ppsp = pages;

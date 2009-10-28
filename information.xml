@@ -74,7 +74,7 @@
 				Make sure that the files are all in the same directory.
 			</li>
 			<li>
-				Through the configuration dialog can create a shortcut
+				Through the Preferences dialog, you can create a shortcut
 				in the Startup section of your Start Menu, so
 				Taekwindow is started when you log on to your computer.
 			</li>
@@ -102,17 +102,17 @@
 				it completely. Left-click the icon again to re-enable.
 			</li>
 			<li>
-				Double-click the icon to open the configuration dialog.
+				Double-click the icon to open the Preferences dialog.
 			</li>
 			<li>
 				Right-click the icon to show a menu, through which you can enable/disable the program,
-				open the configuration dialog, and exit Taekwindow completely.
+				open the Preferences dialog, and exit Taekwindow completely.
 			</li>
 		</ul>
 
 		<p>
 			To stop the program, use the system tray icon. In case you have turned the icon off in the
-			configuration dialog, just run <code>taekwindow.exe</code> again. It will not load itself,
+			Preferences dialog, just run <code>taekwindow.exe</code> again. It will not load itself,
 			but rather stop the running instance and then quit. You can also stop it through the Task Manager
 			if you prefer.
 		</p>
@@ -120,8 +120,8 @@
 
 	<configuration>
 		<p>
-			You can configure the program by right-clicking the system tray icon and choosing Configure.
-			This will open the configuration dialog; its usage should be self-explanatory.
+			You can configure the program by right-clicking the system tray icon and choosing Preferences.
+			This will open the Preferences dialog; its usage should be self-explanatory.
 		</p>
 	</configuration>
 
