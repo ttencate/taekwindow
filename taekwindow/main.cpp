@@ -150,9 +150,6 @@ void loadAndApplyConfig() {
 	DLLConfiguration dllConfig;
 	EXEConfiguration exeConfig;
 
-	dllConfig.setDefaults();
-	exeConfig.setDefaults();
-
 	loadConfig(&dllConfig, &exeConfig);
 
 	applyConfig(&dllConfig, &exeConfig);

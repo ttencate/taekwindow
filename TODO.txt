@@ -5,5 +5,4 @@ TODO
 - Rename "Configuration" to "Preferences" to blend in better with Windows conventions.
 - Update the Readme.
 - Add some way to get to the configuration dialog if the tray icon is hidden.
-- It doesn't remember middle mouse button setting for resize!
 - Try to hook with WH_MOUSE_LL instead of WH_MOUSE, to hook both 32-bits and 64-bits processes.

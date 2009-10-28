@@ -20,7 +20,13 @@ struct EXEConfiguration {
 
 };
 
+/* Loads the configuration from the registry/environment.
+ * In case of missing values, fills in defaults.
+ */
 void loadConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig);
+
+/* Saves the configuration to the registry/environment.
+ */
 void saveConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig);
 
 #endif
