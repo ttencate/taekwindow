@@ -146,9 +146,9 @@ BEGIN
     CONTROL         "Start when &logging on\r\n\r\nThis option creates or removes a shortcut to Taekwindow in the Startup folder in the Start Menu for your user account.",IDC_STARTATLOGON,
                     "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,18,204,36
     CONTROL         "",IDC_STARTUPIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,24,60,192,30
-    GROUPBOX        "System tray",IDC_SYSTRAYGROUP,6,108,216,84
-    CONTROL         "Show icon in the &system tray\r\n\r\nClick the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_SYSTRAYICON,
-                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,120,108,42
+    GROUPBOX        "Notification area",IDC_SYSTRAYGROUP,6,108,216,84
+    CONTROL         "Show icon in &notification area (system tray)\r\n\r\nClick the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_SYSTRAYICON,
+                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,120,108,48
     CONTROL         "",IDC_SYSTRAYIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,126,132,90,54
 END
 

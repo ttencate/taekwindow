@@ -83,8 +83,8 @@
 
 	<usage>
 		<p>
-			Start <code>taekwindow.exe</code> to load the program. A new icon will appear in the system tray
-			(the icon area in the taskbar, next to the clock) and you can now do the following:
+			Start <code>taekwindow.exe</code> to load the program. A new icon will appear in the taskbar notification area
+			(next to the clock, also known as the system tray) and you can now do the following:
 		</p>
 		<ul>
 			<li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>
@@ -93,7 +93,7 @@
 			<li>Use the scroll wheel on the window under the mouse cursor, instead of the window that happens to have the focus.</li>
 		</ul>
 		<p>
-			The system tray icon can be used in the following ways:
+			The icon in the taskbar can be used in the following ways:
 		</p>
 		<ul>
 			<li>
@@ -111,7 +111,7 @@
 		</ul>
 
 		<p>
-			To stop the program, use the system tray icon. In case you have turned the icon off in the
+			To stop the program, use the icon in the taskbar notification area. In case you have turned the icon off in the
 			Preferences dialog, just run <code>taekwindow.exe</code> again. It will not load itself,
 			but rather stop the running instance and then quit. You can also stop it through the Task Manager
 			if you prefer.
@@ -120,7 +120,7 @@
 
 	<configuration>
 		<p>
-			You can configure the program by right-clicking the system tray icon and choosing Preferences.
+			You can configure the program by right-clicking the notification area icon and choosing Preferences.
 			This will open the Preferences dialog; its usage should be self-explanatory.
 		</p>
 	</configuration>
