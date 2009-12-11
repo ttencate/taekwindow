@@ -264,8 +264,8 @@ LRESULT CALLBACK configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam
 			switch (LOWORD(wParam)) {
 				case IDOK:
 				case ID_APPLY_NOW:
-					applyConfig(&newConfig);
-					saveConfig(&newConfig);
+					applyConfig(newConfig);
+					newConfig.save();
 					break;
 			}
 			break;
@@ -481,7 +481,7 @@ INT_PTR showPropSheet() {
 void showConfig() {
 	// Load the most current settings from the environment, in case they've changed since startup
 	// by some external factor.
-	loadConfig(&newConfig);
+	newConfig.load();
 
 	// Show the dialog (modally).
 	int result = showPropSheet();
@@ -489,7 +489,7 @@ void showConfig() {
 	if (result >= 1) {
 		// Changes were saved. They have already been applied;
 		// now save them to the environment (registry, file system) as well.
-		saveConfig(&newConfig);
+		newConfig.save();
 	}
 }
 

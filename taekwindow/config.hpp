@@ -5,6 +5,8 @@
 
 struct Configuration {
 
+public:
+
 	/* Whether or not to show the system tray icon while the application is running.
 	 */
 	bool systemTrayIcon;
@@ -39,17 +41,25 @@ struct Configuration {
 	 */
 	void setDefaults();
 
+	/* Loads the configuration from the registry/environment.
+	 * In case of missing values, fills in defaults.
+	 */
+	void load();
+
+	/* Saves the configuration to the registry/environment.
+	 */
+	void save();
+
+private:
+
+	void getStartupLinkFilename(TCHAR *buffer);
+	void createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description);
+	template<typename F, typename P> void applyFunctor(P param);
+	void loadFromRegistry();
+	void saveToRegistry();
+	void loadFromStartup();
+	void saveToStartup();
+
 };
-
-// TODO these should be member functions
-
-/* Loads the configuration from the registry/environment.
- * In case of missing values, fills in defaults.
- */
-void loadConfig(Configuration *config);
-
-/* Saves the configuration to the registry/environment.
- */
-void saveConfig(Configuration *config);
 
 #endif

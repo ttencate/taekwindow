@@ -26,6 +26,6 @@ extern Configuration activeConfig;
 
 /* Apply the given configuration to make it active.
  */
-void applyConfig(Configuration *config);
+void applyConfig(Configuration const &config);
 
 #endif

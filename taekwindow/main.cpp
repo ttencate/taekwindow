@@ -69,15 +69,15 @@ bool disable() {
 	return true;
 }
 
-void applyConfig(Configuration *config) {
-	activeConfig = *config;
-	showTrayIcon(config->systemTrayIcon);
+void applyConfig(Configuration const &config) {
+	activeConfig = config;
+	showTrayIcon(config.systemTrayIcon);
 }
 
 void loadAndApplyConfig() {
 	Configuration config;
-	loadConfig(&config);
-	applyConfig(&config);
+	config.load();
+	applyConfig(config);
 }
 
 /* Runs the message loop until it is time to quit.

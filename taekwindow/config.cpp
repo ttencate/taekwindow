@@ -26,7 +26,7 @@ void Configuration::setDefaults() {
 /* Constructs the filename of the shortcut link to the EXE in the Startup folder in the Start Menu.
  * The buffer must be at least MAX_PATH characters long.
  */
-void getStartupLinkFilename(TCHAR *buffer) {
+void Configuration::getStartupLinkFilename(TCHAR *buffer) {
 	SHGetFolderPath(0, CSIDL_STARTUP, NULL, SHGFP_TYPE_CURRENT, buffer);
 	StringCchCat(buffer, MAX_PATH, _T("\\Taekwindow.lnk"));
 }
@@ -38,7 +38,7 @@ template<> void assign<bool>(bool &out, DWORD data) { out = (data != 0); }
 
 /* Uses the COM interface IShellLink to create a shortcut.
  */
-void createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description) {
+void Configuration::createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description) {
 	HRESULT res;
 
 	// Initialize COM.
@@ -115,36 +115,36 @@ struct Write {
  * where T is the type of the configuration item, and P the type of some parameter.
  */
 template<typename F, typename P>
-void applyFunctor(Configuration *config, P param) {
-	F::apply(config->modifier, _T("modifier"), param);
-	F::apply(config->moveButton, _T("moveButton"), param);
-	F::apply(config->resizeButton, _T("resizeButton"), param);
-	F::apply(config->resizeMode, _T("resizeMode"), param);
-	F::apply(config->pushBackButton, _T("pushBackButton"), param);
-	F::apply(config->scrollWindowUnderCursor, _T("scrollWindowUnderCursor"), param);
+void Configuration::applyFunctor(P param) {
+	F::apply(modifier, _T("modifier"), param);
+	F::apply(moveButton, _T("moveButton"), param);
+	F::apply(resizeButton, _T("resizeButton"), param);
+	F::apply(resizeMode, _T("resizeMode"), param);
+	F::apply(pushBackButton, _T("pushBackButton"), param);
+	F::apply(scrollWindowUnderCursor, _T("scrollWindowUnderCursor"), param);
 
-	F::apply(config->systemTrayIcon, _T("systemTrayIcon"), param);
+	F::apply(systemTrayIcon, _T("systemTrayIcon"), param);
 }
 
 /* Reads the configuration settings from the registry and places them in the objects pointed to.
  */
-void loadConfigFromRegistry(Configuration *config) {
+void Configuration::loadFromRegistry() {
 	HKEY key;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_READ, &key) == ERROR_SUCCESS) {
-		applyFunctor<Read>(config, key);
+		applyFunctor<Read>(key);
 		RegCloseKey(key);
 	}
 }
 
 /* Saves the given configuration to the registry.
  */
-void saveConfigToRegistry(Configuration *config) {
+void Configuration::saveToRegistry() {
 	// Open the registry key.
 	HKEY key;
 	// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
 	// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_SET_VALUE, &key) == ERROR_SUCCESS) {
-		applyFunctor<Write>(config, key);
+		applyFunctor<Write>(key);
 		// Close the key again.
 		RegCloseKey(key);
 	}
@@ -152,21 +152,21 @@ void saveConfigToRegistry(Configuration *config) {
 
 /* Checks the existence of a Startup shortcut and places it in execonfig.
  */
-void loadConfigFromStartup(Configuration *config) {
+void Configuration::loadFromStartup() {
 	TCHAR linkFilename[MAX_PATH];
 	getStartupLinkFilename(linkFilename);
-	config->startAtLogon = (GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES);
+	startAtLogon = (GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES);
 }
 
 /* Creates or removes a Startup shortcut as necessary.
  */
-void saveConfigToStartup(Configuration *config) {
+void Configuration::saveToStartup() {
 	TCHAR linkFilename[MAX_PATH];
 	getStartupLinkFilename(linkFilename);
 	bool exists = GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES;
-	if (exists && !config->startAtLogon) {
+	if (exists && !startAtLogon) {
 		DeleteFile(linkFilename);
-	} else if (!exists && config->startAtLogon) {
+	} else if (!exists && startAtLogon) {
 		TCHAR target[MAX_PATH];
 		GetModuleFileName(NULL, target, MAX_PATH);
 		TCHAR workingDir[MAX_PATH];
@@ -179,14 +179,14 @@ void saveConfigToStartup(Configuration *config) {
 	}
 }
 
-void loadConfig(Configuration *config) {
+void Configuration::load() {
 	// Set the defaults, in case settings are missing.
-	config->setDefaults();
-	loadConfigFromRegistry(config);
-	loadConfigFromStartup(config);
+	setDefaults();
+	loadFromRegistry();
+	loadFromStartup();
 }
 
-void saveConfig(Configuration *config) {
-	saveConfigToRegistry(config);
-	saveConfigToStartup(config);
+void Configuration::save() {
+	saveToRegistry();
+	saveToStartup();
 }
