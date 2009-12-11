@@ -2,7 +2,7 @@
 
 #include "actions.hpp"
 #include "wininfo.hpp"
-#include "util.hpp"
+#include "dllutil.hpp"
 #include "debuglog.hpp"
 
 bool doPushBack(HWND window) {

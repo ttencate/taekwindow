@@ -20,7 +20,6 @@
 	<binaryfiles>
 		<!-- Relative to the Release/ directory -->
 		<file>taekwindow.exe</file>
-		<file>taekwindowhooks.dll</file>
 		<file>readme.html</file>
 	</binaryfiles>
 
@@ -37,12 +36,6 @@
 		<file>taekwindow\*.hpp</file>
 		<file>taekwindow\*.rc</file>
 		<file>taekwindow\*.vcproj</file>
-		<file>taekwindowhooks\*.cpp</file>
-		<file>taekwindowhooks\*.h</file>
-		<file>taekwindowhooks\*.hpp</file>
-		<file>taekwindowhooks\*.def</file>
-		<file>taekwindowhooks\*.rc</file>
-		<file>taekwindowhooks\*.vcproj</file>
 		<file>tools\7za.exe</file>
 		<file>tools\msxsl.exe</file>
 		<file>taekwindow.sln</file>

@@ -7,7 +7,7 @@
 #include <strsafe.h>
 
 #include "debuglog.hpp"
-#include "util.hpp"
+#include "dllutil.hpp"
 
 extern HANDLE debugLogFile;
 HANDLE localDebugLogFile = INVALID_HANDLE_VALUE;

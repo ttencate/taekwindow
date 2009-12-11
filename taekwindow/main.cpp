@@ -3,19 +3,13 @@
 #include "util.hpp"
 #include "config.hpp"
 #include "version.h"
+#include "dllmain.hpp"
+#include "hooks.hpp"
 
 #include <windows.h>
 #include <tchar.h>
 
 HINSTANCE currentInstance = NULL;
-HMODULE dllHandle = NULL;
-
-DWORD (*initProc)(DWORD, DWORD) = NULL;
-void (*uninitProc)() = NULL;
-void (*applyConfigProc)(DLLConfiguration*) = NULL;
-
-HOOKPROC lowLevelMouseProc = NULL;
-HOOKPROC lowLevelKeyboardProc = NULL;
 
 HHOOK lowLevelMouseHook = NULL;
 HHOOK lowLevelKeyboardHook = NULL;
@@ -26,27 +20,11 @@ HINSTANCE getCurrentInstance() {
 	return currentInstance;
 }
 
-/* Loads and initializes the DLL with the hook handlers.
- * Returns true on success.
- */
-bool loadDll() {
-	dllHandle = LoadLibrary(_T(HOOKS_DLL_FILE) _T(".dll"));
-	if (!dllHandle)
-		return false;
-	return true;
-}
-
-/* Unloads the DLL. Returns true on success.
- */
-bool unloadDll() {
-	return FreeLibrary(dllHandle) != 0;
-}
-
 /* Initializes the DLL by passing in the current thread ID.
  * Returns NULL on success, or the thread ID of the thread that was there before us on failure.
  */
 DWORD initDll() {
-	return (*initProc)(GetCurrentThreadId(), GetCurrentProcessId());
+	return init(GetCurrentThreadId(), GetCurrentProcessId());
 }
 
 /* Uninitializes the DLL by making it forget our thread ID.
@@ -55,45 +33,17 @@ DWORD initDll() {
  * the .exe needs it.
  */
 void uninitDll() {
-	(*uninitProc)();
-}
-
-/* Updates the configuration settings in the DLL.
- */
-void applyDllConfig(DLLConfiguration *dllconfig) {
-	(*applyConfigProc)(dllconfig);
-}
-
-/* Initializes the function pointers to functions in the DLL.
- * Returns true on success.
- */
-bool findProcs() {
-	initProc = (DWORD (*)(DWORD, DWORD))GetProcAddress(dllHandle, "init");
-	if (!initProc)
-		return false;
-	uninitProc = (void (*)())GetProcAddress(dllHandle, "uninit");
-	if (!uninitProc)
-		return false;
-	applyConfigProc = (void (*)(DLLConfiguration*))GetProcAddress(dllHandle, "applyConfig");
-	if (!applyConfigProc)
-		return false;
-	lowLevelMouseProc = (HOOKPROC)GetProcAddress(dllHandle, "lowLevelMouseProc");
-	if (!lowLevelMouseProc)
-		return false;
-	lowLevelKeyboardProc = (HOOKPROC)GetProcAddress(dllHandle, "lowLevelKeyboardProc");
-	if (!lowLevelKeyboardProc)
-		return false;
-	return true;
+	uninit();
 }
 
 /* Attaches global event hooks.
  * Returns true on success.
  */
 bool attachHooks() {
-	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, dllHandle, NULL);
+	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, NULL, NULL);
 	if (!lowLevelMouseHook)
 		return false;
-	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, dllHandle, NULL);
+	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, NULL, NULL);
 	if (!lowLevelKeyboardHook)
 		return false;
 	return true;
@@ -185,42 +135,32 @@ int messageLoop() {
 int myMain(HINSTANCE hInstance) {
 	currentInstance = hInstance;
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
-	// First, load the DLL with the event handlers in it.
-	if (!loadDll()) {
-		showLastError(NULL, _T("Error loading DLL"));
+
+	DWORD prevThreadId = initDll();
+	if (prevThreadId) {
+		// Somebody has been there before us.
+		// Kick that instance in the nuts.
+		MessageBox(NULL, _T(APPLICATION_TITLE) _T(" is already running and will now be stopped.\n\nRerun the program it if you want to start it again."), _T("Taekwindow already running"), MB_OK | MB_ICONINFORMATION);
+		PostThreadMessage(prevThreadId, WM_QUIT, 0, 0);
 	} else {
-		// DLL loaded, get pointers to the functions in it that we need.
-		if (!findProcs()) {
-			showLastError(NULL, _T("Error getting handler address"));
+		// We're the first to initialize the DLL, continue.
+		// Load the configuration from the registry.
+		loadAndApplyConfig();
+		// Attach the event hooks.
+		if (!enable()) {
+			showLastError(NULL, _T("Error attaching hooks"));
 		} else {
-			// Function pointers acquired, initialize the DLL.
-			DWORD prevThreadId = initDll();
-			if (prevThreadId) {
-				// Somebody has been there before us.
-				// Kick that instance in the nuts.
-				MessageBox(NULL, _T(APPLICATION_TITLE) _T(" is already running and will now be stopped.\n\nRerun the program it if you want to start it again."), _T("Taekwindow already running"), MB_OK | MB_ICONINFORMATION);
-				PostThreadMessage(prevThreadId, WM_QUIT, 0, 0);
-			} else {
-				// We're the first to initialize the DLL, continue.
-				// Load the configuration from the registry.
-				loadAndApplyConfig();
-				// Attach the event hooks.
-				if (!enable()) {
-					showLastError(NULL, _T("Error attaching hooks"));
-				} else {
-					// main message loop
-					retVal = messageLoop();
-				}
-				// Normal exit.
-				showTrayIcon(false);
-				// Note that calling detachHooks is OK if attachHooks only partly worked.
-				detachHooks();
-				// Make the DLL forget about our existence.
-				uninitDll();
-			}
+			// main message loop
+			retVal = messageLoop();
 		}
-		unloadDll();
+		// Normal exit.
+		showTrayIcon(false);
+		// Note that calling detachHooks is OK if attachHooks only partly worked.
+		detachHooks();
+		// Make the DLL forget about our existence.
+		uninitDll();
 	}
+
 	return retVal;
 }
 

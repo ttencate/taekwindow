@@ -4,7 +4,7 @@
 #include "hooks.hpp"
 #include "drag.hpp"
 #include "actions.hpp"
-#include "config.hpp"
+#include "dllconfig.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
 

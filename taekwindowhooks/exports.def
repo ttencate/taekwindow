@@ -1,7 +1,0 @@
-LIBRARY	"taekwindowhooks"
-EXPORTS
-	init
-	applyConfig
-	lowLevelMouseProc
-	lowLevelKeyboardProc
-	uninit

@@ -5,7 +5,7 @@
 #include "drag.hpp"
 #include "wininfo.hpp"
 #include "actions.hpp"
-#include "config.hpp"
+#include "dllconfig.hpp"
 #include "debuglog.hpp"
 
 /* The current state of the state machine.

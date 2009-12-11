@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <tchar.h>
 
-#include "util.hpp"
+#include "dllutil.hpp"
 #include "debuglog.hpp"
 
 MouseButton eventToButton(WPARAM wParam) {

@@ -2,7 +2,9 @@ TODO
 ----
 
 - Update the Readme.
+- Do a full code review.
 - Add some way to get to the configuration dialog if the tray icon is hidden.
 - Try a modal loop for move/resize events. Much easier to maintain, and hopefully more reliable too.
 - Load cursors once, and unload them at exit.
 - Fix the cursor (by capturing the mouse?).
+- Get rid of DLL remnants.

@@ -1,8 +1,8 @@
 #include <windows.h>
 #include <tchar.h>
 
-#include "main.hpp"
-#include "config.hpp"
+#include "dllmain.hpp"
+#include "dllconfig.hpp"
 #include "debuglog.hpp"
 
 /* The handle of this instance of the DLL, set in DllMain.
@@ -55,7 +55,7 @@ void uninit() {
 	mainProcessId = 0;
 }
 
-void applyConfig(DLLConfiguration *newConfig) {
+void applyDllConfig(DLLConfiguration *newConfig) {
 	DEBUGLOG("Updating configuration");
 	config = *newConfig;
 }
