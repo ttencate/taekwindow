@@ -1,5 +1,5 @@
-Environment
------------
+Building
+========
 
 The project and solution files were made in Microsoft Visual Studio 2008.
 
@@ -10,15 +10,33 @@ To build, you need the following in your PATH:
 The project files may work in the Express edition of Visual C++,
 but I am not sure of this and have not tested it.
 
+The build system is a little complicated. information.xml is the central storage for data. The various XSLT files process this to produce version.h, Version.cs, package.bat and some .shtml files for the web site. These XSLT files are run using msxsl.exe in the tools folder. It is started from a custom build rule in the C++ projects, and from the post-build event in the C# project.
+
+Complicated, but with good reason: one-button packaging and web site updating.
+
+Squeezing
+=========
+
+I've invested some effort to make the program as small as possible. In particular, the C Runtime (CRT) is not used. Note that the compiler injects many CRT references if we use C++ features.
+
+Because of this, we cannot use:
+- standard C functions (sprintf, memcpy, etc., but see below)
+- floating point numbers
+- inheritance
+- exceptions
+- global variables that require destruction
+
+Most of the CRT functions have a replacement in the Windows API. A notable exception is memcpy; the Windows API function CopyMemory is merely an alias. It refuses to work as a compiler intrinsic. Thus we have our own picostdlib.c which implements memcpy.
+
 Which window to move
---------------------
+====================
 
 When the mouse is pressed down, we need to determine which window needs to move/resize. This can be done by finding the root ancestor window (top-level window) of the window under the cursor, using GetAncestor with GA_ROOT. However, in an MDI setting this returns the parent window, whereas we'd probably like to grab the child window.
 
 Instead, we walk the parent chain manually, stopping whenever we encounter a window that is movable/resizable according to some definition. Checking for WS_CAPTION takes care of most cases. Resizability and handling of maximized windows is a bit trickier; see the comments in the code for details.
 
 Internals
----------
+=========
 
 There are several ways to do what Taekwindow does, among them: hooks and window subclassing.
 
@@ -29,7 +47,12 @@ There are several ways to do what Taekwindow does, among them: hooks and window 
 - Window subclassing is tricky, but might be the cleanest solution in the end.
 - A modal loop, just like Windows itself does when a window is moved or resized.
 
-We currently use the WH_MOUSE and WH_KEYBOARD_LL hooks. The advantage of WH_KEYBOARD_LL is that it has the power to eat messages that the application should not get. However, keep in mind that it runs in Taekwindow's process, not in the application that is to receive the message!
+Hooking
+-------
+
+We currently use the WH_MOUSE_LL and WH_KEYBOARD_LL hooks. These low-level hooks run in the process that hooked them (i.e. Taekwindow itself), NOT in the process that the message is intended for. The advantage is that we don't need a separate DLL that needs to be injected. A DLL is not a problem, until you're on a 64-bit Windows. Then you need separate DLLs for injecting into 32-bits and 64-bits applications, and even separate EXEs to call SetWindowsHookEx()! That would be a pain in the ass.
+
+The advantage of WH_KEYBOARD_LL is that it has the power to eat messages that the application should not get. However, keep in mind that it runs in Taekwindow's process, not in the application that is to receive the message!
 
 Subclassing
 -----------
@@ -39,23 +62,3 @@ We can subclass a window, which essentially wraps the original window procedure 
 It is a tricky technique, because you cannot unsubclass safely if somebody else subclassed in the meantime, you shouldn't subclass multiple times, and you should unsubclass before the window is destroyed. On Windows XP there are convenient subclassing controls in ComCtl32.dll, but these are apparently not in Windows 2000, so we should do the dirty work ourselves.
 
 Subclassing is useful if we do it only for a short while: only while the user is dragging a window, that particular window will be subclassed. However, the question arises when to subclass: upon an Alt-down is too early, because we don't know which window is about to be dragged; upon mouse-down is too late, because WM_NCHITTEST has already returned the wrong value to the system by then. In between, right before WM_NCHITTEST arrives, is possible, if we perform the subclassing from a CallWndProc hook. But this hook is expensive: it is called upon each invocation of every window procedure in the system. Perhaps the WH_MOUSE_LL hook is an option, catching the mouse-down before it results in a WM_NCHITTEST -- but because this hook handler runs in a different process, it cannot subclass the window.
-
-Build system
-------------
-
-Well yeah, that's rather complicated. information.xml is the central storage for data. The various XSLT files process this to produce version.h, Version.cs, package.bat and some .shtml files for the web site. These XSLT files are run using msxsl.exe in the tools folder. It is started from a custom build rule in the C++ projects, and from the post-build event in the C# project.
-
-Complicated, but with good reason: one-button packaging and web site updating.
-
-Squeezing
----------
-
-I've invested some effort to make the program as small as possible. In particular, the C Runtime (CRT) is not used. Note that the compiler injects many CRT references if we use C++ features.
-
-Because of this, we cannot use:
-- standard C functions (sprintf, memcpy, etc., but see below)
-- floating point numbers
-- inheritance
-- exceptions
-
-Most of the CRT functions have a replacement in the Windows API. A notable exception is memcpy; the Windows API function CopyMemory is merely an alias. It refuses to work as a compiler intrinsic. Thus we have our own picostdlib.cpp which implements memcpy.
