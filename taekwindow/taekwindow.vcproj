@@ -319,6 +319,10 @@
 				RelativePath=".\version.h"
 				>
 			</File>
+			<File
+				RelativePath=".\wininfo.hpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
