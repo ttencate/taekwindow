@@ -1,3 +1,6 @@
+#include <windows.h>
+#include <tchar.h>
+
 #include "messages.hpp"
 #include "trayicon.hpp"
 #include "util.hpp"
@@ -5,9 +8,6 @@
 #include "version.h"
 #include "hooks.hpp"
 #include "debuglog.hpp"
-
-#include <windows.h>
-#include <tchar.h>
 
 HINSTANCE currentInstance = NULL;
 

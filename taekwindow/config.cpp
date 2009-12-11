@@ -1,11 +1,11 @@
-#include "config.hpp"
-#include "util.hpp"
-#include "version.h"
-
 #include <windows.h>
 #include <shlobj.h>
 #include <tchar.h>
 #include <strsafe.h>
+
+#include "config.hpp"
+#include "util.hpp"
+#include "version.h"
 
 /* We'll only change the version number of the key once the registry structure is no longer backwards compatible.
  * That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.

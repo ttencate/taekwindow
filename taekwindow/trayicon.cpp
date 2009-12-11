@@ -1,3 +1,8 @@
+#include <windows.h>
+#include <windowsx.h>
+#include <tchar.h>
+#include <strsafe.h>
+
 #include "trayicon.hpp"
 #include "configdlg.hpp"
 #include "messages.hpp"
@@ -5,11 +10,6 @@
 #include "resource.h"
 #include "util.hpp"
 #include "main.hpp"
-
-#include <windows.h>
-#include <windowsx.h>
-#include <tchar.h>
-#include <strsafe.h>
 
 const UINT ICON_ID = 42;
 

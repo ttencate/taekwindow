@@ -1,3 +1,8 @@
+#include <windows.h>
+#include <commctrl.h>
+#include <tchar.h>
+#include <gdiplus.h>
+
 #include "main.hpp"
 #include "util.hpp"
 #include "config.hpp"
@@ -5,11 +10,6 @@
 #include "resource.h"
 #include "version.h"
 #include "picostdlib.h"
-
-#include <windows.h>
-#include <commctrl.h>
-#include <tchar.h>
-#include <gdiplus.h>
 
 /* It ain't pretty, but it doesn't seem to be in standard headers.
  * Anyway, so much legacy code relies on this that
