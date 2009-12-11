@@ -3,8 +3,8 @@
 #include "util.hpp"
 #include "config.hpp"
 #include "version.h"
-#include "dllmain.hpp"
 #include "hooks.hpp"
+#include "debuglog.hpp"
 
 #include <windows.h>
 #include <tchar.h>
@@ -14,26 +14,10 @@ HINSTANCE currentInstance = NULL;
 HHOOK lowLevelMouseHook = NULL;
 HHOOK lowLevelKeyboardHook = NULL;
 
-EXEConfiguration activeExeConfig;
+Configuration activeConfig;
 
 HINSTANCE getCurrentInstance() {
 	return currentInstance;
-}
-
-/* Initializes the DLL by passing in the current thread ID.
- * Returns NULL on success, or the thread ID of the thread that was there before us on failure.
- */
-DWORD initDll() {
-	return init(GetCurrentThreadId(), GetCurrentProcessId());
-}
-
-/* Uninitializes the DLL by making it forget our thread ID.
- * This way, if the DLL (for some reason) lingers in memory after we've shut down,
- * it will not hold a nonexistent thread ID, and therefore be available when a new instance of
- * the .exe needs it.
- */
-void uninitDll() {
-	uninit();
 }
 
 /* Attaches global event hooks.
@@ -85,23 +69,15 @@ bool disable() {
 	return true;
 }
 
-void applyExeConfig(EXEConfiguration *config) {
-	activeExeConfig = *config;
+void applyConfig(Configuration *config) {
+	activeConfig = *config;
 	showTrayIcon(config->systemTrayIcon);
 }
 
-void applyConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
-	applyDllConfig(dllConfig);
-	applyExeConfig(exeConfig);
-}
-
 void loadAndApplyConfig() {
-	DLLConfiguration dllConfig;
-	EXEConfiguration exeConfig;
-
-	loadConfig(&dllConfig, &exeConfig);
-
-	applyConfig(&dllConfig, &exeConfig);
+	Configuration config;
+	loadConfig(&config);
+	applyConfig(&config);
 }
 
 /* Runs the message loop until it is time to quit.
@@ -136,30 +112,23 @@ int myMain(HINSTANCE hInstance) {
 	currentInstance = hInstance;
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 
-	DWORD prevThreadId = initDll();
-	if (prevThreadId) {
-		// Somebody has been there before us.
-		// Kick that instance in the nuts.
-		MessageBox(NULL, _T(APPLICATION_TITLE) _T(" is already running and will now be stopped.\n\nRerun the program it if you want to start it again."), _T("Taekwindow already running"), MB_OK | MB_ICONINFORMATION);
-		PostThreadMessage(prevThreadId, WM_QUIT, 0, 0);
+	OPENDEBUGLOG();
+	// Load the configuration from the registry.
+	loadAndApplyConfig();
+
+	// Attach the event hooks.
+	if (!enable()) {
+		showLastError(NULL, _T("Error attaching hooks"));
 	} else {
-		// We're the first to initialize the DLL, continue.
-		// Load the configuration from the registry.
-		loadAndApplyConfig();
-		// Attach the event hooks.
-		if (!enable()) {
-			showLastError(NULL, _T("Error attaching hooks"));
-		} else {
-			// main message loop
-			retVal = messageLoop();
-		}
-		// Normal exit.
-		showTrayIcon(false);
-		// Note that calling detachHooks is OK if attachHooks only partly worked.
-		detachHooks();
-		// Make the DLL forget about our existence.
-		uninitDll();
+		// main message loop
+		retVal = messageLoop();
 	}
+
+	// Normal exit.
+	showTrayIcon(false);
+	// Note that calling detachHooks is OK if attachHooks only partly worked.
+	detachHooks();
+	CLOSEDEBUGLOG();
 
 	return retVal;
 }

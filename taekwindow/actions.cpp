@@ -2,8 +2,11 @@
 
 #include "actions.hpp"
 #include "wininfo.hpp"
-#include "dllutil.hpp"
 #include "debuglog.hpp"
+
+/* See doPushBack().
+ */
+HWND lastForegroundWindow = NULL;
 
 bool doPushBack(HWND window) {
 	DEBUGLOG("Pushing window 0x%X to the back", window);
@@ -60,4 +63,14 @@ bool doMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
 	LPARAM lParam = ((short)(mousePos.x)) | (((short)(mousePos.y)) << 16);
 	SendMessage(window, WM_MOUSEWHEEL, wParam, lParam);
 	return true;
+}
+
+void activateWithoutRaise(HWND window) 
+{
+	DEBUGLOG("Activating window 0x%X without raising", window);
+	// Save the Z position of the previously active window.
+	HWND insertAfter = GetNextWindow(window, GW_HWNDPREV);
+	SetForegroundWindow(window);
+	// This has pulled it to the front; so change its position in the Z order back.
+	SetWindowPos(window, insertAfter, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }

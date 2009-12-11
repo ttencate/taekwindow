@@ -5,7 +5,7 @@
 #include "drag.hpp"
 #include "wininfo.hpp"
 #include "actions.hpp"
-#include "dllconfig.hpp"
+#include "main.hpp"
 #include "debuglog.hpp"
 
 /* The current state of the state machine.
@@ -116,7 +116,7 @@ POINT mouseDelta(POINT const &mousePos) {
 /* Returns true if the modifier key (e.g. Alt) is currently pressed.
  */
 bool isModifierDown() {
-	return (GetAsyncKeyState(config.modifier) & 0x8000) != 0;
+	return (GetAsyncKeyState(activeConfig.modifier) & 0x8000) != 0;
 }
 
 // STATE EXITING --------------------------------------------------------------
@@ -246,7 +246,7 @@ void enterResizeState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	}
 	// Find out at which corner to resize.
 	ScreenToClient(draggedWindow, &mousePos);
-	switch (config.resizeMode) {
+	switch (activeConfig.resizeMode) {
 		case rmBottomRight:
 			resizingX = 1;
 			resizingY = 1;
@@ -274,13 +274,13 @@ bool onMouseDownNormalState(MouseButton button, HWND window, POINT mousePos) {
 		// This is not interesting. Discard ASAP.
 		return false;
 	}
-	if (button != config.moveButton && button != config.resizeButton) {
+	if (button != activeConfig.moveButton && button != activeConfig.resizeButton) {
 		// Wrong button. Discard.
 		return false;
 	}
 	DEBUGLOG("Handling button down event");
 	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
-	if (button == config.moveButton) {
+	if (button == activeConfig.moveButton) {
 		// We prefer windows that are not maximized over those that are, which makes sense in an MDI environment.
 		// This would be what the user expected.
 		HWND parentWindow = findFirstParent(window, isRestoredMovableWindow);
@@ -297,7 +297,7 @@ bool onMouseDownNormalState(MouseButton button, HWND window, POINT mousePos) {
 				return true;
 			}
 		}
-	} else if (button == config.resizeButton) {
+	} else if (button == activeConfig.resizeButton) {
 		// Try to find a parent window that we can resize without unmaximizing.
 		// This one is probably the one that the user meant.
 		HWND parentWindow = findFirstParent(window, isRestoredResizableWindow);

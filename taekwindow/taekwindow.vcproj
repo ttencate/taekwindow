@@ -230,14 +230,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dllmain.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dllutil.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\drag.cpp"
 				>
 			</File>
@@ -254,11 +246,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\shared.cpp"
+				RelativePath=".\trayicon.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\trayicon.cpp"
+				RelativePath=".\types.cpp"
 				>
 			</File>
 			<File
@@ -292,18 +284,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dllconfig.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dllmain.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dllutil.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\drag.hpp"
 				>
 			</File>
@@ -325,6 +305,10 @@
 			</File>
 			<File
 				RelativePath=".\trayicon.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\types.hpp"
 				>
 			</File>
 			<File
@@ -455,24 +439,12 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files (shared)"
-			>
 			<File
-				RelativePath="..\shared\dllconfig.hpp"
+				RelativePath="..\Source.txt"
 				>
 			</File>
 			<File
-				RelativePath="..\shared\types.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Source Files (shared)"
-			>
-			<File
-				RelativePath="..\shared\dllconfig.cpp"
+				RelativePath="..\TODO.txt"
 				>
 			</File>
 		</Filter>

@@ -7,4 +7,6 @@ TODO
 - Try a modal loop for move/resize events. Much easier to maintain, and hopefully more reliable too.
 - Load cursors once, and unload them at exit.
 - Fix the cursor (by capturing the mouse?).
-- Get rid of DLL remnants.
+- Make the "ignore" state not move the mouse cursor.
+- Search for TODO and do them.
+- Detect multiple instances.

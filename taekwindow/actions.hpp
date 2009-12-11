@@ -15,4 +15,10 @@ bool doPushBack(HWND window);
  */
 bool doMouseWheel(HWND window, POINT mousePos, WPARAM wParam);
 
+/* Activates a window, then restores its original position in the Z order.
+ * This has the effect of activating it without bringing it to the front,
+ * something that the Windows API normally doesn't allow.
+ */
+void activateWithoutRaise(HWND window);
+
 #endif

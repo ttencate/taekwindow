@@ -12,9 +12,15 @@
  */
 TCHAR const REG_KEY[] = _T("Software\\Taekwindow\\0.2");
 
-void EXEConfiguration::setDefaults() {
+void Configuration::setDefaults() {
 	systemTrayIcon = true;
 	startAtLogon = false;
+	modifier = VK_LMENU;
+	moveButton = mbLeft;
+	resizeButton = mbRight;
+	resizeMode = rmNineRectangles;
+	pushBackButton = mbMiddle;
+	scrollWindowUnderCursor = true;
 }
 
 /* Constructs the filename of the shortcut link to the EXE in the Startup folder in the Start Menu.
@@ -109,36 +115,36 @@ struct Write {
  * where T is the type of the configuration item, and P the type of some parameter.
  */
 template<typename F, typename P>
-void applyFunctor(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig, P param) {
-	F::apply(dllConfig->modifier, _T("modifier"), param);
-	F::apply(dllConfig->moveButton, _T("moveButton"), param);
-	F::apply(dllConfig->resizeButton, _T("resizeButton"), param);
-	F::apply(dllConfig->resizeMode, _T("resizeMode"), param);
-	F::apply(dllConfig->pushBackButton, _T("pushBackButton"), param);
-	F::apply(dllConfig->scrollWindowUnderCursor, _T("scrollWindowUnderCursor"), param);
+void applyFunctor(Configuration *config, P param) {
+	F::apply(config->modifier, _T("modifier"), param);
+	F::apply(config->moveButton, _T("moveButton"), param);
+	F::apply(config->resizeButton, _T("resizeButton"), param);
+	F::apply(config->resizeMode, _T("resizeMode"), param);
+	F::apply(config->pushBackButton, _T("pushBackButton"), param);
+	F::apply(config->scrollWindowUnderCursor, _T("scrollWindowUnderCursor"), param);
 
-	F::apply(exeConfig->systemTrayIcon, _T("systemTrayIcon"), param);
+	F::apply(config->systemTrayIcon, _T("systemTrayIcon"), param);
 }
 
 /* Reads the configuration settings from the registry and places them in the objects pointed to.
  */
-void loadConfigFromRegistry(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
+void loadConfigFromRegistry(Configuration *config) {
 	HKEY key;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_READ, &key) == ERROR_SUCCESS) {
-		applyFunctor<Read>(dllConfig, exeConfig, key);
+		applyFunctor<Read>(config, key);
 		RegCloseKey(key);
 	}
 }
 
 /* Saves the given configuration to the registry.
  */
-void saveConfigToRegistry(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
+void saveConfigToRegistry(Configuration *config) {
 	// Open the registry key.
 	HKEY key;
 	// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
 	// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_SET_VALUE, &key) == ERROR_SUCCESS) {
-		applyFunctor<Write>(dllConfig, exeConfig, key);
+		applyFunctor<Write>(config, key);
 		// Close the key again.
 		RegCloseKey(key);
 	}
@@ -146,21 +152,21 @@ void saveConfigToRegistry(DLLConfiguration *dllConfig, EXEConfiguration *exeConf
 
 /* Checks the existence of a Startup shortcut and places it in execonfig.
  */
-void loadConfigFromStartup(EXEConfiguration *exeConfig) {
+void loadConfigFromStartup(Configuration *config) {
 	TCHAR linkFilename[MAX_PATH];
 	getStartupLinkFilename(linkFilename);
-	exeConfig->startAtLogon = (GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES);
+	config->startAtLogon = (GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES);
 }
 
 /* Creates or removes a Startup shortcut as necessary.
  */
-void saveConfigToStartup(EXEConfiguration *exeConfig) {
+void saveConfigToStartup(Configuration *config) {
 	TCHAR linkFilename[MAX_PATH];
 	getStartupLinkFilename(linkFilename);
 	bool exists = GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES;
-	if (exists && !exeConfig->startAtLogon) {
+	if (exists && !config->startAtLogon) {
 		DeleteFile(linkFilename);
-	} else if (!exists && exeConfig->startAtLogon) {
+	} else if (!exists && config->startAtLogon) {
 		TCHAR target[MAX_PATH];
 		GetModuleFileName(NULL, target, MAX_PATH);
 		TCHAR workingDir[MAX_PATH];
@@ -173,15 +179,14 @@ void saveConfigToStartup(EXEConfiguration *exeConfig) {
 	}
 }
 
-void loadConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
+void loadConfig(Configuration *config) {
 	// Set the defaults, in case settings are missing.
-	dllConfig->setDefaults();
-	exeConfig->setDefaults();
-	loadConfigFromRegistry(dllConfig, exeConfig);
-	loadConfigFromStartup(exeConfig);
+	config->setDefaults();
+	loadConfigFromRegistry(config);
+	loadConfigFromStartup(config);
 }
 
-void saveConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig) {
-	saveConfigToRegistry(dllConfig, exeConfig);
-	saveConfigToStartup(exeConfig);
+void saveConfig(Configuration *config) {
+	saveConfigToRegistry(config);
+	saveConfigToStartup(config);
 }

@@ -3,7 +3,8 @@
 
 #include <windows.h>
 
-#include "dllutil.hpp"
+#include "util.hpp"
+#include "types.hpp"
 
 enum DragState {
 	/* The state active while nothing is happening.

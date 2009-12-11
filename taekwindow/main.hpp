@@ -22,12 +22,10 @@ HINSTANCE getCurrentInstance();
 
 /* The currently active configuration.
  */
-extern EXEConfiguration activeExeConfig;
+extern Configuration activeConfig;
 
 /* Apply the given configuration to make it active.
  */
-void applyDllConfig(DLLConfiguration *dllConfig);
-void applyExeConfig(EXEConfiguration *exeConfig);
-void applyConfig(DLLConfiguration *dllConfig, EXEConfiguration *exeConfig);
+void applyConfig(Configuration *config);
 
 #endif

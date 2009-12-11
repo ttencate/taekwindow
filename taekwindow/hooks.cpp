@@ -4,7 +4,7 @@
 #include "hooks.hpp"
 #include "drag.hpp"
 #include "actions.hpp"
-#include "dllconfig.hpp"
+#include "main.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
 
@@ -21,7 +21,7 @@ extern DWORD mainThreadId;
 /* Handles a possible "push window to the background" event.
  */
 bool considerPushBack(MouseButton button, HWND window, POINT mousePos) {
-	if (button == config.pushBackButton) {
+	if (button == activeConfig.pushBackButton) {
 		UINT hitTestCode = SendMessage(window, WM_NCHITTEST, 0, MAKELPARAM(mousePos.x, mousePos.y));
 		if (hitTestCode == HTCAPTION) {
 			window = GetAncestor(window, GA_ROOT);
@@ -34,7 +34,7 @@ bool considerPushBack(MouseButton button, HWND window, POINT mousePos) {
 /* Handles a possible scroll wheel event.
  */
 bool considerMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
-	if (config.scrollWindowUnderCursor) {
+	if (activeConfig.scrollWindowUnderCursor) {
 		return doMouseWheel(window, mousePos, wParam);
 	} else {
 		// Use Windows default behaviour.
@@ -42,8 +42,7 @@ bool considerMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
 	}
 }
 
-/* The function for handling mouse events. This is the reason why we have to use a separate DLL;
- * see the SetWindowsHookEx documentation for details.
+/* The function for handling mouse events.
  */
 LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
@@ -109,7 +108,7 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		if (info->vkCode == 0x51) {
 			DEBUGLOG("Panic button pressed");
 			// Q button pressed. Panic button for debugging.
-			PostThreadMessage(mainThreadId, WM_QUIT, 0, 0);
+			PostThreadMessage(GetCurrentThreadId(), WM_QUIT, 0, 0);
 			return 1;
 		}
 #endif

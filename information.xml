@@ -14,7 +14,6 @@
 	<licensebrief>This program is licensed under the BSD license. This means you are free and welcome to distribute it.</licensebrief>
 
 	<mainexefile>taekwindow</mainexefile>
-	<hooksdllfile>taekwindowhooks</hooksdllfile>
 	<readmefile>readme.html</readmefile>
 
 	<binaryfiles>

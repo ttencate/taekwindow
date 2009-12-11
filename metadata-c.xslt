@@ -19,7 +19,6 @@
 		#define APPLICATION_LICENSE_BRIEF     "<xsl:value-of select="licensebrief"/>"
 		#define APPLICATION_README_FILE       "<xsl:value-of select="readmefile"/>"
 		#define MAIN_EXE_FILE                 "<xsl:value-of select="mainexefile"/>"
-		#define HOOKS_DLL_FILE                "<xsl:value-of select="hooksdllfile"/>"
 	</xsl:template>
 
 </xsl:stylesheet> 

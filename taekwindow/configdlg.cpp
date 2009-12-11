@@ -26,11 +26,10 @@ HWND configWindowHandle = 0;
  */
 WNDPROC origConfigWindowProc;
 
-/* The currently active DLL configuration.
+/* The configuration that is currently entered in the dialog.
  * Only valid when the dialog is visible.
  */
-DLLConfiguration newDllConfig;
-EXEConfiguration newExeConfig;
+Configuration newConfig;
 
 /* GDI+ token.
  */
@@ -115,8 +114,8 @@ BOOL CALLBACK defaultDialogProc(HWND, UINT message, WPARAM wParam, LPARAM lParam
 BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckDlgButton(dialogHandle, IDC_SYSTRAYICON, newExeConfig.systemTrayIcon);
-			CheckDlgButton(dialogHandle, IDC_STARTATLOGON, newExeConfig.startAtLogon);
+			CheckDlgButton(dialogHandle, IDC_SYSTRAYICON, newConfig.systemTrayIcon);
+			CheckDlgButton(dialogHandle, IDC_STARTATLOGON, newConfig.startAtLogon);
 			break;
 		case WM_COMMAND:
 			PropSheet_Changed(configWindowHandle, dialogHandle);
@@ -124,8 +123,8 @@ BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newExeConfig.systemTrayIcon = IsDlgButtonChecked(dialogHandle, IDC_SYSTRAYICON) == BST_CHECKED;
-					newExeConfig.startAtLogon = IsDlgButtonChecked(dialogHandle, IDC_STARTATLOGON) == BST_CHECKED;
+					newConfig.systemTrayIcon = IsDlgButtonChecked(dialogHandle, IDC_SYSTRAYICON) == BST_CHECKED;
+					newConfig.startAtLogon = IsDlgButtonChecked(dialogHandle, IDC_STARTATLOGON) == BST_CHECKED;
 					return TRUE;
 			}
 			break;
@@ -148,16 +147,16 @@ BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 	switch (message) {
 		case WM_INITDIALOG:
 			CheckRadioButton(dialogHandle, IDC_LEFTALT, IDC_RIGHTALT,
-				newDllConfig.modifier == VK_MENU ? IDC_ANYALT :
-				newDllConfig.modifier == VK_RMENU ? IDC_RIGHTALT :
+				newConfig.modifier == VK_MENU ? IDC_ANYALT :
+				newConfig.modifier == VK_RMENU ? IDC_RIGHTALT :
 				IDC_LEFTALT);
 			CheckRadioButton(dialogHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
-				newDllConfig.moveButton == mbMiddle ? IDC_MOVEMIDDLE :
-				newDllConfig.moveButton == mbRight ? IDC_MOVERIGHT :
+				newConfig.moveButton == mbMiddle ? IDC_MOVEMIDDLE :
+				newConfig.moveButton == mbRight ? IDC_MOVERIGHT :
 				IDC_MOVELEFT);
 			CheckRadioButton(dialogHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
-				newDllConfig.resizeButton == mbLeft ? IDC_RESIZELEFT :
-				newDllConfig.resizeButton == mbMiddle ? IDC_RESIZEMIDDLE :
+				newConfig.resizeButton == mbLeft ? IDC_RESIZELEFT :
+				newConfig.resizeButton == mbMiddle ? IDC_RESIZEMIDDLE :
 				IDC_RESIZERIGHT);
 			break;
 		case WM_COMMAND:
@@ -170,15 +169,15 @@ BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPar
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newDllConfig.modifier =
+					newConfig.modifier =
 						IsDlgButtonChecked(dialogHandle, IDC_ANYALT) ? VK_MENU :
 						IsDlgButtonChecked(dialogHandle, IDC_RIGHTALT) ? VK_RMENU :
 						VK_LMENU;
-					newDllConfig.moveButton =
+					newConfig.moveButton =
 						IsDlgButtonChecked(dialogHandle, IDC_MOVEMIDDLE) ? mbMiddle :
 						IsDlgButtonChecked(dialogHandle, IDC_MOVERIGHT) ? mbRight :
 						mbLeft;
-					newDllConfig.resizeButton =
+					newConfig.resizeButton =
 						IsDlgButtonChecked(dialogHandle, IDC_RESIZELEFT) ? mbLeft :
 						IsDlgButtonChecked(dialogHandle, IDC_RESIZEMIDDLE) ? mbMiddle :
 						mbRight;
@@ -193,7 +192,7 @@ BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPa
 	switch (message) {
 		case WM_INITDIALOG:
 			CheckRadioButton(dialogHandle, IDC_BOTTOMRIGHT, IDC_NINERECTANGLES,
-				newDllConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT :
+				newConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT :
 				IDC_NINERECTANGLES);
 			break;
 		case WM_COMMAND:
@@ -202,7 +201,7 @@ BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wPa
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newDllConfig.resizeMode =
+					newConfig.resizeMode =
 						IsDlgButtonChecked(dialogHandle, IDC_BOTTOMRIGHT) ? rmBottomRight :
 						rmNineRectangles;
 					return TRUE;
@@ -216,7 +215,7 @@ BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wP
 	switch (message) {
 		case WM_INITDIALOG:
 			CheckRadioButton(dialogHandle, IDC_SCROLLFOCUSED, IDC_SCROLLUNDERCURSOR,
-				newDllConfig.scrollWindowUnderCursor ? IDC_SCROLLUNDERCURSOR : IDC_SCROLLFOCUSED);
+				newConfig.scrollWindowUnderCursor ? IDC_SCROLLUNDERCURSOR : IDC_SCROLLFOCUSED);
 			break;
 		case WM_COMMAND:
 			PropSheet_Changed(configWindowHandle, dialogHandle);
@@ -224,7 +223,7 @@ BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wP
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newDllConfig.scrollWindowUnderCursor = IsDlgButtonChecked(dialogHandle, IDC_SCROLLUNDERCURSOR) == BST_CHECKED;
+					newConfig.scrollWindowUnderCursor = IsDlgButtonChecked(dialogHandle, IDC_SCROLLUNDERCURSOR) == BST_CHECKED;
 					return TRUE;
 			}
 			break;
@@ -265,8 +264,8 @@ LRESULT CALLBACK configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam
 			switch (LOWORD(wParam)) {
 				case IDOK:
 				case ID_APPLY_NOW:
-					applyConfig(&newDllConfig, &newExeConfig);
-					saveConfig(&newDllConfig, &newExeConfig);
+					applyConfig(&newConfig);
+					saveConfig(&newConfig);
 					break;
 			}
 			break;
@@ -482,7 +481,7 @@ INT_PTR showPropSheet() {
 void showConfig() {
 	// Load the most current settings from the environment, in case they've changed since startup
 	// by some external factor.
-	loadConfig(&newDllConfig, &newExeConfig);
+	loadConfig(&newConfig);
 
 	// Show the dialog (modally).
 	int result = showPropSheet();
@@ -490,7 +489,7 @@ void showConfig() {
 	if (result >= 1) {
 		// Changes were saved. They have already been applied;
 		// now save them to the environment (registry, file system) as well.
-		saveConfig(&newDllConfig, &newExeConfig);
+		saveConfig(&newConfig);
 	}
 }
 
