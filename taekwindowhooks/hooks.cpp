@@ -20,13 +20,15 @@ extern DWORD mainThreadId;
 
 /* Handles a possible "push window to the background" event.
  */
-bool considerPushBack(HWND window, MouseButton button, UINT hitTestCode) {
-	if (button == config.pushBackButton && hitTestCode == HTCAPTION) {
-		window = GetAncestor(window, GA_ROOT);
-		return doPushBack(window);
-	} else {
-		return false;
+bool considerPushBack(MouseButton button, HWND window, POINT mousePos) {
+	if (button == config.pushBackButton) {
+		UINT hitTestCode = SendMessage(window, WM_NCHITTEST, 0, MAKELPARAM(mousePos.x, mousePos.y));
+		if (hitTestCode == HTCAPTION) {
+			window = GetAncestor(window, GA_ROOT);
+			return doPushBack(window);
+		}
 	}
+	return false;
 }
 
 /* Handles a possible scroll wheel event.
@@ -43,7 +45,7 @@ bool considerMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
 /* The function for handling mouse events. This is the reason why we have to use a separate DLL;
  * see the SetWindowsHookEx documentation for details.
  */
-LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool processed = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
 		// Store last known foreground window for focus hack (see doPushBack in actions.cpp).
@@ -51,9 +53,9 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		if (lfw) {
 			lastForegroundWindow = lfw;
 		}
-		MOUSEHOOKSTRUCT *eventInfo = (MOUSEHOOKSTRUCT*)lParam;
-		MOUSEHOOKSTRUCTEX *eventInfoEx = (MOUSEHOOKSTRUCTEX*)lParam;
-		MouseButton button;
+		MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
+		HWND window = WindowFromPoint(eventInfo->pt);
+		MouseButton button = eventToButton(wParam);
 		switch (wParam) {
 			case WM_LBUTTONDOWN:
 			case WM_MBUTTONDOWN:
@@ -61,11 +63,9 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONDOWN:
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
-				// Find out which button was pressed.
-				button = eventToButton(wParam);
 				// Are we pushing the window to the back?
-				processed |= considerPushBack(eventInfo->hwnd, button, eventInfo->wHitTestCode);
-				processed |= onMouseDown(button, eventInfo->hwnd, eventInfo->pt);
+				processed |= considerPushBack(button, window, eventInfo->pt);
+				processed |= onMouseDown(button, window, eventInfo->pt);
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -73,16 +73,19 @@ LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONUP:
 			case WM_NCMBUTTONUP:
 			case WM_NCRBUTTONUP:
-				button = eventToButton(wParam);
-				// We only want to take action if it's the current dragging button being released.
-				processed |= onMouseUp(button, eventInfo->hwnd, eventInfo->pt);
+				processed |= onMouseUp(button, window, eventInfo->pt);
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
 				processed |= onMouseMove(eventInfo->pt);
+				if (processed) {
+					// If we eat the event, even the mouse cursor position won't be updated
+					// by Windows, so low-level is the low-level hook.
+					SetCursorPos(eventInfo->pt.x, eventInfo->pt.y);
+				}
 				break;
 			case WM_MOUSEWHEEL:
-				processed |= considerMouseWheel(eventInfo->hwnd, eventInfo->pt, eventInfoEx->mouseData);
+				processed |= considerMouseWheel(window, eventInfo->pt, eventInfo->mouseData);
 				break;
 		}
 	}

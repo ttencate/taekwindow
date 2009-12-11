@@ -3,4 +3,6 @@ TODO
 
 - Update the Readme.
 - Add some way to get to the configuration dialog if the tray icon is hidden.
-- Try to hook with WH_MOUSE_LL instead of WH_MOUSE, to hook both 32-bits and 64-bits processes.
+- Try a modal loop for move/resize events. Much easier to maintain, and hopefully more reliable too.
+- Load cursors once, and unload them at exit.
+- Fix the cursor (by capturing the mouse?).

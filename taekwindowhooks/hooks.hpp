@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 #endif

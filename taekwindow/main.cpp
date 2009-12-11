@@ -14,10 +14,10 @@ DWORD (*initProc)(DWORD, DWORD) = NULL;
 void (*uninitProc)() = NULL;
 void (*applyConfigProc)(DLLConfiguration*) = NULL;
 
-HOOKPROC mouseProc = NULL;
+HOOKPROC lowLevelMouseProc = NULL;
 HOOKPROC lowLevelKeyboardProc = NULL;
 
-HHOOK mouseHook = NULL;
+HHOOK lowLevelMouseHook = NULL;
 HHOOK lowLevelKeyboardHook = NULL;
 
 EXEConfiguration activeExeConfig;
@@ -77,8 +77,8 @@ bool findProcs() {
 	applyConfigProc = (void (*)(DLLConfiguration*))GetProcAddress(dllHandle, "applyConfig");
 	if (!applyConfigProc)
 		return false;
-	mouseProc = (HOOKPROC)GetProcAddress(dllHandle, "mouseProc");
-	if (!mouseProc)
+	lowLevelMouseProc = (HOOKPROC)GetProcAddress(dllHandle, "lowLevelMouseProc");
+	if (!lowLevelMouseProc)
 		return false;
 	lowLevelKeyboardProc = (HOOKPROC)GetProcAddress(dllHandle, "lowLevelKeyboardProc");
 	if (!lowLevelKeyboardProc)
@@ -87,12 +87,11 @@ bool findProcs() {
 }
 
 /* Attaches global event hooks.
- * Currently this is only done for mouse events; keyboard events may be added later.
  * Returns true on success.
  */
 bool attachHooks() {
-	mouseHook = SetWindowsHookEx(WH_MOUSE, mouseProc, dllHandle, NULL);
-	if (!mouseHook)
+	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, dllHandle, NULL);
+	if (!lowLevelMouseHook)
 		return false;
 	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, dllHandle, NULL);
 	if (!lowLevelKeyboardHook)
@@ -108,14 +107,14 @@ bool detachHooks() {
 	if (!UnhookWindowsHookEx(lowLevelKeyboardHook))
 		success = false;
 	lowLevelKeyboardHook = NULL;
-	if (!UnhookWindowsHookEx(mouseHook))
+	if (!UnhookWindowsHookEx(lowLevelMouseHook))
 		success = false;
-	mouseHook = NULL;
+	lowLevelMouseHook = NULL;
 	return success;
 }
 
 bool isEnabled() {
-	return (mouseHook && lowLevelKeyboardHook);
+	return (lowLevelMouseHook && lowLevelKeyboardHook);
 }
 
 bool enable() {

@@ -50,23 +50,14 @@ HWND findMIRCTextWindow(HWND containerWindow) {
 // END HACK
 
 bool doMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
-	HWND targetWindow = WindowFromPoint(mousePos);
-
 	// BEGIN HACK for mIRC
-	if (isMIRCWindow(targetWindow)) {
-		targetWindow = findMIRCTextWindow(targetWindow);
+	if (isMIRCWindow(window)) {
+		window = findMIRCTextWindow(window);
 	}
 	// END HACK
 
-	if (targetWindow != window) {
-		DEBUGLOG("Forwarding mouse wheel for window 0x%X to window 0x%X", window, targetWindow);
-		LPARAM lParam = ((short)(mousePos.x)) | (((short)(mousePos.y)) << 16);
-		SendMessage(targetWindow, WM_MOUSEWHEEL, wParam, lParam);
-		return true;
-	} else {
-		// Either the focus happens to be on the window under the cursor,
-		// or this is an event we sent ourselves.
-		// Either way, we're good, stay away from it.
-		return false;
-	}
+	DEBUGLOG("Forwarding mouse wheel to window 0x%X", window);
+	LPARAM lParam = ((short)(mousePos.x)) | (((short)(mousePos.y)) << 16);
+	SendMessage(window, WM_MOUSEWHEEL, wParam, lParam);
+	return true;
 }
