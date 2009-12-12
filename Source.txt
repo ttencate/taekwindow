@@ -26,7 +26,7 @@ Because of this, we cannot use:
 - exceptions
 - global variables that require destruction
 
-Most of the CRT functions have a replacement in the Windows API. A notable exception is memcpy; the Windows API function CopyMemory is merely an alias. It refuses to work as a compiler intrinsic. Thus we have our own picostdlib.c which implements memcpy.
+Most of the CRT functions have a replacement in the Windows API. A notable exception is memcpy; the Windows API function CopyMemory is merely an alias. It refuses to work as a compiler intrinsic. Thus we have our own picostdlib.c which implements memcpy. In the same vein, the global C++ operators new and delete are defined in picostdcpplib.cpp.
 
 Which window to move
 ====================
@@ -34,6 +34,11 @@ Which window to move
 When the mouse is pressed down, we need to determine which window needs to move/resize. This can be done by finding the root ancestor window (top-level window) of the window under the cursor, using GetAncestor with GA_ROOT. However, in an MDI setting this returns the parent window, whereas we'd probably like to grab the child window.
 
 Instead, we walk the parent chain manually, stopping whenever we encounter a window that is movable/resizable according to some definition. Checking for WS_CAPTION takes care of most cases. Resizability and handling of maximized windows is a bit trickier; see the comments in the code for details.
+
+Cursor changing
+===============
+
+SetCursor() only works if the cursor is over your own window. We cannot change some other process's window class cursor through SetClassLongPtr(). We should be able to create our own window and capture the mouse; but the mouse has to be inside at the time of capture, and the button must be registered as down. If we're creating windows anyway, we might as well create a fullscreen topmost window and do away with the mouse capturing. This approach seems to be more robust.
 
 Internals
 =========

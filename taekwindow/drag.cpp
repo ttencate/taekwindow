@@ -1,4 +1,3 @@
-#define OEMRESOURCE
 #include <windows.h>
 #include <tchar.h>
 
@@ -7,6 +6,7 @@
 #include "actions.hpp"
 #include "main.hpp"
 #include "debuglog.hpp"
+#include "cursorwindow.hpp"
 
 /* The current state of the state machine.
  * Must only be changed through changeState().
@@ -25,6 +25,10 @@ POINT lastMousePos;
  */
 HWND draggedWindow;
 
+/* The cursor window. Only valid while dragging.
+ */
+CursorWindow *cursorWindow = NULL;
+
 /* The window in the Z-order previous to the draggedWindow.
  * Used to keep the order intact when calling SetWindowPos.
  */
@@ -33,10 +37,6 @@ HWND prevInZOrder;
 /* The current position of the window. Saves calls to GetWindowRect.
  */
 RECT lastRect;
-
-/* The cursor that was set by the application, before we changed it.
- */
-HCURSOR prevCursor;
 
 /* The monitor that the window is currently on.
  */
@@ -52,28 +52,6 @@ void updateWindowPos(UINT flags) {
 	SetWindowPos(draggedWindow, prevInZOrder, lastRect.left, lastRect.top, lastRect.right - lastRect.left, lastRect.bottom - lastRect.top, SWP_NOACTIVATE | flags);
 }
 
-/* Sets the new cursor; assumes that the current cursor is defined by the application being dragged.
- * Expects one of the OCR_* constants.
- */
-void setCursor(int ocr) {
-	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
-	prevCursor = SetCursor(newCursor);
-}
-
-/* Sets the new cursor; assumes that the current cursor is defined by ourselves.
- * To be called in between setCursor() and restoreCursor().
- */
-void updateCursor(int ocr) {
-	HCURSOR newCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(ocr), IMAGE_CURSOR, 0, 0, LR_SHARED);
-	DestroyCursor(SetCursor(newCursor));
-}
-
-/* Restores the cursor to the one before setCursor() was called.
- */
-void restoreCursor() {
-	DestroyCursor(SetCursor(prevCursor));
-}
-
 /* Sets the variables resizingX and resizingY to the proper values,
  * considering the client-coordinate pointer location.
  * Note that, unlike lastRect, these are client coordinates of the dragged window itself,
@@ -86,18 +64,18 @@ void setResizingY(POINT const &pt) {
 	resizingY = pt.y * 3 / (lastRect.bottom - lastRect.top) - 1;
 }
 
-/* Returns the cursor (OCR_* constant) to be used for the current resizing direction.
+/* Returns the cursor to be used for the current resizing direction.
  */
-int getResizingCursor() {
+Cursor getResizingCursor() {
 	if (resizingX && !resizingY)
-		return OCR_SIZEWE;
+		return crResizeWE;
 	if (!resizingX && resizingY)
-		return OCR_SIZENS;
+		return crResizeNS;
 	if (resizingX * resizingY > 0)
-		return OCR_SIZENWSE;
+		return crResizeNWSE;
 	if (resizingX * resizingY < 0)
-		return OCR_SIZENESW;
-	return OCR_NORMAL; // fallback
+		return crResizeNESW;
+	return crNormal; // fallback
 }
 
 /* Returns the movement of the mouse since the last time.
@@ -122,17 +100,17 @@ bool isModifierDown() {
 // STATE EXITING --------------------------------------------------------------
 
 /* Ends the drag action.
- * Releases the mouse capture and restores the cursor.
+ * Restores the cursor.
  */
 void exitDeformState() {
 	DEBUGLOG("Ending drag action");
-	ReleaseCapture();
+	delete cursorWindow;
+	cursorWindow = NULL;
 	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
 		// The active window was deactivated when we clicked the dragged window.
 		// Restore the previously active window to active.
 		activateWithoutRaise(lastForegroundWindow);
 	}
-	restoreCursor();
 }
 
 /* Called right before the current state is exited.
@@ -173,11 +151,11 @@ void enterDeformState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	// Store window handle and Z order position of the victim.
 	draggedWindow = parentWindow;
 	prevInZOrder = GetNextWindow(parentWindow, GW_HWNDPREV);
+
+	// Create the cursor window.
+	cursorWindow = new CursorWindow();
 	// Store current mouse position.
 	lastMousePos = mousePos;
-	// Capture the mouse so it'll still get events even if the mouse leaves the window
-	// (could happen while resizing).
-	SetCapture(draggedWindow);
 	// Store the current window rectangle, specified in the client coordinates of the window's parent
 	// (or, if no parent, in screen coordinates).
 	GetWindowRect(draggedWindow, &lastRect);
@@ -197,7 +175,7 @@ void enterMoveState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	DEBUGLOG("Starting move action");
 	changeState(dsMove);
 	enterDeformState(button, parentWindow, mousePos);
-	setCursor(OCR_SIZEALL);
+	cursorWindow->setCursor(crMove);
 }
 
 /* Switches back to the normal state.
@@ -214,7 +192,7 @@ void enterMaximizedMoveState(MouseButton button, HWND parentWindow, POINT mouseP
 	enterDeformState(button, parentWindow, mousePos);
 	// Remember the monitor that currently contains the window.
 	currentMonitor = MonitorFromWindow(parentWindow, MONITOR_DEFAULTTONULL);
-	setCursor(OCR_SIZEALL);
+	cursorWindow->setCursor(crMove);
 }
 
 /* Sets up the cursor and the resize type.
@@ -257,14 +235,14 @@ void enterResizeState(MouseButton button, HWND parentWindow, POINT mousePos) {
 			setResizingY(mousePos);
 			break;
 	}
-	setCursor(getResizingCursor());
+	cursorWindow->setCursor(getResizingCursor());
 }
 
 void enterIgnoreState(MouseButton button) {
 	DEBUGLOG("Starting ignore action");
 	changeState(dsIgnore);
 	enterMouseDownState(button);
-	setCursor(OCR_NO);
+	cursorWindow->setCursor(crIgnore);
 }
 
 // EVENT HANDLING -------------------------------------------------------------
@@ -286,7 +264,7 @@ bool onMouseDownNormalState(MouseButton button, HWND window, POINT mousePos) {
 		HWND parentWindow = findFirstParent(window, isRestoredMovableWindow);
 		if (parentWindow) {
 			enterMoveState(button, parentWindow, mousePos);
-			return true;
+			return false; // !!!
 		} else {
 			// No unmaximized movable window found; look for a maximized one that can be kicked to another monitor.
 			// Only top-level windows can be moved to other monitors, I guess.
@@ -333,7 +311,7 @@ bool onMouseMoveMoveState(POINT mousePos) {
 	lastRect.right += delta.x;
 	lastRect.bottom += delta.y;
 	updateWindowPos(SWP_NOSIZE);
-	return true;
+	return false; // !!!
 }
 
 /* Moves the window accordingly.
@@ -412,7 +390,7 @@ bool onMouseMoveResizeState(POINT mousePos) {
 			break;
 	}
 	if (needCursorUpdate)
-		updateCursor(getResizingCursor());
+		cursorWindow->setCursor(getResizingCursor());
 	updateWindowPos(flags);
 	return true;
 }

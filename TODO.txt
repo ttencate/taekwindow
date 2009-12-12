@@ -5,8 +5,8 @@ TODO
 - Search for TODO and do them.
 - Do a full code review.
 - Add some way to get to the configuration dialog if the tray icon is hidden.
-- Try a modal loop for move/resize events. Much easier to maintain, and hopefully more reliable too.
-- Load cursors once, and unload them at exit.
-- Fix the cursor (by capturing the mouse?).
-- Make the "ignore" state not move the mouse cursor.
 - Detect multiple instances.
+- Fix resizing windows beyond their limits.
+- Bump rigidly into screen edges.
+- Send log files into separate directory.
+- Fix some bugs mentioned in the tracker.

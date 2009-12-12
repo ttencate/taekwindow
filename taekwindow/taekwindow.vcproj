@@ -226,6 +226,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cursors.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cursorwindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\debuglog.cpp"
 				>
 			</File>
@@ -239,6 +247,10 @@
 			</File>
 			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\picostdcpplib.cpp"
 				>
 			</File>
 			<File
@@ -277,6 +289,14 @@
 			</File>
 			<File
 				RelativePath=".\configdlg.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cursors.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cursorwindow.hpp"
 				>
 			</File>
 			<File

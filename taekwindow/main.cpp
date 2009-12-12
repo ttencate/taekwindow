@@ -8,6 +8,7 @@
 #include "version.h"
 #include "hooks.hpp"
 #include "debuglog.hpp"
+#include "cursors.hpp"
 
 HINSTANCE currentInstance = NULL;
 
@@ -115,6 +116,7 @@ int myMain(HINSTANCE hInstance) {
 	OPENDEBUGLOG();
 	// Load the configuration from the registry.
 	loadAndApplyConfig();
+	cursors.load();
 
 	// Attach the event hooks.
 	if (!enable()) {
