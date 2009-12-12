@@ -9,6 +9,8 @@
 #include "hooks.hpp"
 #include "debuglog.hpp"
 #include "cursors.hpp"
+#include "dragmachine.hpp"
+#include "normal.hpp"
 
 HINSTANCE currentInstance = NULL;
 
@@ -117,6 +119,7 @@ int myMain(HINSTANCE hInstance) {
 	// Load the configuration from the registry.
 	loadAndApplyConfig();
 	cursors.load();
+	DragMachine::init(new NormalState());
 
 	// Attach the event hooks.
 	if (!enable()) {
@@ -130,6 +133,7 @@ int myMain(HINSTANCE hInstance) {
 	showTrayIcon(false);
 	// Note that calling detachHooks is OK if attachHooks only partly worked.
 	detachHooks();
+	DragMachine::cleanup();
 	CLOSEDEBUGLOG();
 
 	return retVal;

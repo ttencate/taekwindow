@@ -58,7 +58,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
-				WarnAsError="true"
+				WarnAsError="false"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 				OmitDefaultLibName="true"
@@ -238,7 +238,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\drag.cpp"
+				RelativePath=".\deform.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dragmachine.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dragstate.cpp"
 				>
 			</File>
 			<File
@@ -246,7 +254,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ignore.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\mousedown.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\move.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\movemax.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\normal.cpp"
 				>
 			</File>
 			<File
@@ -255,6 +283,10 @@
 			</File>
 			<File
 				RelativePath=".\picostdlib.c"
+				>
+			</File>
+			<File
+				RelativePath=".\resize.cpp"
 				>
 			</File>
 			<File
@@ -304,11 +336,23 @@
 				>
 			</File>
 			<File
-				RelativePath=".\drag.hpp"
+				RelativePath=".\deform.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dragmachine.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dragstate.hpp"
 				>
 			</File>
 			<File
 				RelativePath=".\hooks.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ignore.hpp"
 				>
 			</File>
 			<File
@@ -320,7 +364,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\mousedown.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\move.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\movemax.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\normal.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\picostdlib.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resize.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\statemachine.hpp"
 				>
 			</File>
 			<File

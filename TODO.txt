@@ -9,3 +9,5 @@ TODO
 - Fix resizing windows beyond their limits.
 - Reintroduce classes in the state machine.
 - Fix some bugs mentioned in the tracker.
+- Synchronize header guards.
+- Test with MDI's... think I broke something there...

@@ -2,7 +2,7 @@
 #include <tchar.h>
 
 #include "hooks.hpp"
-#include "drag.hpp"
+#include "dragmachine.hpp"
 #include "actions.hpp"
 #include "main.hpp"
 #include "util.hpp"
@@ -42,6 +42,21 @@ bool considerMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
 	}
 }
 
+/* Clips the given point to be inside the cursor clip rectangle.
+ */
+void clipCursor(POINT &pos) {
+	RECT clip;
+	GetClipCursor(&clip);
+	if (pos.x < clip.left)
+		pos.x = clip.left;
+	if (pos.x >= clip.right)
+		pos.x = clip.right;
+	if (pos.y < clip.top)
+		pos.y = clip.top;
+	if (pos.y >= clip.bottom)
+		pos.y = clip.bottom;
+}
+
 /* The function for handling mouse events.
  */
 LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
@@ -53,7 +68,11 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			lastForegroundWindow = lfw;
 		}
 		MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
-		HWND window = WindowFromPoint(eventInfo->pt);
+		POINT mousePos = eventInfo->pt;
+		// A low-level mouse proc gets the mouse coordinates even before they are
+		// clipped to the screen boundaries. So we need to do this ourselves.
+		clipCursor(mousePos);
+		HWND window = WindowFromPoint(mousePos);
 		MouseButton button = eventToButton(wParam);
 		switch (wParam) {
 			case WM_LBUTTONDOWN:
@@ -63,8 +82,8 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
 				// Are we pushing the window to the back?
-				processed |= considerPushBack(button, window, eventInfo->pt);
-				processed |= onMouseDown(button, window, eventInfo->pt);
+				processed |= considerPushBack(button, window, mousePos);
+				processed |= DragMachine::instance().onMouseDown(button, window, mousePos);
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -72,19 +91,19 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONUP:
 			case WM_NCMBUTTONUP:
 			case WM_NCRBUTTONUP:
-				processed |= onMouseUp(button, window, eventInfo->pt);
+				processed |= DragMachine::instance().onMouseUp(button, window, mousePos);
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
-				processed |= onMouseMove(eventInfo->pt);
+				processed |= DragMachine::instance().onMouseMove(mousePos);
 				if (processed) {
 					// If we eat the event, even the mouse cursor position won't be updated
 					// by Windows, so low-level is the low-level hook.
-					SetCursorPos(eventInfo->pt.x, eventInfo->pt.y);
+					SetCursorPos(mousePos.x, mousePos.y);
 				}
 				break;
 			case WM_MOUSEWHEEL:
-				processed |= considerMouseWheel(window, eventInfo->pt, eventInfo->mouseData);
+				processed |= considerMouseWheel(window, mousePos, eventInfo->mouseData);
 				break;
 		}
 	}
@@ -104,7 +123,7 @@ LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	if (nCode >= 0 && nCode == HC_ACTION) { // A little redundant, yes. But the docs say it.
 #ifdef _DEBUG
 		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
-		DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);
+		// DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);
 		if (info->vkCode == 0x51) {
 			DEBUGLOG("Panic button pressed");
 			// Q button pressed. Panic button for debugging.

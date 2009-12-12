@@ -3,6 +3,9 @@
 
 #ifdef _DEBUG
 
+#include <windows.h>
+#include <tchar.h>
+
 void openDebugLog();
 void closeDebugLog();
 void debugLog(LPCTSTR format, ...);
