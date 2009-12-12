@@ -3,24 +3,17 @@
 
 #include "statemachine.hpp"
 #include "dragstate.hpp"
+#include "events.hpp"
 
 class DragMachine : public StateMachine<DragState> {
 
-	static DragMachine *s_instance;
-
 	public:
 
-		static void init(DragState *startState);
-		static void cleanup();
-		static DragMachine &instance() { return *s_instance; }
-
-		bool onMouseDown(MouseButton button, HWND window, POINT mousePos);
-		bool onMouseUp(MouseButton button, HWND window, POINT mousePos);
-		bool onMouseMove(POINT mousePos);
-
-	private:
-
 		DragMachine(DragState *startState);
+
+		bool onMouseDown(MouseDownEvent const &event);
+		bool onMouseUp(MouseUpEvent const &event);
+		bool onMouseMove(MouseMoveEvent const &event);
 
 };
 

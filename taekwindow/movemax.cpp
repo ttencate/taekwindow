@@ -20,11 +20,11 @@ void MoveMaxState::enter() {
 
 /* Moves the window accordingly.
  */
-bool MoveMaxState::onMouseMove(POINT mousePos) {
-	DeformState::onMouseMove(mousePos);
+bool MoveMaxState::onMouseMove(MouseMoveEvent const &event) {
+	DeformState::onMouseMove(event);
 
 	DEBUGLOG("Handling maximized move action");
-	HMONITOR mouseMonitor = MonitorFromPoint(mousePos, MONITOR_DEFAULTTONEAREST);
+	HMONITOR mouseMonitor = MonitorFromPoint(event.mousePos, MONITOR_DEFAULTTONEAREST);
 	if (mouseMonitor != d_currentMonitor) {
 		// Window needs to be moved to another monitor, while retaining its maximized state.
 		d_currentMonitor = mouseMonitor;

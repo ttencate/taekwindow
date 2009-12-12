@@ -1,7 +1,7 @@
 TODO
 ----
 
-- Make hook handling more modular.
+- Fix Ctrl+wheel and such not working.
 - Fix resizing windows beyond their limits.
 - Detect multiple instances.
 - Add some way to get to the configuration dialog if the tray icon is hidden.

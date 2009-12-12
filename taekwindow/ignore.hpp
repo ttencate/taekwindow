@@ -11,6 +11,10 @@ class IgnoreState : public MouseDownState {
 
 		virtual void enter();
 
+		virtual bool onMouseDown(MouseDownEvent const &event);
+		virtual bool onMouseUp(MouseUpEvent const &event);
+		virtual bool onMouseMove(MouseMoveEvent const &event);
+
 };
 
 #endif

@@ -4,33 +4,40 @@
 #include <windows.h>
 
 #include "types.hpp"
+#include "statemachine.hpp"
+#include "events.hpp"
 
 /* An interface for a state in the DragMachine state machine.
  * All these functions have implementations, but they are guaranteed to do nothing.
  */
 class DragState {
 
+	friend class StateMachine<DragState>; // for setMachine()
+
+	StateMachine<DragState> *d_machine;
+
 	public:
+
+		DragState();
 
 		virtual void enter();
 		virtual void exit();
 
-		/* Called when a mouse button is pressed.
-		 * window is the bottommost window in the hierarchy. mousePos is the location of the mouse cursor.
-		 * If true is returned, the event will not be passed to the application.
-		 */
-		virtual bool onMouseDown(MouseButton button, HWND window, POINT mousePos);
+		virtual bool onMouseDown(MouseDownEvent const &event);
+		virtual bool onMouseUp(MouseUpEvent const &event);
+		virtual bool onMouseMove(MouseMoveEvent const &event);
 
-		/* Called when a mouse button is released.
-		 * window is the bottommost window in the hierarchy. mousePos is the location of the mouse cursor.
-		 * If true is returned, the event will not be passed to the application.
-		 */
-		virtual bool onMouseUp(MouseButton button, HWND window, POINT mousePos);
+	protected:
 
-		/* Called when the mouse is moved.
-		 * If true is returned, the event will not be passed to the application.
+		void setNextState(DragState *state) { d_machine->setNextState(state); }
+
+	private:
+
+		/* We need this for bootstrapping: a StateMachine requires a State for its construction,
+		 * and a State requires a StateMachine.
+		 * This is called from StateMachine; do not call it from anywhere else.
 		 */
-		virtual bool onMouseMove(POINT mousePos);
+		void setMachine(StateMachine<DragState> *machine) { d_machine = machine; }
 };
 
 

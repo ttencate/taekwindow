@@ -2,34 +2,44 @@
 #include <tchar.h>
 
 #include "hooks.hpp"
-#include "dragmachine.hpp"
-#include "actions.hpp"
 #include "main.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
+#include "events.hpp"
+#include "handlerlist.hpp"
 
-/* Handles a possible "push window to the background" event.
+HHOOK lowLevelMouseHook = NULL;
+HHOOK lowLevelKeyboardHook = NULL;
+
+/* Attaches global event hooks.
+ * Returns true on success.
  */
-bool considerPushBack(MouseButton button, HWND window, POINT mousePos) {
-	if (button == activeConfig.pushBackButton) {
-		UINT hitTestCode = SendMessage(window, WM_NCHITTEST, 0, MAKELPARAM(mousePos.x, mousePos.y));
-		if (hitTestCode == HTCAPTION) {
-			window = GetAncestor(window, GA_ROOT);
-			return doPushBack(window);
-		}
-	}
-	return false;
+bool attachHooks() {
+	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, getCurrentInstance(), NULL);
+	if (!lowLevelMouseHook)
+		return false;
+	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, getCurrentInstance(), NULL);
+	if (!lowLevelKeyboardHook)
+		return false;
+	return true;
 }
 
-/* Handles a possible scroll wheel event.
+/* Detaches previously set hooks.
+ * Returns true on success.
  */
-bool considerMouseWheel(HWND window, POINT mousePos, WPARAM wParam) {
-	if (activeConfig.scrollWindowUnderCursor) {
-		return doMouseWheel(window, mousePos, wParam);
-	} else {
-		// Use Windows default behaviour.
-		return false;
-	}
+bool detachHooks() {
+	bool success = true;
+	if (!UnhookWindowsHookEx(lowLevelKeyboardHook))
+		success = false;
+	lowLevelKeyboardHook = NULL;
+	if (!UnhookWindowsHookEx(lowLevelMouseHook))
+		success = false;
+	lowLevelMouseHook = NULL;
+	return success;
+}
+
+bool areHooksAttached() {
+	return (lowLevelMouseHook && lowLevelKeyboardHook);
 }
 
 /* Clips the given point to be inside the cursor clip rectangle.
@@ -47,16 +57,13 @@ void clipCursor(POINT &pos) {
 		pos.y = clip.bottom;
 }
 
+
+
 /* The function for handling mouse events.
  */
 LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	bool processed = false; // Set to true if we don't want to pass the event to the application.
+	bool eat = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
-		// Store last known foreground window for focus hack (see doPushBack in actions.cpp).
-		HWND lfw = GetForegroundWindow();
-		if (lfw) {
-			lastForegroundWindow = lfw;
-		}
 		MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
 		POINT mousePos = eventInfo->pt;
 		// A low-level mouse proc gets the mouse coordinates even before they are
@@ -71,9 +78,7 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONDOWN:
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
-				// Are we pushing the window to the back?
-				processed |= considerPushBack(button, window, mousePos);
-				processed |= DragMachine::instance().onMouseDown(button, window, mousePos);
+				eat = mouseHandlerList->onMouseDown(MouseDownEvent(mousePos, button, window));
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -81,25 +86,25 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONUP:
 			case WM_NCMBUTTONUP:
 			case WM_NCRBUTTONUP:
-				processed |= DragMachine::instance().onMouseUp(button, window, mousePos);
+				eat = mouseHandlerList->onMouseUp(MouseUpEvent(mousePos, button, window));
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
-				processed |= DragMachine::instance().onMouseMove(mousePos);
-				if (processed) {
+				eat = mouseHandlerList->onMouseMove(MouseMoveEvent(mousePos));
+				if (eat) {
 					// If we eat the event, even the mouse cursor position won't be updated
 					// by Windows, so low-level is the low-level hook.
 					SetCursorPos(mousePos.x, mousePos.y);
 				}
 				break;
 			case WM_MOUSEWHEEL:
-				processed |= considerMouseWheel(window, mousePos, eventInfo->mouseData);
+				eat = mouseHandlerList->onMouseWheel(MouseWheelEvent(mousePos, eventInfo->mouseData, window));
 				break;
 		}
 	}
 
 	LRESULT res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
-	if (processed)
+	if (eat)
 		res = 1; // nonzero return value prevents passing the event to the application
 	return res;
 }

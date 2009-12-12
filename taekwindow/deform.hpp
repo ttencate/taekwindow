@@ -35,7 +35,7 @@ class DeformState : public MouseDownState {
 		virtual void enter();
 		virtual void exit();
 
-		virtual bool onMouseMove(POINT mousePos);
+		virtual bool onMouseMove(MouseMoveEvent const &event);
 
 	protected:
 

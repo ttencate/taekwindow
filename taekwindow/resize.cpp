@@ -77,15 +77,15 @@ void ResizeState::enter() {
 
 /* Resizes the window accordingly.
  */
-bool ResizeState::onMouseMove(POINT mousePos) {
-	DeformState::onMouseMove(mousePos);
+bool ResizeState::onMouseMove(MouseMoveEvent const &event) {
+	DeformState::onMouseMove(event);
 
 	DEBUGLOG("Handling resize action");
 	POINT delta = mouseDelta();
 	// Do not move the window, unless resizing at its top and/or its left.
 	UINT flags = SWP_NOMOVE;
 	// Resize at the right corner/edge.
-	POINT clientPos = mousePos;
+	POINT clientPos = event.mousePos;
 	ScreenToClient(window(), &clientPos);
 	RECT rect = lastRect();
 	bool needCursorUpdate = false;

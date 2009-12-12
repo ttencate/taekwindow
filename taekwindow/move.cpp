@@ -18,8 +18,8 @@ void MoveState::enter() {
 
 /* Moves the window accordingly.
  */
-bool MoveState::onMouseMove(POINT mousePos) {
-	DeformState::onMouseMove(mousePos);
+bool MoveState::onMouseMove(MouseMoveEvent const &event) {
+	DeformState::onMouseMove(event);
 	DEBUGLOG("Handling move action");
 
 	POINT delta = mouseDelta();

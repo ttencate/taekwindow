@@ -53,12 +53,12 @@ void DeformState::exit() {
 	MouseDownState::exit();
 }
 
-bool DeformState::onMouseMove(POINT mousePos) {
+bool DeformState::onMouseMove(MouseMoveEvent const &event) {
 	DEBUGLOG("Handling DeformState::onMouseMove");
-	d_mouseDelta.x = mousePos.x - d_mousePos.x;
-	d_mouseDelta.y = mousePos.y - d_mousePos.y;
-	d_mousePos = mousePos;
-	return MouseDownState::onMouseMove(mousePos);
+	d_mouseDelta.x = event.mousePos.x - d_mousePos.x;
+	d_mouseDelta.y = event.mousePos.y - d_mousePos.y;
+	d_mousePos = event.mousePos;
+	return MouseDownState::onMouseMove(event);
 }
 
 void DeformState::updateWindowPos(RECT rect, UINT flags) {

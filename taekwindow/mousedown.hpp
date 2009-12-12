@@ -22,7 +22,7 @@ class MouseDownState : public DragState {
 		virtual void enter();
 		virtual void exit();
 
-		virtual bool onMouseUp(MouseButton button, HWND window, POINT mousePos);
+		virtual bool onMouseUp(MouseUpEvent const &event);
 
 	protected:
 

@@ -11,7 +11,7 @@ class MoveState : public DeformState {
 
 		virtual void enter();
 
-		virtual bool onMouseMove(POINT mousePos);
+		virtual bool onMouseMove(MouseMoveEvent const &event);
 
 };
 

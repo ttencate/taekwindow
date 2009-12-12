@@ -3,6 +3,7 @@
 
 #include "wininfo.hpp"
 #include "debuglog.hpp"
+#include "hacks.hpp"
 
 HWND findFirstParent(HWND window, bool (*criterium)(HWND)) {
 	HWND ancestor = window;
@@ -75,84 +76,36 @@ bool isThickBorderWindow(HWND window) {
 		return false;
 }
 
-// BEGIN HACKs for specific applications
-
-bool isGoogleTalk(HWND window) {
-	// The contact list window and the chat view window do not have WS_CAPTION style, but is movable/resizable.
-	return
-		windowHasClass(window, _T("Google Talk - Google Xmpp Client GUI Window")) ||
-		windowHasClass(window, _T("Chat View"));
-}
-
-bool isGoogleChrome(HWND window) {
-	// Google Chrome does not have WS_CAPTION style, but is movable/resizable.
-	return windowHasClass(window, _T("Chrome_XPFrame"));
-}
-
-bool isMSOfficeDocument(HWND window) {
-	// Microsoft Office Word 2007 does internally use MDI, but does not show it,
-	// so we pretend that an Office document is not movable/resizable.
-	// Microsoft Office Excel 2007 uses an MDI and shows it too, but does its own handling
-	// of maximization (i.e. does not set WS_MAXIMIZED).
-	// We just pretend that these windows are not floating windows at all,
-	// so it is always the parent window that gets manipulated.
-	return
-		windowHasClass(window, _T("_WwB")) || // Word 2007
-		windowHasClass(window, _T("EXCEL7")); // Excel 2007
-}
-
-// END HACKs
-
 bool isMovableWindow(HWND window) {
-	// BEGIN HACK for MS Office
 	if (isMSOfficeDocument(window)) {
 		return false;
 	}
-	// END HACK
 
 	if (isCaptionWindow(window) && !isFullscreenWindow(window)) {
 		// A normal movable window.
 		return true;
 	}
 
-	// BEGIN HACK for Google Talk
-	if (isGoogleTalk(window)) {
+	if (isGoogleTalk(window) || isGoogleChrome(window)) {
 		return true;
 	}
-	// END HACK
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window)) {
-		return true;
-	}
-	// END HACK
 
 	// No reason why this should be considered movable.
 	return false;
 }
 
 bool isResizableWindow(HWND window) {
-	// BEGIN HACK for MS Office
 	if (isMSOfficeDocument(window)) {
 		return false;
 	}
-	// END HACK
 
 	if (isThickBorderWindow(window) && !isFullscreenWindow(window)) {
 		return true;
 	}
 
-	// BEGIN HACK for Google Talk
-	if (isGoogleTalk(window)) {
+	if (isGoogleTalk(window) || isGoogleChrome(window)) {
 		return true;
 	}
-	// END HACK
-
-	// BEGIN HACK for Google Chrome
-	if (isGoogleChrome(window)) {
-		return true;
-	}
-	// END HACK
 
 	return false;
 }
@@ -171,4 +124,14 @@ bool isMaximizedMovableWindow(HWND window) {
 
 bool isMaximizedResizableWindow(HWND window) {
 	return isResizableWindow(window) && isMaximizedWindow(window);
+}
+
+void activateWithoutRaise(HWND window) 
+{
+	DEBUGLOG("Activating window 0x%X without raising", window);
+	// Save the Z position of the previously active window.
+	HWND insertAfter = GetNextWindow(window, GW_HWNDPREV);
+	SetForegroundWindow(window);
+	// This has pulled it to the front; so change its position in the Z order back.
+	SetWindowPos(window, insertAfter, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }

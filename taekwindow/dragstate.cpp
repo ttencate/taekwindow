@@ -1,19 +1,25 @@
 #include "dragstate.hpp"
 
+DragState::DragState()
+:
+	d_machine(NULL)
+{
+}
+
 void DragState::enter() {
 }
 
 void DragState::exit() {
 }
 
-bool DragState::onMouseDown(MouseButton, HWND, POINT) {
+bool DragState::onMouseDown(MouseDownEvent const &) {
 	return false;
 }
 
-bool DragState::onMouseUp(MouseButton, HWND, POINT) {
+bool DragState::onMouseUp(MouseUpEvent const &) {
 	return false;
 }
 
-bool DragState::onMouseMove(POINT) {
+bool DragState::onMouseMove(MouseMoveEvent const &) {
 	return false;
 }

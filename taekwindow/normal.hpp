@@ -7,7 +7,7 @@ class NormalState : public DragState {
 
 	public:
 
-		virtual bool onMouseDown(MouseButton button, HWND window, POINT mousePos);
+		virtual bool onMouseDown(MouseDownEvent const &event);
 
 	private:
 

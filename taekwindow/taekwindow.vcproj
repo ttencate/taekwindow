@@ -214,10 +214,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\actions.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\config.cpp"
 				>
 			</File>
@@ -242,11 +238,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\draghandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dragmachine.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\dragstate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hacks.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\handlerlist.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hookhandler.cpp"
 				>
 			</File>
 			<File
@@ -286,6 +298,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pushhandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\resize.cpp"
 				>
 			</File>
@@ -302,6 +318,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\wheelhandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\wininfo.cpp"
 				>
 			</File>
@@ -311,10 +331,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\actions.hpp"
-				>
-			</File>
 			<File
 				RelativePath=".\config.hpp"
 				>
@@ -340,11 +356,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\draghandler.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dragmachine.hpp"
 				>
 			</File>
 			<File
 				RelativePath=".\dragstate.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\events.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hacks.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\handlerlist.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hookhandler.hpp"
 				>
 			</File>
 			<File
@@ -384,6 +420,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pushhandler.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\resize.hpp"
 				>
 			</File>
@@ -405,6 +445,10 @@
 			</File>
 			<File
 				RelativePath=".\version.h"
+				>
+			</File>
+			<File
+				RelativePath=".\wheelhandler.hpp"
 				>
 			</File>
 			<File

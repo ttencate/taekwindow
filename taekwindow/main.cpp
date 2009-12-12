@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <tchar.h>
 
+#include "main.hpp"
 #include "messages.hpp"
 #include "trayicon.hpp"
 #include "util.hpp"
@@ -9,49 +10,14 @@
 #include "hooks.hpp"
 #include "debuglog.hpp"
 #include "cursors.hpp"
-#include "dragmachine.hpp"
-#include "normal.hpp"
+#include "handlerlist.hpp"
 
 HINSTANCE currentInstance = NULL;
-
-HHOOK lowLevelMouseHook = NULL;
-HHOOK lowLevelKeyboardHook = NULL;
 
 Configuration activeConfig;
 
 HINSTANCE getCurrentInstance() {
 	return currentInstance;
-}
-
-/* Attaches global event hooks.
- * Returns true on success.
- */
-bool attachHooks() {
-	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, getCurrentInstance(), NULL);
-	if (!lowLevelMouseHook)
-		return false;
-	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, getCurrentInstance(), NULL);
-	if (!lowLevelKeyboardHook)
-		return false;
-	return true;
-}
-
-/* Detaches previously set hooks.
- * Returns true on success.
- */
-bool detachHooks() {
-	bool success = true;
-	if (!UnhookWindowsHookEx(lowLevelKeyboardHook))
-		success = false;
-	lowLevelKeyboardHook = NULL;
-	if (!UnhookWindowsHookEx(lowLevelMouseHook))
-		success = false;
-	lowLevelMouseHook = NULL;
-	return success;
-}
-
-bool isEnabled() {
-	return (lowLevelMouseHook && lowLevelKeyboardHook);
 }
 
 bool enable() {
@@ -70,6 +36,10 @@ bool disable() {
 		return false;
 	updateTrayIcon();
 	return true;
+}
+
+bool isEnabled() {
+	return areHooksAttached();
 }
 
 void applyConfig(Configuration const &config) {
@@ -117,9 +87,9 @@ int myMain(HINSTANCE hInstance) {
 
 	OPENDEBUGLOG();
 	// Load the configuration from the registry.
+	createHookHandlers();
 	loadAndApplyConfig();
 	cursors.load();
-	DragMachine::init(new NormalState());
 
 	// Attach the event hooks.
 	if (!enable()) {
@@ -133,7 +103,7 @@ int myMain(HINSTANCE hInstance) {
 	showTrayIcon(false);
 	// Note that calling detachHooks is OK if attachHooks only partly worked.
 	detachHooks();
-	DragMachine::cleanup();
+	destroyHookHandlers();
 	CLOSEDEBUGLOG();
 
 	return retVal;

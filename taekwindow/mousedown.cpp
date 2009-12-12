@@ -23,13 +23,12 @@ void MouseDownState::exit() {
 	DEBUGLOG("Exited MouseDownState");
 }
 
-bool MouseDownState::onMouseUp(MouseButton button, HWND, POINT) {
+bool MouseDownState::onMouseUp(MouseUpEvent const &event) {
 	DEBUGLOG("Handling button up event");
 	// We're in a state in which a special button was down.
-	if (button == d_downButton) {
+	if (event.button == d_downButton) {
 		// Go back to normal, but eat the event.
-		DEBUGLOG("Setting next state: NormalState");
-		DragMachine::instance().setNextState(new NormalState());
+		setNextState(new NormalState());
 	}
 	// Some other button was released; eat that event too.
 	return true;
