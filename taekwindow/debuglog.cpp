@@ -11,10 +11,19 @@
 
 static HANDLE debugLogFile = INVALID_HANDLE_VALUE;
 
+#define LOG_DIR _T("logs")
+
 void openDebugLog() {
+	if (!CreateDirectory(LOG_DIR, NULL)) {
+		if (GetLastError() != ERROR_ALREADY_EXISTS) {
+			showLastError(NULL, _T("Error creating debug log directory"));
+			return;
+		}
+	}
+
 	long time = GetTickCount();
 	TCHAR fileName[64];
-	wsprintf(fileName, _T("taekwindow-debug-%d.%03d.log"), time/1000, time%1000);
+	wsprintf(fileName, LOG_DIR _T("\\taekwindow-debug-%d.%03d.log"), time/1000, time%1000);
 	debugLogFile = CreateFile(fileName, FILE_WRITE_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (debugLogFile == INVALID_HANDLE_VALUE) {
 		showLastError(NULL, _T("Error opening debug log"));

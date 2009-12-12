@@ -8,5 +8,4 @@ TODO
 - Detect multiple instances.
 - Fix resizing windows beyond their limits.
 - Bump rigidly into screen edges.
-- Send log files into separate directory.
 - Fix some bugs mentioned in the tracker.
