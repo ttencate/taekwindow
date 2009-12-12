@@ -1,5 +1,5 @@
-#ifndef _CONFIG_HPP_
-#define _CONFIG_HPP_
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
 
 #include "types.hpp"
 

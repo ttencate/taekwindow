@@ -1,5 +1,5 @@
-#ifndef _PICOSTDLIB_H_
-#define _PICOSTDLIB_H_
+#ifndef PICOSTDLIB_H
+#define PICOSTDLIB_H
 
 #include <stdlib.h>
 

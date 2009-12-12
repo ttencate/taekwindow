@@ -1,5 +1,5 @@
-#ifndef _HOOKS_H_
-#define _HOOKS_H_
+#ifndef HOOKS_H
+#define HOOKS_H
 
 #include <windows.h>
 

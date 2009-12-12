@@ -1,5 +1,5 @@
-#ifndef _UTIL_HPP_
-#define _UTIL_HPP_
+#ifndef UTIL_HPP
+#define UTIL_HPP
 
 #include <windows.h>
 
@@ -18,7 +18,7 @@ void showLastError(HWND parent, LPCTSTR title);
  * Useful for checking cases that are very unlikely to go wrong once they go right,
  * but that we want to check during debugging anyway.
  */
-#ifdef DEBUG
+#ifdef _DEBUG
 #	define debugShowLastError(title) showLastError(title)
 #else
 #	define debugShowLastError(title)

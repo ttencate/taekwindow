@@ -1,5 +1,5 @@
-#ifndef _MESSAGES_HPP_
-#define _MESSAGES_HPP_
+#ifndef MESSAGES_HPP
+#define MESSAGES_HPP
 
 #include <windows.h>
 

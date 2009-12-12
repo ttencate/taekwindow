@@ -1,5 +1,5 @@
-#ifndef _WININFO_HPP_
-#define _WININFO_HPP_
+#ifndef WININFO_HPP
+#define WININFO_HPP
 
 /* Returns the first parent in the parent chain of the given window
  * that meets the given criterium, or NULL if there is no such parent.

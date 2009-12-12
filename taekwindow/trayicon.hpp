@@ -1,5 +1,5 @@
-#ifndef _TRAYICON_HPP_
-#define _TRAYICON_HPP_
+#ifndef TRAYICON_HPP
+#define TRAYICON_HPP
 
 #include <windows.h>
 

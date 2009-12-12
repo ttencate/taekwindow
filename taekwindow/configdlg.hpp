@@ -1,5 +1,5 @@
-#ifndef _CONFIGDLG_HPP_
-#define _CONFIGDLG_HPP_
+#ifndef CONFIGDLG_HPP
+#define CONFIGDLG_HPP
 
 /* Unconditionally shows the configuration dialog.
  * Must not be called when it is already showing.

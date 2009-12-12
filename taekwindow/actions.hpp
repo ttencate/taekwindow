@@ -1,5 +1,5 @@
-#ifndef _ACTIONS_HPP_
-#define _ACTIONS_HPP_
+#ifndef ACTIONS_HPP
+#define ACTIONS_HPP
 
 #include <windows.h>
 

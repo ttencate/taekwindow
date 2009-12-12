@@ -1,5 +1,5 @@
-#ifndef _DEBUGLOG_HPP_
-#define _DEBUGLOG_HPP_
+#ifndef DEBUGLOG_HPP
+#define DEBUGLOG_HPP
 
 #ifdef _DEBUG
 

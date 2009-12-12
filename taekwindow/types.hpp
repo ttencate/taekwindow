@@ -1,5 +1,5 @@
-#ifndef _TYPES_HPP_
-#define _TYPES_HPP_
+#ifndef TYPES_HPP
+#define TYPES_HPP
 
 #include <windows.h>
 

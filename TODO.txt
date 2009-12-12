@@ -1,11 +1,11 @@
 TODO
 ----
 
-- Update the Readme.
+- Make hook handling more modular.
+- Fix resizing windows beyond their limits.
+- Detect multiple instances.
+- Add some way to get to the configuration dialog if the tray icon is hidden.
+- Fix some bugs mentioned in the tracker.
 - Search for TODO and do them.
 - Do a full code review.
-- Add some way to get to the configuration dialog if the tray icon is hidden.
-- Detect multiple instances.
-- Fix resizing windows beyond their limits.
-- Fix some bugs mentioned in the tracker.
-- Synchronize header guards.
+- Update the Readme.
