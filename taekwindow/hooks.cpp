@@ -8,16 +8,6 @@
 #include "util.hpp"
 #include "debuglog.hpp"
 
-/* The current state we're in.
- */
-extern DragState currentState;
-
-#ifdef _DEBUG
-/* Steal this from main.cpp.
- */
-extern DWORD mainThreadId;
-#endif
-
 /* Handles a possible "push window to the background" event.
  */
 bool considerPushBack(MouseButton button, HWND window, POINT mousePos) {

@@ -19,7 +19,7 @@ void showLastError(HWND parent, LPCTSTR title);
  * but that we want to check during debugging anyway.
  */
 #ifdef _DEBUG
-#	define debugShowLastError(title) showLastError(title)
+#	define debugShowLastError(title) showLastError(NULL, title)
 #else
 #	define debugShowLastError(title)
 #endif
