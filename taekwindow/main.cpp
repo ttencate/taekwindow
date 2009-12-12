@@ -25,10 +25,10 @@ HINSTANCE getCurrentInstance() {
  * Returns true on success.
  */
 bool attachHooks() {
-	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, NULL, NULL);
+	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, getCurrentInstance(), NULL);
 	if (!lowLevelMouseHook)
 		return false;
-	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, NULL, NULL);
+	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, getCurrentInstance(), NULL);
 	if (!lowLevelKeyboardHook)
 		return false;
 	return true;

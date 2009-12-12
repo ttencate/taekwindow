@@ -264,7 +264,7 @@ bool onMouseDownNormalState(MouseButton button, HWND window, POINT mousePos) {
 		HWND parentWindow = findFirstParent(window, isRestoredMovableWindow);
 		if (parentWindow) {
 			enterMoveState(button, parentWindow, mousePos);
-			return false; // !!!
+			return true;
 		} else {
 			// No unmaximized movable window found; look for a maximized one that can be kicked to another monitor.
 			// Only top-level windows can be moved to other monitors, I guess.
@@ -311,7 +311,7 @@ bool onMouseMoveMoveState(POINT mousePos) {
 	lastRect.right += delta.x;
 	lastRect.bottom += delta.y;
 	updateWindowPos(SWP_NOSIZE);
-	return false; // !!!
+	return true;
 }
 
 /* Moves the window accordingly.

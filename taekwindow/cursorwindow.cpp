@@ -10,6 +10,7 @@ CursorWindow::CursorWindow()
 	d_class(createClass()),
 	d_handle(createWindow())
 {
+	setRegion();
 	DEBUGLOG("Created cursor window 0x%08x", d_handle);
 }
 
@@ -41,7 +42,13 @@ ATOM CursorWindow::createClass() {
 HWND CursorWindow::createWindow() {
 	int x = GetSystemMetrics(SM_XVIRTUALSCREEN), y = GetSystemMetrics(SM_YVIRTUALSCREEN);
 	int w = GetSystemMetrics(SM_CXVIRTUALSCREEN), h = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-	return CreateWindowEx(WS_EX_TOPMOST | WS_EX_NOACTIVATE, MAKEINTATOM(d_class), _T(""), WS_POPUP | WS_VISIBLE, x, y, w, h, NULL, NULL, d_instance, 0);
+	return CreateWindowEx(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE, MAKEINTATOM(d_class), _T(""), WS_POPUP | WS_VISIBLE, x, y, w, h, NULL, NULL, d_instance, 0);
+}
+
+void CursorWindow::setRegion() {
+	//HRGN region = CreateRectRgn(0, 0, 0, 0);
+	//SetWindowRgn(d_handle, region, FALSE);
+	// The region is destroyed by the system when it is no longer needed.
 }
 
 LRESULT CALLBACK CursorWindow::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
