@@ -7,7 +7,5 @@ TODO
 - Add some way to get to the configuration dialog if the tray icon is hidden.
 - Detect multiple instances.
 - Fix resizing windows beyond their limits.
-- Reintroduce classes in the state machine.
 - Fix some bugs mentioned in the tracker.
 - Synchronize header guards.
-- Test with MDI's... think I broke something there...
