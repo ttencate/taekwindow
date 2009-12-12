@@ -104,8 +104,6 @@ bool isModifierDown() {
  */
 void exitDeformState() {
 	DEBUGLOG("Ending drag action");
-	delete cursorWindow;
-	cursorWindow = NULL;
 	if (lastForegroundWindow && lastForegroundWindow != draggedWindow) {
 		// The active window was deactivated when we clicked the dragged window.
 		// Restore the previously active window to active.
@@ -135,11 +133,13 @@ void changeState(DragState newState) {
 	currentState = newState;
 }
 
-/* Stores the button for later use.
+/* Stores the button for later use, and creates the cursor window.
  */
 void enterMouseDownState(MouseButton button) {
 	DEBUGLOG("Handling button down event");
 	downButton = button;
+	// Create the cursor window.
+	cursorWindow = new CursorWindow();
 }
 
 /* Stores the initial state for later use.
@@ -152,8 +152,6 @@ void enterDeformState(MouseButton button, HWND parentWindow, POINT mousePos) {
 	draggedWindow = parentWindow;
 	prevInZOrder = GetNextWindow(parentWindow, GW_HWNDPREV);
 
-	// Create the cursor window.
-	cursorWindow = new CursorWindow();
 	// Store current mouse position.
 	lastMousePos = mousePos;
 	// Store the current window rectangle, specified in the client coordinates of the window's parent
@@ -182,6 +180,8 @@ void enterMoveState(MouseButton button, HWND parentWindow, POINT mousePos) {
  */
 void enterNormalState() {
 	changeState(dsNormal);
+	delete cursorWindow;
+	cursorWindow = NULL;
 }
 
 /* Sets up the cursor.
@@ -420,10 +420,24 @@ bool onMouseUp(MouseButton button, HWND, POINT) {
 	}
 }
 
+void clipCursor(POINT &pos) {
+	RECT clip;
+	GetClipCursor(&clip);
+	if (pos.x < clip.left)
+		pos.x = clip.left;
+	if (pos.x >= clip.right)
+		pos.x = clip.right;
+	if (pos.y < clip.top)
+		pos.y = clip.top;
+	if (pos.y >= clip.bottom)
+		pos.y = clip.bottom;
+}
+
 bool onMouseMove(POINT mousePos) {
+	// A low-level mouse proc gets the mouse coordinates even before they are
+	// clipped to the screen boundaries. So we need to do this ourselves.
+	clipCursor(mousePos);
 	switch (currentState) {
-		case dsNormal:
-			return false;
 		case dsMove:
 			return onMouseMoveMoveState(mousePos);
 		case dsMaximizedMove:
@@ -432,6 +446,7 @@ bool onMouseMove(POINT mousePos) {
 			return onMouseMoveResizeState(mousePos);
 		case dsIgnore:
 			return true;
+		default:
+			return false;
 	}
-	return true;
 }

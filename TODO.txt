@@ -7,5 +7,4 @@ TODO
 - Add some way to get to the configuration dialog if the tray icon is hidden.
 - Detect multiple instances.
 - Fix resizing windows beyond their limits.
-- Bump rigidly into screen edges.
 - Fix some bugs mentioned in the tracker.
