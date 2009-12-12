@@ -25,7 +25,7 @@ void WheelHandler::forwardMouseWheel(MouseWheelEvent const &event) {
 	
 	// Unfortunately, we do not receive the complete information that is normally in a
 	// WM_MOUSEWHEEL message. In particular, the key-down information is missing.
-	// (It might be in the "reserved" low word of mouseData, but we cannot be sure.)
+	// It might be in the "reserved" low word of mouseData, but we cannot be sure.
 	// Reconstruct it.
 	WPARAM wParam = GET_WHEEL_DELTA_WPARAM(event.mouseData) << 16;
 	if (GetAsyncKeyState(VK_CONTROL))  wParam |= MK_CONTROL;
