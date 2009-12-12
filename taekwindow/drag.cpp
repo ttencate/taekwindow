@@ -358,7 +358,7 @@ bool onMouseMoveResizeState(POINT mousePos) {
 	UINT flags = SWP_NOMOVE;
 	// Resize at the right corner/edge.
 	ScreenToClient(draggedWindow, &mousePos);
-	bool needCursorUpdate = true;
+	bool needCursorUpdate = false;
 	switch (resizingX) {
 		case -1:
 			lastRect.left += delta.x;
