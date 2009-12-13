@@ -510,7 +510,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\metadata-c.xslt"
+				RelativePath="..\xslt\version.xslt"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -521,67 +521,6 @@
 						OutputFile="$(ProjectDir)version.h"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="generateFromXML"
-						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(ProjectDir)version.h"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\package.xslt"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="generateFromXML"
-						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(OutDir)\package.bat"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="generateFromXML"
-						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(OutDir)\package.bat"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\readme.xslt"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="generateFromXML"
-						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(OutDir)\readme.html"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="generateFromXML"
-						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(OutDir)\readme.html"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\Source.txt"
-				>
-			</File>
-			<File
-				RelativePath="..\TODO.txt"
-				>
 			</File>
 		</Filter>
 	</Files>

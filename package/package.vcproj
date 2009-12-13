@@ -157,7 +157,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\xslt\package.xslt"
+			RelativePath=".\changelog-sf.xslt"
+			>
+		</File>
+		<File
+			RelativePath=".\package.xslt"
 			>
 		</File>
 	</Files>

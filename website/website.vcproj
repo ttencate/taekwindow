@@ -157,23 +157,105 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Name="static"
 			>
+			<File
+				RelativePath=".\static\config-buttons.png"
+				>
+			</File>
+			<File
+				RelativePath=".\static\config-general.png"
+				>
+			</File>
+			<File
+				RelativePath=".\static\config-resizing.png"
+				>
+			</File>
+			<File
+				RelativePath=".\static\config-scrolling.png"
+				>
+			</File>
+			<File
+				RelativePath=".\static\contact.shtml"
+				>
+			</File>
+			<File
+				RelativePath=".\static\faq.shtml"
+				>
+			</File>
+			<File
+				RelativePath=".\static\feed-icon-28x28.png"
+				>
+			</File>
+			<File
+				RelativePath=".\static\footer.part.shtml"
+				>
+			</File>
+			<File
+				RelativePath=".\static\geardownload-5stars.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\geardownload-clean.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\google2f02e625d25e0377.html"
+				>
+			</File>
+			<File
+				RelativePath=".\static\header.part.shtml"
+				>
+			</File>
+			<File
+				RelativePath=".\static\index.shtml"
+				>
+			</File>
+			<File
+				RelativePath=".\static\move-resize.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\move.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\screen.css"
+				>
+			</File>
+			<File
+				RelativePath=".\static\screenshots.shtml"
+				>
+			</File>
+			<File
+				RelativePath=".\static\sficon.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\softpedia-free-award.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\title.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\utils.js"
+				>
+			</File>
+			<File
+				RelativePath=".\static\valid-xhtml10.png"
+				>
+			</File>
 		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+		<File
+			RelativePath=".\documentation-page.xslt"
 			>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+		</File>
+		<File
+			RelativePath=".\download-page.xslt"
 			>
-		</Filter>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
