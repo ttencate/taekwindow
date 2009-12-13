@@ -92,15 +92,15 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\Releasing.txt"
+			RelativePath=".\releasing.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\Source.txt"
+			RelativePath=".\source.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\TODO.txt"
+			RelativePath=".\todo.txt"
 			>
 		</File>
 	</Files>
