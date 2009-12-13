@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link rel="alternate" type="application/rss+xml" title="Taekwindow News RSS" href="http://sourceforge.net/export/rss2_projnews.php?group_id=185457&amp;rss_fulltext=1"/>
+		<link rel="stylesheet" type="text/css" href="screen.css"/>
+		<script type="text/javascript" src="utils.js"></script>
+		<title>Taekwindow - <!--#echo var="title"--></title>
+	</head>
+	<body onload="replaceEmail()">
+		<div id="everything">
+			<div id="topbar">
+				<h1>Taekwindow</h1>
+				<a href="http://sourceforge.net" title="Hosted by SourceForge.net" class="rightmargin"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=185457&amp;type=3" width="125" height="37" alt="SourceForge.net logo"/></a>
+				<a href="http://sourceforge.net/donate/index.php?group_id=185457" title="Donate to this project" class="rightmargin"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" alt="Support this project"/></a>
+				<a href="http://validator.w3.org/check?uri=referer" title="Validate this page" class="rightmargin" style="margin-right:-5px"><img src="valid-xhtml10.png" alt="Valid XHTML 1.0 Strict" height="31" width="88"/></a>
+				<a href="http://sourceforge.net/export/rss2_projnews.php?group_id=185457&amp;rss_fulltext=1" title="Taekwindow News RSS" class="rightmargin"><img src="feed-icon-28x28.png" alt="Taekwindow News RSS" height="28" width="28"/></a>
+			</div>
+			<div id="navbar">
+				<ul class="navbar">
+					<li><a href="index.shtml">Home</a></li>
+					<li><a href="faq.shtml">FAQ</a></li>
+					<li><a href="screenshots.shtml">Screenshots</a></li>
+					<li><a href="documentation.shtml">Documentation</a></li>
+					<li><a href="download.shtml">Download</a></li>
+					<li><a href="contact.shtml">Contact</a></li>
+					<li><a href="http://sourceforge.net/projects/taekwindow/" class="sf">SF.net project page</a></li>
+				</ul>
+			</div>
+			<div id="content">

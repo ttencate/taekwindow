@@ -1,0 +1,34 @@
+<!--#set var="title" value="FAQ"-->
+<!--#set var="lastmod" value="$LAST_MODIFIED"-->
+<!--#include virtual="header.part.shtml"-->
+
+<h1>Frequently Asked Questions</h1>
+
+<h2 id="general">General</h2>
+
+<h3 id="name">Why the funny name?</h3>
+<p>Taekwindow is, as you probably guessed, a contraction of <em>taekwondo</em> (<a href="http://www.wtf.org/">WTF?</a>) and <em>window</em>. The <em>window</em> part should be clear (dirty windows are no good). <em>Taekwondo</em> is a Korean martial art which, quoting <a href="http://en.wikipedia.org/wiki/Taekwondo">Wikipedia</a>:</p>
+<blockquote><p>&quot;... emphasizes kicks thrown from a mobile stance, using the leg's greater reach and power to disable the opponent from a distance.&quot;</p></blockquote>
+<p>And with Taekwindow you can have the same power, doing things that were out of reach before.</p>
+
+<h3 id="logo">Why the logo?</h3>
+<p>The red and blue circle is called the <em>Taeguk</em>. It is the national symbol of Korea, best known from the Korean national flag. The blue part symbolizes the water around the land. Combined with the mouse cursor, whose origin is obvious, I think it makes a nice logo.</p>
+
+<h3 id="license">How is Taekwindow licensed?</h3>
+<p>Taekwindow uses the BSD license. Some sites, <a href="http://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/Taekwindow.shtml">like Softpedia</a>, have got it wrong, and list Taekwindow under the GPL license instead. How this happened I have no idea. I tried mailing to the Softpedia editors, but the e-mail address listed on their <a href="http://www.softpedia.com/user/send_update.shtml">update page</a> appears to be incorrect.</p>
+
+<h2 id="technical">Technical</h2>
+
+<h3 id="vista">Does it run on Windows Vista?</h3>
+<p>I don't use Vista myself, but as it appears from <a href="http://youtube.com/watch?v=MSdpTx0JDiA">this Japanese screencast</a>, it would appear so!</p>
+
+<h3 id="dotnet2">Why does the configuration tool refuse to start?</h3>
+<p>You need to have the .NET framework, version 2.0 or above, installed to run the configuration tool. It can be downloaded from Microsoft <a href="http://msdn2.microsoft.com/en-us/netframework/aa569263.aspx">here</a>.</p>
+<p>Another possibility is a missing DLL. Make sure that <tt>Interop.IWshRuntimeLibrary.dll</tt> is in the same directory as <tt>taekwindowconfig.exe</tt>.</p>
+
+<h3 id="dotnet">How do I fix the &ldquo;The application configuration is incorrect&rdquo; message?</h3>
+<p>When starting Taekwindow, you may get the following error message:</p>
+<blockquote><p>This application has failed to start because the application configuration is incorrect. Reinstalling the application may fix this problem.</p></blockquote>
+<p>This problem is fixed in version 0.2. It was caused by a dependency on the Microsoft C Runtime Library, which is now statically linked to the program. (Interested developers may have a look at <a href="http://typethinker.blogspot.com/2007/12/visual-c-application-configuration.html">this blog post</a> for the gory details.)</p>
+
+<!--#include virtual="footer.part.shtml"-->
