@@ -8,4 +8,3 @@ TODO
 - Search for TODO and do them.
 - Do a full code review.
 - Update the Readme.
-- Fix the list of packaged files.
