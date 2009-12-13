@@ -21,8 +21,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\build\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\out\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\build\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -108,8 +108,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\build\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\out\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\build\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			DeleteExtensionsOnClean="*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -120,10 +120,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Packaging ZIP files..."
-				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(OutDir)\package.bat&quot;&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 				AdditionalDependencies=""
-				Outputs="$(SolutionDir)package\taekwindow.zip"
+				Outputs=""
 			/>
 			<Tool
 				Name="generateFromXML"
@@ -209,7 +209,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
+			Name="sources"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
@@ -327,7 +327,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Header Files"
+			Name="headers"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
@@ -457,7 +457,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Resource Files"
+			Name="resources"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
@@ -503,22 +503,27 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Metadata"
+			Name="xslt"
 			>
 			<File
-				RelativePath="..\information.xml"
-				>
-			</File>
-			<File
-				RelativePath="..\xslt\version.xslt"
+				RelativePath=".\version.xslt"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="generateFromXML"
-						InputXML="$(SolutionDir)information.xml"
-						OutputFile="$(ProjectDir)version.h"
+						InputXML="$(SolutionDir)\information.xml"
+						OutputFile="$(ProjectDir)\version.hpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)\information.xml"
+						OutputFile="$(ProjectDir)\version.hpp"
 					/>
 				</FileConfiguration>
 			</File>

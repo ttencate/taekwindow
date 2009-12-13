@@ -12,7 +12,6 @@
 			AdditionalDependencies="[InputFile]"
 			FileExtensions="*.xslt"
 			ExecutionDescription="Generating [OutputFile] from $(InputFileName) and [InputXML]..."
-			SupportsFileBatching="true"
 			>
 			<Properties>
 				<StringProperty

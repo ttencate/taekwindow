@@ -2,8 +2,8 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:import href="metadata.xslt"/>
-	<xsl:import href="doc2html.xslt"/>
+	<xsl:import href="../metadata.xslt"/>
+	<xsl:import href="../doc2html.xslt"/>
 	<xsl:output omit-xml-declaration="yes"/>
 
 	<xsl:template match="information">

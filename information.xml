@@ -24,24 +24,26 @@
 
 	<sourcefiles>
 		<!-- Relative to $(SolutionDir) -->
-		<file>graphics\*.ico</file>
-		<file>graphics\*.ai</file>
-		<file>graphics\*.psd</file>
-		<file>graphics\*.png</file>
-		<file>shared\*.cpp</file>
-		<file>shared\*.hpp</file>
-		<file>taekwindow\*.cpp</file>
-		<file>taekwindow\*.h</file>
-		<file>taekwindow\*.hpp</file>
-		<file>taekwindow\*.rc</file>
-		<file>taekwindow\*.vcproj</file>
-		<file>tools\7za.exe</file>
-		<file>tools\msxsl.exe</file>
-		<file>taekwindow.sln</file>
-		<file>*.xml</file>
+    <file>bin\*.exe</file>
+    <file>doc\*.vcproj</file>
+    <file>doc\*.txt</file>
+    <file>doc\*.xslt</file>
+    <file>graphics\gui\*.png</file>
+		<file>graphics\icons\*.ico</file>
+		<file>graphics\intermediate\*.png</file>
+    <file>graphics\sources\*.svg</file>
+    <file>graphics\sources\*.psd</file>
+    <file>package\*.vcproj</file>
+		<file>package\*.xslt</file>
+    <file>src\*.vcproj</file>
+    <file>src\*.cpp</file>
+    <file>src\*.hpp</file>
+    <file>src\*.xslt</file>
+		<file>src\*.rc</file>
+		<file>*.sln</file>
+    <file>*.vcproj</file>
+    <file>*.xml</file>
 		<file>*.xslt</file>
-		<file>metadata.rules</file>
-		<file>source.txt</file>
 	</sourcefiles>
 
 	<description>

@@ -6,7 +6,7 @@
 #include "trayicon.hpp"
 #include "util.hpp"
 #include "config.hpp"
-#include "version.h"
+#include "version.hpp"
 #include "hooks.hpp"
 #include "debuglog.hpp"
 #include "cursors.hpp"

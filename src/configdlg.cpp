@@ -8,7 +8,7 @@
 #include "config.hpp"
 #include "configdlg.hpp"
 #include "resource.h"
-#include "version.h"
+#include "version.hpp"
 #include "picostdlib.h"
 
 /* It ain't pretty, but it doesn't seem to be in standard headers.

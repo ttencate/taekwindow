@@ -6,7 +6,7 @@
 #include "trayicon.hpp"
 #include "configdlg.hpp"
 #include "messages.hpp"
-#include "version.h"
+#include "version.hpp"
 #include "resource.h"
 #include "util.hpp"
 #include "main.hpp"
