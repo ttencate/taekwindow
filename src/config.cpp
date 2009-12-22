@@ -105,15 +105,14 @@ void Configuration::loadFromRegistry() {
 /* Saves the given configuration to the registry.
  */
 void Configuration::saveToRegistry() {
-	// Open the registry key.
 	HKEY key;
-	// We'll only change the version number of the key once the registry structure is no longer backwards compatible.
-	// That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
-	if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, KEY_SET_VALUE, &key) == ERROR_SUCCESS) {
-		applyFunctor<Write>(key);
-		// Close the key again.
-		RegCloseKey(key);
+	LONG error = RegCreateKeyEx(HKEY_CURRENT_USER, REG_KEY, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &key, NULL);
+	if (error != ERROR_SUCCESS) {
+		showSystemError(NULL, error, _T("Failed to save settings to registry"));
+		return;
 	}
+	applyFunctor<Write>(key);
+	RegCloseKey(key);
 }
 
 /* Checks the existence of a Startup shortcut and places it in execonfig.

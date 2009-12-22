@@ -6,8 +6,8 @@
 #include "pushhandler.hpp"
 #include "draghandler.hpp"
 #include "handlerlist.hpp"
-#include "trayiconcontroller.hpp"
-#include "configdlg.hpp"
+#include "trayiconmanager.hpp"
+#include "configsheetmanager.hpp"
 
 /* We need this because we're not using the CRT,
  * so constructors and destructors of globally declared objects are never called.
@@ -28,8 +28,8 @@ class Globals {
 	MouseHandlerList d_mouseHandlerList;
 	HHOOK d_llMouseHook;
 	HHOOK d_llKeyboardHook;
-	TrayIconController d_trayIcon;
-	ConfigDlg d_configDlg;
+	TrayIconManager d_trayIcon;
+	ConfigSheetManager d_configDlg;
 
 	public:
 
@@ -40,8 +40,8 @@ class Globals {
 		HHOOK &llMouseHook() { return d_llMouseHook; }
 		HHOOK &llKeyboardHook() { return d_llKeyboardHook; }
 		MouseHandlerList &mouseHandlerList() { return d_mouseHandlerList; }
-		TrayIconController &trayIcon() { return d_trayIcon; }
-		ConfigDlg &configDlg() { return d_configDlg; }
+		TrayIconManager &trayIcon() { return d_trayIcon; }
+		ConfigSheetManager &configDlg() { return d_configDlg; }
 
 	private:
 

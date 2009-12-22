@@ -1,16 +1,16 @@
-#ifndef TRAYICONCONTROLLER_HPP
-#define TRAYICONCONTROLLER_HPP
+#ifndef TRAYICONMANAGER_HPP
+#define TRAYICONMANAGER_HPP
 
 #include "trayicon.hpp"
 
-class TrayIconController {
+class TrayIconManager {
 
 	TrayIcon *d_trayIcon;
 
 	public:
 
-		TrayIconController();
-		~TrayIconController();
+		TrayIconManager();
+		~TrayIconManager();
 
 		/* Updates the tray icon with the current status.
 		 */

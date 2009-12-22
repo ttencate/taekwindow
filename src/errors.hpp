@@ -16,6 +16,10 @@ void showError(HWND parent, LPCTSTR title, LPCTSTR text, ...);
  */
 void showLastError(HWND parent, LPCTSTR title);
 
+/* Shows a message box with the message corresponding to some system error value.
+ */
+void showSystemError(HWND parent, DWORD error, LPCTSTR title);
+
 /* Only calls showLastError in debug mode.
  * Useful for checking cases that are very unlikely to go wrong once they go right,
  * but that we want to check during debugging anyway.

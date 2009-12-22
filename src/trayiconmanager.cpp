@@ -1,18 +1,18 @@
-#include "trayiconcontroller.hpp"
+#include "trayiconmanager.hpp"
 #include "globals.hpp"
 
-TrayIconController::TrayIconController()
+TrayIconManager::TrayIconManager()
 :
 	d_trayIcon(NULL)
 {
 }
 
-TrayIconController::~TrayIconController() {
+TrayIconManager::~TrayIconManager() {
 	if (d_trayIcon)
 		delete d_trayIcon;
 }
 
-void TrayIconController::update() {
+void TrayIconManager::update() {
 	if (globals->config().systemTrayIcon && !d_trayIcon) {
 		d_trayIcon = new TrayIcon();
 	} else if (!globals->config().systemTrayIcon && d_trayIcon) {

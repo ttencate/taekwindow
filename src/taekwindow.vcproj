@@ -452,11 +452,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\configdlg.cpp"
+				RelativePath=".\configsheet.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\configdlg.hpp"
+				RelativePath=".\configsheet.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\configsheetmanager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\configsheetmanager.hpp"
 				>
 			</File>
 			<File
@@ -508,11 +516,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\trayiconcontroller.cpp"
+				RelativePath=".\trayiconmanager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\trayiconcontroller.hpp"
+				RelativePath=".\trayiconmanager.hpp"
 				>
 			</File>
 		</Filter>

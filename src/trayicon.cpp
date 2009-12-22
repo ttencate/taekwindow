@@ -4,7 +4,6 @@
 #include <strsafe.h>
 
 #include "trayicon.hpp"
-#include "configdlg.hpp"
 #include "messages.hpp"
 #include "version.hpp"
 #include "resource.h"

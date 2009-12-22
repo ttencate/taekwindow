@@ -1,5 +1,5 @@
-#ifndef CONFIGDLG_HPP
-#define CONFIGDLG_HPP
+#ifndef CONFIGSHEET_HPP
+#define CONFIGSHEET_HPP
 
 #include <windows.h>
 
@@ -19,6 +19,15 @@ class ConfigSheet : private PropSheet {
 	static int const s_resourceIds[];
 	static int const s_controlIds[];
 
+	/* The configuration that is currently entered in the dialog.
+	 */
+	Configuration d_newConfig;
+
+	CommonControls d_comCtls;
+	GdiPlusWrap d_gdiPlus;
+
+	ImageList d_imageList;
+
 	/* Handle of the configuration dialog's window.
 	 */
 	HWND d_handle;
@@ -28,19 +37,9 @@ class ConfigSheet : private PropSheet {
 	 */
 	WNDPROC d_origWindowProc;
 
-	/* The configuration that is currently entered in the dialog.
-	 * Only valid when the dialog is visible.
-	 */
-	Configuration d_newConfig;
-
-	CommonControls d_comCtls;
-	GdiPlusWrap d_gdiPlus;
-
-	ImageList d_imageList;
-
 	public:
 
-		ConfigSheet();
+		ConfigSheet(Configuration const &config);
 		~ConfigSheet();
 
 		/* Shows the configuration dialog, or, if it's already showing, brings it to the front.
@@ -73,11 +72,6 @@ class ConfigSheet : private PropSheet {
 
 		LRESULT configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam);
 		virtual void callback(HWND hwnd, UINT msg, LPARAM lParam);
-
-		/* Unconditionally shows the dialog.
-		 * Must not be called if it is already showing.
-		 */
-		void doShow();
 		
 		/* Returns true if the configuration dialog is currently visible.
 		 */
@@ -87,19 +81,6 @@ class ConfigSheet : private PropSheet {
 		 * if it is currently showing.
 		 */
 		void bringToFront();
-
-};
-
-class ConfigDlg {
-
-	ConfigSheet *d_sheet;
-
-	public:
-
-		ConfigDlg();
-		~ConfigDlg();
-
-		void show();
 
 };
 

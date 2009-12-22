@@ -1,6 +1,6 @@
 #include <tchar.h>
 
-#include "configdlg.hpp"
+#include "configsheet.hpp"
 #include "main.hpp"
 #include "debug.hpp"
 #include "errors.hpp"
@@ -24,13 +24,14 @@ int const ConfigSheet::s_controlIds[ConfigSheet::s_numImages] = { IDC_STARTUPIMA
 
 ConfigSheet *ConfigSheet::s_instance = NULL;
 
-ConfigSheet::ConfigSheet()
+ConfigSheet::ConfigSheet(Configuration const &config)
 :
 	PropSheet(_T(APPLICATION_TITLE) _T(" Preferences"), LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_APP))),
-	d_handle(NULL),
+	d_newConfig(config),
 	d_origWindowProc(NULL),
 	d_gdiPlus(),
-	d_imageList(d_gdiPlus, s_numImages)
+	d_imageList(d_gdiPlus, s_numImages),
+	d_handle(NULL)
 {
 	ASSERT(!s_instance);
 	s_instance = this;
@@ -52,7 +53,7 @@ void ConfigSheet::show() {
 	if (isShowing()) {
 		bringToFront();
 	} else {
-		doShow();
+		showModal();
 	}
 }
 
@@ -228,8 +229,7 @@ BOOL ConfigSheet::resizingPageDialogProc(HWND pageHandle, UINT message, WPARAM w
 	switch (message) {
 		case WM_INITDIALOG:
 			CheckRadioButton(pageHandle, IDC_BOTTOMRIGHT, IDC_NINERECTANGLES,
-				d_newConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT :
-				IDC_NINERECTANGLES);
+				d_newConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT : IDC_NINERECTANGLES);
 			break;
 		case WM_COMMAND:
 			PropSheet_Changed(d_handle, pageHandle);
@@ -237,9 +237,7 @@ BOOL ConfigSheet::resizingPageDialogProc(HWND pageHandle, UINT message, WPARAM w
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					d_newConfig.resizeMode =
-						IsDlgButtonChecked(pageHandle, IDC_BOTTOMRIGHT) ? rmBottomRight :
-						rmNineRectangles;
+					d_newConfig.resizeMode = IsDlgButtonChecked(pageHandle, IDC_BOTTOMRIGHT) ? rmBottomRight : rmNineRectangles;
 					return TRUE;
 			}
 			break;
@@ -320,44 +318,8 @@ void ConfigSheet::callback(HWND pageHandle, UINT message, LPARAM) {
 	}
 }
 
-void ConfigSheet::doShow() {
-	// Load the most current settings from the environment, in case they've changed since startup
-	// by some external factor.
-	d_newConfig.load();
-
-	// Show the dialog (modally).
-	int result = showModal();
-
-	if (result >= 1) {
-		// Changes were saved. They have already been applied;
-		// now save them to the environment (registry, file system) as well.
-		d_newConfig.save();
-	}
-}
-
 void ConfigSheet::bringToFront() {
 	if (isShowing()) {
 		BringWindowToTop(d_handle);
-	}
-}
-
-ConfigDlg::ConfigDlg()
-:
-	d_sheet(NULL)
-{
-}
-
-ConfigDlg::~ConfigDlg() {
-	delete d_sheet;
-}
-
-void ConfigDlg::show() {
-	if (d_sheet) {
-		d_sheet->show();
-	} else {
-		d_sheet = new ConfigSheet();
-		d_sheet->show();
-		delete d_sheet;
-		d_sheet = NULL;
 	}
 }

@@ -11,8 +11,12 @@ void showError(HWND parent, LPCTSTR title, LPCTSTR text, ...) {
 }
 
 void showLastError(HWND parent, LPCTSTR title) {
+	showSystemError(parent, GetLastError(), title);
+}
+
+void showSystemError(HWND parent, DWORD error, LPCTSTR title) {
 	PVOID msg;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPTSTR)&msg, 0, NULL);
+	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, error, 0, (LPTSTR)&msg, 0, NULL);
 	MessageBox(parent, (LPCTSTR)msg, title, MB_OK | MB_ICONERROR);
 	LocalFree(msg);
 }
