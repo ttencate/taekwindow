@@ -1,7 +1,7 @@
 TODO
 ----
 
-- Try sending another Alt message to counteract the first!
+- Try sending another Alt message to counteract the first. Use SendInput.
 - Fix some bugs mentioned in the tracker.
 - Search for TODO and do them.
 - Do a full code review.

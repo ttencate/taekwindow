@@ -4,9 +4,6 @@
 #include "debug.hpp"
 #include "globals.hpp"
 
-// TODO remove
-#define RECT_ARGS(r) r.left, r.right, r.top, r.bottom
-
 ResizeState::ResizeState(POINT mousePos, MouseButton button, HWND window)
 :
 	DeformState(mousePos, button, window)
@@ -124,18 +121,13 @@ void ResizeState::restore() {
 	windowPlacement.rcNormalPosition.top = 0;
 	windowPlacement.rcNormalPosition.right = monInfo.rcWork.right - monInfo.rcWork.left;
 	windowPlacement.rcNormalPosition.bottom = monInfo.rcWork.bottom - monInfo.rcWork.top;
-	DEBUGLOG("Restoring 0x%08x to %d-%d, %d-%d", window(), RECT_ARGS(windowPlacement.rcNormalPosition));
 
 	// Use SetWindowPlacement for demaximizing to prevent animation.
 	if (!SetWindowPlacement(window(), &windowPlacement))
 		debugShowLastError("SetWindowPlacement");
-
-	DEBUGLOG("Restored 0x%08x to %d-%d, %d-%d", window(), RECT_ARGS(windowPlacement.rcNormalPosition));
 }
 
 void ResizeState::resizeWindow(RECT const &rect) {
-	DEBUGLOG("Resizing to %d-%d, %d-%d", RECT_ARGS(rect));
-
 	// SetWindowPos takes client coordinates
 	POINT pos = { rect.left, rect.top };
 	if (d_parent) {

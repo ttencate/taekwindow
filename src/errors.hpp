@@ -30,4 +30,8 @@ void showSystemError(HWND parent, DWORD error, LPCTSTR title);
 #	define debugShowLastError(title)
 #endif
 
+/* Abort the program in case of a fatal error.
+ */
+void abort();
+
 #endif

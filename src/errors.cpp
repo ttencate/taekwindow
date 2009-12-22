@@ -20,3 +20,7 @@ void showSystemError(HWND parent, DWORD error, LPCTSTR title) {
 	MessageBox(parent, (LPCTSTR)msg, title, MB_OK | MB_ICONERROR);
 	LocalFree(msg);
 }
+
+void abort() {
+	ExitProcess(1);
+}

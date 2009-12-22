@@ -26,6 +26,10 @@ class MouseDownState : public DragState {
 	protected:
 
 		CursorWindow &cursorWindow() const { return *d_cursorWindow; }
+
+	private:
+
+		void sendAltPress();
 };
 
 #endif
