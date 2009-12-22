@@ -2,11 +2,10 @@ TODO
 ----
 
 - Fix resizing windows beyond their limits.
-- Detect multiple instances.
-- Add some way to get to the configuration dialog if the tray icon is hidden.
+- Add "Exit" button to preferences dialog.
 - Fix some bugs mentioned in the tracker.
-- Try merging linker sections for smaller executable.
 - Search for TODO and do them.
 - Do a full code review.
 - Update the Readme.
+- Try merging linker sections for smaller executable.
 - Try to make it even smaller!

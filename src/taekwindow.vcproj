@@ -532,6 +532,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sharedmemory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sharedmemory.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\shelllink.cpp"
 				>
 			</File>

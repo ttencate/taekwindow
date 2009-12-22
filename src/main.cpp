@@ -6,10 +6,14 @@
 #include "hooks.hpp"
 #include "cursors.hpp"
 #include "globals.hpp"
+#include "messages.hpp"
 #include "memory.hpp"
+#include "sharedmemory.hpp"
 #include "errors.hpp"
 #include "debug.hpp"
 #include "version.hpp"
+
+TCHAR const *SHARED_MEM_NAME = _T("Taekwindow_{5C9807CA-E53F-4d1b-8AF7-FCA0FF68EDA0}");
 
 bool enable() {
 	if (isEnabled())
@@ -52,6 +56,11 @@ int messageLoop() {
 	MSG msg;
 	do {
 		getMsgRetVal = GetMessage(&msg, NULL, 0, 0);
+		switch (msg.message) {
+			case SHOW_CONFIG_MESSAGE:
+				globals->configDlg().show();
+				continue;
+		}
 		if (getMsgRetVal == -1) {
 			// error in GetMessage... low-level, panic and abort
 			break;
@@ -73,6 +82,21 @@ int messageLoop() {
  * Called from entryPoint().
  */
 int main() {
+	// A piece of shared memory that acts as a mutex, so that we have only one running instance.
+	// The shared memory contains the thread id of the thread that created it.
+	// Note that the shared memory exists for the lifetime of this object, so it must be in main()'s scope.
+	SharedMemory shmem(SHARED_MEM_NAME, sizeof(DWORD));
+	if (shmem.owned()) {
+		DWORD id = GetCurrentThreadId();
+		DEBUGLOG("Shared memory is ours; %d is the first instance");
+		*(DWORD*)(shmem.mem()) = id;
+	} else {
+		DWORD id = *(DWORD*)shmem.mem();
+		DEBUGLOG("Running instance %d found, posting message and quitting", id);
+		PostThreadMessage(id, SHOW_CONFIG_MESSAGE, 0, 0);
+		return 0;
+	}
+
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 
 	// Load the configuration from the registry.
