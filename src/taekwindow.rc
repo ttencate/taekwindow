@@ -142,14 +142,15 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "General"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    GROUPBOX        "Startup",IDC_STARTUPGROUP,6,6,216,96
+    GROUPBOX        "Startup and exit",IDC_STARTUPGROUP,6,6,216,108
     CONTROL         "Start when &logging on\r\n\r\nThis option creates or removes a shortcut to Taekwindow in the Startup folder in the Start Menu for your user account.",IDC_STARTATLOGON,
                     "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,18,204,36
-    CONTROL         "",IDC_STARTUPIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,24,60,192,30
-    GROUPBOX        "Notification area",IDC_SYSTRAYGROUP,6,108,216,84
+    CONTROL         "",IDC_STARTUPIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,24,54,192,30
+    GROUPBOX        "Notification area",IDC_SYSTRAYGROUP,6,120,216,72
     CONTROL         "Show icon in &notification area (system tray)\r\n\r\nClick the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_SYSTRAYICON,
-                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,120,108,48
+                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,132,108,48
     CONTROL         "",IDC_SYSTRAYIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,126,132,90,54
+    PUSHBUTTON      "&Exit Taekwindow",IDC_EXITBUTTON,12,96,68,14
 END
 
 IDD_BUTTONSPAGE DIALOGEX 0, 0, 229, 199

@@ -158,7 +158,14 @@ BOOL ConfigSheet::generalPageDialogProc(HWND pageHandle, UINT message, WPARAM wP
 			CheckDlgButton(pageHandle, IDC_STARTATLOGON, d_newConfig.startAtLogon);
 			break;
 		case WM_COMMAND:
-			PropSheet_Changed(d_handle, pageHandle);
+			switch (LOWORD(wParam)) {
+				case IDC_EXITBUTTON:
+					PostQuitMessage(0);
+					break;
+				default:
+					PropSheet_Changed(d_handle, pageHandle);
+					break;
+			}
 			return TRUE;
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {

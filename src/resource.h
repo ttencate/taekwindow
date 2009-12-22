@@ -50,6 +50,8 @@
 #define IDC_SCROLLINGGROUP              1026
 #define IDC_SCROLLFOCUSED               1027
 #define IDC_SCROLLUNDERCURSOR           1028
+#define IDC_BUTTON1                     1029
+#define IDC_EXITBUTTON                  1029
 
 // Next default values for new objects
 // 
@@ -57,7 +59,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        110
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1029
+#define _APS_NEXT_CONTROL_VALUE         1030
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -2,7 +2,6 @@ TODO
 ----
 
 - Fix resizing windows beyond their limits.
-- Add "Exit" button to preferences dialog.
 - Fix some bugs mentioned in the tracker.
 - Search for TODO and do them.
 - Do a full code review.
