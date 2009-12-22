@@ -2,6 +2,7 @@
 
 #include "image.hpp"
 #include "errors.hpp"
+#include "picostdlib.h"
 
 Image::Image(int resourceId, int controlId)
 :
