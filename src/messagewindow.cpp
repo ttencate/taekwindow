@@ -6,18 +6,18 @@
 
 TCHAR const *MessageWindowClass::s_name = _T("MessageWindowClass");
 
-size_t MessageWindowClass::d_instances = 0;
-ATOM MessageWindowClass::d_atom = NULL;
+size_t MessageWindowClass::s_instances = 0;
+ATOM MessageWindowClass::s_atom = NULL;
 
 MessageWindowClass::MessageWindowClass() {
-	if (d_instances == 0)
+	if (s_instances == 0)
 		create();
-	++d_instances;
+	++s_instances;
 }
 
 MessageWindowClass::~MessageWindowClass() {
-	--d_instances;
-	if (d_instances == 0)
+	--s_instances;
+	if (s_instances == 0)
 		destroy();
 }
 
@@ -36,15 +36,15 @@ void MessageWindowClass::create() {
 	wndClass.lpszClassName = s_name;
 	wndClass.hIconSm = NULL;
 
-	d_atom = RegisterClassEx(&wndClass);
-	if (!d_atom) {
+	s_atom = RegisterClassEx(&wndClass);
+	if (!s_atom) {
 		showLastError(NULL, _T("Error registering window class"));
 		return;
 	}
 }
 
 void MessageWindowClass::destroy() {
-	UnregisterClass(MAKEINTATOM(d_atom), GetModuleHandle(NULL));
+	UnregisterClass(MAKEINTATOM(s_atom), GetModuleHandle(NULL));
 }
 
 LRESULT CALLBACK MessageWindowClass::windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
