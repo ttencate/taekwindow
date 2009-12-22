@@ -2,7 +2,7 @@
 #include <tchar.h>
 
 #include "wininfo.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 #include "hacks.hpp"
 
 HWND findFirstParent(HWND window, bool (*criterium)(HWND)) {

@@ -2,7 +2,7 @@
 #include <tchar.h>
 
 #include "image.hpp"
-#include "util.hpp"
+#include "errors.hpp"
 
 Image::Image(int resourceId, int controlId)
 :

@@ -3,7 +3,7 @@
 #include <tchar.h>
 
 #include "cursors.hpp"
-#include "util.hpp"
+#include "errors.hpp"
 
 Cursors cursors;
 

@@ -1,5 +1,5 @@
 #include "propsheet.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 PropSheet *PropSheet::s_instance = NULL;
 

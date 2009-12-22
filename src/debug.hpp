@@ -11,8 +11,6 @@ void closeDebugLog();
 void debugLog(LPCTSTR format, ...);
 void assert(bool x, TCHAR const *file, size_t line);
 
-// Note that '...' in a macro must always represent at least one argument;
-// we therefore leave the 'format' argument of debugLog off.
 #define OPENDEBUGLOG() openDebugLog()
 #define CLOSEDEBUGLOG() closeDebugLog()
 #define DEBUGLOG(format, ...) debugLog(_T(format), __VA_ARGS__)

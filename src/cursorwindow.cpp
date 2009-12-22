@@ -3,7 +3,7 @@
 #include "cursorwindow.hpp"
 #include "main.hpp"
 #include "globals.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 CursorWindow::CursorWindow()
 :

@@ -1,7 +1,7 @@
 #include "wheelhandler.hpp"
 #include "globals.hpp"
 #include "hacks.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 #include "main.hpp"
 
 bool WheelHandler::onMouseWheel(MouseWheelEvent const &event) {

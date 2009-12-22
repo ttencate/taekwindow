@@ -415,19 +415,19 @@
 			Name="errors"
 			>
 			<File
-				RelativePath=".\debuglog.cpp"
+				RelativePath=".\debug.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\debuglog.hpp"
+				RelativePath=".\debug.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\util.cpp"
+				RelativePath=".\errors.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\util.hpp"
+				RelativePath=".\errors.hpp"
 				>
 			</File>
 		</Filter>

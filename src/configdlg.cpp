@@ -4,7 +4,7 @@
 
 #include "globals.hpp"
 #include "main.hpp"
-#include "util.hpp"
+#include "errors.hpp"
 #include "config.hpp"
 #include "configdlg.hpp"
 #include "resource.h"

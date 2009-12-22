@@ -1,5 +1,5 @@
 #include "movemax.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 MoveMaxState::MoveMaxState(POINT mousePos, MouseButton button, HWND window)
 :

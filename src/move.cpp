@@ -1,5 +1,5 @@
 #include "move.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 MoveState::MoveState(POINT mousePos, MouseButton button, HWND window)
 :

@@ -1,8 +1,8 @@
 #include <windows.h>
 #include <tchar.h>
 
-#include "util.hpp"
-#include "debuglog.hpp"
+#include "errors.hpp"
+#include "debug.hpp"
 
 void *operator new(size_t size) {
 	void *mem = HeapAlloc(GetProcessHeap(), 0, size);

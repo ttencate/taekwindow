@@ -8,7 +8,7 @@
 #include "messages.hpp"
 #include "version.hpp"
 #include "resource.h"
-#include "util.hpp"
+#include "errors.hpp"
 #include "main.hpp"
 #include "globals.hpp"
 

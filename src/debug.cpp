@@ -6,12 +6,11 @@
 #include <tchar.h>
 #include <strsafe.h>
 
-#include "debuglog.hpp"
-#include "util.hpp"
+#include "debug.hpp"
+#include "errors.hpp"
 
 static HANDLE debugLogFile = INVALID_HANDLE_VALUE;
 
-// TODO merge with util.[ch]pp into errors.[ch]pp
 // TODO settle on printf syntax or FormatMessage syntax, not both
 
 #define LOG_DIR _T("logs")

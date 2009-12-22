@@ -2,7 +2,7 @@
 #include "globals.hpp"
 #include "dragmachine.hpp"
 #include "main.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 #include "wininfo.hpp"
 #include "move.hpp"
 #include "movemax.hpp"

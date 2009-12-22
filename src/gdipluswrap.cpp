@@ -2,7 +2,7 @@
 #include <tchar.h>
 
 #include "gdipluswrap.hpp"
-#include "util.hpp"
+#include "errors.hpp"
 
 GdiPlusWrap::GdiPlusWrap()
 :

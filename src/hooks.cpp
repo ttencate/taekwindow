@@ -3,8 +3,8 @@
 
 #include "hooks.hpp"
 #include "globals.hpp"
-#include "util.hpp"
-#include "debuglog.hpp"
+#include "errors.hpp"
+#include "debug.hpp"
 #include "events.hpp"
 #include "handlerlist.hpp"
 
@@ -53,8 +53,6 @@ void clipCursor(POINT &pos) {
 	if (pos.y >= clip.bottom)
 		pos.y = clip.bottom;
 }
-
-
 
 /* The function for handling mouse events.
  */

@@ -1,7 +1,6 @@
 TODO
 ----
 
-- Make hooks into a class.
 - Trace memory leaks http://www.ddj.com/showArticle.jhtml?documentID=win0302c&pgno=13
 - Clean up needless includes.
 - Fix resizing windows beyond their limits.
@@ -13,3 +12,4 @@ TODO
 - Search for TODO and do them.
 - Do a full code review.
 - Update the Readme.
+- Try to make it even smaller!

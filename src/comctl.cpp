@@ -3,7 +3,7 @@
 #include <commctrl.h>
 
 #include "comctl.hpp"
-#include "util.hpp"
+#include "errors.hpp"
 
 CommonControls::CommonControls() {
 	// Huhhuh, init common control sex. Allcaps break my head.

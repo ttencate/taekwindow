@@ -2,7 +2,7 @@
 #include "wininfo.hpp"
 #include "main.hpp"
 #include "globals.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 bool PushHandler::onMouseDown(MouseDownEvent const &event) {
 	if (event.button == globals->config().pushBackButton) {

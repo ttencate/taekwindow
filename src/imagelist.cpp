@@ -1,5 +1,5 @@
 #include "imagelist.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 ImageList::ImageList(GdiPlusWrap &, size_t size)
 :

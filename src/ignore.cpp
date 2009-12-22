@@ -1,5 +1,5 @@
 #include "ignore.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 IgnoreState::IgnoreState(MouseButton button)
 :

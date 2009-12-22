@@ -1,7 +1,7 @@
 #include "mousedown.hpp"
 #include "dragmachine.hpp"
 #include "normal.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 /* Stores the button for later use, and creates the cursor window.
  */

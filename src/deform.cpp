@@ -1,5 +1,5 @@
 #include "deform.hpp"
-#include "debuglog.hpp"
+#include "debug.hpp"
 
 DeformState::DeformState(POINT mousePos, MouseButton button, HWND window)
 :
