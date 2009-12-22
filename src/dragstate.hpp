@@ -19,6 +19,7 @@ class DragState {
 	public:
 
 		DragState();
+		virtual ~DragState();
 
 		virtual void enter();
 		virtual void exit();
@@ -29,7 +30,7 @@ class DragState {
 
 	protected:
 
-		void setNextState(DragState *state) { d_machine->setNextState(state); }
+		void setNextState(DragState *state) { ASSERT(d_machine); d_machine->setNextState(state); }
 
 	private:
 
@@ -37,7 +38,7 @@ class DragState {
 		 * and a State requires a StateMachine.
 		 * This is called from StateMachine; do not call it from anywhere else.
 		 */
-		void setMachine(StateMachine<DragState> *machine) { d_machine = machine; }
+		void setMachine(StateMachine<DragState> *machine) { ASSERT(!d_machine); d_machine = machine; }
 };
 
 

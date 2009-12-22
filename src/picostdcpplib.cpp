@@ -2,6 +2,7 @@
 #include <tchar.h>
 
 #include "util.hpp"
+#include "debuglog.hpp"
 
 void *operator new(size_t size) {
 	void *mem = HeapAlloc(GetProcessHeap(), 0, size);
@@ -13,5 +14,6 @@ void *operator new(size_t size) {
 }
 
 void operator delete(void *mem) {
-	HeapFree(GetProcessHeap(), 0, mem);
+	if (!HeapFree(GetProcessHeap(), 0, mem))
+		DEBUGLOG("ERROR: Failed to free heap memory!");
 }

@@ -11,8 +11,13 @@ MoveState::MoveState(POINT mousePos, MouseButton button, HWND window)
  */
 void MoveState::enter() {
 	DeformState::enter();
-
 	DEBUGLOG("Starting move action");
+
+	RECT rect;
+	GetWindowRect(window(), &rect);
+	d_windowPos.x = rect.left;
+	d_windowPos.y = rect.top;
+
 	cursorWindow().setCursor(crMove);
 }
 
@@ -23,12 +28,13 @@ bool MoveState::onMouseMove(MouseMoveEvent const &event) {
 	DEBUGLOG("Handling move action");
 
 	POINT delta = mouseDelta();
-	RECT rect = lastRect();
-	rect.left += delta.x;
-	rect.top += delta.y;
-	rect.right += delta.x;
-	rect.bottom += delta.y;
-	updateWindowPos(rect, SWP_NOSIZE);
+	d_windowPos.x += delta.x;
+	d_windowPos.y += delta.y;
+	moveWindow();
 
 	return true;
+}
+
+void MoveState::moveWindow() {
+	SetWindowPos(window(), 0, d_windowPos.x, d_windowPos.y, 0, 0, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
 }

@@ -52,4 +52,8 @@ bool isMaximizedResizableWindow(HWND window);
  */
 void activateWithoutRaise(HWND window);
 
+/* Like ScreenToClient, but for rectangles instead of points.
+ */
+bool screenToClient(HWND window, RECT &rect);
+
 #endif

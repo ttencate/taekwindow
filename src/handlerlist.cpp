@@ -5,8 +5,6 @@
 #include "wheelhandler.hpp"
 #include "pushhandler.hpp"
 
-MouseHandlerList *mouseHandlerList = NULL;
-
 MouseHandlerList::MouseHandlerList()
 :
 	d_count(0)
@@ -20,8 +18,7 @@ MouseHandlerList::~MouseHandlerList() {
 }
 
 void MouseHandlerList::add(MouseHookHandler *handler) {
-	if (d_count >= d_capacity)
-		return;
+	ASSERT(d_count < d_capacity);
 	d_handlers[d_count] = handler;
 	++d_count;
 }
@@ -57,16 +54,3 @@ bool MouseHandlerList::onMouseWheel(MouseWheelEvent const &event) {
 	}
 	return false;
 }
-
-void createHookHandlers() {
-	mouseHandlerList = new MouseHandlerList();
-	mouseHandlerList->add(new WheelHandler());
-	mouseHandlerList->add(new PushHandler());
-	mouseHandlerList->add(new DragHandler());
-}
-
-void destroyHookHandlers() {
-	delete mouseHandlerList;
-	mouseHandlerList = NULL;
-}
-

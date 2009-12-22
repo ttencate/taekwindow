@@ -22,9 +22,4 @@ class MouseHandlerList {
 
 };
 
-extern MouseHandlerList *mouseHandlerList;
-
-void createHookHandlers();
-void destroyHookHandlers();
-
 #endif

@@ -1,4 +1,5 @@
 #include "normal.hpp"
+#include "globals.hpp"
 #include "dragmachine.hpp"
 #include "main.hpp"
 #include "debuglog.hpp"
@@ -13,13 +14,13 @@ bool NormalState::onMouseDown(MouseDownEvent const &event) {
 		// This is not interesting. Discard ASAP.
 		return false;
 	}
-	if (event.button != activeConfig.moveButton && event.button != activeConfig.resizeButton) {
+	if (event.button != globals->config().moveButton && event.button != globals->config().resizeButton) {
 		// Wrong button. Discard.
 		return false;
 	}
 	// Yippee! A Modifier-drag event just started that we want to process (or ignore).
 	DEBUGLOG("Handling a modifier-mousedown event");
-	if (event.button == activeConfig.moveButton) {
+	if (event.button == globals->config().moveButton) {
 		// We prefer windows that are not maximized over those that are, which makes sense in an MDI environment.
 		// This would be what the user expected.
 		HWND parentWindow = findFirstParent(event.window, isRestoredMovableWindow);
@@ -36,7 +37,7 @@ bool NormalState::onMouseDown(MouseDownEvent const &event) {
 				return true;
 			}
 		}
-	} else if (event.button == activeConfig.resizeButton) {
+	} else if (event.button == globals->config().resizeButton) {
 		// Try to find a parent window that we can resize without unmaximizing.
 		// This one is probably the one that the user meant.
 		HWND parentWindow = findFirstParent(event.window, isRestoredResizableWindow);
@@ -63,5 +64,5 @@ bool NormalState::onMouseDown(MouseDownEvent const &event) {
 }
 
 bool NormalState::isModifierDown() const {
-	return (GetAsyncKeyState(activeConfig.modifier) & 0x8000) != 0;
+	return (GetAsyncKeyState(globals->config().modifier) & 0x8000) != 0;
 }

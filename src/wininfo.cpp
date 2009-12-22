@@ -135,3 +135,15 @@ void activateWithoutRaise(HWND window)
 	// This has pulled it to the front; so change its position in the Z order back.
 	SetWindowPos(window, insertAfter, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
+
+bool screenToClient(HWND window, RECT &rect) {
+	POINT topLeft = { rect.left, rect.top };
+	POINT bottomRight = { rect.right, rect.bottom };
+	int r1 = ScreenToClient(window, &topLeft);
+	int r2 = ScreenToClient(window, &bottomRight);
+	rect.left = topLeft.x;
+	rect.top = topLeft.y;
+	rect.right = bottomRight.x;
+	rect.bottom = bottomRight.y;
+	return r1 && r2;
+}

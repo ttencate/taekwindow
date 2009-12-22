@@ -18,9 +18,7 @@ void DeformState::enter() {
 	MouseDownState::enter();
 	DEBUGLOG("Entering DeformState");
 
-	// Store window handle and Z order position of the victim.
-	d_prevInZOrder = GetNextWindow(d_window, GW_HWNDPREV);
-
+	/* TODO remove this code
 	// Store the current window rectangle, specified in the client coordinates of the window's parent
 	// (or, if no parent, in screen coordinates).
 	GetWindowRect(d_window, &d_lastRect);
@@ -35,13 +33,13 @@ void DeformState::enter() {
 		d_lastRect.right = bottomRight.x;
 		d_lastRect.bottom = bottomRight.y;
 	}
+	*/
 }
 
 /* Ends the drag action.
  * Restores the Z order.
  */
 void DeformState::exit() {
-	DEBUGLOG("Exiting DeformState");
 	// TODO remove this code, if it is now unnecessary
 	/*
 	if (d_lastForegroundWindow && d_lastForegroundWindow != d_window) {
@@ -50,18 +48,13 @@ void DeformState::exit() {
 		activateWithoutRaise(d_lastForegroundWindow);
 	}
 	*/
+	DEBUGLOG("Exited DeformState");
 	MouseDownState::exit();
 }
 
 bool DeformState::onMouseMove(MouseMoveEvent const &event) {
-	DEBUGLOG("Handling DeformState::onMouseMove");
 	d_mouseDelta.x = event.mousePos.x - d_mousePos.x;
 	d_mouseDelta.y = event.mousePos.y - d_mousePos.y;
 	d_mousePos = event.mousePos;
 	return MouseDownState::onMouseMove(event);
-}
-
-void DeformState::updateWindowPos(RECT rect, UINT flags) {
-	d_lastRect = rect;
-	SetWindowPos(d_window, d_prevInZOrder, d_lastRect.left, d_lastRect.top, d_lastRect.right - d_lastRect.left, d_lastRect.bottom - d_lastRect.top, SWP_NOACTIVATE | flags);
 }

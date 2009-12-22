@@ -11,14 +11,7 @@
 #include "debuglog.hpp"
 #include "cursors.hpp"
 #include "handlerlist.hpp"
-
-HINSTANCE currentInstance = NULL;
-
-Configuration activeConfig;
-
-HINSTANCE getCurrentInstance() {
-	return currentInstance;
-}
+#include "globals.hpp"
 
 bool enable() {
 	if (isEnabled())
@@ -43,7 +36,7 @@ bool isEnabled() {
 }
 
 void applyConfig(Configuration const &config) {
-	activeConfig = config;
+	globals->config() = config;
 	showTrayIcon(config.systemTrayIcon);
 }
 
@@ -81,13 +74,11 @@ int messageLoop() {
 /* The main function for the application.
  * Called from entryPoint().
  */
-int myMain(HINSTANCE hInstance) {
-	currentInstance = hInstance;
+int main() {
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 
 	OPENDEBUGLOG();
 	// Load the configuration from the registry.
-	createHookHandlers();
 	loadAndApplyConfig();
 	cursors.load();
 
@@ -103,7 +94,6 @@ int myMain(HINSTANCE hInstance) {
 	showTrayIcon(false);
 	// Note that calling detachHooks is OK if attachHooks only partly worked.
 	detachHooks();
-	destroyHookHandlers();
 	CLOSEDEBUGLOG();
 
 	return retVal;
@@ -112,9 +102,9 @@ int myMain(HINSTANCE hInstance) {
 /* The actual entry point to the application.
  * This replaces WinMainCRTStartup from the CRT.
  */
-int entryPoint() {
-	int mainret = 0;
-	HINSTANCE hInstance = GetModuleHandle(NULL);
-	mainret = myMain(hInstance);
-	return mainret;
+void entryPoint() {
+	globals = new Globals();
+	int mainret = main();
+	delete globals;
+	ExitProcess(mainret);
 }

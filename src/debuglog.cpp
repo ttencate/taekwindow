@@ -11,6 +11,9 @@
 
 static HANDLE debugLogFile = INVALID_HANDLE_VALUE;
 
+// TODO merge with util.[ch]pp into errors.[ch]pp
+// TODO settle on printf syntax or FormatMessage syntax, not both
+
 #define LOG_DIR _T("logs")
 
 void openDebugLog() {
@@ -57,6 +60,14 @@ void debugLog(LPCTSTR format, ...) {
 		size_t length;
 		StringCbLength(buffer, BUF_SIZE / sizeof(buffer[0]), &length);
 		WriteFile(debugLogFile, buffer, length, &written, NULL);
+	}
+}
+
+void assert(bool x, TCHAR const *file, size_t line) {
+	if (!x) {
+		DEBUGLOG("Assertion failed in %s, line %d; aborting", file, line);
+		showError(NULL, _T("Assertion failed"), _T("Assertion failed in %1!s!, line %2!u!.\r\n\r\nAborting program."), file, line);
+		ExitProcess(1);
 	}
 }
 

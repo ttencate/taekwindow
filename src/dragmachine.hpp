@@ -9,7 +9,7 @@ class DragMachine : public StateMachine<DragState> {
 
 	public:
 
-		DragMachine(DragState *startState);
+		explicit DragMachine(DragState *startState);
 
 		bool onMouseDown(MouseDownEvent const &event);
 		bool onMouseUp(MouseUpEvent const &event);

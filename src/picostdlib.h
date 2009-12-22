@@ -1,8 +1,6 @@
 #ifndef PICOSTDLIB_H
 #define PICOSTDLIB_H
 
-#include <stdlib.h>
-
 /* Implementation of some stdlib functions that we really can't do without,
  * but we don't want to link in the CRT for.
  * (The CRT adds about 50 kB to the final executable.)
@@ -19,7 +17,7 @@ int _fltused = 0;
  * So use our own implementation instead.
  * It's not used often, so it doesn't need to be highly optimized.
  */
-void *memcpy(void *dst, void const *src, size_t count);
+void *memcpy(void *dst, void const *src, unsigned count);
 #pragma function(memcpy)
 
 #endif

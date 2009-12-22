@@ -10,7 +10,6 @@
  */
 class CursorWindow {
 
-	HINSTANCE d_instance;
 	ATOM d_class;
 	HWND d_handle;
 

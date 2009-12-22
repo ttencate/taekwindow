@@ -1,6 +1,6 @@
 #include "picostdlib.h"
 
-void *memcpy(void *dst, void const *src, size_t count) {
+void *memcpy(void *dst, void const *src, unsigned count) {
 	void *ret = dst;
     while (count--) {
         *(char*)dst = *(char*)src;

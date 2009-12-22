@@ -1,10 +1,17 @@
 TODO
 ----
 
+- Finish refactoring ConfigDlg.
+- Ensure that LNK4210 is gone.
+- Make hooks into a class.
+- Trace memory leaks http://www.ddj.com/showArticle.jhtml?documentID=win0302c&pgno=13
+- Clean up needless includes.
 - Fix resizing windows beyond their limits.
 - Detect multiple instances.
 - Add some way to get to the configuration dialog if the tray icon is hidden.
 - Fix some bugs mentioned in the tracker.
+- Try merging linker sections for smaller executable.
+- Try the memcpy intrinsic again http://www.ddj.com/windows/184416623
 - Search for TODO and do them.
 - Do a full code review.
 - Update the Readme.

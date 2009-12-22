@@ -17,7 +17,7 @@ class StateMachine {
 
 	public:
 
-		StateMachine(State *start);
+		explicit StateMachine(State *start);
 		~StateMachine();
 
 		void setNextState(State *nextState);

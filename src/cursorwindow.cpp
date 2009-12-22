@@ -2,11 +2,11 @@
 
 #include "cursorwindow.hpp"
 #include "main.hpp"
+#include "globals.hpp"
 #include "debuglog.hpp"
 
 CursorWindow::CursorWindow()
 :
-	d_instance(getCurrentInstance()),
 	d_class(createClass()),
 	d_handle(createWindow())
 {
@@ -16,7 +16,7 @@ CursorWindow::CursorWindow()
 
 CursorWindow::~CursorWindow() {
 	DestroyWindow(d_handle);
-	UnregisterClass(MAKEINTATOM(d_class), d_instance);
+	UnregisterClass(MAKEINTATOM(d_class), globals->currentInstance());
 	DEBUGLOG("Destroyed cursor window 0x%08x", d_handle);
 }
 
@@ -30,7 +30,7 @@ ATOM CursorWindow::createClass() {
 	wc.lpfnWndProc = &winProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = getCurrentInstance();
+	wc.hInstance = globals->currentInstance();
 	wc.hIcon = NULL;
 	wc.hCursor = NULL;
 	wc.hbrBackground = NULL;
@@ -42,7 +42,7 @@ ATOM CursorWindow::createClass() {
 HWND CursorWindow::createWindow() {
 	int x = GetSystemMetrics(SM_XVIRTUALSCREEN), y = GetSystemMetrics(SM_YVIRTUALSCREEN);
 	int w = GetSystemMetrics(SM_CXVIRTUALSCREEN), h = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-	return CreateWindowEx(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE, MAKEINTATOM(d_class), _T(""), WS_POPUP | WS_VISIBLE, x, y, w, h, NULL, NULL, d_instance, 0);
+	return CreateWindowEx(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE, MAKEINTATOM(d_class), _T(""), WS_POPUP | WS_VISIBLE, x, y, w, h, NULL, NULL, globals->currentInstance(), 0);
 }
 
 void CursorWindow::setRegion() {

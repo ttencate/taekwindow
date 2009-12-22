@@ -10,6 +10,7 @@
 #include "resource.h"
 #include "util.hpp"
 #include "main.hpp"
+#include "globals.hpp"
 
 const UINT ICON_ID = 42;
 
@@ -107,12 +108,8 @@ void startConfigurationTool() {
 }
 */
 
-void startConfigurationTool() {
-	if (isConfigShowing()) {
-		focusConfig();
-	} else {
-		showConfig();
-	}
+void showConfigDlg() {
+	globals->configDlg().show();
 }
 
 void exitProgram() {
@@ -139,7 +136,7 @@ LRESULT CALLBACK iconWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					return 0;
 				case WM_LBUTTONDBLCLK:
 					toggleEnabled(); // second click does not register as WM_LBUTTONDOWN
-					startConfigurationTool();
+					showConfigDlg();
 					return 0;
 			}
 			break;
@@ -149,7 +146,7 @@ LRESULT CALLBACK iconWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					toggleEnabled();
 					return 0;
 				case IDM_CONFIGURE:
-					startConfigurationTool();
+					showConfigDlg();
 					return 0;
 				case IDM_EXIT:
 					exitProgram();

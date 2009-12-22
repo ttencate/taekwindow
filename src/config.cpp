@@ -10,17 +10,23 @@
 /* We'll only change the version number of the key once the registry structure is no longer backwards compatible.
  * That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
  */
-TCHAR const REG_KEY[] = _T("Software\\Taekwindow\\0.2");
+TCHAR const *const Configuration::REG_KEY = _T("Software\\Taekwindow\\0.2");
+
+Configuration::Configuration()
+:
+	systemTrayIcon(true),
+	startAtLogon(false),
+	modifier(VK_LMENU),
+	moveButton(mbLeft),
+	resizeButton(mbRight),
+	resizeMode(rmNineRectangles),
+	pushBackButton(mbMiddle),
+	scrollWindowUnderCursor(true)
+{
+}
 
 void Configuration::setDefaults() {
-	systemTrayIcon = true;
-	startAtLogon = false;
-	modifier = VK_LMENU;
-	moveButton = mbLeft;
-	resizeButton = mbRight;
-	resizeMode = rmNineRectangles;
-	pushBackButton = mbMiddle;
-	scrollWindowUnderCursor = true;
+	*this = Configuration();
 }
 
 /* Constructs the filename of the shortcut link to the EXE in the Startup folder in the Start Menu.

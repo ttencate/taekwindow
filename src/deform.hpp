@@ -19,15 +19,6 @@ class DeformState : public MouseDownState {
 	 */
 	HWND d_window;
 
-	/* The window in the Z-order previous to the draggedWindow.
-	 * Used to keep the order intact when calling SetWindowPos.
-	 */
-	HWND d_prevInZOrder;
-
-	/* The current position of the window. Saves calls to GetWindowRect.
-	 */
-	RECT d_lastRect;
-
 	public:
 
 		DeformState(POINT mousePos, MouseButton button, HWND window);
@@ -41,14 +32,8 @@ class DeformState : public MouseDownState {
 
 		POINT mousePos() const { return d_mousePos; }
 		POINT mouseDelta() const { return d_mouseDelta; }
-
 		HWND window() const { return d_window; }
-		HWND prevInZOrder() const { return d_prevInZOrder; }
-		RECT lastRect() const { return d_lastRect; }
 
-		/* Calls SetWindowPos with the appropriate arguments. Extra flags can be passed in.
-		 */
-		void updateWindowPos(RECT rect, UINT flags);
 };
 
 #endif

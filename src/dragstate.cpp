@@ -4,6 +4,11 @@ DragState::DragState()
 :
 	d_machine(NULL)
 {
+	DEBUGLOG("DragState at 0x%08x: constructor", this);		
+}
+
+DragState::~DragState() {
+	DEBUGLOG("DragState at 0x%08x: destructor", this);		
 }
 
 void DragState::enter() {

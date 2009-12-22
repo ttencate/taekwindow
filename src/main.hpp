@@ -16,14 +16,6 @@ bool isEnabled();
 bool enable();
 bool disable();
 
-/* Returns the handle of the current instance, as passed to WinMain.
- */
-HINSTANCE getCurrentInstance();
-
-/* The currently active configuration.
- */
-extern Configuration activeConfig;
-
 /* Apply the given configuration to make it active.
  */
 void applyConfig(Configuration const &config);

@@ -5,6 +5,8 @@
 
 class MoveState : public DeformState {
 
+	POINT d_windowPos;
+
 	public:
 
 		MoveState(POINT mousePos, MouseButton button, HWND window);
@@ -12,6 +14,10 @@ class MoveState : public DeformState {
 		virtual void enter();
 
 		virtual bool onMouseMove(MouseMoveEvent const &event);
+
+	private:
+
+		void moveWindow();
 
 };
 

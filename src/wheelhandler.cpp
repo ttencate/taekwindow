@@ -1,10 +1,11 @@
 #include "wheelhandler.hpp"
+#include "globals.hpp"
 #include "hacks.hpp"
 #include "debuglog.hpp"
 #include "main.hpp"
 
 bool WheelHandler::onMouseWheel(MouseWheelEvent const &event) {
-	if (activeConfig.scrollWindowUnderCursor) {
+	if (globals->config().scrollWindowUnderCursor) {
 		forwardMouseWheel(event);
 		return true;
 	} else {

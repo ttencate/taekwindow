@@ -2,24 +2,21 @@
 #include <tchar.h>
 
 #include "hooks.hpp"
-#include "main.hpp"
+#include "globals.hpp"
 #include "util.hpp"
 #include "debuglog.hpp"
 #include "events.hpp"
 #include "handlerlist.hpp"
 
-HHOOK lowLevelMouseHook = NULL;
-HHOOK lowLevelKeyboardHook = NULL;
-
 /* Attaches global event hooks.
  * Returns true on success.
  */
 bool attachHooks() {
-	lowLevelMouseHook = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, getCurrentInstance(), NULL);
-	if (!lowLevelMouseHook)
+	globals->llMouseHook() = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, globals->currentInstance(), NULL);
+	if (!globals->llMouseHook())
 		return false;
-	lowLevelKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, getCurrentInstance(), NULL);
-	if (!lowLevelKeyboardHook)
+	globals->llKeyboardHook() = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, globals->currentInstance(), NULL);
+	if (!globals->llKeyboardHook())
 		return false;
 	return true;
 }
@@ -29,17 +26,17 @@ bool attachHooks() {
  */
 bool detachHooks() {
 	bool success = true;
-	if (!UnhookWindowsHookEx(lowLevelKeyboardHook))
+	if (!UnhookWindowsHookEx(globals->llKeyboardHook()))
 		success = false;
-	lowLevelKeyboardHook = NULL;
-	if (!UnhookWindowsHookEx(lowLevelMouseHook))
+	globals->llKeyboardHook() = NULL;
+	if (!UnhookWindowsHookEx(globals->llMouseHook()))
 		success = false;
-	lowLevelMouseHook = NULL;
+	globals->llMouseHook() = NULL;
 	return success;
 }
 
 bool areHooksAttached() {
-	return (lowLevelMouseHook && lowLevelKeyboardHook);
+	return (globals->llMouseHook() && globals->llKeyboardHook());
 }
 
 /* Clips the given point to be inside the cursor clip rectangle.
@@ -78,7 +75,7 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONDOWN:
 			case WM_NCMBUTTONDOWN:
 			case WM_NCRBUTTONDOWN:
-				eat = mouseHandlerList->onMouseDown(MouseDownEvent(mousePos, button, window));
+				eat = globals->mouseHandlerList().onMouseDown(MouseDownEvent(mousePos, button, window));
 				break;
 			case WM_LBUTTONUP:
 			case WM_MBUTTONUP:
@@ -86,11 +83,11 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			case WM_NCLBUTTONUP:
 			case WM_NCMBUTTONUP:
 			case WM_NCRBUTTONUP:
-				eat = mouseHandlerList->onMouseUp(MouseUpEvent(mousePos, button, window));
+				eat = globals->mouseHandlerList().onMouseUp(MouseUpEvent(mousePos, button, window));
 				break;
 			case WM_MOUSEMOVE:
 			case WM_NCMOUSEMOVE:
-				eat = mouseHandlerList->onMouseMove(MouseMoveEvent(mousePos));
+				eat = globals->mouseHandlerList().onMouseMove(MouseMoveEvent(mousePos));
 				if (eat) {
 					// If we eat the event, even the mouse cursor position won't be updated
 					// by Windows, so low-level is the low-level hook.
@@ -98,7 +95,7 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				}
 				break;
 			case WM_MOUSEWHEEL:
-				eat = mouseHandlerList->onMouseWheel(MouseWheelEvent(mousePos, eventInfo->mouseData, window));
+				eat = globals->mouseHandlerList().onMouseWheel(MouseWheelEvent(mousePos, eventInfo->mouseData, window));
 				break;
 		}
 	}

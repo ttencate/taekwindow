@@ -44,7 +44,7 @@ bool MoveMaxState::onMouseMove(MouseMoveEvent const &event) {
 		windowPlacement.showCmd = SW_RESTORE;
 		SetWindowPlacement(window(), &windowPlacement);
 		// Move the restored window to the top left of the working area of the desired monitor.
-		SetWindowPos(window(), prevInZOrder(), monitorInfo.rcWork.left, monitorInfo.rcWork.top, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE);
+		SetWindowPos(window(), 0, monitorInfo.rcWork.left, monitorInfo.rcWork.top, 0, 0, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
 		// Unlock window drawing for the final stage.
 		LockWindowUpdate(NULL);
 		// And remaximize.

@@ -1,8 +1,8 @@
 #include <windows.h>
-#include <commctrl.h>
 #include <tchar.h>
 #include <gdiplus.h>
 
+#include "globals.hpp"
 #include "main.hpp"
 #include "util.hpp"
 #include "config.hpp"
@@ -10,6 +10,7 @@
 #include "resource.h"
 #include "version.hpp"
 #include "picostdlib.h"
+#include "comctl.hpp"
 
 /* It ain't pretty, but it doesn't seem to be in standard headers.
  * Anyway, so much legacy code relies on this that
@@ -17,236 +18,269 @@
  */
 #define ID_APPLY_NOW 0x3021
 
-/* Handle of the configuration dialog's window.
- */
-HWND configWindowHandle = 0;
+ConfigSheet *ConfigSheet::s_instance = NULL;
 
-/* Original window procedure of the property sheet dialog.
- * We override this with our own, but call the original.
- */
-WNDPROC origConfigWindowProc;
+ConfigSheet::ConfigSheet()
+:
+	PropSheet(_T(APPLICATION_TITLE) _T(" Preferences"), LoadIcon(globals->currentInstance(), MAKEINTRESOURCE(IDI_APP))),
+	d_handle(NULL),
+	d_origWindowProc(NULL)
+{
+	ASSERT(!s_instance);
+	s_instance = this;
 
-/* The configuration that is currently entered in the dialog.
- * Only valid when the dialog is visible.
- */
-Configuration newConfig;
+	// Most of the runs, the user will not use the preferences dialog.
+	// That's why we do not initialize in WinMain, but only when it is used.
+	if (!initCommonControls()) {
+		return; // TODO handle error
+	}
+	d_gdiPlus.init(); // we CAN work without GDI+, so ignore any errors
+	loadImages();
 
-/* GDI+ token.
- */
-ULONG_PTR gdiplusToken;
-
-/* The PNG images in the dialog.
- */
-const int NUM_IMAGES = 5;
-const int IMAGE_CONTROL_IDS[NUM_IMAGES] = { IDC_STARTUPIMAGE, IDC_SYSTRAYIMAGE, IDC_BOTTOMRIGHTIMAGE, IDC_NINERECTANGLESIMAGE, IDC_APPLOGO };
-const int IMAGE_RESOURCE_IDS[NUM_IMAGES] = { IDB_STARTUP, IDB_TRAYICON, IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
-Gdiplus::Bitmap *images[NUM_IMAGES];
-
-void initDynamicLabels(HWND dialogHandle) {
-	SetDlgItemText(dialogHandle, IDC_ABOUTGROUP, _T("About ") _T(APPLICATION_TITLE));
-	SetDlgItemText(dialogHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
-	SetDlgItemText(dialogHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
-	SetDlgItemText(dialogHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
-	SetDlgItemText(dialogHandle, IDC_APPEMAIL, _T("<a href=\"mailto:") _T(APPLICATION_EMAIL) _T("\">") _T(APPLICATION_EMAIL) _T("</a>"));
-	SetDlgItemText(dialogHandle, IDC_APPWEBSITE, _T("<a href=\"") _T(APPLICATION_WEBSITE) _T("\">") _T(APPLICATION_WEBSITE) _T("</a>"));
-	SetDlgItemText(dialogHandle, IDC_LICENSE, _T(APPLICATION_LICENSE_BRIEF) _T(" See the file <a href=\"") _T(APPLICATION_README_FILE) _T("\">") _T(APPLICATION_README_FILE) _T("</a> for details."));
+	addPage(PropSheetPage(IDD_GENERALPAGE, &generalPageFwd));
+	addPage(PropSheetPage(IDD_BUTTONSPAGE, &buttonsPageFwd));
+	addPage(PropSheetPage(IDD_RESIZINGPAGE, &resizingPageFwd));
+	addPage(PropSheetPage(IDD_SCROLLINGPAGE, &scrollingPageFwd));
+	addPage(PropSheetPage(IDD_ABOUTPAGE, &aboutPageFwd));
 }
 
-void drawImage(DRAWITEMSTRUCT *item, Gdiplus::Bitmap *image) {
-	HDC dc = item->hDC;
-	Gdiplus::Graphics graphics(dc);
-
-	image->SetResolution(graphics.GetDpiX(), graphics.GetDpiY());
-
-	RECT &rect = item->rcItem;
-	int x = (rect.left + rect.right - (int)image->GetWidth()) / 2;
-	int y = (rect.top + rect.bottom - (int)image->GetHeight()) / 2;
-
-	graphics.DrawImage(image, x, y);
+ConfigSheet::~ConfigSheet() {
+	unloadImages();
+	d_gdiPlus.cleanup();
+	s_instance = NULL;
 }
 
-void drawImageControl(int controlID, DRAWITEMSTRUCT *item) {
-	for (int i = 0; i < NUM_IMAGES; ++i) {
-		if (IMAGE_CONTROL_IDS[i] == controlID) {
-			Gdiplus::Bitmap *image = images[i];
-			if (image) {
-				drawImage(item, image);
-			}
+void ConfigSheet::show() {
+	if (isShowing()) {
+		bringToFront();
+	} else {
+		doShow();
+	}
+}
+
+bool ConfigSheet::isShowing() {
+	return d_handle != 0;
+}
+
+BOOL CALLBACK ConfigSheet::generalPageFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	ASSERT(s_instance);
+	return s_instance->generalPageDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK ConfigSheet::buttonsPageFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	ASSERT(s_instance);
+	return s_instance->buttonsPageDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK ConfigSheet::resizingPageFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	ASSERT(s_instance);
+	return s_instance->resizingPageDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK ConfigSheet::scrollingPageFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	ASSERT(s_instance);
+	return s_instance->scrollingPageDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+BOOL CALLBACK ConfigSheet::aboutPageFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	ASSERT(s_instance);
+	return s_instance->aboutPageDialogProc(dialogHandle, message, wParam, lParam);
+}
+
+LRESULT CALLBACK ConfigSheet::configFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	ASSERT(s_instance);
+	return s_instance->configWindowProc(dialogHandle, message, wParam, lParam);
+}
+
+void ConfigSheet::initDynamicLabels(HWND pageHandle) {
+	SetDlgItemText(pageHandle, IDC_ABOUTGROUP, _T("About ") _T(APPLICATION_TITLE));
+	SetDlgItemText(pageHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
+	SetDlgItemText(pageHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
+	SetDlgItemText(pageHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
+	SetDlgItemText(pageHandle, IDC_APPEMAIL, _T("<a href=\"mailto:") _T(APPLICATION_EMAIL) _T("\">") _T(APPLICATION_EMAIL) _T("</a>"));
+	SetDlgItemText(pageHandle, IDC_APPWEBSITE, _T("<a href=\"") _T(APPLICATION_WEBSITE) _T("\">") _T(APPLICATION_WEBSITE) _T("</a>"));
+	SetDlgItemText(pageHandle, IDC_LICENSE, _T(APPLICATION_LICENSE_BRIEF) _T(" See the file <a href=\"") _T(APPLICATION_README_FILE) _T("\">") _T(APPLICATION_README_FILE) _T("</a> for details."));
+}
+
+void ConfigSheet::drawImageControl(int controlId, DRAWITEMSTRUCT const &item) {
+	for (int i = 0; i < s_numImages; ++i) {
+		if (d_images[i] && d_images[i]->controlId() == controlId) {
+			d_images[i]->draw(item);
 			break;
 		}
 	}
 }
 
-void hyperlinkClicked(int controlID, NMLINK *nmLink) {
-	LPCTSTR url = nmLink->item.szUrl;
+void ConfigSheet::hyperlinkClicked(int controlID, NMLINK const &nmLink) {
+	LPCTSTR url = nmLink.item.szUrl;
 	if (url) {
 		if ((int)ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOWDEFAULT) <= 32) {
 			switch (controlID) {
 				case IDC_APPEMAIL:
 					// N.B. skip "mailto:" in the string, start at 7th character (hackish).
-					showError(configWindowHandle, _T("Could not launch e-mail program"), _T("It seems that your system does not have an e-mail program installed, or it is not set up properly to handle \"mailto:\" links.\r\n\r\nYou can still send e-mail to %1 manually."), &url[7]);
+					showError(d_handle, _T("Could not launch e-mail program"), _T("It seems that your system does not have an e-mail program installed, or it is not set up properly to handle \"mailto:\" links.\r\n\r\nYou can still send e-mail to %1 manually."), &url[7]);
 					break;
 				case IDC_APPWEBSITE:
-					showError(configWindowHandle, _T("Could not launch web browser"), _T("It seems that your system does not have a web browser installed, or it is not set up properly to handle \"http\" links.\r\n\r\nIf you do have a browser, point it to %1 manually."), url);
+					showError(d_handle, _T("Could not launch web browser"), _T("It seems that your system does not have a web browser installed, or it is not set up properly to handle \"http\" links.\r\n\r\nIf you do have a browser, point it to %1 manually."), url);
 					break;
 				case IDC_LICENSE:
-					showError(configWindowHandle, _T("Could not find readme file"), _T("The file %1 could not be found in the current directory. You should have received this file along with %2.exe."), url, _T(MAIN_EXE_FILE));
+					showError(d_handle, _T("Could not find readme file"), _T("The file %1 could not be found in the current directory. You should have received this file along with %2.exe."), url, _T(MAIN_EXE_FILE));
 					break;
 				default:
-					showLastError(configWindowHandle, _T("Could not open URL"));
+					showLastError(d_handle, _T("Could not open URL"));
 			}
 		}
 	}
 }
 
-BOOL CALLBACK defaultDialogProc(HWND, UINT message, WPARAM wParam, LPARAM lParam) {
+void ConfigSheet::mutexButtonRadios(HWND pageHandle, WPARAM wParam, int move, int resize) {
+	if ((int)wParam == move && IsDlgButtonChecked(pageHandle, resize)) {
+		CheckRadioButton(pageHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
+			resize == IDC_RESIZERIGHT ? IDC_RESIZEMIDDLE : IDC_RESIZERIGHT);
+	}
+	if ((int)wParam == resize && IsDlgButtonChecked(pageHandle, move)) {
+		CheckRadioButton(pageHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
+			move == IDC_MOVELEFT ? IDC_MOVEMIDDLE : IDC_MOVELEFT);
+	}
+}
+
+BOOL ConfigSheet::commonDialogProc(HWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
 			return TRUE;
 		case WM_DRAWITEM:
-			drawImageControl((int)wParam, (DRAWITEMSTRUCT*)lParam);
+			s_instance->drawImageControl((int)wParam, *(DRAWITEMSTRUCT*)lParam);
 			return TRUE;
 		default:
 			return FALSE;
 	}
 }
 
-BOOL CALLBACK generalPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL ConfigSheet::generalPageDialogProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckDlgButton(dialogHandle, IDC_SYSTRAYICON, newConfig.systemTrayIcon);
-			CheckDlgButton(dialogHandle, IDC_STARTATLOGON, newConfig.startAtLogon);
+			CheckDlgButton(pageHandle, IDC_SYSTRAYICON, d_newConfig.systemTrayIcon);
+			CheckDlgButton(pageHandle, IDC_STARTATLOGON, d_newConfig.startAtLogon);
 			break;
 		case WM_COMMAND:
-			PropSheet_Changed(configWindowHandle, dialogHandle);
+			PropSheet_Changed(d_handle, pageHandle);
 			return TRUE;
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newConfig.systemTrayIcon = IsDlgButtonChecked(dialogHandle, IDC_SYSTRAYICON) == BST_CHECKED;
-					newConfig.startAtLogon = IsDlgButtonChecked(dialogHandle, IDC_STARTATLOGON) == BST_CHECKED;
+					d_newConfig.systemTrayIcon = IsDlgButtonChecked(pageHandle, IDC_SYSTRAYICON) == BST_CHECKED;
+					d_newConfig.startAtLogon = IsDlgButtonChecked(pageHandle, IDC_STARTATLOGON) == BST_CHECKED;
 					return TRUE;
 			}
 			break;
 	}
-	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+	return commonDialogProc(pageHandle, message, wParam, lParam);
 }
 
-void mutexButtonRadios(HWND dialogHandle, WPARAM wParam, int move, int resize) {
-	if ((int)wParam == move && IsDlgButtonChecked(dialogHandle, resize)) {
-		CheckRadioButton(dialogHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
-			resize == IDC_RESIZERIGHT ? IDC_RESIZEMIDDLE : IDC_RESIZERIGHT);
-	}
-	if ((int)wParam == resize && IsDlgButtonChecked(dialogHandle, move)) {
-		CheckRadioButton(dialogHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
-			move == IDC_MOVELEFT ? IDC_MOVEMIDDLE : IDC_MOVELEFT);
-	}
-}
-
-BOOL CALLBACK buttonsPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL ConfigSheet::buttonsPageDialogProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckRadioButton(dialogHandle, IDC_LEFTALT, IDC_RIGHTALT,
-				newConfig.modifier == VK_MENU ? IDC_ANYALT :
-				newConfig.modifier == VK_RMENU ? IDC_RIGHTALT :
+			CheckRadioButton(pageHandle, IDC_LEFTALT, IDC_RIGHTALT,
+				d_newConfig.modifier == VK_MENU ? IDC_ANYALT :
+				d_newConfig.modifier == VK_RMENU ? IDC_RIGHTALT :
 				IDC_LEFTALT);
-			CheckRadioButton(dialogHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
-				newConfig.moveButton == mbMiddle ? IDC_MOVEMIDDLE :
-				newConfig.moveButton == mbRight ? IDC_MOVERIGHT :
+			CheckRadioButton(pageHandle, IDC_MOVELEFT, IDC_MOVERIGHT,
+				d_newConfig.moveButton == mbMiddle ? IDC_MOVEMIDDLE :
+				d_newConfig.moveButton == mbRight ? IDC_MOVERIGHT :
 				IDC_MOVELEFT);
-			CheckRadioButton(dialogHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
-				newConfig.resizeButton == mbLeft ? IDC_RESIZELEFT :
-				newConfig.resizeButton == mbMiddle ? IDC_RESIZEMIDDLE :
+			CheckRadioButton(pageHandle, IDC_RESIZELEFT, IDC_RESIZERIGHT,
+				d_newConfig.resizeButton == mbLeft ? IDC_RESIZELEFT :
+				d_newConfig.resizeButton == mbMiddle ? IDC_RESIZEMIDDLE :
 				IDC_RESIZERIGHT);
 			break;
 		case WM_COMMAND:
 			// Prevent same button for different functions.
-			mutexButtonRadios(dialogHandle, wParam, IDC_MOVELEFT  , IDC_RESIZELEFT  );
-			mutexButtonRadios(dialogHandle, wParam, IDC_MOVEMIDDLE, IDC_RESIZEMIDDLE);
-			mutexButtonRadios(dialogHandle, wParam, IDC_MOVERIGHT , IDC_RESIZERIGHT );
-			PropSheet_Changed(configWindowHandle, dialogHandle);
+			mutexButtonRadios(pageHandle, wParam, IDC_MOVELEFT  , IDC_RESIZELEFT  );
+			mutexButtonRadios(pageHandle, wParam, IDC_MOVEMIDDLE, IDC_RESIZEMIDDLE);
+			mutexButtonRadios(pageHandle, wParam, IDC_MOVERIGHT , IDC_RESIZERIGHT );
+			PropSheet_Changed(d_handle, pageHandle);
 			return TRUE;
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newConfig.modifier =
-						IsDlgButtonChecked(dialogHandle, IDC_ANYALT) ? VK_MENU :
-						IsDlgButtonChecked(dialogHandle, IDC_RIGHTALT) ? VK_RMENU :
+					d_newConfig.modifier =
+						IsDlgButtonChecked(pageHandle, IDC_ANYALT) ? VK_MENU :
+						IsDlgButtonChecked(pageHandle, IDC_RIGHTALT) ? VK_RMENU :
 						VK_LMENU;
-					newConfig.moveButton =
-						IsDlgButtonChecked(dialogHandle, IDC_MOVEMIDDLE) ? mbMiddle :
-						IsDlgButtonChecked(dialogHandle, IDC_MOVERIGHT) ? mbRight :
+					d_newConfig.moveButton =
+						IsDlgButtonChecked(pageHandle, IDC_MOVEMIDDLE) ? mbMiddle :
+						IsDlgButtonChecked(pageHandle, IDC_MOVERIGHT) ? mbRight :
 						mbLeft;
-					newConfig.resizeButton =
-						IsDlgButtonChecked(dialogHandle, IDC_RESIZELEFT) ? mbLeft :
-						IsDlgButtonChecked(dialogHandle, IDC_RESIZEMIDDLE) ? mbMiddle :
+					d_newConfig.resizeButton =
+						IsDlgButtonChecked(pageHandle, IDC_RESIZELEFT) ? mbLeft :
+						IsDlgButtonChecked(pageHandle, IDC_RESIZEMIDDLE) ? mbMiddle :
 						mbRight;
 					return TRUE;
 			}
 			break;
 	}
-	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+	return commonDialogProc(pageHandle, message, wParam, lParam);
 }
 
-BOOL CALLBACK resizingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL ConfigSheet::resizingPageDialogProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckRadioButton(dialogHandle, IDC_BOTTOMRIGHT, IDC_NINERECTANGLES,
-				newConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT :
+			CheckRadioButton(pageHandle, IDC_BOTTOMRIGHT, IDC_NINERECTANGLES,
+				d_newConfig.resizeMode == rmBottomRight ? IDC_BOTTOMRIGHT :
 				IDC_NINERECTANGLES);
 			break;
 		case WM_COMMAND:
-			PropSheet_Changed(configWindowHandle, dialogHandle);
+			PropSheet_Changed(d_handle, pageHandle);
 			return TRUE;
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newConfig.resizeMode =
-						IsDlgButtonChecked(dialogHandle, IDC_BOTTOMRIGHT) ? rmBottomRight :
+					d_newConfig.resizeMode =
+						IsDlgButtonChecked(pageHandle, IDC_BOTTOMRIGHT) ? rmBottomRight :
 						rmNineRectangles;
 					return TRUE;
 			}
 			break;
 	}
-	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+	return commonDialogProc(pageHandle, message, wParam, lParam);
 }
 
-BOOL CALLBACK scrollingPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL ConfigSheet::scrollingPageDialogProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			CheckRadioButton(dialogHandle, IDC_SCROLLFOCUSED, IDC_SCROLLUNDERCURSOR,
-				newConfig.scrollWindowUnderCursor ? IDC_SCROLLUNDERCURSOR : IDC_SCROLLFOCUSED);
+			CheckRadioButton(pageHandle, IDC_SCROLLFOCUSED, IDC_SCROLLUNDERCURSOR,
+				d_newConfig.scrollWindowUnderCursor ? IDC_SCROLLUNDERCURSOR : IDC_SCROLLFOCUSED);
 			break;
 		case WM_COMMAND:
-			PropSheet_Changed(configWindowHandle, dialogHandle);
+			PropSheet_Changed(d_handle, pageHandle);
 			return TRUE;
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
-					newConfig.scrollWindowUnderCursor = IsDlgButtonChecked(dialogHandle, IDC_SCROLLUNDERCURSOR) == BST_CHECKED;
+					d_newConfig.scrollWindowUnderCursor = IsDlgButtonChecked(pageHandle, IDC_SCROLLUNDERCURSOR) == BST_CHECKED;
 					return TRUE;
 			}
 			break;
 	}
-	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+	return commonDialogProc(pageHandle, message, wParam, lParam);
 }
 
-BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL ConfigSheet::aboutPageDialogProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_INITDIALOG:
-			initDynamicLabels(dialogHandle);
+			initDynamicLabels(pageHandle);
 			break;
 		case WM_NOTIFY:
 			NMHDR *nmHdr = (NMHDR*)lParam;
 			switch (nmHdr->code) {
 				case NM_CLICK:
 				case NM_RETURN:
-					hyperlinkClicked((int)wParam, (NMLINK*)lParam);
+					hyperlinkClicked((int)wParam, *(NMLINK*)lParam);
 					return TRUE;
 			}
 			break;
 	}
-	return defaultDialogProc(dialogHandle, message, wParam, lParam);
+	return commonDialogProc(pageHandle, message, wParam, lParam);
 }
 
 /* The subclassed window procedure for the property sheet dialog.
@@ -257,15 +291,15 @@ BOOL CALLBACK aboutPageDialogProc(HWND dialogHandle, UINT message, WPARAM wParam
  * but it is sent *before* the pages get a PSN_APPLY notification,
  * so the configuration is not yet up to date at that point.
  */
-LRESULT CALLBACK configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam) {
-	LRESULT retVal = CallWindowProc(origConfigWindowProc, dialogHandle, message, wParam, lParam);
+LRESULT ConfigSheet::configWindowProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
+	LRESULT retVal = CallWindowProc(d_origWindowProc, pageHandle, message, wParam, lParam);
 	switch (message) {
 		case WM_COMMAND:
 			switch (LOWORD(wParam)) {
 				case IDOK:
 				case ID_APPLY_NOW:
-					applyConfig(newConfig);
-					newConfig.save();
+					applyConfig(d_newConfig);
+					d_newConfig.save();
 					break;
 			}
 			break;
@@ -273,232 +307,75 @@ LRESULT CALLBACK configWindowProc(HWND dialogHandle, UINT message, WPARAM wParam
 	return retVal;
 }
 
-/* PropSheetProc for the configuration dialog.
- * Must return 0.
+/* PropSheetProc callback for the configuration dialog.
  */
-int CALLBACK configPropSheetProc(HWND dialogHandle, UINT message, LPARAM) {
+void ConfigSheet::callback(HWND pageHandle, UINT message, LPARAM) {
 	switch (message) {
 		case PSCB_INITIALIZED:
-			configWindowHandle = dialogHandle;
-			origConfigWindowProc = (WNDPROC)SetWindowLongPtr(dialogHandle, GWLP_WNDPROC, (LONG_PTR)&configWindowProc);
+			d_handle = pageHandle;
+			d_origWindowProc = (WNDPROC)SetWindowLongPtr(pageHandle, GWLP_WNDPROC, (LONG_PTR)&configFwd);
 			break;
 	}
-	return 0;
 }
 
-/* Initializes the Common Controls library.
- * It is ok to call this multiple times, and they do not need shutdown.
- */
-bool initCommonControls() {
-	// Huhhuh, init common control sex. Allcaps break my head.
-	INITCOMMONCONTROLSEX icc;
-	icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icc.dwICC = ICC_STANDARD_CLASSES | ICC_LINK_CLASS;
-	if (InitCommonControlsEx(&icc) != TRUE) {
-		showLastError(NULL, _T("Unable to initialize common controls"));
-		return false;
+void ConfigSheet::doShow() {
+	// Load the most current settings from the environment, in case they've changed since startup
+	// by some external factor.
+	d_newConfig.load();
+
+	// Show the dialog (modally).
+	int result = showModal();
+
+	if (result >= 1) {
+		// Changes were saved. They have already been applied;
+		// now save them to the environment (registry, file system) as well.
+		d_newConfig.save();
 	}
-	return true;
 }
 
-/* Initializes GDI+.
- * Returns true on success.
- * If it returns false, the error will already have been reported to the user.
- */
-bool initGdiplus() {
-	// Assuming that 0 is an invalid token, but this is not documented...
-	gdiplusToken = 0;
-
-	Gdiplus::GdiplusStartupInput gsi;
-	gsi.GdiplusVersion = 1;
-	gsi.DebugEventCallback = NULL;
-	gsi.SuppressBackgroundThread = FALSE;
-	gsi.SuppressExternalCodecs = TRUE;
-	Gdiplus::Status status = Gdiplus::GdiplusStartup(&gdiplusToken, &gsi, NULL);
-	if (status != Gdiplus::Ok) {
-		showError(NULL, _T("Could not initialize GDI+"), _T("The GDI+ graphics library could not be initialized. Some images will not be visible.\n\nGdiplusStartup returned the error code %1!d!."), status);
-		return false;
-	}
-	return true;
-}
-
-void shutdownGdiplus() {
-	// Assuming that 0 is an invalid token, but this is not documented...
-	if (gdiplusToken) {
-		Gdiplus::GdiplusShutdown(gdiplusToken);
+void ConfigSheet::bringToFront() {
+	if (isShowing()) {
+		BringWindowToTop(d_handle);
 	}
 }
 
 /* Loads the PNG images from resources, storing them in the images array.
  * Silently fails for images that cannot be loaded, storing NULL for that image.
  */
-void loadImages() {
-	for (int i = 0; i < NUM_IMAGES; ++i) {
-		images[i] = NULL;
-
-		// Find and load the resource from the executable.
-		// It has the undocumented type "PNG".
-		int resourceID = IMAGE_RESOURCE_IDS[i];
-		HRSRC resourceHandle = FindResource(NULL, MAKEINTRESOURCE(resourceID), _T("PNG"));
-		if (!resourceHandle) {
-			debugShowLastError(_T("Could not find resource"));
-			continue;
-		}
-		HGLOBAL resource = LoadResource(NULL, resourceHandle);
-		if (!resource) {
-			debugShowLastError(_T("Could not load resource"));
-			continue;
-		}
-		void *resourceData = LockResource(resource);
-		if (!resourceData) {
-			debugShowLastError(_T("Could not lock resource"));
-			continue;
-		}
-
-		// Allocate memory to copy the resource to.
-		// Unfortunately, the HGLOBAL returned by LoadResource is not really a HGLOBAL,
-		// so we cannot have CreateStreamOnHGlobal read from that. We have to make a copy.
-
-		// Note: passing NULL to SizeofResource is not explicitly allowed by the docs,
-		// but the other XxxResource functions do allow it, and much code on the internet also passes NULL.
-		// So let's assume that this is an omission in the docs.
-		DWORD bytes = SizeofResource(NULL, resourceHandle);
-		if (!bytes) {
-			debugShowLastError(_T("Could not determine resource size"));
-			continue;
-		}
-		HGLOBAL mem = GlobalAlloc(GMEM_MOVEABLE, bytes);
-		if (!mem) {
-			debugShowLastError(_T("Could not allocate memory"));
-			continue;
-		}
-		void *memData = GlobalLock(mem);
-		if (!memData) {
-			debugShowLastError(_T("Could not lock memory"));
-			continue;
-		}
-		if (!memcpy(memData, resourceData, bytes)) {
-			debugShowLastError(_T("Could not copy memory"));
-			continue;
-		}
-		if (!GlobalUnlock(mem) && GetLastError()) {
-			debugShowLastError(_T("Could not unlock memory"));
-			continue;
-		}
-
-		// Create a stream from the memory.
-		// Note that by passing TRUE, the stream calls GlobalFree automatically.
-		IStream *stream;
-		if (CreateStreamOnHGlobal(mem, TRUE, &stream) != S_OK) {
-			debugShowLastError(_T("Could not create image stream"));
-			GlobalFree(mem);
-			continue;
-		}
-		// Stream might be bigger than resource, don't know whether PNG loader minds,
-		// but better be safe.
-		ULARGE_INTEGER largeBytes;
-		largeBytes.HighPart = 0;
-		largeBytes.LowPart = bytes;
-		stream->SetSize(largeBytes);
-
-		// Create an image from the stream.
-		images[i] = new Gdiplus::Bitmap(stream);
-
-		// Clean up.
-		stream->Release();
+void ConfigSheet::loadImages() {
+	int const controlIds[ConfigSheet::s_numImages] = { IDC_STARTUPIMAGE, IDC_SYSTRAYIMAGE, IDC_BOTTOMRIGHTIMAGE, IDC_NINERECTANGLESIMAGE, IDC_APPLOGO };
+	int const resourceIds[ConfigSheet::s_numImages] = { IDB_STARTUP, IDB_TRAYICON, IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
+	for (int i = 0; i < s_numImages; ++i) {
+		d_images[i] = new Image(resourceIds[i], controlIds[i]);
 	}
 }
 
-void unloadImages() {
-	for (int i = 0; i < NUM_IMAGES; ++i) {
-		if (images[i]) {
-			delete images[i];
-			images[i] = NULL;
+void ConfigSheet::unloadImages() {
+	for (int i = 0; i < s_numImages; ++i) {
+		if (d_images[i]) {
+			delete d_images[i];
+			d_images[i] = NULL;
 		}
 	}
 }
 
-INT_PTR showPropSheet() {
-	// Most of the runs, the user will not use the configuration dialog.
-	// That's why we do not initialize in WinMain, but only when it is used.
-	if (!initCommonControls()) {
-		return -1;
-	}
-	initGdiplus(); // we CAN work without GDI+, so ignore any errors
-	loadImages();
-
-	/* The property sheet pages in the configuration dialog.
-	 */
-	const int NUM_PAGES = 5;
-	const int PAGE_TEMPLATES[NUM_PAGES] = { IDD_GENERALPAGE, IDD_BUTTONSPAGE, IDD_RESIZINGPAGE, IDD_SCROLLINGPAGE, IDD_ABOUTPAGE };
-	const DLGPROC PAGE_DIALOG_PROCS[NUM_PAGES] = { &generalPageDialogProc, &buttonsPageDialogProc, &resizingPageDialogProc, &scrollingPageDialogProc, &aboutPageDialogProc };
-
-	PROPSHEETPAGE pages[NUM_PAGES];
-	for (int i = 0; i < NUM_PAGES; ++i) {
-		PROPSHEETPAGE &page = pages[i];
-		page.dwSize = sizeof(PROPSHEETPAGE);
-		page.dwFlags = 0;
-		page.hInstance = getCurrentInstance();
-		page.pszTemplate = MAKEINTRESOURCE(PAGE_TEMPLATES[i]);
-		page.hIcon = NULL;
-		page.pszTitle = NULL; // fetched from dialog resource
-		page.pfnDlgProc = PAGE_DIALOG_PROCS[i];
-		page.lParam = 0;
-		page.pfnCallback = NULL;
-		page.pcRefParent = NULL;
-		page.pszHeaderTitle = NULL;
-		page.pszHeaderSubTitle = NULL;
-	}
-
-	HICON iconHandle = LoadIcon(getCurrentInstance(), MAKEINTRESOURCE(IDI_APP));
-
-	PROPSHEETHEADER header;
-	header.dwSize = sizeof(PROPSHEETHEADER);
-	header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP | PSH_USEHICON | PSH_USECALLBACK;
-	header.hwndParent = NULL;
-	header.hInstance = getCurrentInstance();
-	header.hIcon = iconHandle; // if we use pszIcon instead, the Win7 taskbar button gets the 16x16 icon...
-	header.pszCaption = _T(APPLICATION_TITLE) _T(" Preferences");
-	header.nPages = NUM_PAGES;
-	header.nStartPage = 0;
-	header.ppsp = pages;
-	header.pfnCallback = &configPropSheetProc;
-	header.hbmWatermark = NULL;
-	header.pszbmWatermark = NULL;
-	header.hplWatermark = NULL;
-	header.hbmHeader = NULL;
-	header.pszbmHeader = NULL;
-
-	INT_PTR result = PropertySheet(&header);
-
-	unloadImages();
-	shutdownGdiplus();
-
-	configWindowHandle = 0;
-	return result;
+ConfigDlg::ConfigDlg()
+:
+	d_sheet(NULL)
+{
 }
 
-void showConfig() {
-	// Load the most current settings from the environment, in case they've changed since startup
-	// by some external factor.
-	newConfig.load();
-
-	// Show the dialog (modally).
-	int result = showPropSheet();
-
-	if (result >= 1) {
-		// Changes were saved. They have already been applied;
-		// now save them to the environment (registry, file system) as well.
-		newConfig.save();
-	}
+ConfigDlg::~ConfigDlg() {
+	delete d_sheet;
 }
 
-bool isConfigShowing() {
-	return configWindowHandle != 0;
-}
-
-void focusConfig() {
-	if (configWindowHandle) {
-		BringWindowToTop(configWindowHandle);
+void ConfigDlg::show() {
+	if (d_sheet) {
+		d_sheet->show();
+	} else {
+		d_sheet = new ConfigSheet();
+		d_sheet->show();
+		delete d_sheet;
+		d_sheet = NULL;
 	}
 }

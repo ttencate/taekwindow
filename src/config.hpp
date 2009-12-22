@@ -36,6 +36,10 @@ public:
 	/* The mouse wheel behaviour: scroll the window under the cursor (true), or the focused window (false)?
 	 */
 	bool scrollWindowUnderCursor;
+
+	/* Sets all fields to their default values.
+	 */
+	Configuration();
 	
 	/* Sets all fields to their default values.
 	 */
@@ -51,6 +55,8 @@ public:
 	void save();
 
 private:
+
+	static TCHAR const *const REG_KEY;
 
 	void getStartupLinkFilename(TCHAR *buffer);
 	void createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description);
