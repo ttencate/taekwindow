@@ -1,8 +1,6 @@
 TODO
 ----
 
-- Finish refactoring ConfigDlg.
-- Ensure that LNK4210 is gone.
 - Make hooks into a class.
 - Trace memory leaks http://www.ddj.com/showArticle.jhtml?documentID=win0302c&pgno=13
 - Clean up needless includes.

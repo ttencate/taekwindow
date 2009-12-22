@@ -3,6 +3,8 @@
 
 #include <windows.h>
 
+#pragma warning(disable: 4390) // empty statements
+
 /* Shows a message box with the given message, in which argument substitution is done
  * according to the format of FormatMessage (not printf syntax!).
  * The parent may be NULL.
