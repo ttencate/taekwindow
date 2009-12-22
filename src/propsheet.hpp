@@ -9,9 +9,7 @@
  *
  * Important: due to the way the callback is implemented,
  * only one property sheet must be shown through this class at the same time!
- * This can be hacked around by parenting it to a dummy window, and attaching
- * a pointer back to the PropSheet object as extra data to the parent, but
- * this is not worth the effort right now.
+ * This can be hacked around by using GetProp/SetProp, but it's not worth the trouble right now.
  */
 class PropSheet {
 

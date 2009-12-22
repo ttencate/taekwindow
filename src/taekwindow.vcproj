@@ -403,6 +403,10 @@
 				RelativePath=".\picostdlib.h"
 				>
 			</File>
+			<File
+				RelativePath=".\purecall.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="config"
@@ -503,6 +507,14 @@
 				RelativePath=".\trayicon.hpp"
 				>
 			</File>
+			<File
+				RelativePath=".\trayiconcontroller.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\trayiconcontroller.hpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="winutils"
@@ -532,6 +544,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\messagewindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\messagewindow.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sharedmemory.cpp"
 				>
 			</File>
@@ -545,6 +565,10 @@
 			</File>
 			<File
 				RelativePath=".\shelllink.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\windowproc.hpp"
 				>
 			</File>
 			<File

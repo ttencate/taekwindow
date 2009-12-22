@@ -20,7 +20,7 @@ bool enable() {
 		return true;
 	if (!attachHooks())
 		return false;
-	updateTrayIcon();
+	globals->trayIcon().update();
 	return true;
 }
 
@@ -29,7 +29,7 @@ bool disable() {
 		return true;
 	if (!detachHooks())
 		return false;
-	updateTrayIcon();
+	globals->trayIcon().update();
 	return true;
 }
 
@@ -39,7 +39,7 @@ bool isEnabled() {
 
 void applyConfig(Configuration const &config) {
 	globals->config() = config;
-	showTrayIcon(config.systemTrayIcon);
+	globals->trayIcon().update();
 }
 
 void loadAndApplyConfig() {
@@ -112,7 +112,6 @@ int main() {
 	}
 
 	// Normal exit.
-	showTrayIcon(false);
 	// Note that calling detachHooks is OK if attachHooks only partly worked.
 	detachHooks();
 

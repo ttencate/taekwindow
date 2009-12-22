@@ -1,19 +1,42 @@
 #ifndef TRAYICON_HPP
 #define TRAYICON_HPP
 
-/* Sets the visibility of the tray icon.
- * It is okay to call this if the visibility state does not change
- * (e.g. showing it when it is already visible).
- * In case of errors, the function fails silently.
- */
-void showTrayIcon(bool show);
+#include <windows.h>
 
-/* Returns whether the tray icon is currently visible.
- */
-bool showingTrayIcon();
+#include "messagewindow.hpp"
 
-/* Updates the tray icon (if visible) with the current status.
- */
-void updateTrayIcon();
+class TrayIcon {
+
+	HICON d_enabledIcon, d_disabledIcon;
+	bool d_showing;
+	NOTIFYICONDATA d_data;
+	MessageWindow d_window;
+
+	public:
+
+		TrayIcon();
+		~TrayIcon();
+
+		bool showing() const { return d_showing; }
+		void update();
+
+	private:
+
+		void create();
+		void destroy();
+
+		HICON currentIcon();
+
+		void showMenu(POINT pos);
+		void toggleEnabled();
+		void showConfigDlg();
+		void exitProgram();
+
+		LRESULT windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+		TrayIcon(TrayIcon const &); // not implemented
+		TrayIcon &operator=(TrayIcon const &); // not implemented
+
+};
 
 #endif
