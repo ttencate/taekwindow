@@ -4,7 +4,6 @@ Globals *globals;
 
 Globals::Globals()
 :
-	d_currentInstance(GetModuleHandle(NULL)),
 	d_llMouseHook(NULL),
 	d_llKeyboardHook(NULL)
 {

@@ -1,8 +1,7 @@
 #include "resize.hpp"
-#include "debug.hpp"
-#include "main.hpp"
 #include "wininfo.hpp"
 #include "errors.hpp"
+#include "debug.hpp"
 #include "globals.hpp"
 
 // TODO remove

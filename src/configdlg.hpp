@@ -2,14 +2,12 @@
 #define CONFIGDLG_HPP
 
 #include <windows.h>
-#include <commctrl.h>
 
-#include "gdipluswrap.hpp"
-#include "image.hpp"
-#include "imagelist.hpp"
 #include "propsheet.hpp"
 #include "config.hpp"
 #include "comctl.hpp"
+#include "gdipluswrap.hpp"
+#include "imagelist.hpp"
 
 class ConfigSheet : private PropSheet {
 

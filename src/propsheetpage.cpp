@@ -1,10 +1,9 @@
 #include "propsheetpage.hpp"
-#include "globals.hpp"
 
 PropSheetPage::PropSheetPage(int templateId, DLGPROC dialogProc) {
 	d_page.dwSize = sizeof(PROPSHEETPAGE);
 	d_page.dwFlags = 0;
-	d_page.hInstance = globals->currentInstance();
+	d_page.hInstance = GetModuleHandle(NULL);
 	d_page.pszTemplate = MAKEINTRESOURCE(templateId);
 	d_page.hIcon = NULL;
 	d_page.pszTitle = NULL; // fetched from dialog resource

@@ -1,10 +1,6 @@
 #ifndef STATEMACHINE_HPP
 #define STATEMACHINE_HPP
 
-#include <typeinfo>
-
-#include "debug.hpp"
-
 /* The StateMachine owns every state passed in, and will take care of deleting them.
  * The State type must have member functions enter() and exit(),
  * and an accessible void setMachine(StateMachine<State> *).

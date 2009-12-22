@@ -1,12 +1,10 @@
-#include <windows.h>
 #include <tchar.h>
-#include <commctrl.h>
 
 #include "comctl.hpp"
 #include "errors.hpp"
 
 CommonControls::CommonControls() {
-	// Huhhuh, init common control sex. Allcaps break my head.
+	// Initialize the sex of a common control. Or something.
 	INITCOMMONCONTROLSEX icc;
 	icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	icc.dwICC = ICC_STANDARD_CLASSES | ICC_LINK_CLASS;

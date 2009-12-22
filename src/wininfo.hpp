@@ -1,6 +1,8 @@
 #ifndef WININFO_HPP
 #define WININFO_HPP
 
+#include <windows.h>
+
 /* Returns the first parent in the parent chain of the given window
  * that meets the given criterium, or NULL if there is no such parent.
  */

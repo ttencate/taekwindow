@@ -59,7 +59,6 @@ private:
 	static TCHAR const *const REG_KEY;
 
 	void getStartupLinkFilename(TCHAR *buffer);
-	void createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description);
 	template<typename F, typename P> void applyFunctor(P param);
 	void loadFromRegistry();
 	void saveToRegistry();

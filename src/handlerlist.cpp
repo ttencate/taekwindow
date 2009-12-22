@@ -1,9 +1,5 @@
-#include <cstdarg>
-
 #include "handlerlist.hpp"
-#include "draghandler.hpp"
-#include "wheelhandler.hpp"
-#include "pushhandler.hpp"
+#include "debug.hpp"
 
 MouseHandlerList::MouseHandlerList()
 :

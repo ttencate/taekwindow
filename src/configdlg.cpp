@@ -1,16 +1,12 @@
-#include <windows.h>
 #include <tchar.h>
-#include <gdiplus.h>
 
-#include "globals.hpp"
-#include "main.hpp"
-#include "errors.hpp"
-#include "config.hpp"
 #include "configdlg.hpp"
+#include "main.hpp"
+#include "debug.hpp"
+#include "errors.hpp"
 #include "resource.h"
 #include "version.hpp"
 #include "picostdlib.h"
-#include "comctl.hpp"
 
 /* It ain't pretty, but it doesn't seem to be in standard headers.
  * Anyway, so much legacy code relies on this that
@@ -30,7 +26,7 @@ ConfigSheet *ConfigSheet::s_instance = NULL;
 
 ConfigSheet::ConfigSheet()
 :
-	PropSheet(_T(APPLICATION_TITLE) _T(" Preferences"), LoadIcon(globals->currentInstance(), MAKEINTRESOURCE(IDI_APP))),
+	PropSheet(_T(APPLICATION_TITLE) _T(" Preferences"), LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_APP))),
 	d_handle(NULL),
 	d_origWindowProc(NULL),
 	d_gdiPlus(),

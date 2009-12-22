@@ -2,7 +2,6 @@
 #define PROPSHEET_HPP
 
 #include <windows.h>
-#include <tchar.h>
 
 #include "propsheetpage.hpp"
 

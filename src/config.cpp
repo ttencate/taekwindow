@@ -1,11 +1,12 @@
 #include <windows.h>
-#include <shlobj.h>
 #include <tchar.h>
 #include <strsafe.h>
+#include <shlobj.h>
 
 #include "config.hpp"
 #include "errors.hpp"
 #include "version.hpp"
+#include "shelllink.hpp"
 
 /* We'll only change the version number of the key once the registry structure is no longer backwards compatible.
  * That is, once newer versions can no longer interpret the settings of an older version as if the settings were their own.
@@ -41,47 +42,6 @@ void Configuration::getStartupLinkFilename(TCHAR *buffer) {
  */
 template<typename T> void assign(T &out, DWORD data) { out = T(data); }
 template<> void assign<bool>(bool &out, DWORD data) { out = (data != 0); }
-
-/* Uses the COM interface IShellLink to create a shortcut.
- */
-void Configuration::createLink(TCHAR *filename, TCHAR *target, TCHAR *workingDir, TCHAR *description) {
-	HRESULT res;
-
-	// Initialize COM.
-	res = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-	if (res != S_OK && res != S_FALSE) {
-		showError(NULL, _T("Error creating shortcut"), _T("COM initialization failed. Error code: %1!lx!."), res);
-		return;
-	}
-
-	// Create the ShellLink object.
-	IShellLink *link;
-	res = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void**)&link);
-	if (res != S_OK) {
-		showError(NULL, _T("Error creating shortcut"), _T("The ShellLink object could not be created. Error code: %1!lx!."), res);
-	} else {
-		// Set the link's properties.
-		link->SetPath(target);
-		link->SetDescription(description);
-		link->SetWorkingDirectory(workingDir);
-		link->SetIconLocation(target, 0);
-
-		// Save the link to the file.
-		IPersistFile *pf;
-		link->QueryInterface(IID_IPersistFile, (void**)&pf);
-		if (res != S_OK) {
-			showError(NULL, _T("Error creating shortcut"), _T("The IPersistFile interface could not be acquired. Error code: %1!lx!."), res);
-		} else {
-			res = pf->Save(filename, TRUE);
-			if (res != S_OK) {
-				showError(NULL, _T("Error creating shortcut"), _T("The ShellLink could not be saved. Error code: %1!lx!."), res);
-			}
-			// Clean up.
-			pf->Release();
-		}
-		link->Release();
-	}
-}
 
 struct Read {
 	/* Reads a DWORD from the specified value in the specified registry key,
@@ -169,9 +129,11 @@ void Configuration::loadFromStartup() {
 void Configuration::saveToStartup() {
 	TCHAR linkFilename[MAX_PATH];
 	getStartupLinkFilename(linkFilename);
-	bool exists = GetFileAttributes(linkFilename) != INVALID_FILE_ATTRIBUTES;
+	ShellLink link(linkFilename);
+
+	bool exists = link.exists();
 	if (exists && !startAtLogon) {
-		DeleteFile(linkFilename);
+		link.destroy();
 	} else if (!exists && startAtLogon) {
 		TCHAR target[MAX_PATH];
 		GetModuleFileName(NULL, target, MAX_PATH);
@@ -181,7 +143,7 @@ void Configuration::saveToStartup() {
 		if (filePart) {
 			*filePart = '\0';
 		}
-		createLink(linkFilename, target, workingDir, _T(APPLICATION_TITLE) _T(" startup link (automatically created; can safely be removed)"));
+		link.create(target, workingDir, _T(APPLICATION_TITLE) _T(" startup link (automatically created; can safely be removed)"));
 	}
 }
 

@@ -531,6 +531,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\shelllink.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\shelllink.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\wininfo.cpp"
 				>
 			</File>
@@ -583,7 +591,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\version.h"
+				RelativePath=".\version.hpp"
 				>
 			</File>
 			<File

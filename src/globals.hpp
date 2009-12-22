@@ -1,8 +1,6 @@
 #ifndef GLOBALS_HPP
 #define GLOBALS_HPP
 
-#include <windows.h>
-
 #include "config.hpp"
 #include "wheelhandler.hpp"
 #include "pushhandler.hpp"
@@ -22,7 +20,6 @@
 class Globals {
 
 	// Important: the order of declaration is the order of construction!
-	HINSTANCE const d_currentInstance;
 	Configuration d_config;
 	WheelHandler d_wheelHandler;
 	PushHandler d_pushHandler;
@@ -37,7 +34,6 @@ class Globals {
 		Globals();
 		~Globals();
 
-		HINSTANCE const currentInstance() { return d_currentInstance; }
 		Configuration &config() { return d_config; }
 		HHOOK &llMouseHook() { return d_llMouseHook; }
 		HHOOK &llKeyboardHook() { return d_llKeyboardHook; }

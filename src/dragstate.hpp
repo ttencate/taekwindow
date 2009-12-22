@@ -1,11 +1,10 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#include <windows.h>
-
 #include "types.hpp"
 #include "statemachine.hpp"
 #include "events.hpp"
+#include "debug.hpp"
 
 /* An interface for a state in the DragMachine state machine.
  * All these functions have implementations, but they are guaranteed to do nothing.

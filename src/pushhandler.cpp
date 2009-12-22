@@ -1,6 +1,5 @@
 #include "pushhandler.hpp"
 #include "wininfo.hpp"
-#include "main.hpp"
 #include "globals.hpp"
 #include "debug.hpp"
 

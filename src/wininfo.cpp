@@ -1,6 +1,3 @@
-#include <windows.h>
-#include <tchar.h>
-
 #include "wininfo.hpp"
 #include "debug.hpp"
 #include "hacks.hpp"

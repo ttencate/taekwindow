@@ -1,7 +1,5 @@
 #include "normal.hpp"
 #include "globals.hpp"
-#include "dragmachine.hpp"
-#include "main.hpp"
 #include "debug.hpp"
 #include "wininfo.hpp"
 #include "move.hpp"

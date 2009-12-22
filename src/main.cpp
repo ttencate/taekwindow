@@ -2,17 +2,14 @@
 #include <tchar.h>
 
 #include "main.hpp"
-#include "messages.hpp"
 #include "trayicon.hpp"
-#include "errors.hpp"
-#include "config.hpp"
-#include "version.hpp"
 #include "hooks.hpp"
-#include "debug.hpp"
 #include "cursors.hpp"
-#include "handlerlist.hpp"
 #include "globals.hpp"
 #include "memory.hpp"
+#include "errors.hpp"
+#include "debug.hpp"
+#include "version.hpp"
 
 bool enable() {
 	if (isEnabled())

@@ -1,9 +1,8 @@
 #ifndef MOUSEDOWN_HPP
 #define MOUSEDOWN_HPP
 
-#include "types.hpp"
-#include "cursorwindow.hpp"
 #include "dragstate.hpp"
+#include "cursorwindow.hpp"
 
 class MouseDownState : public DragState {
 

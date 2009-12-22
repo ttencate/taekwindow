@@ -1,8 +1,9 @@
 #ifdef _DEBUG
 
+// TODO settle on printf syntax or FormatMessage syntax, not both; and probably should be FormatMessage.
+// TODO then get rid of this, and its include:
 #define STRSAFE_NO_DEPRECATE
 
-#include <windows.h>
 #include <tchar.h>
 #include <strsafe.h>
 
@@ -10,8 +11,6 @@
 #include "errors.hpp"
 
 static HANDLE debugLogFile = INVALID_HANDLE_VALUE;
-
-// TODO settle on printf syntax or FormatMessage syntax, not both
 
 #define LOG_DIR _T("logs")
 

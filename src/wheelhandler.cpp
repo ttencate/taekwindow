@@ -2,7 +2,6 @@
 #include "globals.hpp"
 #include "hacks.hpp"
 #include "debug.hpp"
-#include "main.hpp"
 
 bool WheelHandler::onMouseWheel(MouseWheelEvent const &event) {
 	if (globals->config().scrollWindowUnderCursor) {

@@ -1,7 +1,6 @@
 TODO
 ----
 
-- Clean up needless includes.
 - Fix resizing windows beyond their limits.
 - Detect multiple instances.
 - Add some way to get to the configuration dialog if the tray icon is hidden.

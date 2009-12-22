@@ -1,21 +1,18 @@
-#include <windows.h>
 #include <tchar.h>
 
 #include "hooks.hpp"
 #include "globals.hpp"
-#include "errors.hpp"
 #include "debug.hpp"
-#include "events.hpp"
-#include "handlerlist.hpp"
 
 /* Attaches global event hooks.
  * Returns true on success.
  */
 bool attachHooks() {
-	globals->llMouseHook() = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, globals->currentInstance(), NULL);
+	HINSTANCE instance = GetModuleHandle(NULL);
+	globals->llMouseHook() = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, instance, NULL);
 	if (!globals->llMouseHook())
 		return false;
-	globals->llKeyboardHook() = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, globals->currentInstance(), NULL);
+	globals->llKeyboardHook() = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, instance, NULL);
 	if (!globals->llKeyboardHook())
 		return false;
 	return true;
