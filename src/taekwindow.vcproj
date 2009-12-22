@@ -387,7 +387,11 @@
 			Name="stdlibs"
 			>
 			<File
-				RelativePath=".\picostdcpplib.cpp"
+				RelativePath=".\memory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\memory.hpp"
 				>
 			</File>
 			<File

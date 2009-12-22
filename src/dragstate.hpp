@@ -19,7 +19,6 @@ class DragState {
 	public:
 
 		DragState();
-		virtual ~DragState();
 
 		virtual void enter();
 		virtual void exit();

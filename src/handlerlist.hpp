@@ -3,6 +3,9 @@
 
 #include "hookhandler.hpp"
 
+/* The MouseHandlerList does not own its handlers;
+ * destroying them is the caller's responsibility.
+ */
 class MouseHandlerList {
 
 	static size_t const d_capacity = 4;
@@ -12,7 +15,6 @@ class MouseHandlerList {
 	public:
 
 		MouseHandlerList();
-		~MouseHandlerList();
 		void add(MouseHookHandler *handler);
 
 		bool onMouseDown(MouseDownEvent const &event);

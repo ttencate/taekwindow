@@ -12,6 +12,7 @@
 #include "cursors.hpp"
 #include "handlerlist.hpp"
 #include "globals.hpp"
+#include "memory.hpp"
 
 bool enable() {
 	if (isEnabled())
@@ -77,7 +78,6 @@ int messageLoop() {
 int main() {
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 
-	OPENDEBUGLOG();
 	// Load the configuration from the registry.
 	loadAndApplyConfig();
 	cursors.load();
@@ -94,7 +94,6 @@ int main() {
 	showTrayIcon(false);
 	// Note that calling detachHooks is OK if attachHooks only partly worked.
 	detachHooks();
-	CLOSEDEBUGLOG();
 
 	return retVal;
 }
@@ -103,8 +102,12 @@ int main() {
  * This replaces WinMainCRTStartup from the CRT.
  */
 void entryPoint() {
+	OPENDEBUGLOG();
+	initMemMgr();
 	globals = new Globals();
 	int mainret = main();
 	delete globals;
+	TRACE_LEAKS();
+	CLOSEDEBUGLOG();
 	ExitProcess(mainret);
 }

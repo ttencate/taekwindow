@@ -11,12 +11,6 @@ MouseHandlerList::MouseHandlerList()
 {
 }
 
-MouseHandlerList::~MouseHandlerList() {
-	for (size_t i = 0; i < d_count; ++i) {
-		delete d_handlers[i];
-	}
-}
-
 void MouseHandlerList::add(MouseHookHandler *handler) {
 	ASSERT(d_count < d_capacity);
 	d_handlers[d_count] = handler;
