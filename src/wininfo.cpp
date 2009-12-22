@@ -36,13 +36,13 @@ HWND findLastParent(HWND window, bool (*criterium)(HWND)) {
 	return match;
 }
 
-bool windowHasClass(HWND window, wchar_t const *className) {
+bool windowHasClass(HWND window, TCHAR const *className) {
 	const int BUFFER_SIZE = 256;
 
 	// A simple cache: if the window handle matches the previously fetched one,
 	// we do not need to call GetClassName again.
 	static HWND prevWindow = NULL;
-	static wchar_t buffer[BUFFER_SIZE];
+	static TCHAR buffer[BUFFER_SIZE];
 	if (window != prevWindow) {
 		prevWindow = window;
 		if (!GetClassName(window, buffer, BUFFER_SIZE))

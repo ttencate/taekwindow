@@ -15,7 +15,7 @@ HWND findLastParent(HWND window, bool (*criterium)(HWND));
 
 /* Returns true if the given window has the given window class name.
  */
-bool windowHasClass(HWND window, wchar_t const *className);
+bool windowHasClass(HWND window, TCHAR const *className);
 
 /* Returns true if the window is currently maximized.
  */
