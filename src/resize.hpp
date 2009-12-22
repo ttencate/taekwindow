@@ -5,11 +5,9 @@
 
 class ResizeState : public DeformState {
 
-	/* The current window rectangle, and the desired rectangle,
-	 * in client coordinates (or screen coordinates, if no parent).
-	 * A possible difference between these is due to minimum/maximum size.
+	/* The current window rectangle, in screen coordinates.
 	 */
-	RECT d_actualRect, d_desiredRect;
+	RECT d_actualRect;
 
 	/* The side(s) on which the window is resized. Both either -1, 0 or 1.
 	 */
@@ -31,12 +29,12 @@ class ResizeState : public DeformState {
 
 		/* Updates d_resizingX and d_resizingY, and returns true if they changed.
 		 */
-		bool updateResizingXY();
+		bool updateResizingXY(RECT const &rect);
 
 		/* Helpers for updateResizingXY().
 		 */
-		void updateResizingBottomRight();
-		void updateResizingNineRects();
+		void updateResizingBottomRight(RECT const &rect);
+		void updateResizingNineRects(RECT const &rect);
 
 		/* Returns the cursor to be used for the current resizing direction.
 		 */
@@ -48,13 +46,9 @@ class ResizeState : public DeformState {
 		void restore();
 
 		/* Resizes the window to the best of its abilities (respecting minimum/maximum size)
-		 * to the size of d_desiredRect. Does not update d_actualRect.
+		 * to the size of d_desiredRect. Also updates d_actualRect.
 		 */
-		void resizeWindow();
-
-		/* Returns the current window rectangle, in coordinates suitable for d_actualRect.
-		 */
-		RECT currentRect() const;
+		void resizeWindow(RECT const &desiredRect);
 
 };
 

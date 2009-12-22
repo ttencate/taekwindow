@@ -13,29 +13,28 @@ ResizeState::ResizeState(POINT mousePos, MouseButton button, HWND window)
 {
 }
 
-bool ResizeState::updateResizingXY() {
+bool ResizeState::updateResizingXY(RECT const &rect) {
 	int orx = d_resizingX, ory = d_resizingY;
 	switch (globals->config().resizeMode) {
 		case rmBottomRight:
-			updateResizingBottomRight();
+			updateResizingBottomRight(rect);
 			break;
 		case rmNineRectangles:
-			updateResizingNineRects();
+			updateResizingNineRects(rect);
 			break;
 	}	
 	return orx != d_resizingX || ory != d_resizingY;
 }
 
-void ResizeState::updateResizingBottomRight() {
+void ResizeState::updateResizingBottomRight(RECT const &) {
 	d_resizingX = 1;
 	d_resizingY = 1;
 }
 
-void ResizeState::updateResizingNineRects() {
-	POINT clientPos = mousePos();
-	ScreenToClient(window(), &clientPos);
-	d_resizingX = clientPos.x * 3 / (d_actualRect.right - d_actualRect.left) - 1;
-	d_resizingY = clientPos.y * 3 / (d_actualRect.bottom - d_actualRect.top) - 1;
+void ResizeState::updateResizingNineRects(RECT const &rect) {
+	POINT pos = mousePos();
+	d_resizingX = rect.right == rect.left ? 0 : (pos.x - rect.left) * 3 / (rect.right - rect.left) - 1;
+	d_resizingY = rect.bottom == rect.top ? 0 : (pos.y - rect.top) * 3 / (rect.bottom - rect.top) - 1;
 }
 
 /* Returns the cursor to be used for the current resizing direction.
@@ -49,7 +48,7 @@ Cursor ResizeState::getResizingCursor() {
 		return crResizeNWSE;
 	if (d_resizingX * d_resizingY < 0)
 		return crResizeNESW;
-	return crNormal; // fallback
+	return crNormal;
 }
 
 /* Sets up the cursor and the resize type.
@@ -61,25 +60,16 @@ void ResizeState::enter() {
 	// When resizing a maximized window, unmaximize it first.
 	if (IsZoomed(window())) {
 		restore();
-		DEBUGLOG("Returned from restore");
 	}
-	DEBUGLOG("After the if");
 
 	d_parent = GetAncestor(window(), GA_PARENT);
-	DEBUGLOG("Got the ancestor");
-	d_actualRect = currentRect();
-	DEBUGLOG("Returned from currentRect");
-	DEBUGLOG("Actual rect is %d-%d, %d-%d", RECT_ARGS(d_actualRect));
-	
-	d_desiredRect = d_actualRect;
-	DEBUGLOG("Desired rect is %d-%d, %d-%d", RECT_ARGS(d_desiredRect));
 
 	// Find out at which corner to resize.
-	updateResizingXY();
-	DEBUGLOG("Updated resizingXY");
+	RECT rect;
+	GetWindowRect(window(), &rect);
+	updateResizingXY(rect);
 
 	cursorWindow().setCursor(getResizingCursor());
-	DEBUGLOG("Cursor set; returning from enter");
 }
 
 /* Resizes the window accordingly.
@@ -90,23 +80,24 @@ bool ResizeState::onMouseMove(MouseMoveEvent const &event) {
 	POINT delta = mouseDelta();
 
 	// Resize at the correct corner/edge.
-	if (d_resizingX < 0) {
-		d_desiredRect.left += delta.x;
-	} else if (d_resizingX > 0) {
-		d_desiredRect.right += delta.x;
-	}
-	if (d_resizingY < 0) {
-		d_desiredRect.top += delta.y;
-	} else if (d_resizingY > 0) {
-		d_desiredRect.bottom += delta.y;
-	}
-
-	resizeWindow();
-	d_actualRect = currentRect();
-
-	if (updateResizingXY())
+	RECT rect;
+	GetWindowRect(window(), &rect);
+	if (updateResizingXY(rect))
 		cursorWindow().setCursor(getResizingCursor());
 	
+	if (d_resizingX < 0) {
+		rect.left += delta.x;
+	} else if (d_resizingX > 0) {
+		rect.right += delta.x;
+	}
+	if (d_resizingY < 0) {
+		rect.top += delta.y;
+	} else if (d_resizingY > 0) {
+		rect.bottom += delta.y;
+	}
+
+	resizeWindow(rect);
+
 	return true;
 }
 
@@ -142,21 +133,27 @@ void ResizeState::restore() {
 	DEBUGLOG("Restored 0x%08x to %d-%d, %d-%d", window(), RECT_ARGS(windowPlacement.rcNormalPosition));
 }
 
-void ResizeState::resizeWindow() {
-	DEBUGLOG("Resizing to %d-%d, %d-%d", RECT_ARGS(d_desiredRect));
-	// Reminder: SetWindowPos takes client coordinates
-	SetWindowPos(window(), 0,
-		d_desiredRect.left, d_desiredRect.top,
-		d_desiredRect.right - d_desiredRect.left, d_desiredRect.bottom - d_desiredRect.top,
-		SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-}
+void ResizeState::resizeWindow(RECT const &rect) {
+	DEBUGLOG("Resizing to %d-%d, %d-%d", RECT_ARGS(rect));
 
-RECT ResizeState::currentRect() const {
-	RECT rect;
-	GetWindowRect(window(), &rect);
+	// SetWindowPos takes client coordinates
+	POINT pos = { rect.left, rect.top };
 	if (d_parent) {
-		screenToClient(d_parent, rect);
+		ScreenToClient(d_parent, &pos);
 	}
-	DEBUGLOG("Current is %d-%d, %d-%d", RECT_ARGS(rect));
-	return rect;
+	SetWindowPos(window(), 0,
+		pos.x, pos.y,
+		rect.right - rect.left, rect.bottom - rect.top,
+		SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	RECT actualRect;
+	GetWindowRect(window(), &actualRect);
+
+	// The window may have hit its minimum or maximum size. Move to compensate, if necessary.
+	// This does cause some flicker, but I see no reliable way to prevent that.
+	int dx = d_resizingX < 0 ? rect.right - actualRect.right : 0;
+	int dy = d_resizingY < 0 ? rect.bottom - actualRect.bottom : 0;
+	if (dx || dy) {
+		SetWindowPos(window(), 0, pos.x + dx, pos.y + dy, 0, 0,
+			SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_NOSIZE);
+	}
 }
