@@ -20,7 +20,7 @@ CursorWindow::~CursorWindow() {
 }
 
 void CursorWindow::setCursor(Cursor cursor) {
-	SetClassLongPtr(d_handle, GCLP_HCURSOR, (LONG_PTR)cursors.get(cursor));
+	SetClassLongPtr(d_handle, GCLP_HCURSOR, (LONG_PTR)globals->cursors().get(cursor));
 }
 
 ATOM CursorWindow::createClass() {

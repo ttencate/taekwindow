@@ -4,7 +4,7 @@
 #include "errors.hpp"
 #include "version.hpp"
 
-TCHAR const *MessageWindowClass::s_name = _T("MessageWindowClass");
+TCHAR const *const MessageWindowClass::s_name = _T("MessageWindowClass");
 
 size_t MessageWindowClass::s_instances = 0;
 ATOM MessageWindowClass::s_atom = NULL;

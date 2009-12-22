@@ -13,7 +13,7 @@
 #include "debug.hpp"
 #include "version.hpp"
 
-TCHAR const *SHARED_MEM_NAME = _T("Taekwindow_{5C9807CA-E53F-4d1b-8AF7-FCA0FF68EDA0}");
+TCHAR const *const SHARED_MEM_NAME = _T("Taekwindow_{5C9807CA-E53F-4d1b-8AF7-FCA0FF68EDA0}");
 
 bool enable() {
 	if (isEnabled())
@@ -101,7 +101,6 @@ int main() {
 
 	// Load the configuration from the registry.
 	loadAndApplyConfig();
-	cursors.load();
 
 	// Attach the event hooks.
 	if (!enable()) {

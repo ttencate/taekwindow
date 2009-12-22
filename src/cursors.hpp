@@ -23,7 +23,7 @@ class Cursors {
 
 	public:
 
-		void load();
+		Cursors();
 
 		HCURSOR get(Cursor cursor) const;
 
@@ -33,7 +33,5 @@ class Cursors {
 		 */
 		HCURSOR load(int ocr) const;
 };
-
-extern Cursors cursors;
 
 #endif

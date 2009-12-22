@@ -7,7 +7,7 @@
 
 class MessageWindowClass {
 
-	static TCHAR const *s_name;
+	static TCHAR const *const s_name;
 
 	static size_t s_instances;
 	static ATOM s_atom;

@@ -4,9 +4,7 @@
 
 #include "cursors.hpp"
 
-Cursors cursors;
-
-void Cursors::load() {
+Cursors::Cursors() {
 	d_cursors[crNormal] = load(OCR_NORMAL);
 	d_cursors[crIgnore] = load(OCR_NO);
 	d_cursors[crMove] = load(OCR_SIZEALL);
