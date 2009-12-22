@@ -18,35 +18,37 @@
  */
 #define ID_APPLY_NOW 0x3021
 
+size_t const ConfigSheet::s_numPages = 5;
+int const ConfigSheet::s_templateIds[ConfigSheet::s_numPages] = { IDD_GENERALPAGE, IDD_BUTTONSPAGE, IDD_RESIZINGPAGE, IDD_SCROLLINGPAGE, IDD_ABOUTPAGE };
+DLGPROC const ConfigSheet::s_pageProcs[ConfigSheet::s_numPages] = { &ConfigSheet::generalPageFwd, &ConfigSheet::buttonsPageFwd, &ConfigSheet::resizingPageFwd, &ConfigSheet::scrollingPageFwd, &ConfigSheet::aboutPageFwd };
+
+size_t const ConfigSheet::s_numImages = 5;
+int const ConfigSheet::s_resourceIds[ConfigSheet::s_numImages] = { IDB_STARTUP, IDB_TRAYICON, IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
+int const ConfigSheet::s_controlIds[ConfigSheet::s_numImages] = { IDC_STARTUPIMAGE, IDC_SYSTRAYIMAGE, IDC_BOTTOMRIGHTIMAGE, IDC_NINERECTANGLESIMAGE, IDC_APPLOGO };
+
 ConfigSheet *ConfigSheet::s_instance = NULL;
 
 ConfigSheet::ConfigSheet()
 :
 	PropSheet(_T(APPLICATION_TITLE) _T(" Preferences"), LoadIcon(globals->currentInstance(), MAKEINTRESOURCE(IDI_APP))),
 	d_handle(NULL),
-	d_origWindowProc(NULL)
+	d_origWindowProc(NULL),
+	d_gdiPlus(),
+	d_imageList(d_gdiPlus, s_numImages)
 {
 	ASSERT(!s_instance);
 	s_instance = this;
 
-	// Most of the runs, the user will not use the preferences dialog.
-	// That's why we do not initialize in WinMain, but only when it is used.
-	if (!initCommonControls()) {
-		return; // TODO handle error
+	for (size_t i = 0; i < s_numImages; ++i) {
+		d_imageList.load(s_resourceIds[i], s_controlIds[i]);
 	}
-	d_gdiPlus.init(); // we CAN work without GDI+, so ignore any errors
-	loadImages();
 
-	addPage(PropSheetPage(IDD_GENERALPAGE, &generalPageFwd));
-	addPage(PropSheetPage(IDD_BUTTONSPAGE, &buttonsPageFwd));
-	addPage(PropSheetPage(IDD_RESIZINGPAGE, &resizingPageFwd));
-	addPage(PropSheetPage(IDD_SCROLLINGPAGE, &scrollingPageFwd));
-	addPage(PropSheetPage(IDD_ABOUTPAGE, &aboutPageFwd));
+	for (size_t i = 0; i < s_numPages; ++i) {
+		addPage(PropSheetPage(s_templateIds[i], s_pageProcs[i]));
+	}
 }
 
 ConfigSheet::~ConfigSheet() {
-	unloadImages();
-	d_gdiPlus.cleanup();
 	s_instance = NULL;
 }
 
@@ -103,12 +105,9 @@ void ConfigSheet::initDynamicLabels(HWND pageHandle) {
 }
 
 void ConfigSheet::drawImageControl(int controlId, DRAWITEMSTRUCT const &item) {
-	for (int i = 0; i < s_numImages; ++i) {
-		if (d_images[i] && d_images[i]->controlId() == controlId) {
-			d_images[i]->draw(item);
-			break;
-		}
-	}
+	Image *image = d_imageList.forControl(controlId);
+	if (image)
+		image->draw(item);
 }
 
 void ConfigSheet::hyperlinkClicked(int controlID, NMLINK const &nmLink) {
@@ -289,7 +288,7 @@ BOOL ConfigSheet::aboutPageDialogProc(HWND pageHandle, UINT message, WPARAM wPar
  * all the pages have written to it.
  * The PropSheetProc can get us a notification (on Windows XP and above)
  * but it is sent *before* the pages get a PSN_APPLY notification,
- * so the configuration is not yet up to date at that point.
+ * so the d_newConfig is not yet up to date at that point.
  */
 LRESULT ConfigSheet::configWindowProc(HWND pageHandle, UINT message, WPARAM wParam, LPARAM lParam) {
 	LRESULT retVal = CallWindowProc(d_origWindowProc, pageHandle, message, wParam, lParam);
@@ -336,26 +335,6 @@ void ConfigSheet::doShow() {
 void ConfigSheet::bringToFront() {
 	if (isShowing()) {
 		BringWindowToTop(d_handle);
-	}
-}
-
-/* Loads the PNG images from resources, storing them in the images array.
- * Silently fails for images that cannot be loaded, storing NULL for that image.
- */
-void ConfigSheet::loadImages() {
-	int const controlIds[ConfigSheet::s_numImages] = { IDC_STARTUPIMAGE, IDC_SYSTRAYIMAGE, IDC_BOTTOMRIGHTIMAGE, IDC_NINERECTANGLESIMAGE, IDC_APPLOGO };
-	int const resourceIds[ConfigSheet::s_numImages] = { IDB_STARTUP, IDB_TRAYICON, IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
-	for (int i = 0; i < s_numImages; ++i) {
-		d_images[i] = new Image(resourceIds[i], controlIds[i]);
-	}
-}
-
-void ConfigSheet::unloadImages() {
-	for (int i = 0; i < s_numImages; ++i) {
-		if (d_images[i]) {
-			delete d_images[i];
-			d_images[i] = NULL;
-		}
 	}
 }
 

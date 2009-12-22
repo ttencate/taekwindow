@@ -467,6 +467,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\imagelist.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\imagelist.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\propsheet.cpp"
 				>
 			</File>

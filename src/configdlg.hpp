@@ -6,12 +6,20 @@
 
 #include "gdipluswrap.hpp"
 #include "image.hpp"
+#include "imagelist.hpp"
 #include "propsheet.hpp"
 #include "config.hpp"
+#include "comctl.hpp"
 
 class ConfigSheet : private PropSheet {
 
-	static int const s_numImages = 5;
+	static size_t const s_numPages;
+	static int const s_templateIds[];
+	static DLGPROC const s_pageProcs[];
+
+	static size_t const s_numImages;
+	static int const s_resourceIds[];
+	static int const s_controlIds[];
 
 	/* Handle of the configuration dialog's window.
 	 */
@@ -27,9 +35,10 @@ class ConfigSheet : private PropSheet {
 	 */
 	Configuration d_newConfig;
 
+	CommonControls d_comCtls;
 	GdiPlusWrap d_gdiPlus;
 
-	Image *d_images[s_numImages];
+	ImageList d_imageList;
 
 	public:
 
@@ -52,7 +61,6 @@ class ConfigSheet : private PropSheet {
 		static LRESULT CALLBACK configFwd(HWND dialogHandle, UINT message, WPARAM wParam, LPARAM lParam);
 
 		void loadImages();
-		void unloadImages();
 		void initDynamicLabels(HWND dialogHandle);
 		void drawImageControl(int controlID, DRAWITEMSTRUCT const &item);
 		void hyperlinkClicked(int controlID, NMLINK const &nmLink);
