@@ -1,10 +1,15 @@
 TODO
 ----
 
-- Update the Readme and version number.
+- Fix correct propagation of the version number into taekwindow.rc.
 - Test release build thoroughly on XP and Windows 7.
 - Release.
 
 - Try sending another Alt message to counteract the first. Use SendInput.
+- Try disabling Unicode for smaller executable.
+- Make the tray icon menu into a resource.
+- Make wrapper classes for the mouse/keyboard hooks.
+- Look into the icon: it's 15 kB, and seems to be uncompressed in the .exe. (Aren't we using PNG?)
+- Strip the metadata from PNGs -- there are references to Inkscape and ImageReady.
 - Search for TODO and do them.
 - Do a full code review.

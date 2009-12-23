@@ -29,7 +29,7 @@ Add the files and set their properties.
 
 Create a new News Item. Use as title: "Taekwindow <version number>: <snappy title>". Describe the release, then end with:
 ---
-Taekwindow is a simple, lightweight program that allows you to manipulate floating windows in Microsoft Windows very efficiently using the Alt key, in a way similar to many X11 window managers.
+Taekwindow is a simple, lightweight and free Windows program that allows you to move and resize windows by dragging them with the Alt key, similar to many X11 window managers.
  
 For more information, and for downloading the program, visit:  
  
