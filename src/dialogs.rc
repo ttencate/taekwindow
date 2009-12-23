@@ -1,57 +1,23 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "resource.h"
+#include "dialogs.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include <winres.h>
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Neutral resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
-#ifdef _WIN32
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1252)
-#endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_APP                 ICON                    "..\\graphics\\icons\\all.ico"
-IDI_TRAY_COLOUR         ICON                    "..\\graphics\\icons\\traycolour.ico"
-IDI_TRAY_GRAY           ICON                    "..\\graphics\\icons\\traygray.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// PNG
-//
-
-IDB_STARTUP             PNG                     "..\\graphics\\gui\\startup.png"
-IDB_TRAYICON            PNG                     "..\\graphics\\gui\\trayicon.png"
-IDB_RESIZEBOTTOMRIGHT   PNG                     "..\\graphics\\gui\\resize-bottom-right.png"
-IDB_RESIZENINERECTANGLES PNG                     "..\\graphics\\gui\\resize-nine-rectangles.png"
-IDB_LOGO                PNG                     "..\\graphics\\gui\\logo-64.png"
-#endif    // Neutral resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (U.K.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -63,18 +29,17 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 1 TEXTINCLUDE 
 BEGIN
-    "resource.h\0"
+    "dialogs.h\0"
 END
 
 2 TEXTINCLUDE 
 BEGIN
-    "#include ""afxres.h""\r\n"
+    "#include <winres.h>\r\n"
     "\0"
 END
 
 3 TEXTINCLUDE 
 BEGIN
-    "\r\n"
     "\0"
 END
 
@@ -217,60 +182,8 @@ BEGIN
     CONTROL         "License",IDC_LICENSE,"SysLink",WS_TABSTOP,12,162,204,24
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// Dutch (Netherlands) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NLD)
-#ifdef _WIN32
-LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
-#pragma code_page(1252)
-#endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Version
-//
-
-VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,4,0
- PRODUCTVERSION 0,2,4,0
- FILEFLAGSMASK 0x17L
-#ifdef _DEBUG
- FILEFLAGS 0x1L
-#else
- FILEFLAGS 0x0L
-#endif
- FILEOS 0x4L
- FILETYPE 0x1L
- FILESUBTYPE 0x0L
-BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "040904b0"
-        BEGIN
-            VALUE "FileDescription", "Taekwindow"
-            VALUE "FileVersion", "0.2.4.0"
-            VALUE "InternalName", "Taekwindow"
-            VALUE "LegalCopyright", "Copyright © 2006-2008, Thomas ten Cate"
-            VALUE "OriginalFilename", "taekwindow.exe"
-            VALUE "ProductName", "Taekwindow"
-            VALUE "ProductVersion", "0.2.4.0"
-        END
-    END
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x409, 1200
-    END
-END
-
-#endif    // Dutch (Netherlands) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

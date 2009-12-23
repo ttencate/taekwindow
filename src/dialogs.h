@@ -1,20 +1,12 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by taekwindow.rc
+// Used by dialogs.rc
 //
-#define IDI_APP                         101
-#define IDI_TRAY_COLOUR                 102
-#define IDI_TRAY_GRAY                   103
-#define IDB_LOGO                        104
 #define IDD_GENERALPAGE                 105
 #define IDD_BUTTONSPAGE                 106
 #define IDD_RESIZINGPAGE                107
 #define IDD_SCROLLINGPAGE               108
 #define IDD_ABOUTPAGE                   109
-#define IDB_STARTUP                     110
-#define IDB_TRAYICON                    111
-#define IDB_RESIZEBOTTOMRIGHT           112
-#define IDB_RESIZENINERECTANGLES        113
 #define IDC_STARTATLOGON                1001
 #define IDC_APPTITLE                    1002
 #define IDC_STARTUPGROUP                1002

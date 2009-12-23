@@ -5,8 +5,8 @@
 
 #include "trayicon.hpp"
 #include "messages.hpp"
-#include "version.hpp"
-#include "resource.h"
+#include "version.h"
+#include "graphics.h"
 #include "errors.hpp"
 #include "main.hpp"
 #include "globals.hpp"

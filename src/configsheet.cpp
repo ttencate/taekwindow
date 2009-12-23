@@ -4,8 +4,9 @@
 #include "main.hpp"
 #include "debug.hpp"
 #include "errors.hpp"
-#include "resource.h"
-#include "version.hpp"
+#include "dialogs.h"
+#include "graphics.h"
+#include "version.h"
 #include "picostdlib.h"
 
 /* It ain't pretty, but it doesn't seem to be in standard headers.

@@ -222,6 +222,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dialogs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dialogs.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics.h"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics.rc"
+				>
+			</File>
+			<File
 				RelativePath="..\graphics\gui\logo-64.png"
 				>
 			</File>
@@ -234,15 +250,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
 				RelativePath="..\graphics\gui\startup.png"
-				>
-			</File>
-			<File
-				RelativePath=".\taekwindow.rc"
 				>
 			</File>
 			<File
@@ -255,6 +263,10 @@
 			</File>
 			<File
 				RelativePath="..\graphics\gui\trayicon.png"
+				>
+			</File>
+			<File
+				RelativePath=".\version.rc"
 				>
 			</File>
 		</Filter>
@@ -634,7 +646,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\version.hpp"
+				RelativePath=".\version.h"
 				>
 			</File>
 			<File
@@ -646,7 +658,7 @@
 					<Tool
 						Name="generateFromXML"
 						InputXML="$(SolutionDir)\information.xml"
-						OutputFile="$(ProjectDir)\version.hpp"
+						OutputFile="$(ProjectDir)\version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration

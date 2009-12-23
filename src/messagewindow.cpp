@@ -2,7 +2,7 @@
 
 #include "messagewindow.hpp"
 #include "errors.hpp"
-#include "version.hpp"
+#include "version.h"
 
 TCHAR const *const MessageWindowClass::s_name = _T("MessageWindowClass");
 

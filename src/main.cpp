@@ -11,7 +11,7 @@
 #include "sharedmemory.hpp"
 #include "errors.hpp"
 #include "debug.hpp"
-#include "version.hpp"
+#include "version.h"
 
 TCHAR const *const SHARED_MEM_NAME = _T("Taekwindow_{5C9807CA-E53F-4d1b-8AF7-FCA0FF68EDA0}");
 
