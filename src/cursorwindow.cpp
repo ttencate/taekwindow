@@ -61,21 +61,22 @@ LRESULT CALLBACK CursorWindow::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 			//ShowWindow(hwnd, SW_HIDE);
 			return 0;
 		case WM_PAINT:
-#ifdef _DEBUG
+			// If we do not at least call BeginPaint()/EndPaint(),
+			// the system will keep sending this message over and over again.
+			// The CPU won't get any rest!
 			paint(hwnd);
-#endif
 			return 0;
 	}
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-#ifdef _DEBUG
 void CursorWindow::paint(HWND window) {
 	PAINTSTRUCT p;
 	BeginPaint(window, &p);
+#ifdef _DEBUG
 	RECT rect;
 	GetWindowRect(window, &rect);
 	DrawEdge(p.hdc, &rect, EDGE_SUNKEN, BF_LEFT | BF_RIGHT | BF_BOTTOM | BF_TOP);
+#endif
 	EndPaint(window, &p);
 }
-#endif
