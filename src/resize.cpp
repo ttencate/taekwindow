@@ -30,8 +30,12 @@ void ResizeState::updateResizingBottomRight(RECT const &) {
 
 void ResizeState::updateResizingNineRects(RECT const &rect) {
 	POINT pos = mousePos();
-	d_resizingX = rect.right == rect.left ? 0 : (pos.x - rect.left) * 3 / (rect.right - rect.left) - 1;
-	d_resizingY = rect.bottom == rect.top ? 0 : (pos.y - rect.top) * 3 / (rect.bottom - rect.top) - 1;
+	int rx = rect.right == rect.left ? 0 : (pos.x - rect.left) * 3 / (rect.right - rect.left) - 1;
+	int ry = rect.bottom == rect.top ? 0 : (pos.y - rect.top) * 3 / (rect.bottom - rect.top) - 1;
+	if (rx)
+		d_resizingX = rx;
+	if (ry)
+		d_resizingY = ry;
 }
 
 /* Returns the cursor to be used for the current resizing direction.
@@ -64,6 +68,7 @@ void ResizeState::enter() {
 	// Find out at which corner to resize.
 	RECT rect;
 	GetWindowRect(window(), &rect);
+	d_resizingX = d_resizingY = 0;
 	updateResizingXY(rect);
 
 	cursorWindow().setCursor(getResizingCursor());
