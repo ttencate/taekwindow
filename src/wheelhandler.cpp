@@ -24,7 +24,7 @@ void WheelHandler::forwardMouseWheel(MouseWheelEvent const &event) {
 	// END HACK
 
 	// Unfortunately, we do not receive the complete information that is normally in a
-	// WM_MOUSEWHEEL message. In particular, the key-down information is missing.
+	// WM_MOUSEWHEEL or WM_MOUSEHWHEEL message. In particular, the key-down information is missing.
 	// It might be in the "reserved" low word of mouseData, but we cannot be sure.
 	// Reconstruct it.
 	WPARAM wParam = GET_WHEEL_DELTA_WPARAM(event.mouseData) << 16;
@@ -41,5 +41,5 @@ void WheelHandler::forwardMouseWheel(MouseWheelEvent const &event) {
 	DEBUGLOG("Our lParam converts back to: %d, %d", GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
 	DEBUGLOG("Forwarding mouse wheel to window 0x%X (wParam = 0x%08X, lParam = 0x%08X)", window, wParam, lParam);
-	SendMessage(window, WM_MOUSEWHEEL, wParam, lParam);
+	SendMessage(window, event.msg, wParam, lParam);
 }

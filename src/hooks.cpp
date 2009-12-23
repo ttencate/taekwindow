@@ -4,6 +4,11 @@
 #include "globals.hpp"
 #include "debug.hpp"
 
+// We want to use this, but it requires WIN32_WINNT to be 0x600 at least (Windows Vista).
+// By setting that, we'd risk accidentally using other Vista features,
+// damaging XP support... so we just copy the definition here.
+#define WM_MOUSEHWHEEL 0x020E
+
 /* Attaches global event hooks.
  * Returns true on success.
  */
@@ -90,7 +95,8 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				}
 				break;
 			case WM_MOUSEWHEEL:
-				eat = globals->mouseHandlerList().onMouseWheel(MouseWheelEvent(mousePos, eventInfo->mouseData, window));
+			case WM_MOUSEHWHEEL:
+				eat = globals->mouseHandlerList().onMouseWheel(MouseWheelEvent(wParam, mousePos, eventInfo->mouseData, window));
 				break;
 		}
 	}

@@ -31,11 +31,12 @@ struct MouseMoveEvent {
 };
 
 struct MouseWheelEvent {
+	UINT msg;
 	POINT mousePos;
 	DWORD mouseData;
 	HWND window;
-	MouseWheelEvent(POINT p, DWORD d, HWND w) :
-		mousePos(p), mouseData(d), window(w)
+	MouseWheelEvent(UINT m, POINT p, DWORD d, HWND w) :
+		msg(m), mousePos(p), mouseData(d), window(w)
 	{ }
 };
 
