@@ -21,11 +21,15 @@ void MoveState::enter() {
 	cursorWindow().setCursor(crMove);
 }
 
+void MoveState::exit() {
+	DEBUGLOG("Ending move action");
+	DeformState::exit();
+}
+
 /* Moves the window accordingly.
  */
 bool MoveState::onMouseMove(MouseMoveEvent const &event) {
 	DeformState::onMouseMove(event);
-	DEBUGLOG("Handling move action");
 
 	POINT delta = mouseDelta();
 	d_windowPos.x += delta.x;

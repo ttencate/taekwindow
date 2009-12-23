@@ -9,9 +9,13 @@ IgnoreState::IgnoreState(MouseButton button)
 
 void IgnoreState::enter() {
 	MouseDownState::enter();
-
 	DEBUGLOG("Starting ignore action");
 	cursorWindow().setCursor(crIgnore);
+}
+
+void IgnoreState::exit() {
+	DEBUGLOG("Ending ignore action");
+	MouseDownState::exit();
 }
 
 bool IgnoreState::onMouseDown(MouseDownEvent const &event) {

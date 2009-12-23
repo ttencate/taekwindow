@@ -19,7 +19,6 @@ void MouseDownState::enter() {
 void MouseDownState::exit() {
 	delete d_cursorWindow;
 	d_cursorWindow = NULL;
-	DEBUGLOG("Sending another Alt keystroke");
 	DEBUGLOG("Exited MouseDownState");
 }
 
