@@ -26,7 +26,7 @@
 		<!-- Relative to $(SolutionDir) -->
     <file>bin\*.exe</file>
     <file>doc\*.vcproj</file>
-    <file>doc\*.txt</file>
+    <file>doc\source.txt</file>
     <file>doc\*.xslt</file>
     <file>graphics\gui\*.png</file>
 		<file>graphics\icons\*.ico</file>
