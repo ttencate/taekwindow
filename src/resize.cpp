@@ -108,8 +108,13 @@ bool ResizeState::onMouseMove(MouseMoveEvent const &event) {
 void ResizeState::restore() {
 	WINDOWPLACEMENT windowPlacement;
 	windowPlacement.length = sizeof(WINDOWPLACEMENT);
-	if (!GetWindowPlacement(window(), &windowPlacement))
+	if (!GetWindowPlacement(window(), &windowPlacement)) {
 		debugShowLastError("GetWindowPlacement");
+		return;
+	}
+	DEBUGLOG("Current window restored position: %d, %d, %d, %d",
+		windowPlacement.rcNormalPosition.left, windowPlacement.rcNormalPosition.top,
+		windowPlacement.rcNormalPosition.right, windowPlacement.rcNormalPosition.bottom);
 
 	// A complication: Get/SetWindowPlacement use workspace coordinates, not screen coordinates.
 	// The difference is that workspace coordinates exclude the taskbar.
@@ -117,19 +122,28 @@ void ResizeState::restore() {
 	HMONITOR monitor = MonitorFromWindow(window(), MONITOR_DEFAULTTONEAREST);
 	MONITORINFO monInfo;
 	monInfo.cbSize = sizeof(MONITORINFO);
-	if (!GetMonitorInfo(monitor, &monInfo))
+	if (!GetMonitorInfo(monitor, &monInfo)) {
 		debugShowLastError("GetMonitorInfo");
+		return;
+	}
+	DEBUGLOG("Monitor work area: %d, %d, %d, %d",
+		monInfo.rcWork.left, monInfo.rcWork.top, monInfo.rcWork.right, monInfo.rcWork.bottom);
 
-	ASSERT(windowPlacement.length == sizeof(WINDOWPLACEMENT));
+	windowPlacement.length = sizeof(WINDOWPLACEMENT);
 	windowPlacement.showCmd = SW_RESTORE;
 	windowPlacement.rcNormalPosition.left = 0;
 	windowPlacement.rcNormalPosition.top = 0;
 	windowPlacement.rcNormalPosition.right = monInfo.rcWork.right - monInfo.rcWork.left;
 	windowPlacement.rcNormalPosition.bottom = monInfo.rcWork.bottom - monInfo.rcWork.top;
+	DEBUGLOG("Setting restored position to %d, %d, %d, %d",
+		windowPlacement.rcNormalPosition.left, windowPlacement.rcNormalPosition.top,
+		windowPlacement.rcNormalPosition.right, windowPlacement.rcNormalPosition.bottom);
 
 	// Use SetWindowPlacement for demaximizing to prevent animation.
 	if (!SetWindowPlacement(window(), &windowPlacement))
 		debugShowLastError("SetWindowPlacement");
+
+	SendMessage(window(), WM_NULL, 0, 0);
 }
 
 void ResizeState::resizeWindow(RECT const &rect) {

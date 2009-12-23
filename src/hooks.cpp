@@ -56,49 +56,73 @@ void clipCursor(POINT &pos) {
 		pos.y = clip.bottom;
 }
 
+bool processMouseMessage(WPARAM wParam, LPARAM lParam) {
+	MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
+	POINT mousePos = eventInfo->pt;
+	// A low-level mouse proc gets the mouse coordinates even before they are
+	// clipped to the screen boundaries. So we need to do this ourselves.
+	clipCursor(mousePos);
+	HWND window = WindowFromPoint(mousePos);
+	MouseButton button = eventToButton(wParam);
+	switch (wParam) {
+		case WM_LBUTTONDOWN:
+		case WM_MBUTTONDOWN:
+		case WM_RBUTTONDOWN:
+		case WM_NCLBUTTONDOWN:
+		case WM_NCMBUTTONDOWN:
+		case WM_NCRBUTTONDOWN:
+			return globals->mouseHandlerList().onMouseDown(MouseDownEvent(mousePos, button, window));
+		case WM_LBUTTONUP:
+		case WM_MBUTTONUP:
+		case WM_RBUTTONUP:
+		case WM_NCLBUTTONUP:
+		case WM_NCMBUTTONUP:
+		case WM_NCRBUTTONUP:
+			return globals->mouseHandlerList().onMouseUp(MouseUpEvent(mousePos, button, window));
+		case WM_MOUSEMOVE:
+		case WM_NCMOUSEMOVE:
+			if (globals->mouseHandlerList().onMouseMove(MouseMoveEvent(mousePos))) {
+				// If we eat the event, even the mouse cursor position won't be updated
+				// by Windows, so low-level is the low-level hook.
+				SetCursorPos(mousePos.x, mousePos.y);
+				return true;
+			} else {
+				return false;
+			}
+		case WM_MOUSEWHEEL:
+		case WM_MOUSEHWHEEL:
+			return globals->mouseHandlerList().onMouseWheel(MouseWheelEvent(wParam, mousePos, eventInfo->mouseData, window));
+		default:
+			return false;
+	}
+}
+
 /* The function for handling mouse events.
  */
 LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+	// Question: from where is the callback called?
+	// Answer: from pretty much anywhere!
+	// The callback is called by sending a message, so any function that causes
+	// pending sent messages to be processed can cause callback invocations.
+	// For example, a call to GetAncestor can indirectly cause a call to the callback,
+	// and if GetAncestor itself was called *from* the callback, things go boom pretty hard.
+	// 
+	// Workaround: ignore nested callback calls while another call is being processed.
+	// 
+	// Alternative: post messages to a dummy window and have its window procedure process them sequentially.
+	// Drawback: because we defer work until after the callback returns,
+	//           we no longer have the power to eat messages from here.
+	static bool inMouseProc = false;
+
 	bool eat = false; // Set to true if we don't want to pass the event to the application.
-	if (nCode >= 0 && nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
-		MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
-		POINT mousePos = eventInfo->pt;
-		// A low-level mouse proc gets the mouse coordinates even before they are
-		// clipped to the screen boundaries. So we need to do this ourselves.
-		clipCursor(mousePos);
-		HWND window = WindowFromPoint(mousePos);
-		MouseButton button = eventToButton(wParam);
-		switch (wParam) {
-			case WM_LBUTTONDOWN:
-			case WM_MBUTTONDOWN:
-			case WM_RBUTTONDOWN:
-			case WM_NCLBUTTONDOWN:
-			case WM_NCMBUTTONDOWN:
-			case WM_NCRBUTTONDOWN:
-				eat = globals->mouseHandlerList().onMouseDown(MouseDownEvent(mousePos, button, window));
-				break;
-			case WM_LBUTTONUP:
-			case WM_MBUTTONUP:
-			case WM_RBUTTONUP:
-			case WM_NCLBUTTONUP:
-			case WM_NCMBUTTONUP:
-			case WM_NCRBUTTONUP:
-				eat = globals->mouseHandlerList().onMouseUp(MouseUpEvent(mousePos, button, window));
-				break;
-			case WM_MOUSEMOVE:
-			case WM_NCMOUSEMOVE:
-				eat = globals->mouseHandlerList().onMouseMove(MouseMoveEvent(mousePos));
-				if (eat) {
-					// If we eat the event, even the mouse cursor position won't be updated
-					// by Windows, so low-level is the low-level hook.
-					SetCursorPos(mousePos.x, mousePos.y);
-				}
-				break;
-			case WM_MOUSEWHEEL:
-			case WM_MOUSEHWHEEL:
-				eat = globals->mouseHandlerList().onMouseWheel(MouseWheelEvent(wParam, mousePos, eventInfo->mouseData, window));
-				break;
+	if (!inMouseProc) {
+		inMouseProc = true;
+		if (nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
+			eat = processMouseMessage(wParam, lParam);
 		}
+		inMouseProc = false;
+	} else {
+		DEBUGLOG("Already in mouse callback; ignoring message 0x%08X", wParam);
 	}
 
 	LRESULT res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
@@ -113,7 +137,10 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
  * Note that this runs in the context of the main exe.
  */
 LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	if (nCode >= 0 && nCode == HC_ACTION) { // A little redundant, yes. But the docs say it.
+	// Note: see the comment in lowLevelMouseProc.
+	// If we're going to put more functionality here,
+	// it needs to share the "mutex" with that procedure.
+	if (nCode == HC_ACTION) {
 #ifdef _DEBUG
 		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
 		// DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);

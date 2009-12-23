@@ -4,8 +4,8 @@
 	<apptitle>Taekwindow</apptitle>
 	<filename>taekwindow</filename>
 	<majorversion>0</majorversion>
-	<minorversion>2</minorversion>
-	<revision>4</revision>
+	<minorversion>3</minorversion>
+	<revision>0</revision>
 	<build>0</build>
 	<author>Thomas ten Cate</author>
 	<email>ttencate+taekwindow@gmail.com</email>
@@ -48,24 +48,27 @@
 
 	<description>
 		<p>
-			Taekwindow is a simple, lightweight and free program that allows you to
-			manipulate floating windows in Microsoft Windows in a way similar to
+			Taekwindow is a simple, lightweight and free Windows program that allows you to
+			move and resize windows by dragging them with the Alt key, similar to
 			many X11 window managers.
 		</p>
 	</description>
 
 	<sysreqs>
 		<p>
-			Taekwindow runs only on Windows XP and above (that is, Vista and 7), both 32-bits and 64-bits versions.
+			Taekwindow works on Windows XP and above (that is, Vista and 7), both 32-bits and 64-bits versions.
 			It is tested on 32-bits Windows XP and 64-bits Windows 7.
 		</p>
+    <p>
+      Windows 2000 is no longer officially supported, but might still work.
+    </p>
 	</sysreqs>
 
 	<installation>
 		<ol>
 			<li>
 				To install Taekwindow, simply extract the archive to any place you like.
-				Make sure that the files are all in the same directory.
+				You need only the <code>taekwindow.exe</code> file to use the program.
 			</li>
 			<li>
 				Through the Preferences dialog, you can create a shortcut
@@ -78,7 +81,7 @@
 	<usage>
 		<p>
 			Start <code>taekwindow.exe</code> to load the program. A new icon will appear in the taskbar notification area
-			(next to the clock, also known as the system tray) and you can now do the following:
+			(next to the clock, also known as the system tray). You can now do the following:
 		</p>
 		<ul>
 			<li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>

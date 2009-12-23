@@ -1,10 +1,10 @@
 TODO
 ----
 
+- Update the Readme and version number.
+- Test release build thoroughly on XP and Windows 7.
+- Release.
+
 - Try sending another Alt message to counteract the first. Use SendInput.
-- Fix some bugs mentioned in the tracker.
 - Search for TODO and do them.
 - Do a full code review.
-- Update the Readme.
-- Try merging linker sections for smaller executable.
-- Try to make it even smaller!
