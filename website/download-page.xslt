@@ -42,7 +42,7 @@
 		</p>
 
 		<p>
-			Note that the .NET Framework is no longer a requirement.
+			Note that the program no longer needs the .NET Framework.
 		</p>
 
 		<h1>Source code</h1>

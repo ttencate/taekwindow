@@ -146,7 +146,7 @@
 	</feature-requests>
 
 	<versions>
-		<version nr="0.3.0">
+		<version nr="0.3">
       <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2920175&amp;group_id=185457">
         the .NET platform is no longer required
       </bugfix>
