@@ -26,7 +26,6 @@ HWND findMIRCTextWindow(HWND containerWindow) {
 }
 
 // The contact list window and the chat view window do not have WS_CAPTION style, but is movable/resizable.
-
 bool isGoogleTalk(HWND window) {
 	return
 		windowHasClass(window, _T("Google Talk - Google Xmpp Client GUI Window")) ||
@@ -34,9 +33,13 @@ bool isGoogleTalk(HWND window) {
 }
 
 // Google Chrome does not have WS_CAPTION style, but is movable/resizable.
-
 bool isGoogleChrome(HWND window) {
 	return windowHasClass(window, _T("Chrome_XPFrame"));
+}
+
+// Itunes does not have WS_CAPTION style, but is movable/resizable.
+bool isItunes(HWND window) {
+	return windowHasClass(window, _T("iTunes"));
 }
 
 // Microsoft Office Word 2007 does internally use MDI, but does not show it,
@@ -45,7 +48,6 @@ bool isGoogleChrome(HWND window) {
 // of maximization (i.e. does not set WS_MAXIMIZED).
 // We just pretend that these windows are not floating windows at all,
 // so it is always the parent window that gets manipulated.
-
 bool isMSOfficeDocument(HWND window) {
 	return
 		windowHasClass(window, _T("_WwB")) || // Word 2007

@@ -74,18 +74,22 @@ bool isThickBorderWindow(HWND window) {
 }
 
 bool isMovableWindow(HWND window) {
+	// BEGIN HACK
 	if (isMSOfficeDocument(window)) {
 		return false;
 	}
+	// END HACK
 
 	if (isCaptionWindow(window) && !isFullscreenWindow(window)) {
 		// A normal movable window.
 		return true;
 	}
 
-	if (isGoogleTalk(window) || isGoogleChrome(window)) {
+	// BEGIN HACK
+	if (isGoogleTalk(window) || isGoogleChrome(window) || isItunes(window)) {
 		return true;
 	}
+	// END HACK
 
 	// No reason why this should be considered movable.
 	return false;
