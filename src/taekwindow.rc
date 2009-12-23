@@ -171,6 +171,8 @@ BEGIN
     CONTROL         "Resize with mi&ddle mouse button",IDC_RESIZEMIDDLE,
                     "Button",BS_AUTORADIOBUTTON,12,150,204,12
     CONTROL         "Resize with rig&ht mouse button",IDC_RESIZERIGHT,"Button",BS_AUTORADIOBUTTON,12,162,204,12
+    CONTROL         "&Push windows back with middle mouse button on title bar",IDC_PUSHBACKCHECK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,186,210,10
 END
 
 IDD_RESIZINGPAGE DIALOGEX 0, 0, 229, 199

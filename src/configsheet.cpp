@@ -195,6 +195,7 @@ BOOL ConfigSheet::buttonsPageDialogProc(HWND pageHandle, UINT message, WPARAM wP
 				d_newConfig.resizeButton == mbLeft ? IDC_RESIZELEFT :
 				d_newConfig.resizeButton == mbMiddle ? IDC_RESIZEMIDDLE :
 				IDC_RESIZERIGHT);
+			CheckDlgButton(pageHandle, IDC_PUSHBACKCHECK, d_newConfig.pushBackButton == mbMiddle);
 			break;
 		case WM_COMMAND:
 			// Prevent same button for different functions.
@@ -218,6 +219,8 @@ BOOL ConfigSheet::buttonsPageDialogProc(HWND pageHandle, UINT message, WPARAM wP
 						IsDlgButtonChecked(pageHandle, IDC_RESIZELEFT) ? mbLeft :
 						IsDlgButtonChecked(pageHandle, IDC_RESIZEMIDDLE) ? mbMiddle :
 						mbRight;
+					d_newConfig.pushBackButton =
+						IsDlgButtonChecked(pageHandle, IDC_PUSHBACKCHECK) ? mbMiddle : mbNone;
 					return TRUE;
 			}
 			break;
