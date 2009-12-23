@@ -1,3 +1,5 @@
+#include <windowsx.h>
+
 #include "wheelhandler.hpp"
 #include "globals.hpp"
 #include "hacks.hpp"
@@ -21,21 +23,23 @@ void WheelHandler::forwardMouseWheel(MouseWheelEvent const &event) {
 	}
 	// END HACK
 
-	DEBUGLOG("Forwarding mouse wheel to window 0x%X", window);
-	
 	// Unfortunately, we do not receive the complete information that is normally in a
 	// WM_MOUSEWHEEL message. In particular, the key-down information is missing.
 	// It might be in the "reserved" low word of mouseData, but we cannot be sure.
 	// Reconstruct it.
 	WPARAM wParam = GET_WHEEL_DELTA_WPARAM(event.mouseData) << 16;
-	if (GetAsyncKeyState(VK_CONTROL))  wParam |= MK_CONTROL;
-	if (GetAsyncKeyState(VK_LBUTTON))  wParam |= MK_LBUTTON;
-	if (GetAsyncKeyState(VK_MBUTTON))  wParam |= MK_MBUTTON;
-	if (GetAsyncKeyState(VK_RBUTTON))  wParam |= MK_RBUTTON;
-	if (GetAsyncKeyState(VK_SHIFT))    wParam |= MK_SHIFT;
-	if (GetAsyncKeyState(VK_XBUTTON1)) wParam |= MK_XBUTTON1;
-	if (GetAsyncKeyState(VK_XBUTTON2)) wParam |= MK_XBUTTON2;
+	if (GetAsyncKeyState(VK_CONTROL)  & 0x8000) wParam |= MK_CONTROL;
+	if (GetAsyncKeyState(VK_LBUTTON)  & 0x8000) wParam |= MK_LBUTTON;
+	if (GetAsyncKeyState(VK_MBUTTON)  & 0x8000) wParam |= MK_MBUTTON;
+	if (GetAsyncKeyState(VK_RBUTTON)  & 0x8000) wParam |= MK_RBUTTON;
+	if (GetAsyncKeyState(VK_SHIFT)    & 0x8000) wParam |= MK_SHIFT;
+	if (GetAsyncKeyState(VK_XBUTTON1) & 0x8000) wParam |= MK_XBUTTON1;
+	if (GetAsyncKeyState(VK_XBUTTON2) & 0x8000) wParam |= MK_XBUTTON2;
 
-	LPARAM lParam = ((short)(event.mousePos.x)) | (((short)(event.mousePos.y)) << 16);
+	DEBUGLOG("Mouse position for wheel event: %d, %d", event.mousePos.x, event.mousePos.y);
+	LPARAM lParam = (event.mousePos.y << 16) | (event.mousePos.x & 0xFFFF);
+	DEBUGLOG("Our lParam converts back to: %d, %d", GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+
+	DEBUGLOG("Forwarding mouse wheel to window 0x%X (wParam = 0x%08X, lParam = 0x%08X)", window, wParam, lParam);
 	SendMessage(window, WM_MOUSEWHEEL, wParam, lParam);
 }
