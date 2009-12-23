@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <tchar.h>
 
+#include "memory.hpp"
 #include "errors.hpp"
 #include "debug.hpp"
 
@@ -46,11 +47,11 @@ void traceLeaks() {
 	entry.lpData = NULL;
 
 	HeapLock(heap);
-	bool leaks = false;
+	size_t leaked = 0;
 	while (HeapWalk(heap, &entry)) {
 		if (entry.wFlags & PROCESS_HEAP_ENTRY_BUSY) {
-			leaks = true;
-			DEBUGLOG("WARNING: Leaked block of %d bytes at 0x%08x", entry.cbData, entry.lpData);
+			leaked += entry.cbData;
+			DEBUGLOG("WARNING: Leaked block of %d bytes at 0x%08x (flags: 0x%04x)", entry.cbData, entry.lpData, entry.wFlags);
 		}
 	}
 	DWORD error = GetLastError();
@@ -61,7 +62,11 @@ void traceLeaks() {
 		showLastError(NULL, _T("HeapWalk() failed"));
 	}
 
-	if (leaks) {
+	// It seems that Windows XP often allocates a block of 6144 bytes,
+	// even on our custom heap, that is never freed. It has the same flags
+	// as our own allocations (PROCESS_HEAP_ENTRY_BUSY only).
+	// We don't want to know.
+	if (leaked != 0 && leaked != 6144) {
 		showError(NULL, _T("Memory leaks detected"), _T("Warning: one or more memory leaks were detected at shutdown. See the debug log for details."));
 	}
 }
