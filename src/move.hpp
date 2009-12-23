@@ -5,6 +5,12 @@
 
 class MoveState : public DeformState {
 
+	/* May be NULL.
+	 */
+	HWND d_parent;
+
+	/* Screen coordinates.
+	 */
 	POINT d_windowPos;
 
 	public:
