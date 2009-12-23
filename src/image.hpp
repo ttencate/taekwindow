@@ -9,7 +9,7 @@
  */
 class Image {
 
-	Gdiplus::Bitmap *d_bitmap;
+	Gdiplus::Image *d_image;
 	int d_controlId;
 
 	public:

@@ -2,11 +2,12 @@
 
 #include "image.hpp"
 #include "errors.hpp"
+#include "debug.hpp"
 #include "picostdlib.h"
 
 Image::Image(int resourceId, int controlId)
 :
-	d_bitmap(NULL),
+	d_image(NULL),
 	d_controlId(controlId)
 {
 	// Find and load the resource from the executable.
@@ -74,25 +75,33 @@ Image::Image(int resourceId, int controlId)
 	stream->SetSize(largeBytes);
 
 	// Create an image from the stream.
-	d_bitmap = new Gdiplus::Bitmap(stream);
+	d_image = new Gdiplus::Image(stream);
+	if (!d_image) {
+		debugShowLastError("Could not create GDI+ Bitmap from image stream");
+	}
 
 	// Clean up.
 	stream->Release();
 }
 
 Image::~Image() {
-	delete d_bitmap;
+	delete d_image;
 }
 
 void Image::draw(DRAWITEMSTRUCT const &item) const {
+	if (!d_image)
+		return;
+
 	HDC dc = item.hDC;
 	Gdiplus::Graphics graphics(dc);
 
-	d_bitmap->SetResolution(graphics.GetDpiX(), graphics.GetDpiY());
-
 	RECT const &rect = item.rcItem;
-	int x = (rect.left + rect.right - (int)d_bitmap->GetWidth()) / 2;
-	int y = (rect.top + rect.bottom - (int)d_bitmap->GetHeight()) / 2;
+	DEBUGLOG("Drawing to rectangle %d, %d, %d, %d", rect.left, rect.top, rect.right, rect.bottom);
+	int x = (rect.left + rect.right - (int)d_image->GetWidth()) / 2;
+	int y = (rect.top + rect.bottom - (int)d_image->GetHeight()) / 2;
+	DEBUGLOG("Drawing at %d, %d", x, y);
 
-	graphics.DrawImage(d_bitmap, x, y);
+	Gdiplus::Rect imgRect(x, y, d_image->GetWidth(), d_image->GetHeight());
+
+	graphics.DrawImage(d_image, imgRect);
 }
