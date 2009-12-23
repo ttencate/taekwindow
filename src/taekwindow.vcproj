@@ -667,7 +667,7 @@
 					<Tool
 						Name="generateFromXML"
 						InputXML="$(SolutionDir)\information.xml"
-						OutputFile="$(ProjectDir)\version.hpp"
+						OutputFile="$(ProjectDir)\version.h"
 					/>
 				</FileConfiguration>
 			</File>

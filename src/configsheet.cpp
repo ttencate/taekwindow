@@ -324,6 +324,6 @@ void ConfigSheet::callback(HWND pageHandle, UINT message, LPARAM) {
 
 void ConfigSheet::bringToFront() {
 	if (isShowing()) {
-		BringWindowToTop(d_handle);
+		SetForegroundWindow(d_handle);
 	}
 }
