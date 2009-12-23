@@ -75,7 +75,7 @@ void CursorWindow::paint(HWND window) {
 	BeginPaint(window, &p);
 #ifdef _DEBUG
 	RECT rect;
-	GetWindowRect(window, &rect);
+	GetClientRect(window, &rect);
 	DrawEdge(p.hdc, &rect, EDGE_SUNKEN, BF_LEFT | BF_RIGHT | BF_BOTTOM | BF_TOP);
 #endif
 	EndPaint(window, &p);
