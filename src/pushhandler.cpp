@@ -7,8 +7,7 @@ bool PushHandler::onMouseDown(MouseDownEvent const &event) {
 	if (event.button == globals->config().pushBackButton) {
 		UINT hitTestCode = SendMessage(event.window, WM_NCHITTEST, 0, MAKELPARAM(event.mousePos.x, event.mousePos.y));
 		if (hitTestCode == HTCAPTION) {
-			HWND window = GetAncestor(event.window, GA_ROOT);
-			pushBack(window);
+			pushBack(event.window);
 			return true;
 		}
 	}
