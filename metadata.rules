@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VisualStudioToolFile
-	Name="Generate file from XML"
+	Name="Taekwindow custom build rules"
 	Version="8,00"
 	>
 	<Rules>
@@ -26,6 +26,25 @@
 					DisplayName="Output file"
 					Description="The file to write the result of XSLT processing to"
 					Switch="[value]"
+					Delimited="true"
+				/>
+			</Properties>
+		</CustomBuildRule>
+		<CustomBuildRule
+			Name="C Preprocessor"
+			DisplayName="C Preprocessor"
+			CommandLine="cl.exe /EP $(InputPath) &gt; [OutputDir]\$(InputName)"
+			Outputs="[OutputDir]\$(InputName)"
+			FileExtensions="*.pp"
+			ExecutionDescription="Preprocessing $(InputFileName)..."
+			>
+			<Properties>
+				<StringProperty
+					Name="OutputDir"
+					DisplayName="Output directory"
+					Description="Sets the directory to which the output file will be written."
+					Switch="[value]"
+					DefaultValue="$(IntDir)"
 					Delimited="true"
 				/>
 			</Properties>

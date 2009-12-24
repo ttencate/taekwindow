@@ -29,6 +29,9 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="C Preprocessor"
+			/>
+			<Tool
 				Name="generateFromXML"
 			/>
 			<Tool
@@ -53,6 +56,9 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="C Preprocessor"
 			/>
 			<Tool
 				Name="generateFromXML"
@@ -96,26 +102,16 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath=".\package.bat.pp"
+			>
+		</File>
+		<File
+			RelativePath=".\package.h"
+			>
+		</File>
+		<File
 			RelativePath=".\package.xslt"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(IntDir)\package.bat"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(IntDir)\package.bat"
-				/>
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>
