@@ -69,6 +69,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\meta.h"
+			>
+		</File>
+		<File
 			RelativePath=".\metadata.xslt"
 			>
 		</File>

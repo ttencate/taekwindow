@@ -95,7 +95,7 @@ LRESULT CALLBACK ConfigSheet::configFwd(HWND dialogHandle, UINT message, WPARAM 
 void ConfigSheet::initDynamicLabels(HWND pageHandle) {
 	SetDlgItemText(pageHandle, IDC_ABOUTGROUP, _T("About ") _T(APPLICATION_TITLE));
 	SetDlgItemText(pageHandle, IDC_APPTITLE, _T(APPLICATION_TITLE));
-	SetDlgItemText(pageHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_STRING));
+	SetDlgItemText(pageHandle, IDC_APPVERSION, _T("Version ") _T(APPLICATION_VERSION_FULL));
 	SetDlgItemText(pageHandle, IDC_APPCOPYRIGHT, _T(APPLICATION_COPYRIGHT));
 	SetDlgItemText(pageHandle, IDC_APPEMAIL, _T("<a href=\"mailto:") _T(APPLICATION_EMAIL) _T("\">") _T(APPLICATION_EMAIL) _T("</a>"));
 	SetDlgItemText(pageHandle, IDC_APPWEBSITE, _T("<a href=\"") _T(APPLICATION_WEBSITE) _T("\">") _T(APPLICATION_WEBSITE) _T("</a>"));
