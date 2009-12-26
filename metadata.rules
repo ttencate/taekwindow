@@ -33,7 +33,7 @@
 		<CustomBuildRule
 			Name="C Preprocessor"
 			DisplayName="C Preprocessor"
-			CommandLine="cl.exe /EP $(InputPath) &gt; [OutputDir]\$(InputName)"
+			CommandLine="cl.exe /EP &quot;$(InputPath)&quot; &gt; &quot;[OutputDir]\$(InputName)&quot;"
 			Outputs="[OutputDir]\$(InputName)"
 			FileExtensions="*.pp"
 			ExecutionDescription="Preprocessing $(InputFileName)..."
