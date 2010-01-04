@@ -166,15 +166,14 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\documentation-page.xslt"
+			RelativePath=".\documentation.shtml.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\documentation.shtml"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -182,21 +181,19 @@
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\documentation.shtml"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\download-page.xslt"
+			RelativePath=".\download.shtml.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\download.shtml"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -204,8 +201,7 @@
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\download.shtml"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 		</File>

@@ -2,11 +2,12 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:import href="../metadata.xslt"/>
+	<xsl:import href="../meta.xslt"/>
 	<xsl:import href="../doc2html.xslt"/>
+	
 	<xsl:output omit-xml-declaration="yes"/>
 
-	<xsl:template match="information">
+	<xsl:template match="/">
 		<xsl:comment xml:space="preserve">#set var="title" value="Download"</xsl:comment>
 		<xsl:comment xml:space="preserve">#set var="lastmod" value="$LAST_MODIFIED"</xsl:comment>
 		<xsl:comment xml:space="preserve">#include virtual="header.part.shtml"</xsl:comment>
@@ -21,7 +22,7 @@
 			<img src="geardownload-5stars.gif" alt="Rated 5 stars on GearDownload.com" title="Rated 5 stars on GearDownload.com" class="rightmargin"/>
 		</a>
 
-		<h1>Download <xsl:value-of select="apptitle"/></h1>
+		<h1>Download <xsl:value-of select="$apptitle"/></h1>
 
 		<p>This ZIP file contains the latest version of the program itself and other required files.</p>
 
@@ -30,19 +31,19 @@
 				<xsl:element name="a">
 					<xsl:attribute name="href">
 						<xsl:text xml:space="preserve">http://downloads.sourceforge.net/taekwindow/</xsl:text>
-						<xsl:call-template name="binaryzipfile"/>
+						<xsl:value-of select="$binaryzipfile"/>
 					</xsl:attribute>
 					<xsl:attribute name="class">sf</xsl:attribute>
 					<xsl:text xml:space="preserve">Download </xsl:text>
-					<xsl:value-of select="apptitle"/>
+					<xsl:value-of select="$apptitle"/>
 					<xsl:text xml:space="preserve"> </xsl:text>
-					<xsl:call-template name="shortversion"/>
+					<xsl:value-of select="$shortversion"/>
 				</xsl:element>
 			</strong>
 		</p>
 
 		<p>
-			Note that the program no longer needs the .NET Framework.
+			Note that this version of the program no longer needs the .NET Framework.
 		</p>
 
 		<h1>Source code</h1>
@@ -54,13 +55,13 @@
 				<xsl:element name="a">
 					<xsl:attribute name="href">
 						<xsl:text xml:space="preserve">http://downloads.sourceforge.net/taekwindow/</xsl:text>
-						<xsl:call-template name="sourcezipfile"/>
+						<xsl:value-of select="$sourcezipfile"/>
 					</xsl:attribute>
 					<xsl:attribute name="class">sf</xsl:attribute>
 					<xsl:text xml:space="preserve">Download </xsl:text>
-					<xsl:value-of select="apptitle"/>
+					<xsl:value-of select="$apptitle"/>
 					<xsl:text xml:space="preserve"> </xsl:text>
-					<xsl:call-template name="shortversion"/>
+					<xsl:value-of select="$shortversion"/>
 					<xsl:text xml:space="preserve"> source code</xsl:text>
 				</xsl:element>
 			</strong>
