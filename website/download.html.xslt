@@ -42,7 +42,7 @@
 			</xsl:element>
 		</p>
 
-		<h2>Like it? Click the button!</h2>
+		<h1>Like it? Click the button!</h1>
 
 		<p>
 			I work on this program in my spare time, and give it away to the world without demanding anything in return. However, if you want to show your appreciation and support, please consider donating. Through PayPal, it's quick and easy.
@@ -54,7 +54,7 @@
 			</a>
 		</p>
 
-		<h2>Source code</h2>
+		<h1>Source code</h1>
 
 		It is possible to download the source code of the program, in the form of a Visual C++ 2008 solution. This is probably only interesting for developers.
 
@@ -73,7 +73,7 @@
 			</xsl:element>
 		</p>
 
-		<h2>RSS feed</h2>
+		<h1>RSS feed</h1>
 
 		<p>
 			To stay updated with the latest version, you can subscribe to the <a href="http://sourceforge.net/export/rss2_projnews.php?group_id=185457&amp;rss_fulltext=1">

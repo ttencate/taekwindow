@@ -131,4 +131,16 @@
 		</xsl:element>
 	</xsl:template>
 
+	<xsl:template match="em">
+		<em>
+			<xsl:apply-templates/>
+		</em>
+	</xsl:template>
+
+	<xsl:template match="strong">
+		<strong>
+			<xsl:apply-templates/>
+		</strong>
+	</xsl:template>
+
 </xsl:stylesheet>
