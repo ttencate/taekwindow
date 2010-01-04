@@ -86,6 +86,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\faq.xml"
+			>
+		</File>
+		<File
 			RelativePath=".\history.xml"
 			>
 		</File>

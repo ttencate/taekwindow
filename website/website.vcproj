@@ -141,10 +141,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\static\screenshots.shtml"
-				>
-			</File>
-			<File
 				RelativePath=".\static\sficon.gif"
 				>
 			</File>
@@ -187,6 +183,26 @@
 		</File>
 		<File
 			RelativePath=".\download.shtml.xslt"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\faq.shtml.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
