@@ -3,12 +3,12 @@
 <history>
   
   <version nr="0.3">
-    <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2920175&amp;group_id=185457">
+    <feature see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2920175&amp;group_id=185457">
       the .NET platform is no longer required
-    </bugfix>
-    <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2809001&amp;group_id=185457">
+    </feature>
+    <feature see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2809001&amp;group_id=185457">
       on a 64-bits platform, moving and resizing now works for both 32-bits and 64-bits applications
-    </bugfix>
+    </feature>
     <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2314897&amp;group_id=185457">
       scrolling now works correctly on monitors to the left or top of the primary monitor
     </bugfix>

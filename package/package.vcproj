@@ -74,15 +74,14 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\changelog-sf.xslt"
+			RelativePath=".\changelog-sf.txt.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\changelog-sf.txt"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -90,8 +89,7 @@
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\changelog-sf.txt"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 		</File>
@@ -100,26 +98,8 @@
 			>
 		</File>
 		<File
-			RelativePath=".\package.xslt"
+			RelativePath=".\package.bat.xslt"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(IntDir)\package.bat"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(IntDir)\package.bat"
-				/>
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

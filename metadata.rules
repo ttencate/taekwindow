@@ -7,7 +7,7 @@
 		<CustomBuildRule
 			Name="generateFromXML"
 			DisplayName="Generate file with XSLT"
-			CommandLine="&quot;$(SolutionDir)bin\msxsl.exe&quot; &quot;$(SolutionDir)\root.xml&quot; &quot;$(InputPath)&quot; -o &quot;$(InputName)&quot;"
+			CommandLine="&quot;$(SolutionDir)bin\msxsl.exe&quot; &quot;$(SolutionDir)\root.xml&quot; &quot;$(InputPath)&quot; -o &quot;[OutputDir]\$(InputName)&quot;"
 			Outputs="[OutputDir]\$(InputName)"
 			AdditionalDependencies="$(InputFileName)"
 			FileExtensions="*.xslt"
