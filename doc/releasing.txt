@@ -9,7 +9,7 @@ Switch to Release mode.
 
 Clean and rebuild the solution.
 
-If anything in terms of files or build structure was changed, extract the source zip file and check whether it builds cleanly.
+If anything in terms of files or build structure was changed, extract the source zip file and check whether it builds cleanly (Debug and Release mode).
 
 Commit the changes.
 
