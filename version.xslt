@@ -2,8 +2,6 @@
 
 <stylesheet version="1.0" xmlns="http://www.w3.org/1999/XSL/Transform">
 
-	<include href="meta.xslt"/>
-
 	<variable name="version" select="document('version.xml')/version"/>
 
 	<variable name="fullversion">
@@ -28,12 +26,6 @@
 				<value-of select="$version/build"/>
 			</if>
 		</if>
-	</variable>
-
-	<variable name="appnameversion">
-		<value-of select="apptitle"/>
-		<text xml:space="preserve"> </text>
-		<value-of select="shortversion"/>
 	</variable>
 
 </stylesheet>
