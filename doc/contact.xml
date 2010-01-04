@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <contact>
-  Taekwindow is developed and maintained by Thomas ten Cate. The preferred way to contact
-  the developer is through the <a href="http://taekwindow.sf.net/">Taekwindow web page</a>.
+	<p>
+		The author of Taekwindow is Thomas ten Cate. You can contact me at <span class="email">ttencate(PLUS)taekwindow(AT)gmail(DOT)com</span>.
+	</p>
+
+	<p>
+		However, for bug reports or feature requests I'd rather you use the <a href="http://sourceforge.net/tracker/?group_id=185457&amp;atid=913353" class="sf">bug and feature tracker</a>. This allows me to easily keep track of what needs to be done.
+	</p>
+
+	<p>
+		If you like to express your appreciation for this program you're very welcome to <a href="http://sourceforge.net/project/project_donations.php?group_id=185457" class="sf">leave a donation</a>.
+	</p>
+
 </contact>

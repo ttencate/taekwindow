@@ -2,6 +2,7 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+	<xsl:import href="website.xslt"/>
 	<xsl:import href="../meta.xslt"/>
 	<xsl:import href="../doc2html.xslt"/>
 
@@ -9,10 +10,9 @@
 
 	<xsl:variable name="faq" select="document('../doc/faq.xml')/faq"/>
 
-	<xsl:template match="/">
-		<xsl:comment xml:space="preserve">#set var="title" value="Download"</xsl:comment>
-		<xsl:comment xml:space="preserve">#set var="lastmod" value="$LAST_MODIFIED"</xsl:comment>
-		<xsl:comment xml:space="preserve">#include virtual="header.part.shtml"</xsl:comment>
+	<xsl:variable name="title">FAQ</xsl:variable>
+
+	<xsl:variable name="content">
 
 		<h1>Frequently Asked Questions</h1>
 
@@ -58,7 +58,6 @@
 			</xsl:for-each>
 		</xsl:for-each>
 
-		<xsl:comment xml:space="preserve">#include virtual="footer.part.shtml"</xsl:comment>
-	</xsl:template>
+	</xsl:variable>
 
 </xsl:stylesheet>

@@ -12,15 +12,10 @@ body {
 	padding: 0;
 }
 
-#topbar h1 {
-	background-image: url("title.gif");
-	background-repeat: no-repeat;
-	float: left;
-	width: 656px;
-	height: 0px;
-	overflow: hidden;
-	padding: 0;
-	padding-top: 165px;
+#topbar h1 
+{
+	font-size: 300%;
+	font-weight: normal;
 }
 
 #navbar {
@@ -53,12 +48,39 @@ ul.navbar li a:active, ul.navbar li a:hover {
 	background-color: #ddddaa;
 }
 
+a 
+{
+	color: #000080;
+}
+
 #content {
 	margin: 2em;
 }
 
+h1 
+{
+	font-size: 140%;
+	font-weight: bold;
+}
+
+h2
+{
+	font-size: 120%;
+	font-weight: bold;
+}
+
+h3 
+{
+	font-size: 120%;
+	font-weight: normal;
+}
+
 img {
 	border: 0;
+}
+
+.inline {
+	vertical-align: middle;
 }
 
 .leftmargin {
@@ -80,6 +102,71 @@ a.sf {
 	background-position: center left;
 	background-repeat: no-repeat;
 	padding-left: 13px;
+}
+
+a.download 
+{
+	padding: 0.5em;
+	background-color: #ddddaa;
+	color: #000066;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 140%;
+	width: auto;
+}
+
+a.download:active, a.download:hover 
+{
+	color: #000066;
+	background-color: #eeeebb;
+}
+
+a.download img 
+{
+	vertical-align: middle;
+	margin-right: 0.5em;
+}
+
+a.donate 
+{
+	padding: 0.2em;
+	padding-right: 0.4em;
+	background-color: #ddddaa;
+	color: #000066;
+	text-decoration: none;
+	font-size: 100%;
+	font-weight: normal;
+	width: auto;
+}
+
+a.donate:active, a.donate:hover 
+{
+	color: #000066;
+	background-color: #eeeebb;
+}
+
+a.donate img 
+{
+	vertical-align: middle;
+	margin-left: 0.4em;
+	margin-right: 0.2em;
+}
+
+.awards
+{
+	background-color: #ffffee;
+}
+
+.awards a
+{
+	display: block;
+	margin: 1em;
+	opacity: 0.2;
+}
+
+.awards a:active, .awards a:hover
+{
+	opacity: 1.0;
 }
 
 #footer {

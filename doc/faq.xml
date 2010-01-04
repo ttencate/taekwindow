@@ -47,6 +47,13 @@
 			</answer>
 		</qa>
 
+		<qa id="dotnet">
+			<question>Do I need the .NET framework?</question>
+			<answer>
+				<p>Version 0.2.x required the .NET framework for the configuration tool. As of version 0.3, .NET is no longer needed.</p>
+			</answer>
+		</qa>
+
 		<qa id="mac">
 			<question>Will there be a Mac version?</question>
 			<answer>

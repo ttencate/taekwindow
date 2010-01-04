@@ -77,35 +77,7 @@
 			Name="static"
 			>
 			<File
-				RelativePath=".\static\config-buttons.png"
-				>
-			</File>
-			<File
-				RelativePath=".\static\config-general.png"
-				>
-			</File>
-			<File
-				RelativePath=".\static\config-resizing.png"
-				>
-			</File>
-			<File
-				RelativePath=".\static\config-scrolling.png"
-				>
-			</File>
-			<File
-				RelativePath=".\static\contact.shtml"
-				>
-			</File>
-			<File
-				RelativePath=".\static\faq.shtml"
-				>
-			</File>
-			<File
 				RelativePath=".\static\feed-icon-28x28.png"
-				>
-			</File>
-			<File
-				RelativePath=".\static\footer.part.shtml"
 				>
 			</File>
 			<File
@@ -121,19 +93,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\static\header.part.shtml"
-				>
-			</File>
-			<File
-				RelativePath=".\static\index.shtml"
-				>
-			</File>
-			<File
 				RelativePath=".\static\move-resize.gif"
 				>
 			</File>
 			<File
 				RelativePath=".\static\move.gif"
+				>
+			</File>
+			<File
+				RelativePath=".\static\preferences.png"
 				>
 			</File>
 			<File
@@ -162,7 +130,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\documentation.shtml.xslt"
+			RelativePath=".\contact.html.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -182,7 +150,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\download.shtml.xslt"
+			RelativePath=".\download.html.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -202,7 +170,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\faq.shtml.xslt"
+			RelativePath=".\faq.html.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -218,6 +186,58 @@
 				<Tool
 					Name="generateFromXML"
 					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\index.html.xslt"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\manual.html.xslt"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					OutputDir="$(OutDir)"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\website.xslt"
+			>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="generateFromXML"
 				/>
 			</FileConfiguration>
 		</File>
