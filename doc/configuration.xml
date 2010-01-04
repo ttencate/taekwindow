@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration>
+  <p>
+    You can configure the program by right-clicking the notification area icon and choosing Preferences.
+    This will open the Preferences dialog; its usage should be self-explanatory.
+  </p>
+  <p>
+    If you chose to hide the taskbar icon, you can access the Preferences dialog
+    by running <code>taekwindow.exe</code> a second time.
+  </p>
+</configuration>

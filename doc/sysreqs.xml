@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<sysreqs>
+  <p>
+    Taekwindow works on Windows XP and above (that is, Vista and 7), both 32-bits and 64-bits versions.
+    It is tested on 32-bits Windows XP and 64-bits Windows 7.
+  </p>
+  <p>
+    Windows 2000 is no longer officially supported, but might still work.
+  </p>
+</sysreqs>

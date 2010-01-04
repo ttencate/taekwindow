@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<thanks>
+  <p>I would like to thank the following people for their contributions to this project:</p>
+  <thanklist>
+    <thank who="Eamon Nerbonne and Mark IJbema">
+      tested early versions of the program and provided valuable comments and suggestions.
+    </thank>
+    <thank who="Sylvain Vignaud">
+      provided a patch to blacklist certain applications that require Alt-dragging in their normal mode of operation.
+      I'm still hoping to convert this into a configurable blacklist some day!
+    </thank>
+  </thanklist>
+</thanks>

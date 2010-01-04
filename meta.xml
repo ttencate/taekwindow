@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<meta>
+
+  <apptitle>Taekwindow</apptitle>
+  <author>Thomas ten Cate</author>
+  <email>ttencate+taekwindow@gmail.com</email>
+  <website>http://taekwindow.sf.net/</website>
+  <copyright>Copyright © 2006-2009, Thomas ten Cate</copyright>
+  <licensebrief>This program is licensed under the BSD license. This means you are free and welcome to distribute it.</licensebrief>
+
+  <filebasename>taekwindow</filebasename>
+  <mainexefile>taekwindow</mainexefile>
+  <readmefile>readme.html</readmefile>
+
+</meta>

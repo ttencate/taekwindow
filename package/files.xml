@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<files>
+
+  <binaryfiles>
+    <!-- Relative to the Release/ directory -->
+    <file>taekwindow.exe</file>
+    <file>readme.html</file>
+  </binaryfiles>
+
+  <sourcefiles>
+    <!-- Relative to $(SolutionDir) -->
+    <file>bin\*.exe</file>
+    <file>doc\*.vcproj</file>
+    <file>doc\source.txt</file>
+    <file>doc\*.xslt</file>
+    <file>graphics\gui\*.png</file>
+    <file>graphics\icons\*.ico</file>
+    <file>graphics\intermediate\*.png</file>
+    <file>graphics\sources\*.svg</file>
+    <file>graphics\sources\*.psd</file>
+    <file>package\*.vcproj</file>
+    <file>package\*.xslt</file>
+    <file>src\*.vcproj</file>
+    <file>src\*.cpp</file>
+    <file>src\*.hpp</file>
+    <file>src\*.xslt</file>
+    <file>src\*.rc</file>
+    <file>*.sln</file>
+    <file>*.vcproj</file>
+    <file>*.xml</file>
+    <file>*.xslt</file>
+  </sourcefiles>
+
+</files>

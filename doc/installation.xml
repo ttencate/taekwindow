@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<installation>
+  <ol>
+    <li>
+      To install Taekwindow, simply extract the archive to any place you like.
+      You need only the <code>taekwindow.exe</code> file to use the program.
+    </li>
+    <li>
+      Through the Preferences dialog, you can create a shortcut
+      in the Startup section of your Start Menu, so
+      Taekwindow is started when you log on to your computer.
+    </li>
+  </ol>
+</installation>

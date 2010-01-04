@@ -65,11 +65,23 @@
 			>
 		</File>
 		<File
-			RelativePath=".\information.xml"
+			RelativePath=".\meta.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\meta.xslt"
 			>
 		</File>
 		<File
 			RelativePath=".\metadata.xslt"
+			>
+		</File>
+		<File
+			RelativePath=".\version.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\version.xslt"
 			>
 		</File>
 	</Files>

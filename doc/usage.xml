@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<usage>
+  <p>
+    Start <code>taekwindow.exe</code> to load the program. A new icon will appear in the taskbar notification area
+    (next to the clock, also known as the system tray). You can now do the following:
+  </p>
+  <ul>
+    <li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>
+    <li>Hold left Alt and drag a window with the right mouse button to resize it. If you resize a maximized window, it will automatically be unmaximized.</li>
+    <li>Middle-click on the title bar of a window to push it to the background.</li>
+    <li>Use the scroll wheel on the window under the mouse cursor, instead of the window that happens to have the focus.</li>
+  </ul>
+  <p>
+    The icon in the taskbar can be used in the following ways:
+  </p>
+  <ul>
+    <li>
+      Left-click the icon to completely disable all features of Taekwindow. Use this in case some
+      application needs to handle the events that Taekwindow is catching, but you don't want to quit
+      Taekwindow completely. The icon will turn gray to indicate that it is disabled;
+      left-click again to re-enable.
+    </li>
+    <li>
+      Double-click the icon to open the Preferences dialog.
+    </li>
+    <li>
+      Right-click the icon to show a menu, through which you can enable/disable the program,
+      open the Preferences dialog, and exit Taekwindow completely.
+    </li>
+  </ul>
+  <p>
+    You can exit the program via the taskbar icon. If the icon is invisible, you can either
+    use the button in the Preferences dialog to exit, or simply end the process through
+    Windows Task Manager.
+  </p>
+</usage>

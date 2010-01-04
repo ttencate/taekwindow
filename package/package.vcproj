@@ -96,6 +96,10 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath=".\files.xml"
+			>
+		</File>
+		<File
 			RelativePath=".\package.xslt"
 			>
 			<FileConfiguration

@@ -70,6 +70,34 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\bugs.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\configuration.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\contact.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\description.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\history.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\installation.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\license.xml"
+			>
+		</File>
+		<File
 			RelativePath=".\readme.xslt"
 			>
 			<FileConfiguration
@@ -100,7 +128,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\sysreqs.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\thanks.xml"
+			>
+		</File>
+		<File
 			RelativePath=".\todo.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\usage.xml"
 			>
 		</File>
 	</Files>
