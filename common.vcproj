@@ -65,23 +65,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\history.h"
-			>
-		</File>
-		<File
 			RelativePath=".\information.xml"
 			>
 		</File>
 		<File
-			RelativePath=".\meta.h"
-			>
-		</File>
-		<File
 			RelativePath=".\metadata.xslt"
-			>
-		</File>
-		<File
-			RelativePath=".\metautil.h"
 			>
 		</File>
 	</Files>

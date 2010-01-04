@@ -649,6 +649,28 @@
 				RelativePath=".\version.h"
 				>
 			</File>
+			<File
+				RelativePath=".\version.xslt"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)\information.xml"
+						OutputFile="$(ProjectDir)\version.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="generateFromXML"
+						InputXML="$(SolutionDir)\information.xml"
+						OutputFile="$(ProjectDir)\version.h"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

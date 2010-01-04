@@ -29,12 +29,7 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="C Preprocessor"
-				PreprocessorDefinitions="SOLUTION_DIR=$(SolutionDir);INT_DIR=$(IntDir);OUT_DIR=$(OutDir);BIN_DIR=$(SolutionDir)\bin"
-			/>
-			<Tool
 				Name="generateFromXML"
-				OutputFile=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -45,7 +40,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Packaging ZIP files..."
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
+				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -60,12 +55,7 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="C Preprocessor"
-				PreprocessorDefinitions="SOLUTION_DIR=$(SolutionDir);INT_DIR=$(IntDir);OUT_DIR=$(OutDir);BIN_DIR=$(SolutionDir)\bin"
-			/>
-			<Tool
 				Name="generateFromXML"
-				OutputFile=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -76,7 +66,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Packaging ZIP files..."
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
+				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -84,32 +74,48 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\changelog-sf.txt.pp"
+			RelativePath=".\changelog-sf.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
-					Name="C Preprocessor"
-					OutputDir="$(OutDir)"
+					Name="generateFromXML"
+					InputXML="$(SolutionDir)\information.xml"
+					OutputFile="$(OutDir)\changelog-sf.txt"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32"
 				>
 				<Tool
-					Name="C Preprocessor"
-					OutputDir="$(OutDir)"
+					Name="generateFromXML"
+					InputXML="$(SolutionDir)\information.xml"
+					OutputFile="$(OutDir)\changelog-sf.txt"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\package.bat.pp"
+			RelativePath=".\package.xslt"
 			>
-		</File>
-		<File
-			RelativePath=".\package.h"
-			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					InputXML="$(SolutionDir)\information.xml"
+					OutputFile="$(IntDir)\package.bat"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="generateFromXML"
+					InputXML="$(SolutionDir)\information.xml"
+					OutputFile="$(IntDir)\package.bat"
+				/>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

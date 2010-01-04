@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying static website files..."
-				CommandLine="copy &quot;$(ProjectDir)\static\*.*&quot; &quot;$(OutDir)&quot;"
+				CommandLine="copy $(ProjectDir)\static\*.* $(OutDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -66,7 +66,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying static website files..."
-				CommandLine="copy &quot;$(ProjectDir)\static\*.*&quot; &quot;$(OutDir)&quot;"
+				CommandLine="copy $(ProjectDir)\static\*.* $(OutDir)"
 			/>
 		</Configuration>
 	</Configurations>
