@@ -56,7 +56,9 @@
 
 		<h1>Source code</h1>
 
-		It is possible to download the source code of the program, in the form of a Visual C++ 2008 solution. This is probably only interesting for developers.
+		<p>
+			It is possible to download the source code of the program, in the form of a Visual C++ 2008 solution. This is probably only interesting for developers.
+		</p>
 
 		<p>
 			<xsl:element name="a">

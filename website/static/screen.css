@@ -1,6 +1,7 @@
 body {
 	background-color: #ffffcc;
 	font-family: sans-serif;
+	line-height: 130%;
 }
 
 #everything {
@@ -23,6 +24,7 @@ body {
 	margin: 0;
 	padding: 0;
 	clear: both;
+	line-height: normal;
 }
 
 ul.navbar {
