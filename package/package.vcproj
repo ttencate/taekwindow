@@ -30,9 +30,11 @@
 			/>
 			<Tool
 				Name="C Preprocessor"
+				PreprocessorDefinitions="SOLUTION_DIR=$(SolutionDir);INT_DIR=$(IntDir);OUT_DIR=$(OutDir);BIN_DIR=$(SolutionDir)\bin"
 			/>
 			<Tool
 				Name="generateFromXML"
+				OutputFile=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -43,7 +45,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Packaging ZIP files..."
-				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
+				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -59,9 +61,11 @@
 			/>
 			<Tool
 				Name="C Preprocessor"
+				PreprocessorDefinitions="SOLUTION_DIR=$(SolutionDir);INT_DIR=$(IntDir);OUT_DIR=$(OutDir);BIN_DIR=$(SolutionDir)\bin"
 			/>
 			<Tool
 				Name="generateFromXML"
+				OutputFile=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -72,7 +76,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Packaging ZIP files..."
-				CommandLine="cd ..&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
+				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;call &quot;$(IntDir)\package.bat&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -107,10 +111,6 @@
 		</File>
 		<File
 			RelativePath=".\package.h"
-			>
-		</File>
-		<File
-			RelativePath=".\package.xslt"
 			>
 		</File>
 	</Files>

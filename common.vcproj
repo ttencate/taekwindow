@@ -76,6 +76,10 @@
 			RelativePath=".\metadata.xslt"
 			>
 		</File>
+		<File
+			RelativePath=".\metautil.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

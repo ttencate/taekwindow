@@ -13,6 +13,6 @@
 #define APPLICATION_EMAIL             "ttencate+taekwindow@gmail.com"
 #define APPLICATION_LICENSE_BRIEF     "This program is licensed under the BSD license. This means you are free and welcome to distribute it."
 #define APPLICATION_README_FILE       "readme.html"
-#define MAIN_EXE_FILE                 "taekwindow"
+#define APPLICATION_BASE_NAME         taekwindow
 
 #endif
