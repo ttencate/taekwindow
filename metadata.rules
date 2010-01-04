@@ -6,12 +6,12 @@
 	<Rules>
 		<CustomBuildRule
 			Name="generateFromXML"
-			DisplayName="Generate file from XML"
-			CommandLine="&quot;$(SolutionDir)bin\msxsl.exe&quot; &quot;[InputXML]&quot; &quot;$(InputPath)&quot; -o &quot;[OutputFile]&quot;"
-			Outputs="[OutputFile]"
-			AdditionalDependencies="[InputFile]"
+			DisplayName="Generate file with XSLT"
+			CommandLine="&quot;$(SolutionDir)bin\msxsl.exe&quot; &quot;$(SolutionDir)\root.xml&quot; &quot;$(InputPath)&quot; -o &quot;$(InputName)&quot;"
+			Outputs="[OutputDir]\$(InputName)"
+			AdditionalDependencies="$(InputFileName)"
 			FileExtensions="*.xslt"
-			ExecutionDescription="Generating [OutputFile] from $(InputFileName) and [InputXML]..."
+			ExecutionDescription="Transforming $(InputFileName) into $(InputName)..."
 			>
 			<Properties>
 				<StringProperty
@@ -27,6 +27,13 @@
 					Description="The file to write the result of XSLT processing to"
 					Switch="[value]"
 					Delimited="true"
+				/>
+				<StringProperty
+					Name="OutputDir"
+					DisplayName="Output Directory"
+					Description="Output directory for the result of the XSLT transformation"
+					Switch="[value]"
+					DefaultValue="$(IntDir)"
 				/>
 			</Properties>
 		</CustomBuildRule>

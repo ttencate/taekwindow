@@ -6,23 +6,33 @@
 
 	<variable name="fullversion">
 		<value-of select="$version/major"/>
-		.
+		<text xml:space="preserve">.</text>
 		<value-of select="$version/minor"/>
-		.
+		<text xml:space="preserve">.</text>
 		<value-of select="$version/revision"/>
-		.
+		<text xml:space="preserve">.</text>
+		<value-of select="$version/build"/>
+	</variable>
+
+	<variable name="fullversioncommas">
+		<value-of select="$version/major"/>
+		<text xml:space="preserve">,</text>
+		<value-of select="$version/minor"/>
+		<text xml:space="preserve">,</text>
+		<value-of select="$version/revision"/>
+		<text xml:space="preserve">,</text>
 		<value-of select="$version/build"/>
 	</variable>
 
 	<variable name="shortversion">
 		<value-of select="$version/major"/>
-		.
+		<text xml:space="preserve">.</text>
 		<value-of select="$version/minor"/>
-		<if test="revision != '0' or build != '0'">
-			.
+		<if test="$version/revision != '0' or $version/build != '0'">
+			<text xml:space="preserve">.</text>
 			<value-of select="$version/revision"/>
-			<if test="build != '0'">
-				.
+			<if test="$version/build != '0'">
+				<text xml:space="preserve">.</text>
 				<value-of select="$version/build"/>
 			</if>
 		</if>

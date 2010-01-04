@@ -650,15 +650,14 @@
 				>
 			</File>
 			<File
-				RelativePath=".\version.xslt"
+				RelativePath=".\version.h.xslt"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="generateFromXML"
-						InputXML="$(SolutionDir)\information.xml"
-						OutputFile="$(ProjectDir)\version.h"
+						OutputDir="$(ProjectDir)"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -666,8 +665,7 @@
 					>
 					<Tool
 						Name="generateFromXML"
-						InputXML="$(SolutionDir)\information.xml"
-						OutputFile="$(ProjectDir)\version.h"
+						OutputDir="$(ProjectDir)"
 					/>
 				</FileConfiguration>
 			</File>

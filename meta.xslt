@@ -18,15 +18,15 @@
 	<variable name="readmefile" select="$meta/readmefile"/>
 
 	<variable name="appnameversion">
-		<value-of select="apptitle"/>
+		<value-of select="$apptitle"/>
 		<text xml:space="preserve"> </text>
-		<value-of select="shortversion"/>
+		<value-of select="$shortversion"/>
 	</variable>
 
 	<variable name="authorfull">
-		<value-of select="author"/>
+		<value-of select="$author"/>
 		<text xml:space="preserve"> &lt;</text>
-		<value-of select="email"/>
+		<value-of select="$email"/>
 		<text xml:space="preserve">&gt;</text>
 	</variable>
 

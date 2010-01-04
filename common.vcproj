@@ -73,7 +73,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\metadata.xslt"
+			RelativePath=".\root.xml"
 			>
 		</File>
 		<File
