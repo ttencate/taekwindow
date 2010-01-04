@@ -36,7 +36,7 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 
-	<xsl:template match="versions">
+	<xsl:template match="history">
 		<h2>Version history</h2>
 		<xsl:for-each select="version">
 			<p>

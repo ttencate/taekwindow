@@ -98,15 +98,14 @@
 			>
 		</File>
 		<File
-			RelativePath=".\readme.xslt"
+			RelativePath=".\readme.html.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\readme.html"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -114,8 +113,7 @@
 				>
 				<Tool
 					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\readme.html"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 		</File>
