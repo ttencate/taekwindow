@@ -65,6 +65,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\history.h"
+			>
+		</File>
+		<File
 			RelativePath=".\information.xml"
 			>
 		</File>

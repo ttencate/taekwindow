@@ -9,9 +9,31 @@
 #define SOURCE_ZIP_FILE      ZIP_BASE_NAME-APPLICATION_VERSION_FILENAME-src.zip
 
 /* Relative to Release directory */
-#define BINARY_FILES         taekwindow.exe readme.html
+#define BINARY_FILES         \
+	taekwindow.exe \
+	readme.html
 /* Relative to $(SolutionDir) */
-#define SOURCE_FILES         bin\*.exe doc\*.vcproj doc\source.txt doc\*.xslt graphics\gui\*.png graphics\icons\*.ico graphics\intermediate\*.png graphics\sources\*.svg graphics\sources\*.psd package\*.vcproj package\*.xslt src\*.vcproj src\*.cpp src\*.hpp src\*.xslt src\*.rc *.sln *.vcproj *.xml *.xslt
+#define SOURCE_FILES         \
+	bin\*.exe \
+	doc\*.vcproj \
+	doc\source.txt \
+	doc\*.xslt \
+	graphics\gui\*.png \
+	graphics\icons\*.ico \
+	graphics\intermediate\*.png \
+	graphics\sources\*.svg \
+	graphics\sources\*.psd \
+	package\*.vcproj \
+	package\*.xslt \
+	src\*.vcproj \
+	src\*.cpp \
+	src\*.hpp \
+	src\*.xslt \
+	src\*.rc \
+	*.sln \
+	*.vcproj \
+	*.xml \
+	*.xslt
 
 #define SEVENZIP_FILE        7za.exe
 #define SEVENZIP             BIN_DIR\SEVENZIP_FILE

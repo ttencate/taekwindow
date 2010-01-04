@@ -1,0 +1,129 @@
+FEATURE(0.3)
+http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2920175&amp;group_id=185457
+the .NET platform is no longer required
+
+BUGFIX(0.3)
+http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2809001&amp;group_id=185457
+on a 64-bits platform, moving and resizing now works for both 32-bits and 64-bits applications
+/*
+</bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2314897&amp;group_id=185457">
+        scrolling now works correctly on monitors to the left or top of the primary monitor
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=1999554&amp;group_id=185457">
+        pushing windows to the back with the middle mouse button can now be disabled
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2145527&amp;group_id=185457">
+				the tray icon is now shown even if no settings are present in the registry
+			</bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2210322&amp;group_id=185457">
+        moving an unfocused window behind a focused window no longer causes the focused window to move
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2577045&amp;group_id=185457">
+        the iTunes window can now be moved and resized
+      </bugfix>
+      <bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2587696&amp;group_id=185457">
+        horizontal scroll wheels are now also sent to the right window
+      </bugfix>
+		</version>
+		<version nr="0.2.4">
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">
+				Google Talk now responds to move and resize actions
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2095157&amp;group_id=185457&amp;atid=913353">
+				Google Chrome now responds to move and resize actions
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000712&amp;group_id=185457&amp;atid=913353">
+				the scroll wheel now works correctly in mIRC when it has the focus
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000149&amp;group_id=185457&amp;atid=913353">
+				Microsoft Word 2007 now moves and resizes correctly
+			</bugfix>
+		</version>
+		<version nr="0.2.3">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913353">
+				windows are no longer raised when they are moved or resized
+			</feature>
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913353">
+				windows are no longer activated when they are moved or resized
+			</feature>
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629767&amp;group_id=185457&amp;atid=913353">
+				the scroll wheel optionally affects the window under the mouse cursor, instead of the focused window
+			</feature>
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913353">
+				maximized windows can now be moved across multiple monitors while remaining maximized
+			</feature>
+			<feature>
+				maximized windows can now be resized and will become unmaximized
+			</feature>
+			<feature>
+				a code overhaul should make it much easier to implement future improvements
+			</feature>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1908683&amp;group_id=185457&amp;atid=913353">
+				the error message “Specified cast is not valid” no longer appears when starting the configuration tool after an upgrade from 0.2.1 or earlier
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1905700&amp;group_id=185457&amp;atid=913353">
+				pushing back an inactive window no longer raises the active one
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1982738&amp;group_id=185457&amp;atid=913353">
+				Alt no longer “hangs” after returning to a desktop that was locked with Ctrl+Alt+Del
+			</bugfix>
+		</version>
+		<version nr="0.2.2">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913353">
+				added an optional system tray icon
+			</feature>
+			<feature>
+				the mouse cursor changes while moving or resizing
+			</feature>
+			<feature>
+				middle mouse click on the title bar pushes a window to the background
+			</feature>
+			<bugfix>
+				when no settings are present in the registry, the configuration tool is now filled with default values instead of none at all
+			</bugfix>
+			<bugfix>
+				it is no longer possible to start multiple instances of the configuration tool
+			</bugfix>
+		</version>
+		<version nr="0.2.1">
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653063&amp;group_id=185457&amp;atid=913353">
+				moving and resizing now works properly when dragging title bar or borders
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629393&amp;group_id=185457&amp;atid=913353">
+				moving and resizing now works on MDI child windows, instead of the parent
+			</bugfix>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1894902&amp;group_id=185457&amp;atid=913353">
+				Taekwindow should no longer occasionally behave as if Alt is pressed when it is not
+			</bugfix>
+		</version>
+		<version nr="0.2">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629762&amp;group_id=185457&amp;atid=913353">
+				added a configuration tool
+			</feature>
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653698&amp;group_id=185457&amp;atid=913353">
+				made the modifier and mouse buttons, as well as closest-corner resizing,
+				into options
+			</feature>
+			<feature>
+				added an option to the configuration tool for creating/deleting a Startup
+				shortcut in the Start Menu
+			</feature>
+			<bugfix see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1682619&amp;group_id=185457&amp;atid=913353">
+				the error message “This application has failed to start because the application
+				configuration is incorrect. Reinstalling the application may fix this
+				problem.” no longer appears
+			</bugfix>
+		</version>
+		<version nr="0.1.1">
+			<feature see="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1632182&amp;group_id=185457&amp;atid=913353">
+				implemented closest-corner resizing
+			</feature>
+		</version>
+		<version nr="0.1">
+			<feature>
+        moving with Alt+left button, resizing from the bottom right corner with Alt+right button
+      </feature>
+		</version>
+	</versions>
+	*/

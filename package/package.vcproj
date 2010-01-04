@@ -84,24 +84,22 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\changelog-sf.xslt"
+			RelativePath=".\changelog-sf.txt.pp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
-					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\changelog-sf.txt"
+					Name="C Preprocessor"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32"
 				>
 				<Tool
-					Name="generateFromXML"
-					InputXML="$(SolutionDir)\information.xml"
-					OutputFile="$(OutDir)\changelog-sf.txt"
+					Name="C Preprocessor"
+					OutputDir="$(OutDir)"
 				/>
 			</FileConfiguration>
 		</File>
