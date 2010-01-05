@@ -20,7 +20,7 @@
 			</answer>
 		</qa>
 
-		<qa>
+		<qa id="license">
 			<question>How is Taekwindow licensed?</question>
 			<answer>
 				<p>Taekwindow uses the BSD license. This is a very liberal license; in particular, you are free to distribute and modify the program. (Some websites got it wrong, and list Taekwindow under the GPL license instead.)</p>
@@ -40,7 +40,7 @@
 			</answer>
 		</qa>
 
-		<qa id="64bit">
+		<qa id="bit64">
 			<question>Does it run on 64-bits Windows?</question>
 			<answer>
 				<p>As of version 0.3, it does.</p>
@@ -63,7 +63,7 @@
 		
 	</category>
 
-	<category id="Use">
+	<category id="use">
 
 		<title>Use</title>
 

@@ -10,7 +10,7 @@ To build, you need the following in your PATH:
 The project files may work in the Express edition of Visual C++,
 but I am not sure of this and have not tested it.
 
-The build system is a little complicated. information.xml is the central storage for data. The various XSLT files process this to produce version.h, package.bat and some .shtml files for the web site. These XSLT files are run using msxsl.exe in the bin folder. It is started from a custom build rule in the C++ projects.
+The build system is a little complicated. The various XSLT files process XML files to produce version.h, package.bat and some .html files for the web site. These XSLT files are run using msxsl.exe in the bin folder. It is started from a custom build rule in the C++ projects.
 
 Complicated, but with good reason: one-button packaging and web site updating.
 

@@ -74,7 +74,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\changelog-sf.txt.xslt"
+			RelativePath=".\changelog.txt.xslt"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<xsl:import href="../meta.xslt"/>
 	<xsl:import href="website.xslt"/>
+
+	<xsl:output method="xml" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" encoding="utf-8" indent="yes"/>
 
 	<xsl:variable name="contact" select="document('../doc/contact.xml')/contact"/>
 
@@ -41,7 +43,7 @@
 		<h1>I'm convinced. How do I get it?</h1>
 		<p>
 			Taekwindow is completely free. It is a tiny download, and does not require installation: you can be running it only seconds from now. <strong>
-				<a href="download.shtml">Go and download it!</a>
+				<a href="download.html">Go and download it!</a>
 			</strong>
 		</p>
 		
