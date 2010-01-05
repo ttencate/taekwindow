@@ -1,0 +1,6 @@
+Redirect permanent /index.shtml http://taekwindow.sf.net/index.html
+Redirect permanent /faq.shtml http://taekwindow.sf.net/faq.html
+Redirect permanent /download.shtml http://taekwindow.sf.net/download.html
+Redirect permanent /documentation.shtml http://taekwindow.sf.net/manual.html
+Redirect permanent /contact.shtml http://taekwindow.sf.net/contact.html
+Redirect permanent /screenshots.shtml http://taekwindow.sf.net/index.html

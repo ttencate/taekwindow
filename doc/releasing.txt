@@ -44,4 +44,4 @@ Send an update to the Tweakers.net Meuktracker at http://tweakers.net/etc.dsp?Ac
 
 Send an update to Softpedia at http://www.softpedia.com/progSendUpdate/Taekwindow-SendUpdate-70130.html, copying the contents of the SF.net news page for this release.
 
-Send an update to http://www.heise.de/, updating this file with the actions taken.
+Send an update to http://www.heise.de/, using the URL in the first e-mail from them.
