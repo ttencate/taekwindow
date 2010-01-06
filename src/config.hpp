@@ -7,6 +7,10 @@ struct Configuration {
 
 public:
 
+	/* Whether the settings are stored in the registry or in an INI file.
+	 */
+	ConfigurationLocation location;
+
 	/* Whether or not to show the system tray icon while the application is running.
 	 */
 	bool systemTrayIcon;
@@ -56,12 +60,29 @@ public:
 
 private:
 
-	static TCHAR const *const REG_KEY;
+	static TCHAR const *const s_baseKey;
+	static TCHAR const *const s_programKey;
+	static TCHAR const *const s_versionKey;
+	static TCHAR const *const s_regKey;
+
+	struct ReadFromRegistry;
+	struct WriteToRegistry;
+	struct ReadFromIni;
+	struct WriteToIni;
 
 	void getStartupLinkFilename(TCHAR *buffer);
 	template<typename F, typename P> void applyFunctor(P param);
+	
 	void loadFromRegistry();
 	void saveToRegistry();
+	void deleteFromRegistry();
+
+	bool existsIni();
+	void getIniFilename(TCHAR *buffer, size_t size);
+	void loadFromIni();
+	void saveToIni();
+	void deleteFromIni();
+
 	void loadFromStartup();
 	void saveToStartup();
 
