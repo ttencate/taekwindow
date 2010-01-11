@@ -54,6 +54,13 @@
 			</answer>
 		</qa>
 
+		<qa id="usbstick">
+			<question>Can I run it from a USB stick?</question>
+			<answer>
+				<p>Yes. The program has always been "portable" in the sense that it does not require installation. As of version 0.3.1, you can choose to store your settings in an INI file that you can put on your portable drive alongside the program.</p>
+			</answer>
+		</qa>
+
 		<qa id="mac">
 			<question>Will there be a Mac version?</question>
 			<answer>
