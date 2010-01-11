@@ -19,9 +19,9 @@ size_t const ConfigSheet::s_numPages = 5;
 int const ConfigSheet::s_templateIds[ConfigSheet::s_numPages] = { IDD_GENERALPAGE, IDD_BUTTONSPAGE, IDD_RESIZINGPAGE, IDD_SCROLLINGPAGE, IDD_ABOUTPAGE };
 DLGPROC const ConfigSheet::s_pageProcs[ConfigSheet::s_numPages] = { &ConfigSheet::generalPageFwd, &ConfigSheet::buttonsPageFwd, &ConfigSheet::resizingPageFwd, &ConfigSheet::scrollingPageFwd, &ConfigSheet::aboutPageFwd };
 
-size_t const ConfigSheet::s_numImages = 5;
-int const ConfigSheet::s_resourceIds[ConfigSheet::s_numImages] = { IDB_STARTUP, IDB_TRAYICON, IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
-int const ConfigSheet::s_controlIds[ConfigSheet::s_numImages] = { IDC_STARTUPIMAGE, IDC_SYSTRAYIMAGE, IDC_BOTTOMRIGHTIMAGE, IDC_NINERECTANGLESIMAGE, IDC_APPLOGO };
+size_t const ConfigSheet::s_numImages = 3;
+int const ConfigSheet::s_resourceIds[ConfigSheet::s_numImages] = { IDB_RESIZEBOTTOMRIGHT, IDB_RESIZENINERECTANGLES, IDB_LOGO };
+int const ConfigSheet::s_controlIds[ConfigSheet::s_numImages] = { IDC_BOTTOMRIGHTIMAGE, IDC_NINERECTANGLESIMAGE, IDC_APPLOGO };
 
 ConfigSheet *ConfigSheet::s_instance = NULL;
 
@@ -32,7 +32,8 @@ ConfigSheet::ConfigSheet(Configuration const &config)
 	d_origWindowProc(NULL),
 	d_gdiPlus(),
 	d_imageList(d_gdiPlus, s_numImages),
-	d_handle(NULL)
+	d_handle(NULL),
+	d_exitButton(NULL)
 {
 	ASSERT(!s_instance);
 	s_instance = this;
@@ -102,6 +103,31 @@ void ConfigSheet::initDynamicLabels(HWND pageHandle) {
 	SetDlgItemText(pageHandle, IDC_LICENSE, _T(APPLICATION_LICENSE_BRIEF) _T(" See the file <a href=\"") _T(APPLICATION_README_FILE) _T("\">") _T(APPLICATION_README_FILE) _T("</a> for details."));
 }
 
+void ConfigSheet::createExitButton() {
+	if (d_exitButton)
+		return;
+
+	POINT pos;
+	int w, h;
+
+	RECT rect;
+	HWND okBtn = GetDlgItem(d_handle, IDOK);
+	GetWindowRect(okBtn, &rect);
+	pos.y = rect.top;
+	w = rect.right - rect.left;
+	h = rect.bottom - rect.top;
+
+	HFONT font = (HFONT)SendMessage(okBtn, WM_GETFONT, 0, 0);
+	
+	HWND tabCtrl = FindWindowEx(d_handle, NULL, _T("SysTabControl32"), NULL);
+	GetWindowRect(tabCtrl, &rect);
+	pos.x = rect.left;
+
+	ScreenToClient(d_handle, &pos);
+	d_exitButton = CreateWindow(_T("BUTTON"), _T("&Exit"), WS_CHILD | WS_TABSTOP | WS_VISIBLE, pos.x, pos.y, w, h, d_handle, NULL, GetModuleHandle(NULL), NULL);
+	SendMessage(d_exitButton, WM_SETFONT, (WPARAM)font, (LPARAM)FALSE);
+}
+
 void ConfigSheet::drawImageControl(int controlId, DRAWITEMSTRUCT const &item) {
 	Image *image = d_imageList.forControl(controlId);
 	if (image)
@@ -158,22 +184,18 @@ BOOL ConfigSheet::generalPageDialogProc(HWND pageHandle, UINT message, WPARAM wP
 		case WM_INITDIALOG:
 			CheckDlgButton(pageHandle, IDC_SYSTRAYICON, d_newConfig.systemTrayIcon);
 			CheckDlgButton(pageHandle, IDC_STARTATLOGON, d_newConfig.startAtLogon);
+			CheckRadioButton(pageHandle, IDC_REGISTRY, IDC_INIFILE,
+				d_newConfig.location == clRegistry ? IDC_REGISTRY : IDC_INIFILE);
 			break;
 		case WM_COMMAND:
-			switch (LOWORD(wParam)) {
-				case IDC_EXITBUTTON:
-					PostQuitMessage(0);
-					break;
-				default:
-					PropSheet_Changed(d_handle, pageHandle);
-					break;
-			}
+			PropSheet_Changed(d_handle, pageHandle);
 			return TRUE;
 		case WM_NOTIFY:
 			switch (((NMHDR*)lParam)->code) {
 				case PSN_APPLY:
 					d_newConfig.systemTrayIcon = IsDlgButtonChecked(pageHandle, IDC_SYSTRAYICON) == BST_CHECKED;
 					d_newConfig.startAtLogon = IsDlgButtonChecked(pageHandle, IDC_STARTATLOGON) == BST_CHECKED;
+					d_newConfig.location = IsDlgButtonChecked(pageHandle, IDC_REGISTRY) ? clRegistry : clIniFile;
 					return TRUE;
 			}
 			break;
@@ -299,13 +321,20 @@ LRESULT ConfigSheet::configWindowProc(HWND pageHandle, UINT message, WPARAM wPar
 	LRESULT retVal = CallWindowProc(d_origWindowProc, pageHandle, message, wParam, lParam);
 	switch (message) {
 		case WM_COMMAND:
+			if ((HWND)lParam == d_exitButton) {
+				PostQuitMessage(0);
+				break;
+			}
 			switch (LOWORD(wParam)) {
 				case IDOK:
 				case ID_APPLY_NOW:
 					applyConfig(d_newConfig);
 					d_newConfig.save();
 					break;
-			}
+			} 
+			break;
+		case WM_SHOWWINDOW:
+			createExitButton();
 			break;
 	}	
 	return retVal;

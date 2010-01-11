@@ -37,6 +37,8 @@ class ConfigSheet : private PropSheet {
 	 */
 	WNDPROC d_origWindowProc;
 
+	HWND d_exitButton;
+
 	public:
 
 		ConfigSheet(Configuration const &config);
@@ -59,6 +61,7 @@ class ConfigSheet : private PropSheet {
 
 		void loadImages();
 		void initDynamicLabels(HWND dialogHandle);
+		void createExitButton();
 		void drawImageControl(int controlID, DRAWITEMSTRUCT const &item);
 		void hyperlinkClicked(int controlID, NMLINK const &nmLink);
 		void mutexButtonRadios(HWND dialogHandle, WPARAM wParam, int move, int resize);

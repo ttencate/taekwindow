@@ -248,19 +248,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\graphics\gui\startup.png"
-				>
-			</File>
-			<File
 				RelativePath="..\graphics\icons\traycolour.ico"
 				>
 			</File>
 			<File
 				RelativePath="..\graphics\icons\traygray.ico"
-				>
-			</File>
-			<File
-				RelativePath="..\graphics\gui\trayicon.png"
 				>
 			</File>
 			<File

@@ -107,15 +107,15 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "General"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    GROUPBOX        "Startup and exit",IDC_STARTUPGROUP,6,6,216,108
     CONTROL         "Start when &logging on\r\n\r\nThis option creates or removes a shortcut to Taekwindow in the Startup folder in the Start Menu for your user account.",IDC_STARTATLOGON,
-                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,18,204,36
-    CONTROL         "",IDC_STARTUPIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,24,54,192,30
-    GROUPBOX        "Notification area",IDC_SYSTRAYGROUP,6,120,216,72
+                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,6,6,216,36
     CONTROL         "Show icon in &notification area (system tray)\r\n\r\nClick the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_SYSTRAYICON,
-                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,12,132,108,48
-    CONTROL         "",IDC_SYSTRAYIMAGE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,126,132,90,54
-    PUSHBUTTON      "&Exit Taekwindow",IDC_EXITBUTTON,12,96,68,14
+                    "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,6,48,216,36
+    GROUPBOX        "Store settings in",IDC_SETTINGSLOCATIONGROUP,6,90,216,102
+    CONTROL         "&Registry\r\n\r\nStore settings in the registry section belonging to your user profile. The settings will be moved along with your profile.",IDC_REGISTRY,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE | WS_GROUP | WS_TABSTOP,12,102,204,36
+    CONTROL         "&INI file\r\n\r\nStore the settings in a file ""taekwindow.ini"" in the same folder as ""taekwindow.exe"". Use this if you are running Taekwindow on different computers from a USB drive.",IDC_INIFILE,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,144,204,42
 END
 
 IDD_BUTTONSPAGE DIALOGEX 0, 0, 229, 199
@@ -124,20 +124,19 @@ CAPTION "Keys and buttons"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     GROUPBOX        "Keyboard",IDC_KEYBOARDGROUP,6,6,216,54
-    CONTROL         "Move and resize with &left Alt",IDC_LEFTALT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,18,204,12
+    CONTROL         "Move and resize with &left Alt",IDC_LEFTALT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,18,204,12
     CONTROL         "Move and resize with a&ny Alt",IDC_ANYALT,"Button",BS_AUTORADIOBUTTON,12,30,204,12
     CONTROL         "Move and resize with &right Alt",IDC_RIGHTALT,"Button",BS_AUTORADIOBUTTON,12,42,204,12
-    GROUPBOX        "Moving",IDC_MOVINGGROUP,6,66,216,54
-    CONTROL         "Move with l&eft mouse button",IDC_MOVELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,78,204,12
+    GROUPBOX        "Mouse",IDC_MOUSEGROUP,6,66,216,114
+    CONTROL         "Move with lef&t mouse button",IDC_MOVELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,78,204,12
     CONTROL         "Move with &middle mouse button",IDC_MOVEMIDDLE,"Button",BS_AUTORADIOBUTTON,12,90,204,12
     CONTROL         "Move with ri&ght mouse button",IDC_MOVERIGHT,"Button",BS_AUTORADIOBUTTON,12,102,204,12
-    GROUPBOX        "Resizing",IDC_RESIZINGGROUP,6,126,216,54
-    CONTROL         "Resize with le&ft mouse button",IDC_RESIZELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,138,204,12
+    CONTROL         "Resize with le&ft mouse button",IDC_RESIZELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,120,204,12
     CONTROL         "Resize with mi&ddle mouse button",IDC_RESIZEMIDDLE,
-                    "Button",BS_AUTORADIOBUTTON,12,150,204,12
-    CONTROL         "Resize with rig&ht mouse button",IDC_RESIZERIGHT,"Button",BS_AUTORADIOBUTTON,12,162,204,12
+                    "Button",BS_AUTORADIOBUTTON,12,132,204,12
+    CONTROL         "Resize with rig&ht mouse button",IDC_RESIZERIGHT,"Button",BS_AUTORADIOBUTTON,12,144,204,12
     CONTROL         "&Push windows back with middle mouse button on title bar",IDC_PUSHBACKCHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,186,210,10
+                    "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,12,162,204,10
 END
 
 IDD_RESIZINGPAGE DIALOGEX 0, 0, 229, 199
@@ -147,8 +146,8 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     GROUPBOX        "Resize mode",IDC_RESIZEMODEGROUP,6,6,216,156
     CONTROL         "&Bottom right corner\r\n\r\nRegardless of where you grab the window, you always resize from its lower right corner.",IDC_BOTTOMRIGHT,
-                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,18,102,66
-    CONTROL         "&Nine rectangles\n\nThe window is resized from the corner or edge that is closest to the point where you grab it.",IDC_NINERECTANGLES,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE | WS_GROUP | WS_TABSTOP,12,18,102,66
+    CONTROL         "&Closest corner/edge\n\nThe window is resized from the corner or edge that is closest to the point where you grab it.",IDC_NINERECTANGLES,
                     "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,90,102,66
     CONTROL         "",IDC_BOTTOMRIGHTIMAGE,"Static",SS_OWNERDRAW,120,18,96,66
     CONTROL         "",IDC_NINERECTANGLESIMAGE,"Static",SS_OWNERDRAW,120,90,96,66
@@ -161,7 +160,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     GROUPBOX        "Scroll wheel behaviour",IDC_SCROLLINGGROUP,6,6,216,96
     CONTROL         "Scroll the &focused window\r\n\r\nThe scroll wheel on the mouse affects the window that currently has the focus (Windows default).",IDC_SCROLLFOCUSED,
-                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,18,204,36
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE | WS_GROUP | WS_TABSTOP,12,18,204,36
     CONTROL         "Scroll the window under the &cursor\r\n\r\nThe scroll wheel affects the window that is currently under the mouse cursor.",IDC_SCROLLUNDERCURSOR,
                     "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,12,60,204,36
 END

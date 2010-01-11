@@ -6,8 +6,6 @@
 #define IDI_TRAY_COLOUR                 102
 #define IDI_TRAY_GRAY                   103
 #define IDB_LOGO                        104
-#define IDB_STARTUP                     110
-#define IDB_TRAYICON                    111
 #define IDB_RESIZEBOTTOMRIGHT           112
 #define IDB_RESIZENINERECTANGLES        113
 

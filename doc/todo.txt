@@ -1,7 +1,7 @@
 TODO
 ----
 
-- Test release build thoroughly on XP and Windows 7.
+- PNG-compress the icon.
 - Release.
 
 - Make wrapper classes for the mouse/keyboard hooks.

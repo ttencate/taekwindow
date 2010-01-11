@@ -7,8 +7,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include <winres.h>
-
+#include <winres.h>
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -37,8 +36,6 @@ IDI_TRAY_GRAY           ICON                    "..\\graphics\\icons\\traygray.i
 // PNG
 //
 
-IDB_STARTUP             PNG                     "..\\graphics\\gui\\startup.png"
-IDB_TRAYICON            PNG                     "..\\graphics\\gui\\trayicon.png"
 IDB_RESIZEBOTTOMRIGHT   PNG                     "..\\graphics\\gui\\resize-bottom-right.png"
 IDB_RESIZENINERECTANGLES PNG                     "..\\graphics\\gui\\resize-nine-rectangles.png"
 IDB_LOGO                PNG                     "..\\graphics\\gui\\logo-64.png"
