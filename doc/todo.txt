@@ -1,13 +1,11 @@
 TODO
 ----
 
-- PNG-compress the icon.
+- Test INI stuff on XP.
 - Release.
 
 - Make wrapper classes for the mouse/keyboard hooks.
 - Try disabling Unicode for smaller EXE.
 - Make the tray icon menu into a resource.
-- Look into the icon: it's 15 kB, and seems to be uncompressed in the .exe. (Aren't we using PNG?)
-- Strip the metadata from PNGs -- there are references to Inkscape and ImageReady.
 - Search for TODO and do them.
 - Do a full code review.
