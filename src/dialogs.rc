@@ -111,7 +111,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,6,6,216,36
     CONTROL         "Show icon in &notification area (system tray)\r\n\r\nClick the icon to temporarily disable Taekwindow. Right-click it for a menu.",IDC_SYSTRAYICON,
                     "Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_TABSTOP,6,48,216,36
-    GROUPBOX        "Store settings in",IDC_SETTINGSLOCATIONGROUP,6,90,216,102
+    GROUPBOX        "Settings location",IDC_SETTINGSLOCATIONGROUP,6,90,216,102
     CONTROL         "&Registry\r\n\r\nStore settings in the registry section belonging to your user profile. The settings will be moved along with your profile.",IDC_REGISTRY,
                     "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE | WS_GROUP | WS_TABSTOP,12,102,204,36
     CONTROL         "&INI file\r\n\r\nStore the settings in a file ""taekwindow.ini"" in the same folder as ""taekwindow.exe"". Use this if you are running Taekwindow on different computers from a USB drive.",IDC_INIFILE,
@@ -123,20 +123,22 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Keys and buttons"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    GROUPBOX        "Keyboard",IDC_KEYBOARDGROUP,6,6,216,54
-    CONTROL         "Move and resize with &left Alt",IDC_LEFTALT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,18,204,12
-    CONTROL         "Move and resize with a&ny Alt",IDC_ANYALT,"Button",BS_AUTORADIOBUTTON,12,30,204,12
-    CONTROL         "Move and resize with &right Alt",IDC_RIGHTALT,"Button",BS_AUTORADIOBUTTON,12,42,204,12
-    GROUPBOX        "Mouse",IDC_MOUSEGROUP,6,66,216,114
-    CONTROL         "Move with lef&t mouse button",IDC_MOVELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,78,204,12
-    CONTROL         "Move with &middle mouse button",IDC_MOVEMIDDLE,"Button",BS_AUTORADIOBUTTON,12,90,204,12
-    CONTROL         "Move with ri&ght mouse button",IDC_MOVERIGHT,"Button",BS_AUTORADIOBUTTON,12,102,204,12
-    CONTROL         "Resize with le&ft mouse button",IDC_RESIZELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,120,204,12
-    CONTROL         "Resize with mi&ddle mouse button",IDC_RESIZEMIDDLE,
-                    "Button",BS_AUTORADIOBUTTON,12,132,204,12
-    CONTROL         "Resize with rig&ht mouse button",IDC_RESIZERIGHT,"Button",BS_AUTORADIOBUTTON,12,144,204,12
+    GROUPBOX        "Keyboard",IDC_KEYBOARDGROUP,6,6,216,66
+    CONTROL         "&Left Alt",IDC_LEFTALT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,28,204,12
+    CONTROL         "A&ny Alt",IDC_ANYALT,"Button",BS_AUTORADIOBUTTON,12,40,204,12
+    CONTROL         "&Right Alt",IDC_RIGHTALT,"Button",BS_AUTORADIOBUTTON,12,52,204,12
+    GROUPBOX        "Mouse",IDC_MOUSEGROUP,6,78,216,84
+    CONTROL         "Lef&t mouse button",IDC_MOVELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,100,96,12
+    CONTROL         "&Middle mouse button",IDC_MOVEMIDDLE,"Button",BS_AUTORADIOBUTTON,12,112,96,12
+    CONTROL         "Ri&ght mouse button",IDC_MOVERIGHT,"Button",BS_AUTORADIOBUTTON,12,124,96,12
+    CONTROL         "Le&ft mouse button",IDC_RESIZELEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,114,100,96,12
+    CONTROL         "Mi&ddle mouse button",IDC_RESIZEMIDDLE,"Button",BS_AUTORADIOBUTTON,114,112,96,12
+    CONTROL         "Rig&ht mouse button",IDC_RESIZERIGHT,"Button",BS_AUTORADIOBUTTON,114,124,96,12
     CONTROL         "&Push windows back with middle mouse button on title bar",IDC_PUSHBACKCHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,12,162,204,10
+                    "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,12,145,204,10
+    LTEXT           "Move windows with:",IDC_MOVE,12,90,66,8,NOT WS_GROUP
+    LTEXT           "Resize windows with:",IDC_RESIZE,114,90,69,8,NOT WS_GROUP
+    LTEXT           "Move and resize windows with:",IDC_KEY,12,18,100,8,NOT WS_GROUP
 END
 
 IDD_RESIZINGPAGE DIALOGEX 0, 0, 229, 199
