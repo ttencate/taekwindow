@@ -1,10 +1,6 @@
 #ifndef _TESTAPP_HPP_
 #define _TESTAPP_HPP_
 
-#define _CRT_SECURE_NO_WARNINGS 1
-#include <stdio.h>
-
-#define _WIN32_WINNT WINVER
 #include <windows.h>
 
 // messages.cpp

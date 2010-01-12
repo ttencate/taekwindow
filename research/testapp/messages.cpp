@@ -1,5 +1,8 @@
 #define _CRT_SECURE_NO_DEPRECATE 1
 
+#include <windows.h>
+#include <stdio.h>
+
 #include "testapp.hpp"
 
 char *sysCommandName(WPARAM wParam, LPARAM lParam);
@@ -21,6 +24,14 @@ char *messageInfo(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			break;
 		case WM_MOUSEMOVE:
 			sprintf(buffer, "%s with %s", name, mouseMoveName(wParam));
+			break;
+		case WM_SYSKEYDOWN:
+		case WM_SYSKEYUP:
+			sprintf(buffer, "%s with virtual key 0x%04x, repeat count %i; Alt %s; previously %s",
+				name, wParam, lParam & 0xFF,
+				lParam & 0x20000000 ? "down" : "up",
+				lParam & 0x40000000 ? "down" : "up");
+			break;
 		default:
 			strcpy(buffer, name);
 	}

@@ -1,3 +1,8 @@
+#define _CRT_SECURE_NO_DEPRECATE 1
+
+#include <windows.h>
+#include <stdio.h>
+
 #include "testapp.hpp"
 
 HHOOK msgHook;
