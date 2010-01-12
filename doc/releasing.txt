@@ -1,9 +1,9 @@
 How to release a new version of Taekwindow
 ------------------------------------------
 
-Update the version number in information.xml.
+Update the version number in version.xml.
 
-Update the changelog in information.xml. Full sentences, starting with lowercase letter, no period at the end, describing the end result of the change/bugfix.
+Update the changelog in history.xml. Full sentences, starting with lowercase letter, no period at the end, describing the end result of the change/bugfix.
 
 Switch to Release mode.
 
