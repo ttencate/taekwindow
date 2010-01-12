@@ -1,9 +1,6 @@
 TODO
 ----
 
-- Test INI stuff on XP.
-- Release.
-
 - Make wrapper classes for the mouse/keyboard hooks.
 - Try disabling Unicode for smaller EXE.
 - Make the tray icon menu into a resource.
