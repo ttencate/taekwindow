@@ -1,7 +1,6 @@
 TODO
 ----
 
-- Make wrapper classes for the mouse/keyboard hooks.
 - Try disabling Unicode for smaller EXE.
 - Make the tray icon menu into a resource.
 - Search for TODO and do them.

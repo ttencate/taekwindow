@@ -1,6 +1,6 @@
 #include <tchar.h>
 
-#include "hooks.hpp"
+#include "mousehook.hpp"
 #include "globals.hpp"
 #include "debug.hpp"
 
@@ -9,36 +9,10 @@
 // damaging XP support... so we just copy the definition here.
 #define WM_MOUSEHWHEEL 0x020E
 
-/* Attaches global event hooks.
- * Returns true on success.
- */
-bool attachHooks() {
-	HINSTANCE instance = GetModuleHandle(NULL);
-	globals->llMouseHook() = SetWindowsHookEx(WH_MOUSE_LL, lowLevelMouseProc, instance, NULL);
-	if (!globals->llMouseHook())
-		return false;
-	globals->llKeyboardHook() = SetWindowsHookEx(WH_KEYBOARD_LL, lowLevelKeyboardProc, instance, NULL);
-	if (!globals->llKeyboardHook())
-		return false;
-	return true;
-}
-
-/* Detaches previously set hooks.
- * Returns true on success.
- */
-bool detachHooks() {
-	bool success = true;
-	if (!UnhookWindowsHookEx(globals->llKeyboardHook()))
-		success = false;
-	globals->llKeyboardHook() = NULL;
-	if (!UnhookWindowsHookEx(globals->llMouseHook()))
-		success = false;
-	globals->llMouseHook() = NULL;
-	return success;
-}
-
-bool areHooksAttached() {
-	return (globals->llMouseHook() && globals->llKeyboardHook());
+MouseHook::MouseHook()
+:
+	Hook(WH_MOUSE_LL, &llMouseProc)
+{
 }
 
 /* Clips the given point to be inside the cursor clip rectangle.
@@ -99,13 +73,15 @@ bool processMouseMessage(WPARAM wParam, LPARAM lParam) {
 
 /* The function for handling mouse events.
  */
-LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK MouseHook::llMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	// Question: from where is the callback called?
 	// Answer: from pretty much anywhere!
 	// The callback is called by sending a message, so any function that causes
 	// pending sent messages to be processed can cause callback invocations.
-	// For example, a call to GetAncestor can indirectly cause a call to the callback,
-	// and if GetAncestor itself was called *from* the callback, things go boom pretty hard.
+	// At least SetWindowPlacement has been observed to do this, as well as GetWindowRect; maybe GetAncestor too.
+	// If a call to SetWindowPlacement can indirectly cause a call to the callback,
+	// and if SetWindowPlacement itself was called *from* the callback,
+	// all kinds of assumptions in this code break, and things go boom pretty hard.
 	// 
 	// Workaround: ignore nested callback calls while another call is being processed.
 	// 
@@ -129,28 +105,4 @@ LRESULT CALLBACK lowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	if (eat)
 		res = 1; // nonzero return value prevents passing the event to the application
 	return res;
-}
-
-/* The function for handling keyboard events, tracking the state of the modifier key(s).
- * Also the function to eat keyboard events that the application shouldn't receive.
- * TODO: this is not yet implemented, actually. In the release build this hook is currestly just eating resources...
- * Note that this runs in the context of the main exe.
- */
-LRESULT CALLBACK lowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	// Note: see the comment in lowLevelMouseProc.
-	// If we're going to put more functionality here,
-	// it needs to share the "mutex" with that procedure.
-	if (nCode == HC_ACTION) {
-#ifdef _DEBUG
-		KBDLLHOOKSTRUCT *info = (KBDLLHOOKSTRUCT*)lParam;
-		// DEBUGLOG("vkCode = 0x%08X, flags = 0x%08X", info->vkCode, info->flags);
-		if (info->vkCode == 0x51) {
-			DEBUGLOG("Panic button pressed");
-			// Q button pressed. Panic button for debugging.
-			PostThreadMessage(GetCurrentThreadId(), WM_QUIT, 0, 0);
-			return 1;
-		}
-#endif
-	}
-	return CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
 }

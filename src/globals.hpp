@@ -7,6 +7,8 @@
 #include "pushhandler.hpp"
 #include "draghandler.hpp"
 #include "handlerlist.hpp"
+#include "mousehook.hpp"
+#include "keyboardhook.hpp"
 #include "trayiconmanager.hpp"
 #include "configsheetmanager.hpp"
 
@@ -28,8 +30,8 @@ class Globals {
 	PushHandler d_pushHandler;
 	DragHandler d_dragHandler;
 	MouseHandlerList d_mouseHandlerList;
-	HHOOK d_llMouseHook;
-	HHOOK d_llKeyboardHook;
+	MouseHook d_mouseHook;
+	KeyboardHook d_keyboardHook;
 	TrayIconManager d_trayIcon;
 	ConfigSheetManager d_configDlg;
 
@@ -40,8 +42,8 @@ class Globals {
 
 		Configuration &config() { return d_config; }
 		Cursors &cursors() { return d_cursors; }
-		HHOOK &llMouseHook() { return d_llMouseHook; }
-		HHOOK &llKeyboardHook() { return d_llKeyboardHook; }
+		MouseHook &mouseHook() { return d_mouseHook; }
+		KeyboardHook &keyboardHook() { return d_keyboardHook; }
 		MouseHandlerList &mouseHandlerList() { return d_mouseHandlerList; }
 		TrayIconManager &trayIcon() { return d_trayIcon; }
 		ConfigSheetManager &configDlg() { return d_configDlg; }

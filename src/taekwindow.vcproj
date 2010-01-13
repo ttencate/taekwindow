@@ -604,11 +604,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\hooks.cpp"
+				RelativePath=".\hook.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\hooks.hpp"
+				RelativePath=".\hook.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\keyboardhook.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\keyboardhook.hpp"
 				>
 			</File>
 			<File
@@ -617,6 +625,14 @@
 			</File>
 			<File
 				RelativePath=".\main.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\mousehook.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\mousehook.hpp"
 				>
 			</File>
 		</Filter>

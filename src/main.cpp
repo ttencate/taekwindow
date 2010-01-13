@@ -3,7 +3,6 @@
 
 #include "main.hpp"
 #include "trayicon.hpp"
-#include "hooks.hpp"
 #include "cursors.hpp"
 #include "globals.hpp"
 #include "messages.hpp"
@@ -18,8 +17,13 @@ TCHAR const *const SHARED_MEM_NAME = _T("Taekwindow_{5C9807CA-E53F-4d1b-8AF7-FCA
 bool enable() {
 	if (isEnabled())
 		return true;
-	if (!attachHooks())
+	if (!globals->mouseHook().attach()) {
 		return false;
+	}
+	if (!globals->keyboardHook().attach()) {
+		globals->mouseHook().detach();
+		return false;
+	}
 	globals->trayIcon().update();
 	return true;
 }
@@ -27,14 +31,17 @@ bool enable() {
 bool disable() {
 	if (!isEnabled())
 		return true;
-	if (!detachHooks())
-		return false;
+	bool ret = true;
+	if (!globals->keyboardHook().detach())
+		ret = false;
+	if (!globals->mouseHook().detach())
+		ret = false;
 	globals->trayIcon().update();
-	return true;
+	return ret;
 }
 
 bool isEnabled() {
-	return areHooksAttached();
+	return globals->keyboardHook().attached() && globals->mouseHook().attached();
 }
 
 void applyConfig(Configuration const &config) {
@@ -110,9 +117,8 @@ int main() {
 		retVal = messageLoop();
 	}
 
-	// Normal exit.
-	// Note that calling detachHooks is OK if attachHooks only partly worked.
-	detachHooks();
+	// Normal exit; detach the hooks first.
+	disable();
 
 	return retVal;
 }
