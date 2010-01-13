@@ -10,6 +10,11 @@
  * the system message queue to be flushed, therefore possibly calling a hook again.
  * Now we're in an indirectly recursive hook call, which causes all kinds of assumptions to fail
  * and things to go boom pretty hard.
+ * 
+ * It is not possible to tell the system to hold off on calling our callback.
+ * It is also not possible to ignore recursive calls: we'd have no choice but to drop messages.
+ * That causes us to hang in the wrong state if we happened to drop a mouse-up message.
+ * Our only choice is to push as much work as possible into this worker thread and hope for the best.
  */
 class WorkerThread {
 
@@ -33,7 +38,7 @@ class WorkerThread {
 		static DWORD WINAPI staticThreadProc(LPVOID param);
 		DWORD threadProc();
 
-		void handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
+		bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
 		void collapseMoves(POINT *mousePos);
 
 		WorkerThread(WorkerThread const &other); // not implemented
