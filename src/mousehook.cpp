@@ -40,7 +40,6 @@ bool MouseHook::processMouseMessage(WPARAM wParam, LPARAM lParam) {
 
 	// TODO for the time being, never eat events
 	//	case WM_MOUSEMOVE:
-	//	case WM_NCMOUSEMOVE:
 				// If we eat the event, even the mouse cursor position won't be updated
 				// by Windows, so low-level is the low-level hook.
 	//			SetCursorPos(mousePos.x, mousePos.y);
