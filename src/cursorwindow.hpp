@@ -23,7 +23,6 @@ class CursorWindow {
 
 		ATOM createClass();
 		HWND createWindow();
-		void setRegion();
 
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static void paint(HWND window);
