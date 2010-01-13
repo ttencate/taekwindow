@@ -17,7 +17,7 @@ MouseHook::MouseHook()
 
 /* Clips the given point to be inside the cursor clip rectangle.
  */
-void clipCursor(POINT &pos) {
+void MouseHook::clipCursor(POINT &pos) {
 	RECT clip;
 	GetClipCursor(&clip);
 	if (pos.x < clip.left)
@@ -30,7 +30,7 @@ void clipCursor(POINT &pos) {
 		pos.y = clip.bottom;
 }
 
-bool processMouseMessage(WPARAM wParam, LPARAM lParam) {
+bool MouseHook::processMouseMessage(WPARAM wParam, LPARAM lParam) {
 	MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
 	POINT mousePos = eventInfo->pt;
 	// A low-level mouse proc gets the mouse coordinates even before they are
