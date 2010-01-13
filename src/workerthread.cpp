@@ -59,6 +59,7 @@ DWORD WorkerThread::threadProc() {
 }
 
 void WorkerThread::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
+	// TODO this doesn't yet handle keyboard messages
 	POINT mousePos;
 	mousePos.x = GET_X_LPARAM(lParam);
 	mousePos.y = GET_Y_LPARAM(lParam);
@@ -67,23 +68,17 @@ void WorkerThread::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 		case WM_LBUTTONDOWN:
 		case WM_MBUTTONDOWN:
 		case WM_RBUTTONDOWN:
-		case WM_NCLBUTTONDOWN:
-		case WM_NCMBUTTONDOWN:
-		case WM_NCRBUTTONDOWN:
 			DEBUGLOG("Worker thread handling mouse down 0x%08x at (%i, %i)", message, mousePos.x, mousePos.y);
 			globals->mouseHandlerList().onMouseDown(MouseDownEvent(mousePos, eventToButton(message), window));
 			break;
 		case WM_LBUTTONUP:
 		case WM_MBUTTONUP:
 		case WM_RBUTTONUP:
-		case WM_NCLBUTTONUP:
-		case WM_NCMBUTTONUP:
-		case WM_NCRBUTTONUP:
 			DEBUGLOG("Worker thread handling mouse up 0x%08x at (%i, %i)", message, mousePos.x, mousePos.y);
 			globals->mouseHandlerList().onMouseUp(MouseUpEvent(mousePos, eventToButton(message), window));
 			break;
 		case WM_MOUSEMOVE:
-		case WM_NCMOUSEMOVE:
+			collapseMoves(&mousePos);
 			DEBUGLOG("Worker thread handling mouse move 0x%08x at (%i, %i)", message, mousePos.x, mousePos.y);
 			globals->mouseHandlerList().onMouseMove(MouseMoveEvent(mousePos));
 			break;
@@ -95,3 +90,10 @@ void WorkerThread::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 	}
 }
 
+void WorkerThread::collapseMoves(POINT *mousePos) {
+	MSG msg;
+	while (PeekMessage(&msg, NULL, WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE)) {
+		mousePos->x = GET_X_LPARAM(msg.lParam);
+		mousePos->y = GET_Y_LPARAM(msg.lParam);
+	}
+}

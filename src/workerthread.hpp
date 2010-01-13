@@ -34,6 +34,7 @@ class WorkerThread {
 		DWORD threadProc();
 
 		void handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
+		void collapseMoves(POINT *mousePos);
 
 		WorkerThread(WorkerThread const &other); // not implemented
 		WorkerThread &operator=(WorkerThread const &other); // not implemented
