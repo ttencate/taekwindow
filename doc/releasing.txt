@@ -34,7 +34,7 @@ Add a Group in the Bug tracker for the new version, called "Version <version num
 
 Update the screenshots and the screenshots page if necessary.
 
-Upload the files from out/Release/website/ to scp://web.sourceforge.net/home/groups/t/ta/taekwindow/htdocs 
+Upload the files from out/Release/website/ to sftp://web.sourceforge.net/home/groups/t/ta/taekwindow/htdocs 
 
 Check on http://taekwindow.sf.net/ whether the website looks ok.
 
