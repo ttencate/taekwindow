@@ -387,6 +387,14 @@
 				RelativePath=".\wheelhandler.hpp"
 				>
 			</File>
+			<File
+				RelativePath=".\workerthread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\workerthread.hpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="stdlibs"

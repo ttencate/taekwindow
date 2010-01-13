@@ -106,10 +106,9 @@ int main() {
 
 	int retVal = -1; // value to be returned eventually, after cleaning up etc.
 
-	// Load the configuration from the registry.
 	loadAndApplyConfig();
-
-	// Attach the event hooks.
+	
+	globals->workerThread().start();
 	if (!enable()) {
 		showLastError(NULL, _T("Error attaching hooks"));
 	} else {
@@ -117,8 +116,8 @@ int main() {
 		retVal = messageLoop();
 	}
 
-	// Normal exit; detach the hooks first.
 	disable();
+	globals->workerThread().stop();
 
 	return retVal;
 }
