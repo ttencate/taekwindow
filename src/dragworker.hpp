@@ -13,13 +13,7 @@ class DragWorker {
 
 	public:
 
-		virtual ~DragWorker();
-
 		virtual void move(POINT const &mousePos) = 0;
-
-	private:
-
-		void sendAltPress();
 
 };
 
