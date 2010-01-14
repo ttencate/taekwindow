@@ -24,7 +24,7 @@ void openDebugLog() {
 
 	StringCchCopy(&fileName[pos+1], MAX_PATH - pos - 1, LOG_DIR);
 
-	if (!CreateDirectory(LOG_DIR, NULL)) {
+	if (!CreateDirectory(fileName, NULL)) {
 		if (GetLastError() != ERROR_ALREADY_EXISTS) {
 			showLastError(NULL, _T("Error creating debug log directory"));
 			return;
