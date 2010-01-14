@@ -1,10 +1,17 @@
 TODO
 ----
 
+Bugs:
+- Split other handlers (wheel, push-back)
+- Search for TODO and do them.
+
+Cosmetical:
 - Check for POINT passed by value to worker constructors.
 - Split resize class depending on mode.
 - Name compilation units to match classes.
-- Try disabling Unicode for smaller EXE.
-- Make the tray icon menu into a resource.
-- Search for TODO and do them.
 - Do a full code review.
+- Make the tray icon menu into a resource.
+
+Features:
+- Eat modifier events.
+- Try disabling Unicode for smaller EXE.
