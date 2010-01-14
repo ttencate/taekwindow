@@ -33,10 +33,12 @@ bool MouseHook::sendMessageToHandler(UINT message, WPARAM mouseData, POINT const
 		case WM_LBUTTONDOWN:
 		case WM_MBUTTONDOWN:
 		case WM_RBUTTONDOWN:
+			DEBUGLOG("Hook sending mouse-down message");
 			return globals->mouseHandlerList().llMouseDown(LLMouseDownEvent(mousePos, eventToButton(message)));
 		case WM_LBUTTONUP:
 		case WM_MBUTTONUP:
 		case WM_RBUTTONUP:
+			DEBUGLOG("Hook sending mouse-up message");
 			return globals->mouseHandlerList().llMouseUp(LLMouseUpEvent(mousePos, eventToButton(message)));
 		case WM_MOUSEMOVE:
 			return globals->mouseHandlerList().llMouseMove(LLMouseMoveEvent(mousePos));

@@ -2,6 +2,7 @@ TODO
 ----
 
 - Check for POINT passed by value to worker constructors.
+- Split resize class depending on mode.
 - Name compilation units to match classes.
 - Try disabling Unicode for smaller EXE.
 - Make the tray icon menu into a resource.

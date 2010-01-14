@@ -40,8 +40,7 @@ class WorkerThread {
 		static DWORD WINAPI staticThreadProc(LPVOID param);
 		DWORD threadProc();
 
-		bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
-		void collapseMoves(POINT *mousePos);
+		void collapseMoves(MSG *msg);
 
 		WorkerThread(WorkerThread const &other); // not implemented
 		WorkerThread &operator=(WorkerThread const &other); // not implemented

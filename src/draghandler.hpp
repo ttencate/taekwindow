@@ -12,9 +12,10 @@ class DragHandler : public MouseHookHandler {
 	public:
 
 		DragHandler();
+		virtual ~DragHandler();
 
 		virtual bool llMouseDown(LLMouseDownEvent const &event);
-		virtual bool llMouseUp(LLMouseDownEvent const &event);
+		virtual bool llMouseUp(LLMouseUpEvent const &event);
 		virtual bool llMouseMove(LLMouseMoveEvent const &event);
 
 		virtual bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam);

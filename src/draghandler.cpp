@@ -16,12 +16,17 @@ DragHandler::DragHandler()
 {
 }
 
+DragHandler::~DragHandler() {
+	delete d_worker;
+}
+
 bool DragHandler::llMouseDown(LLMouseDownEvent const &event) {
 	if (d_draggingButton != mbNone) {
 		return true;
 	}
 	if (isModifierDown()) {
 		if (event.button == globals->config().moveButton || event.button == globals->config().resizeButton) {
+			DEBUGLOG("Hook starting a drag action");
 			d_draggingButton = event.button;
 			globals->workerThread().postMessage(DRAG_START_MESSAGE, (WPARAM)event.button, pointToDword(event.mousePos));
 			return true;
@@ -30,9 +35,10 @@ bool DragHandler::llMouseDown(LLMouseDownEvent const &event) {
 	return false;
 }
 
-bool DragHandler::llMouseUp(LLMouseDownEvent const &event) {
+bool DragHandler::llMouseUp(LLMouseUpEvent const &event) {
 	if (d_draggingButton != mbNone) {
 		if (d_draggingButton == event.button) {
+			DEBUGLOG("Hook ending a drag action");
 			d_draggingButton = mbNone;
 			globals->workerThread().postMessage(DRAG_END_MESSAGE, (WPARAM)event.button, pointToDword(event.mousePos));
 		}
@@ -49,7 +55,6 @@ bool DragHandler::llMouseMove(LLMouseMoveEvent const &event) {
 		return true;
 	}
 }
-
 
 bool DragHandler::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
@@ -71,7 +76,7 @@ bool DragHandler::isModifierDown() const {
 }
 
 void DragHandler::handleDragStart(MouseButton button, POINT const &mousePos) {
-	DEBUGLOG("Handling a modifier-mousedown event");
+	DEBUGLOG("Worker starting a drag action");
 	if (button == globals->config().moveButton) {
 		handleMoveStart(mousePos);
 	} else if (button == globals->config().resizeButton) {
@@ -122,6 +127,7 @@ void DragHandler::handleResizeStart(POINT const &mousePos) {
 }
 
 void DragHandler::handleDragEnd(MouseButton, POINT const &) {
+	DEBUGLOG("Worker ending a drag action");
 	delete d_worker;
 	d_worker = NULL;
 }

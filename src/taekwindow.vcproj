@@ -592,35 +592,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\hook.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\hook.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\keyboardhook.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\keyboardhook.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\main.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mousehook.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mousehook.hpp"
 				>
 			</File>
 		</Filter>
@@ -662,6 +638,34 @@
 						OutputDir="$(ProjectDir)"
 					/>
 				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="hooks"
+			>
+			<File
+				RelativePath=".\hook.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hook.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\keyboardhook.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\keyboardhook.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\mousehook.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\mousehook.hpp"
+				>
 			</File>
 		</Filter>
 	</Files>

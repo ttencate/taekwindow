@@ -6,6 +6,7 @@
 #include "globals.hpp"
 #include "errors.hpp"
 #include "winutils.hpp"
+#include "messages.hpp"
 
 WorkerThread::WorkerThread()
 :
@@ -50,6 +51,8 @@ DWORD WorkerThread::threadProc() {
 			break;
 		}
 		if (msg.hwnd == NULL) {
+			if (msg.message == DRAG_MOVE_MESSAGE)
+				collapseMoves(&msg);
 			globals->mouseHandlerList().handleMessage(msg.message, msg.wParam, msg.lParam);
 		} else {
 			DispatchMessage(&msg);
@@ -58,11 +61,8 @@ DWORD WorkerThread::threadProc() {
 	return 0;
 }
 
-void WorkerThread::collapseMoves(POINT *mousePos) {
-	// TODO invoke this from some clever place
-	MSG msg;
-	while (PeekMessage(&msg, NULL, WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE)) {
-		mousePos->x = GET_X_LPARAM(msg.lParam);
-		mousePos->y = GET_Y_LPARAM(msg.lParam);
-	}
+void WorkerThread::collapseMoves(MSG *msg) {
+	// Collapse subsequent move messages into one to give a huge speedup when resizing.
+	while (PeekMessage(msg, NULL, DRAG_MOVE_MESSAGE, DRAG_MOVE_MESSAGE, PM_REMOVE))
+		;
 }
