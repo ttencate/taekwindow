@@ -1,6 +1,8 @@
 TODO
 ----
 
+- Check for POINT passed by value to worker constructors.
+- Name compilation units to match classes.
 - Try disabling Unicode for smaller EXE.
 - Make the tray icon menu into a resource.
 - Search for TODO and do them.

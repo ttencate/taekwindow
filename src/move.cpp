@@ -1,50 +1,36 @@
+#include <windows.h>
+
 #include "move.hpp"
 #include "debug.hpp"
 
-MoveState::MoveState(POINT mousePos, MouseButton button, HWND window)
+MoveWorker::MoveWorker(POINT mousePos, HWND window)
 :
-	DeformState(mousePos, button, window)
+	DeformWorker(mousePos, window)
 {
-}
-
-/* Sets up the cursor.
- */
-void MoveState::enter() {
-	DeformState::enter();
 	DEBUGLOG("Starting move action");
 
-	d_parent = GetAncestor(window(), GA_PARENT);
+	d_parent = GetAncestor(d_window, GA_PARENT);
 
 	RECT rect;
-	GetWindowRect(window(), &rect);
+	GetWindowRect(d_window, &rect);
 	d_windowPos.x = rect.left;
 	d_windowPos.y = rect.top;
 
-	cursorWindow().setCursor(crMove);
+	d_cursorWindow.setCursor(crMove);
 }
 
-void MoveState::exit() {
-	DEBUGLOG("Ending move action");
-	DeformState::exit();
-}
+void MoveWorker::move(POINT const &mousePos) {
+	DeformWorker::move(mousePos);
 
-/* Moves the window accordingly.
- */
-bool MoveState::onMouseMove(MouseMoveEvent const &event) {
-	DeformState::onMouseMove(event);
-
-	POINT delta = mouseDelta();
-	d_windowPos.x += delta.x;
-	d_windowPos.y += delta.y;
+	d_windowPos.x += d_mouseDelta.x;
+	d_windowPos.y += d_mouseDelta.y;
 	moveWindow();
-
-	return true;
 }
 
-void MoveState::moveWindow() {
+void MoveWorker::moveWindow() {
 	POINT clientPos = d_windowPos;
 	if (d_parent) {
 		ScreenToClient(d_parent, &clientPos);
 	}
-	SetWindowPos(window(), 0, clientPos.x, clientPos.y, 0, 0, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
+	SetWindowPos(d_window, 0, clientPos.x, clientPos.y, 0, 0, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
 }

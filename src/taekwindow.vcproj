@@ -272,19 +272,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dragmachine.cpp"
+				RelativePath=".\dragworker.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\dragmachine.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dragstate.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dragstate.hpp"
+				RelativePath=".\dragworker.hpp"
 				>
 			</File>
 			<File
@@ -293,14 +285,6 @@
 			</File>
 			<File
 				RelativePath=".\ignore.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mousedown.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mousedown.hpp"
 				>
 			</File>
 			<File
@@ -320,23 +304,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\normal.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\normal.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\resize.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\resize.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\statemachine.hpp"
 				>
 			</File>
 		</Filter>
@@ -597,6 +569,14 @@
 			</File>
 			<File
 				RelativePath=".\wininfo.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\winutils.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\winutils.hpp"
 				>
 			</File>
 		</Filter>

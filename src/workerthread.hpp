@@ -14,6 +14,8 @@
  * It is not possible to tell the system to hold off on calling our callback.
  * It is also not possible to ignore recursive calls: we'd have no choice but to drop messages.
  * That causes us to hang in the wrong state if we happened to drop a mouse-up message.
+ * It is also not possible to put *all* work into the worker thread, and having the hook callback
+ * only post messages: then, we'
  * Our only choice is to push as much work as possible into this worker thread and hope for the best.
  */
 class WorkerThread {

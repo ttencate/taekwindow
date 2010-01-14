@@ -11,10 +11,20 @@ class MouseHookHandler {
 	
 	public:
 
-		virtual bool onMouseDown(MouseDownEvent const &event);
-		virtual bool onMouseUp(MouseUpEvent const &event);
-		virtual bool onMouseMove(MouseMoveEvent const &event);
-		virtual bool onMouseWheel(MouseWheelEvent const &event);
+		/* These are called from the mouse hook.
+		 * Ideally, they must not call any API functions, because those
+		 * might cause the mouse hook callback to be called again.
+		 * (See also the comment for the WorkerThread class.)
+		 */
+		virtual bool llMouseDown(LLMouseDownEvent const &event);
+		virtual bool llMouseUp(LLMouseUpEvent const &event);
+		virtual bool llMouseMove(LLMouseMoveEvent const &event);
+		virtual bool llMouseWheel(LLMouseWheelEvent const &event);
+
+		/* These are called from the worker thread.
+		 * Return true if the message was processed.
+		 */
+		virtual bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
 
 };
 

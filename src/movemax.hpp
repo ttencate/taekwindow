@@ -3,7 +3,7 @@
 
 #include "deform.hpp"
 
-class MoveMaxState : public DeformState {
+class MoveMaxWorker : public DeformWorker {
 
 	/* The monitor that the window is currently on.
 	 */
@@ -11,11 +11,13 @@ class MoveMaxState : public DeformState {
 
 	public:
 
-		MoveMaxState(POINT mousePos, MouseButton button, HWND window);
+		MoveMaxWorker(POINT mousePos, HWND window);
 
-		virtual void enter();
+		virtual void move(POINT const &mousePos);
 
-		virtual bool onMouseMove(MouseMoveEvent const &event);
+	private:
+
+		void moveToMonitor(HMONITOR monitor);
 
 };
 

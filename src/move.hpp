@@ -3,7 +3,7 @@
 
 #include "deform.hpp"
 
-class MoveState : public DeformState {
+class MoveWorker : public DeformWorker {
 
 	/* May be NULL.
 	 */
@@ -15,12 +15,9 @@ class MoveState : public DeformState {
 
 	public:
 
-		MoveState(POINT mousePos, MouseButton button, HWND window);
+		MoveWorker(POINT mousePos, HWND window);
 
-		virtual void enter();
-		virtual void exit();
-
-		virtual bool onMouseMove(MouseMoveEvent const &event);
+		virtual void move(POINT const &mousePos);
 
 	private:
 

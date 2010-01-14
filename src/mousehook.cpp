@@ -1,9 +1,9 @@
 #include <tchar.h>
 
 #include "mousehook.hpp"
-#include "wininfo.hpp"
 #include "globals.hpp"
 #include "debug.hpp"
+#include "winutils.hpp"
 
 MouseHook::MouseHook()
 :
@@ -13,51 +13,64 @@ MouseHook::MouseHook()
 
 /* Clips the given point to be inside the cursor clip rectangle.
  */
-void MouseHook::clipCursor(POINT &pos) {
+POINT MouseHook::clipCursor(POINT const &pos) {
+	POINT newPos = pos;
 	RECT clip;
 	GetClipCursor(&clip);
-	if (pos.x < clip.left)
-		pos.x = clip.left;
-	if (pos.x >= clip.right)
-		pos.x = clip.right;
-	if (pos.y < clip.top)
-		pos.y = clip.top;
-	if (pos.y >= clip.bottom)
-		pos.y = clip.bottom;
+	if (newPos.x < clip.left)
+		newPos.x = clip.left;
+	if (newPos.x >= clip.right)
+		newPos.x = clip.right;
+	if (newPos.y < clip.top)
+		newPos.y = clip.top;
+	if (newPos.y >= clip.bottom)
+		newPos.y = clip.bottom;
+	return newPos;
 }
 
-bool MouseHook::processMouseMessage(WPARAM wParam, LPARAM lParam) {
-	MSLLHOOKSTRUCT *eventInfo = (MSLLHOOKSTRUCT*)lParam;
-	POINT mousePos = eventInfo->pt;
+bool MouseHook::sendMessageToHandler(UINT message, WPARAM mouseData, POINT const &mousePos) {
+	switch (message) {
+		case WM_LBUTTONDOWN:
+		case WM_MBUTTONDOWN:
+		case WM_RBUTTONDOWN:
+			return globals->mouseHandlerList().llMouseDown(LLMouseDownEvent(mousePos, eventToButton(message)));
+		case WM_LBUTTONUP:
+		case WM_MBUTTONUP:
+		case WM_RBUTTONUP:
+			return globals->mouseHandlerList().llMouseUp(LLMouseUpEvent(mousePos, eventToButton(message)));
+		case WM_MOUSEMOVE:
+			return globals->mouseHandlerList().llMouseMove(LLMouseMoveEvent(mousePos));
+		case WM_MOUSEWHEEL:
+		case WM_MOUSEHWHEEL:
+			return globals->mouseHandlerList().llMouseWheel(LLMouseWheelEvent(message, mousePos, GET_WHEEL_DELTA_WPARAM(mouseData)));
+		default:
+			return false;
+	}
+}
+
+bool MouseHook::processMouseMessage(UINT message, WPARAM mouseData, POINT const &mousePos) {
 	// A low-level mouse proc gets the mouse coordinates even before they are
 	// clipped to the screen boundaries. So we need to do this ourselves.
-	clipCursor(mousePos);
+	POINT pos = clipCursor(mousePos);
 
-	UINT message = wParam;
-	WPARAM newWParam = eventInfo->mouseData;
-	LPARAM newLParam = POINT_TO_LPARAM(mousePos);
-	globals->workerThread().postMessage(message, newWParam, newLParam);
+	bool eat = sendMessageToHandler(message, mouseData, pos);
 
-	// TODO for the time being, never eat events
-	//	case WM_MOUSEMOVE:
-				// If we eat the event, even the mouse cursor position won't be updated
-				// by Windows, so low-level is the low-level hook.
-	//			SetCursorPos(mousePos.x, mousePos.y);
-	//			return true;
+	if (eat && message == WM_MOUSEMOVE) {
+		// The low-level hook is so low-level that if we eat the event,
+		// the mouse cursor position won't be updated.
+		SetCursorPos(pos.x, pos.y);
+	}
 
-	return false;
+	return eat;
 }
 
-/* The function for handling mouse events.
- */
 LRESULT CALLBACK MouseHook::llMouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool eat = false; // Set to true if we don't want to pass the event to the application.
 	if (nCode == HC_ACTION) { // If nCode < 0, do nothing as per Microsoft's recommendations.
-		eat = processMouseMessage(wParam, lParam);
+		MSLLHOOKSTRUCT const &eventInfo = *(MSLLHOOKSTRUCT*)lParam;
+		eat = processMouseMessage(wParam, eventInfo.mouseData, eventInfo.pt);
 	}
 
 	LRESULT res = CallNextHookEx((HHOOK)37, nCode, wParam, lParam); // first argument ignored
-	if (eat)
-		res = 1; // nonzero return value prevents passing the event to the application
-	return res;
+	return eat ? 1 : res; // nonzero return value prevents passing the event to the application
 }

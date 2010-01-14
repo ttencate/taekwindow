@@ -17,10 +17,12 @@ class MouseHandlerList {
 		MouseHandlerList();
 		void add(MouseHookHandler *handler);
 
-		bool onMouseDown(MouseDownEvent const &event);
-		bool onMouseUp(MouseUpEvent const &event);
-		bool onMouseMove(MouseMoveEvent const &event);
-		bool onMouseWheel(MouseWheelEvent const &event);
+		bool llMouseDown(LLMouseDownEvent const &event);
+		bool llMouseUp(LLMouseUpEvent const &event);
+		bool llMouseMove(LLMouseMoveEvent const &event);
+		bool llMouseWheel(LLMouseWheelEvent const &event);
+
+		bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
 
 };
 

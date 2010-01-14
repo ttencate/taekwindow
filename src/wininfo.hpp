@@ -58,9 +58,4 @@ void activateWithoutRaise(HWND window);
  */
 bool screenToClient(HWND window, RECT &rect);
 
-/* Converts a POINT to an LPARAM; the inverse of MAKEPOINT, if that would exist
- * (i.e. MAKEPOINTS for POINT instead of POINTS).
- */
-#define POINT_TO_LPARAM(pt) (((pt).y << 16) | ((pt).x & 0xFFFF));
-
 #endif

@@ -1,17 +1,22 @@
 #include "hookhandler.hpp"
 
-bool MouseHookHandler::onMouseDown(MouseDownEvent const &) {
+
+bool MouseHookHandler::llMouseDown(LLMouseDownEvent const &) {
 	return false;
 }
 
-bool MouseHookHandler::onMouseUp(MouseUpEvent const &) {
+bool MouseHookHandler::llMouseUp(LLMouseUpEvent const &) {
 	return false;
 }
 
-bool MouseHookHandler::onMouseMove(MouseMoveEvent const &) {
+bool MouseHookHandler::llMouseMove(LLMouseMoveEvent const &) {
 	return false;
 }
 
-bool MouseHookHandler::onMouseWheel(MouseWheelEvent const &) {
+bool MouseHookHandler::llMouseWheel(LLMouseWheelEvent const &) {
+	return false;
+}
+
+bool MouseHookHandler::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 	return false;
 }

@@ -3,7 +3,7 @@
 
 #include "deform.hpp"
 
-class ResizeState : public DeformState {
+class ResizeWorker : public DeformWorker {
 
 	/* The current window rectangle, in screen coordinates.
 	 */
@@ -19,11 +19,9 @@ class ResizeState : public DeformState {
 
 	public:
 
-		ResizeState(POINT mousePos, MouseButton button, HWND parentWindow);
+		ResizeWorker(POINT mousePos, HWND parentWindow);
 
-		virtual void enter();
-
-		virtual bool onMouseMove(MouseMoveEvent const &event);
+		virtual void move(POINT const &mousePos);
 
 	private:
 

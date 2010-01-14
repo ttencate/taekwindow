@@ -1,20 +1,15 @@
 #ifndef IGNORE_HPP
 #define IGNORE_HPP
 
-#include "mousedown.hpp"
+#include "dragworker.hpp"
 
-class IgnoreState : public MouseDownState {
+class IgnoreWorker : public DragWorker {
 
 	public:
 
-		IgnoreState(MouseButton button);
+		IgnoreWorker();
 
-		virtual void enter();
-		virtual void exit();
-
-		virtual bool onMouseDown(MouseDownEvent const &event);
-		virtual bool onMouseUp(MouseUpEvent const &event);
-		virtual bool onMouseMove(MouseMoveEvent const &event);
+		virtual void move(POINT const &mousePos);
 
 };
 
