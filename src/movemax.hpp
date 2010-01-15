@@ -11,7 +11,7 @@ class MoveMaxWorker : public DeformWorker {
 
 	public:
 
-		MoveMaxWorker(POINT mousePos, HWND window);
+		MoveMaxWorker(POINT const &mousePos, HWND window);
 
 		virtual void move(POINT const &mousePos);
 

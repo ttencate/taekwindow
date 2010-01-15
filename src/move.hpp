@@ -15,7 +15,7 @@ class MoveWorker : public DeformWorker {
 
 	public:
 
-		MoveWorker(POINT mousePos, HWND window);
+		MoveWorker(POINT const &mousePos, HWND window);
 
 		virtual void move(POINT const &mousePos);
 

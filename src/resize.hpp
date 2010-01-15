@@ -19,7 +19,7 @@ class ResizeWorker : public DeformWorker {
 
 	public:
 
-		ResizeWorker(POINT mousePos, HWND parentWindow);
+		ResizeWorker(POINT const &mousePos, HWND parentWindow);
 
 		virtual void move(POINT const &mousePos);
 

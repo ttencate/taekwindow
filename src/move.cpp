@@ -3,7 +3,7 @@
 #include "move.hpp"
 #include "debug.hpp"
 
-MoveWorker::MoveWorker(POINT mousePos, HWND window)
+MoveWorker::MoveWorker(POINT const &mousePos, HWND window)
 :
 	DeformWorker(mousePos, window)
 {

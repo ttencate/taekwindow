@@ -4,7 +4,7 @@
 #include "debug.hpp"
 #include "globals.hpp"
 
-ResizeWorker::ResizeWorker(POINT mousePos, HWND window)
+ResizeWorker::ResizeWorker(POINT const &mousePos, HWND window)
 :
 	DeformWorker(mousePos, window)
 {

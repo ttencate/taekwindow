@@ -1,7 +1,7 @@
 #include "movemax.hpp"
 #include "debug.hpp"
 
-MoveMaxWorker::MoveMaxWorker(POINT mousePos, HWND window)
+MoveMaxWorker::MoveMaxWorker(POINT const &mousePos, HWND window)
 :
 	DeformWorker(mousePos, window),
 	d_currentMonitor(MonitorFromWindow(window, MONITOR_DEFAULTTONULL))
