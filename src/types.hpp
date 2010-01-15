@@ -14,7 +14,7 @@ enum MouseButton { mbLeft = 0, mbMiddle = 1, mbRight = 2, mbNone = 0x7FFF };
 
 /* For a given mouse event (e.g. WM_LBUTTONDOWN), returns the corresponding button from our enum.
  */
-MouseButton eventToButton(WPARAM wParam);
+MouseButton messageToButton(WPARAM wParam);
 
 /* Returns WM_LBUTTONDOWN for mbLeft, etc.
  */

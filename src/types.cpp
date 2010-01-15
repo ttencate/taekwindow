@@ -1,6 +1,6 @@
 #include "types.hpp"
 
-MouseButton eventToButton(WPARAM wParam) {
+MouseButton messageToButton(WPARAM wParam) {
 	switch (wParam) {
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
