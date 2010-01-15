@@ -20,4 +20,6 @@ DWORD pointToDword(POINT const &pt);
  */
 POINT dwordToPoint(DWORD lParam);
 
+DWORD currentVirtualKeys();
+
 #endif

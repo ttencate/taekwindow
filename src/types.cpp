@@ -20,3 +20,15 @@ MouseButton eventToButton(WPARAM wParam) {
 	}
 	return mbLeft; // fallback
 }
+
+UINT buttonDownMessage(MouseButton button) {
+	switch (button) {
+		case mbLeft:
+			return WM_LBUTTONDOWN;
+		case mbMiddle:
+			return WM_MBUTTONDOWN;
+		case mbRight:
+			return WM_RBUTTONDOWN;
+	}
+	return WM_NULL;
+}

@@ -17,6 +17,6 @@ bool MouseHookHandler::llMouseWheel(LLMouseWheelEvent const &) {
 	return false;
 }
 
-bool MouseHookHandler::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
+bool MouseHookHandler::handleMessage(UINT, WPARAM, LPARAM) {
 	return false;
 }

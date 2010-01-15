@@ -7,13 +7,15 @@ class WheelHandler : public MouseHookHandler {
 	
 	public:
 	
-		virtual bool onMouseWheel(MouseWheelEvent const &event);
+		virtual bool llMouseWheel(LLMouseWheelEvent const &event);
+
+		virtual bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam);
 
 	private:
 
 		/* Handle a mouse wheel event by dispatching it to the window under the cursor.
 		 */
-		void forwardMouseWheel(MouseWheelEvent const &event);
+		void forwardMouseWheel(UINT message, WPARAM wParam, LPARAM lParam);
 
 };
 

@@ -2,10 +2,11 @@ TODO
 ----
 
 Bugs:
-- Split other handlers (wheel, push-back)
+- Fix resize multimonitor bug
 - Search for TODO and do them.
 
 Cosmetical:
+- eventToButton -> messageToButton
 - Check for POINT passed by value to worker constructors.
 - Split resize class depending on mode.
 - Name compilation units to match classes.

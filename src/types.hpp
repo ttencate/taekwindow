@@ -16,6 +16,10 @@ enum MouseButton { mbLeft = 0, mbMiddle = 1, mbRight = 2, mbNone = 0x7FFF };
  */
 MouseButton eventToButton(WPARAM wParam);
 
+/* Returns WM_LBUTTONDOWN for mbLeft, etc.
+ */
+UINT buttonDownMessage(MouseButton button);
+
 /* Locations where settings can be stored.
  */
 enum ConfigurationLocation { clRegistry = 0, clIniFile = 1 };
