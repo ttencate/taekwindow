@@ -19,6 +19,12 @@
 			<a href="http://www.geardownload.com/desktop/taekwindow.html">
 				<img src="geardownload-5stars.gif" alt="Rated 5 stars on GearDownload.com" title="Rated 5 stars on GearDownload.com"/>
 			</a>
+			<a href="http://www.softoxi.com/taekwindow.html">
+				<img src="softoxi-award.png" alt="Taekwindow antivirus scan report at softoxi.com" title="Taekwindow Antivirus Scan Report done by Softoxi.com"/>
+			</a>
+			<a href="http://www.softoxi.com/taekwindow.html">
+				<img src="softoxi-award_star.png" alt="Taekwindow video tutorial at softoxi.com" title="Taekwindow Video Tutorial done by Softoxi.com"/>
+			</a>
 		</p>
 
 		<h1>
