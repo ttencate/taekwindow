@@ -4,6 +4,7 @@ TODO
 Bugs:
 - Fix resize multimonitor bug
 - Search for TODO and do them.
+- Test, test, test!
 
 Cosmetical:
 - Split resize class depending on mode.
