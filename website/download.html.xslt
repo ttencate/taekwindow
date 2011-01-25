@@ -25,9 +25,6 @@
 			<a href="http://www.softoxi.com/taekwindow-video-trailer-screenshots.html">
 				<img src="softoxi-award_star.png" alt="Taekwindow video tutorial at softoxi.com" title="Taekwindow Video Tutorial done by Softoxi.com"/>
 			</a>
-			<a href="http://wareseeker.com/Home-Shell-Desktop/taekwindow-0.3.1.zip/36fabe7b8">
-				<img src="wareseeker-editorspick.gif" alt="Wareseeker.com Editor's Pick" title="Wareseeker.com Editor's Pick"/>
-			</a>
 		</p>
 
 		<h1>
