@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="alternate" type="application/rss+xml" title="Taekwindow News RSS" href="http://sourceforge.net/export/rss2_projnews.php?group_id=185457&amp;rss_fulltext=1" />
+<link rel="stylesheet" type="text/css" href="screen.css" />
+<script type="text/javascript" src="utils.js"></script>
+<title>
+					Taekwindow - User's Manual</title>
+</head>
+<body onload="replaceEmail()">
+<div id="everything">
+<div id="topbar">
+<h1>
+<img src="logo.png" alt="Taekwindow logo" class="inline" />
+							Taekwindow
+						</h1>
+</div>
+<div id="navbar">
+<ul class="navbar">
+<li>
+<a href="index.html">Home</a>
+</li>
+<li>
+<a href="faq.html">FAQ</a>
+</li>
+<li>
+<a href="download.html">Download</a>
+</li>
+<li>
+<a href="manual.html">Manual</a>
+</li>
+<li>
+<a href="contact.html">Contact</a>
+</li>
+<li>
+<a href="http://sourceforge.net/projects/taekwindow/" class="sf">SF.net project page</a>
+</li>
+</ul>
+</div>
+<div id="content">
+<h1>User's Manual</h1><h2>System requirements</h2>
+  <p>
+    Taekwindow works on Windows XP and above (that is, Vista and 7), both 32-bits and 64-bits versions.
+    It is tested on 32-bits Windows XP and 64-bits Windows 7.
+  </p>
+  <p>
+    Windows 2000 is no longer officially supported, but might still work.
+  </p>
+<h2>Installation</h2>
+  <ol>
+    <li>
+      To install Taekwindow, simply extract the archive to any place you like.
+      You need only the <code>taekwindow.exe</code> file to use the program.
+    </li>
+    <li>
+      Through the Preferences dialog, you can create a shortcut
+      in the Startup section of your Start Menu, so
+      Taekwindow is started when you log on to your computer.
+    </li>
+  </ol>
+<h2>Usage</h2>
+  <p>
+    Start <code>taekwindow.exe</code> to load the program. A new icon will appear in the taskbar notification area
+    (next to the clock, also known as the system tray). You can now do the following:
+  </p>
+  <ul>
+    <li>Hold left Alt and drag a window with the left mouse button to move it. If you have multiple monitors, you can also move maximized windows between monitors in this way.</li>
+    <li>Hold left Alt and drag a window with the right mouse button to resize it. If you resize a maximized window, it will automatically be unmaximized.</li>
+    <li>Middle-click on the title bar of a window to push it to the background.</li>
+    <li>Use the scroll wheel on the window under the mouse cursor, instead of the window that happens to have the focus.</li>
+  </ul>
+  <p>
+    The icon in the taskbar can be used in the following ways:
+  </p>
+  <ul>
+    <li>
+      Left-click the icon to completely disable all features of Taekwindow. Use this in case some
+      application needs to handle the events that Taekwindow is catching, but you don't want to quit
+      Taekwindow completely. The icon will turn gray to indicate that it is disabled;
+      left-click again to re-enable.
+    </li>
+    <li>
+      Double-click the icon to open the Preferences dialog.
+    </li>
+    <li>
+      Right-click the icon to show a menu, through which you can enable/disable the program,
+      open the Preferences dialog, and exit Taekwindow completely.
+    </li>
+  </ul>
+  <p>
+    You can exit the program via the taskbar icon. If the icon is invisible, you can either
+    use the button in the Preferences dialog to exit, or simply end the process through
+    Windows Task Manager.
+  </p>
+<h2>Configuration</h2>
+  <p>
+    You can configure the program by right-clicking the notification area icon and choosing Preferences.
+    This will open the Preferences dialog; its usage should be self-explanatory.
+  </p>
+  <p>
+    If you chose to hide the taskbar icon, you can access the Preferences dialog
+    by running <code>taekwindow.exe</code> a second time.
+  </p>
+<h2>Version history</h2><p>0.3.1</p><ul><li>
+			settings can now optionally be stored in an INI file for portability
+		 
+							(see <a href="http://sourceforge.net/tracker/?func=detail&amp;aid=2926612&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			the menu no longer gets activated because of pressing Alt
+		 
+							(see <a href="http://sourceforge.net/tracker/?func=detail&amp;aid=2920245&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li></ul><p>0.3</p><ul><li>
+			the .NET platform is no longer required
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2920175&amp;group_id=185457">tracker item</a>)
+						</li><li>
+			on a 64-bits platform, moving and resizing now works for both 32-bits and 64-bits applications
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2809001&amp;group_id=185457">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			scrolling now works correctly on monitors to the left or top of the primary monitor
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2314897&amp;group_id=185457">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			pushing windows to the back with the middle mouse button can now be disabled
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=1999554&amp;group_id=185457">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			the tray icon is now shown even if no settings are present in the registry
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2145527&amp;group_id=185457">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			moving an unfocused window behind a focused window no longer causes the focused window to move
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2210322&amp;group_id=185457">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			the iTunes window can now be moved and resized
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2577045&amp;group_id=185457">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			horizontal scroll wheels are now also sent to the right window
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;atid=913353&amp;aid=2587696&amp;group_id=185457">tracker item</a>)
+						</li></ul><p>0.2.4</p><ul><li>
+						Bugfix:
+						
+			Google Talk now responds to move and resize actions
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;aid=2120039&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			Google Chrome now responds to move and resize actions
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;aid=2095157&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			the scroll wheel now works correctly in mIRC when it has the focus
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000712&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			Microsoft Word 2007 now moves and resizes correctly
+		 
+							(see <a href="http://sourceforge.net/tracker2/?func=detail&amp;aid=2000149&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li></ul><p>0.2.3</p><ul><li>
+			windows are no longer raised when they are moved or resized
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777612&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			windows are no longer activated when they are moved or resized
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1777609&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			the scroll wheel optionally affects the window under the mouse cursor, instead of the focused window
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629767&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			maximized windows can now be moved across multiple monitors while remaining maximized
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1939201&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			maximized windows can now be resized and will become unmaximized
+		</li><li>
+			a code overhaul should make it much easier to implement future improvements
+		</li><li>
+						Bugfix:
+						
+			the error message “Specified cast is not valid” no longer appears when starting the configuration tool after an upgrade from 0.2.1 or earlier
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1908683&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			pushing back an inactive window no longer raises the active one
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1905700&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			Alt no longer “hangs” after returning to a desktop that was locked with Ctrl+Alt+Del
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1982738&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li></ul><p>0.2.2</p><ul><li>
+			added an optional system tray icon
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629764&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			the mouse cursor changes while moving or resizing
+		</li><li>
+			middle mouse click on the title bar pushes a window to the background
+		</li><li>
+						Bugfix:
+						
+			when no settings are present in the registry, the configuration tool is now filled with default values instead of none at all
+		</li><li>
+						Bugfix:
+						
+			it is no longer possible to start multiple instances of the configuration tool
+		</li></ul><p>0.2.1</p><ul><li>
+						Bugfix:
+						
+			moving and resizing now works properly when dragging title bar or borders
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653063&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			moving and resizing now works on MDI child windows, instead of the parent
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629393&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+						Bugfix:
+						
+			Taekwindow should no longer occasionally behave as if Alt is pressed when it is not
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1894902&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li></ul><p>0.2</p><ul><li>
+			added a configuration tool
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1629762&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			made the modifier and mouse buttons, as well as closest-corner resizing,
+			into options
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1653698&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li><li>
+			added an option to the configuration tool for creating/deleting a Startup
+			shortcut in the Start Menu
+		</li><li>
+						Bugfix:
+						
+			the error message “This application has failed to start because the application
+			configuration is incorrect. Reinstalling the application may fix this
+			problem.” no longer appears
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1682619&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li></ul><p>0.1.1</p><ul><li>
+			implemented closest-corner resizing
+		 
+							(see <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1632182&amp;group_id=185457&amp;atid=913353">tracker item</a>)
+						</li></ul><p>0.1</p><ul><li>
+			moving with Alt+left button, resizing from the bottom right corner with Alt+right button
+		</li></ul><h2>Thanks</h2>
+  <p>I would like to thank the following people for their contributions to this project:</p>
+  <ul><li><strong>Eamon Nerbonne and Mark IJbema</strong>
+      tested early versions of the program and provided valuable comments and suggestions.
+    </li><li><strong>Sylvain Vignaud</strong>
+      provided a patch to blacklist certain applications that require Alt-dragging in their normal mode of operation.
+      I'm still hoping to convert this into a configurable blacklist some day!
+    </li></ul>
+<h2>License</h2>
+  <p>Copyright (c) 2006-2009, Thomas ten Cate.</p>
+  <p>All rights reserved.</p>
+  <p>
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are
+    met:
+  </p>
+  <ul>
+    <li>
+      Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    </li>
+    <li>
+      Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    </li>
+  </ul>
+  <p>
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+    OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  </p>
+</div>
+<div id="footer">
+<p>
+							The <img src="sficon.gif" alt="SourceForge icon" /> icon indicates links to the SourceForge project page.
+						</p>
+<p class="rightmargin">
+<a href="http://sourceforge.net/export/rss2_projnews.php?group_id=185457&amp;rss_fulltext=1" title="Taekwindow News RSS" style="margin-right:10px">
+<img src="feed-icon-28x28.png" alt="Taekwindow News RSS" height="28" width="28" />
+</a>
+<a href="http://validator.w3.org/check?uri=referer" title="Validate this page" style="margin-right:5px">
+<img src="valid-xhtml10.png" alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+</a>
+<a href="http://sourceforge.net" title="Hosted by SourceForge.net">
+<img src="http://sflogo.sourceforge.net/sflogo.php?group_id=185457&amp;type=3" width="125" height="37" alt="SourceForge.net logo" />
+</a>
+</p>
+</div>
+</div>
+<script type="text/javascript">
+					var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+					document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+				</script>
+<script type="text/javascript">
+					try {
+					var pageTracker = _gat._getTracker("UA-1179382-1");
+					pageTracker._trackPageview();
+					} catch(err) {}
+				</script>
+</body>
+</html>
