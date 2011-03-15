@@ -1,0 +1,7 @@
+{% capture content %}
+<h1>{{ page.title }}</h1>
+<p><em>Posted on {{ page.date | date:"%m %B, %Y" }}</em></p>
+{{ content }}
+{% endcapture %}
+
+{% include base.html %}

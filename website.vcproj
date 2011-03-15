@@ -74,172 +74,88 @@
 	</References>
 	<Files>
 		<Filter
-			Name="static"
+			Name="img"
+			>
+		</Filter>
+		<Filter
+			Name="js"
 			>
 			<File
-				RelativePath=".\static\feed-icon-28x28.png"
+				RelativePath=".\js\utils.js"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="css"
+			>
+			<File
+				RelativePath=".\css\screen.css"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="src"
+			>
+		</Filter>
+		<Filter
+			Name="_layouts"
+			>
+			<File
+				RelativePath=".\_layouts\news.html"
 				>
 			</File>
 			<File
-				RelativePath=".\static\geardownload-5stars.gif"
+				RelativePath=".\_layouts\page.html"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="_posts"
+			>
 			<File
-				RelativePath=".\static\geardownload-clean.gif"
+				RelativePath=".\_posts\2011-03-15-migrated-to-github.markdown"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="_includes"
+			>
 			<File
-				RelativePath=".\static\google2f02e625d25e0377.html"
-				>
-			</File>
-			<File
-				RelativePath=".\static\move-resize.gif"
-				>
-			</File>
-			<File
-				RelativePath=".\static\move.gif"
-				>
-			</File>
-			<File
-				RelativePath=".\static\preferences.png"
-				>
-			</File>
-			<File
-				RelativePath=".\static\screen.css"
-				>
-			</File>
-			<File
-				RelativePath=".\static\sficon.gif"
-				>
-			</File>
-			<File
-				RelativePath=".\static\softpedia-free-award.gif"
-				>
-			</File>
-			<File
-				RelativePath=".\static\title.gif"
-				>
-			</File>
-			<File
-				RelativePath=".\static\utils.js"
-				>
-			</File>
-			<File
-				RelativePath=".\static\valid-xhtml10.png"
+				RelativePath=".\_includes\base.html"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\contact.html.xslt"
+			RelativePath=".\_config.yml"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\download.html.xslt"
+			RelativePath=".\CNAME"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\faq.html.xslt"
+			RelativePath=".\contact.md"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\index.html.xslt"
+			RelativePath=".\download.md"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\manual.html.xslt"
+			RelativePath=".\faq.md"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="generateFromXML"
-					OutputDir="$(OutDir)"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\website.xslt"
+			RelativePath=".\google2f02e625d25e0377.html"
 			>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="generateFromXML"
-				/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\index.md"
+			>
+		</File>
+		<File
+			RelativePath=".\manual.md"
+			>
 		</File>
 	</Files>
 	<Globals>

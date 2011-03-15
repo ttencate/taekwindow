@@ -1,5 +1,5 @@
 ---
-layout: base
+layout: page
 title: Home
 ---
 
@@ -37,4 +37,4 @@ I'm convinced. How do I get it?
 ===============================
 
 Taekwindow is completely free. It is a tiny download, and does not require installation: you can be running it only seconds from now.
-**[Go and download it!](download.html)**
+**[Go and download it!](/download.html)**

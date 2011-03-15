@@ -1,6 +1,6 @@
 auto: true
 server: true
-permalink: /news/:year/:month/:day/:title.html
+permalink: /:categories/:year/:month/:day/:title.html
 exclude:
 - CNAME
 - src
