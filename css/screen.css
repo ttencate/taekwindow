@@ -80,6 +80,12 @@ h2
 	padding-left: 0.3em;
 }
 
+h2 a
+{
+    color: #000000;
+    text-decoration: none;
+}
+
 h3 
 {
 	font-size: 120%;
@@ -108,13 +114,6 @@ img {
 	margin: 0 0 1em 1em;
 }
 
-a.sf {
-	background-image: url("sficon.gif");
-	background-position: center left;
-	background-repeat: no-repeat;
-	padding-left: 13px;
-}
-
 a.download 
 {
 	padding: 0.5em;
@@ -138,29 +137,16 @@ a.download img
 	margin-right: 0.5em;
 }
 
-a.donate 
+.feed
 {
-	padding: 0.2em;
-	padding-right: 0.4em;
-	background-color: #ddddaa;
-	color: #000066;
-	text-decoration: none;
-	font-size: 100%;
-	font-weight: normal;
-	width: auto;
+    background: url(/img/icons/feed-icon-14x14.png) no-repeat left center;
+    padding-left: 18px;
 }
 
-a.donate:active, a.donate:hover 
+.github
 {
-	color: #000066;
-	background-color: #eeeebb;
-}
-
-a.donate img 
-{
-	vertical-align: middle;
-	margin-left: 0.4em;
-	margin-right: 0.2em;
+    background: url(/img/icons/github.png) no-repeat left center;
+    padding-left: 20px;
 }
 
 .awards
@@ -181,6 +167,25 @@ a.donate img
 	opacity: 1.0;
 }
 
-#footer {
-	font-size: 60%;
+#footer
+{
+    font-size: 80%;
+    color: #808080;
+}
+
+#footer a 
+{
+    color: #8080A0;
+}
+
+#footer a:hover, #footer a:active
+{
+    color: #000000;
+}
+
+#footer ul li 
+{
+    float: left;
+    list-style-type: none;
+    margin-left: 1.5em;
 }
