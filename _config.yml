@@ -1,0 +1,7 @@
+auto: true
+server: true
+permalink: /news/:year/:month/:day/:title.html
+exclude:
+- CNAME
+- src
+- website.vcproj
