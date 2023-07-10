@@ -7,7 +7,7 @@ title: Home
 	<img src="/img/screenshots/preferences.png" alt="A screenshot of the Taekwindow preferences dialog"/><br/>
 	The Taekwindow preferences dialog
 </p>
-		
+
 What is Taekwindow?
 ===================
 

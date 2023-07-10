@@ -149,24 +149,6 @@ a.download img
     padding-left: 20px;
 }
 
-.awards
-{
-	background-color: #ffffee;
-	text-align: center;
-}
-
-.awards a
-{
-	display: block;
-	margin: 1em;
-	opacity: 0.2;
-}
-
-.awards a:active, .awards a:hover
-{
-	opacity: 1.0;
-}
-
 #footer
 {
     font-size: 80%;

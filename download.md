@@ -3,24 +3,6 @@ layout: page
 title: Download
 ---
 
-<p class="rightmargin awards">
-	<a href="http://www.softpedia.com/progClean/Taekwindow-Clean-70130.html">
-		<img src="/img/awards/softpedia-free-award.gif" alt="100% FREE award granted by Softpedia" title="Softpedia guarantees that Taekwindow 0.2.4 is 100% Free, which means it does not contain any form of malware, including but not limited to: spyware, viruses, trojans and backdoors."/>
-	</a>
-	<a href="http://www.geardownload.com/desktop/taekwindow.html">
-		<img src="/img/awards/geardownload-clean.gif" alt="Tested 100% clean on GearDownload.com" title="This download was tested thoroughly and was found 100% clean."/>
-	</a>
-	<a href="http://www.geardownload.com/desktop/taekwindow.html">
-		<img src="/img/awards/geardownload-5stars.gif" alt="Rated 5 stars on GearDownload.com" title="Rated 5 stars on GearDownload.com"/>
-	</a>
-	<a href="http://www.softoxi.com/taekwindow.html">
-		<img src="/img/awards/softoxi-award.png" alt="Taekwindow antivirus scan report at softoxi.com" title="Taekwindow Antivirus Scan Report done by Softoxi.com"/>
-	</a>
-	<a href="http://www.softoxi.com/taekwindow-video-trailer-screenshots.html">
-		<img src="/img/awards/softoxi-award_star.png" alt="Taekwindow video tutorial at softoxi.com" title="Taekwindow Video Tutorial done by Softoxi.com"/>
-	</a>
-</p>
-
 Download Taekwindow
 ===================
 
