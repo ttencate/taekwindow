@@ -8,7 +8,7 @@ Download Taekwindow
 
 This ZIP file contains the latest version of the program itself.
 
-<a href="https://github.com/downloads/ttencate/taekwindow/taekwindow-0.3.1.zip" class="download">
+<a href="https://github.com/ttencate/taekwindow/releases/download/0.3.1/taekwindow-0.3.1.zip" class="download">
 	<img src="/img/buttons/download.png" alt="Download icon" style="margin-bottom: -15px"/>
 	Download Taekwindow 0.3.1
 </a>
