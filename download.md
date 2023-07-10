@@ -31,25 +31,6 @@ This ZIP file contains the latest version of the program itself.
 	Download Taekwindow 0.3.1
 </a>
 
-Like it? Send a donation!
-=========================
-
-I work on this program in my spare time, and give it away to the world without demanding anything in return. However, if you want to show your appreciation and support, please consider donating.
-
-Donations are a great way to keep up my motivation to work on Taekwindow, and will also get my attention if you want me to add a particular feature (although you should [contact me](/contact.html) first to ask if I think it can and should be done at all).
-
-Through PayPal, donating is quick and easy:
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick"/>
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-"/>
-<input type="image" src="https://www.paypalobjects.com/WEBSCR-640-20110306-1/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"/>
-<img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110306-1/nl_NL/i/scr/pixel.gif" width="1" height="1"/>
-</form>
-
-Thank you!
-
 Source code
 ===========
 
