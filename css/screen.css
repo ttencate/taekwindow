@@ -139,13 +139,13 @@ a.download img
 
 .feed
 {
-    background: url(/img/icons/feed-icon-14x14.png) no-repeat left center;
+    background: url(/taekwindow/img/icons/feed-icon-14x14.png) no-repeat left center;
     padding-left: 18px;
 }
 
 .github
 {
-    background: url(/img/icons/github.png) no-repeat left center;
+    background: url(/taekwindow/img/icons/github.png) no-repeat left center;
     padding-left: 20px;
 }
 

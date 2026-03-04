@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<link rel="alternate" type="application/atom+xml" title="Taekwindow News" href="/atom.xml"/>
-		<link rel="stylesheet" type="text/css" href="/css/screen.css"/>
-		<link rel="icon" type="image/png" href="/favicon.ico"/>
-		<script type="text/javascript" src="/js/utils.js"></script>
+		<link rel="alternate" type="application/atom+xml" title="Taekwindow News" href="{{ site.baseurl }}/atom.xml"/>
+		<link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/css/screen.css"/>
+		<link rel="icon" type="image/png" href="{{ site.baseurl }}/favicon.ico"/>
+		<script type="text/javascript" src="{{ site.baseurl }}/js/utils.js"></script>
 		<title>
 			Taekwindow - {{ page.title }}
 		</title>
@@ -14,29 +14,29 @@
 		<div id="everything">
 			<div id="topbar">
 				<h1>
-					<img src="/img/logos/taekwindow.png" width="92" height="92" alt="Taekwindow logo" class="inline"/>
+					<img src="{{ site.baseurl }}/img/logos/taekwindow.png" width="92" height="92" alt="Taekwindow logo" class="inline"/>
 					Taekwindow
 				</h1>
 			</div>
 			<div id="navbar">
 				<ul class="navbar">
 					<li>
-						<a href="/index.html">Home</a>
+						<a href="{{ site.baseurl }}/index.html">Home</a>
 					</li>
 					<li>
-					    <a href="/news.html">News</a>
+						<a href="{{ site.baseurl }}/news.html">News</a>
 					</li>
 					<li>
-						<a href="/faq.html">FAQ</a>
+						<a href="{{ site.baseurl }}/faq.html">FAQ</a>
 					</li>
 					<li>
-						<a href="/download.html">Download</a>
+						<a href="{{ site.baseurl }}/download.html">Download</a>
 					</li>
 					<li>
-						<a href="/manual.html">Manual</a>
+						<a href="{{ site.baseurl }}/manual.html">Manual</a>
 					</li>
 					<li>
-						<a href="/contact.html">Contact</a>
+						<a href="{{ site.baseurl }}/contact.html">Contact</a>
 					</li>
 				</ul>
 			</div>
@@ -45,7 +45,7 @@
 			</div>
 			<div id="footer">
 				<ul class="rightmargin">
-					<li><a href="/atom.xml" class="feed">Taekwindow news feed (Atom)</a></li>
+					<li><a href="{{ site.baseurl }}/atom.xml" class="feed">Taekwindow news feed (Atom)</a></li>
 					<li><a href="https://github.com/ttencate/taekwindow" class="github">GitHub project page</a></li>
 					<li class="github">Hosted on <a href="http://pages.github.com/">GitHub Pages</a></li>
 				</ul>

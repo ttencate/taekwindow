@@ -4,7 +4,7 @@ title: Home
 ---
 
 <p class="rightmargin">
-	<img src="/img/screenshots/preferences.png" alt="A screenshot of the Taekwindow preferences dialog"/><br/>
+	<img src="{{ site.baseurl }}/img/screenshots/preferences.png" alt="A screenshot of the Taekwindow preferences dialog"/><br/>
 	The Taekwindow preferences dialog
 </p>
 
@@ -37,4 +37,4 @@ I'm convinced. How do I get it?
 ===============================
 
 Taekwindow is completely free. It is a tiny download, and does not require installation: you can be running it only seconds from now.
-**[Go and download it!](/download.html)**
+**[Go and download it!]({{ site.baseurl }}/download.html)**

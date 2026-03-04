@@ -5,4 +5,5 @@ exclude:
 - CNAME
 - src
 - website.vcproj
-url: http://taekwindow.net
+url: https://ttencate.github.io
+baseurl: /taekwindow
